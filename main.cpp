@@ -154,10 +154,14 @@ void update(float delta)
   // Update world
   Sprite *s = sprites[0];
 
+  float v = 20.0f;
+  
   float x = s->position().x;
   float y = s->position().y;
 
-  s->setPosition(x + 0.01f, y);
+  float new_x = x + v * delta;
+
+  s->setPosition(new_x, y);
 }
 
 void draw()
