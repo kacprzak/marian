@@ -10,6 +10,8 @@ ResourceMgr::~ResourceMgr()
 {
   // Delete textures
   for (auto item : m_textures) {
+    GLuint tex_id = item.second->textureId();
+    glDeleteTextures(1, &tex_id);
     delete item.second;
   }
 
@@ -27,7 +29,7 @@ bool ResourceMgr::addTexture(const std::string& filename)
   return true;
 }
 
-Texture *ResourceMgr::getTexture(const std::string& filename)
+const Texture* ResourceMgr::getTexture(const std::string& filename)
 {
   for (auto item : m_textures) {
     if (item.first == filename)

@@ -3,16 +3,15 @@
 
 #include <GL/gl.h>
 #include <string>
-#include <boost/utility.hpp>
 
-class Texture : boost::noncopyable {
+class Texture {
  public:
   Texture();
   ~Texture();
 
-  GLuint textureId() { return m_textureId; }
-  int w() { return m_w; }
-  int h() { return m_h; }
+  GLuint textureId() const { return m_textureId; }
+  int w() const { return m_w; }
+  int h() const { return m_h; }
 
   bool loadFromFile(const std::string& filename);
 

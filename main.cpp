@@ -5,12 +5,15 @@
 #include <GL/glu.h>
 
 #include "Texture.h"
+#include "Sprite.h"
 #include "ResourceMgr.h"
+#include <vector>
 
 // Globals
 const char *title = "Marian";
 const int screen_width = 640;
 const int screen_height = 640;
+std::vector<Sprite*> sprites;
 
 void drawQuad(float x, float y, float w, float h)
 {
@@ -38,6 +41,17 @@ void drawQuad(float x, float y, float w, float h, GLuint texture_id)
   // Disable if was disable.
   if(!texturing_enabled)
     glDisable(GL_TEXTURE_2D);
+}
+
+void drawSprite(const Sprite& sprite)
+{
+  const Texture *tex = sprite.texture();
+
+  drawQuad(sprite.position().x,
+	   sprite.position().y,
+	   tex->w(),
+	   tex->h(),
+	   tex->textureId());
 }
 
 void quit(int code)
@@ -138,6 +152,12 @@ bool process_events() {
 void update(float delta)
 {
   // Update world
+  Sprite *s = sprites[0];
+
+  float x = s->position().x;
+  float y = s->position().y;
+
+  s->setPosition(x + 0.01f, y);
 }
 
 void draw()
@@ -150,9 +170,7 @@ void draw()
   static float scale = 0.02f;
   glScalef(scale, scale, 1.0f);
 
-  Texture *tex = ResourceMgr::instance().getTexture("minecraft_tiles_big.png");
-
-  drawQuad(0, 0, tex->w(), tex->h(), tex->textureId());
+  drawSprite(*sprites[0]);
 
   SDL_GL_SwapBuffers(); 
 }
@@ -166,6 +184,11 @@ int main()
     std::cerr << "Unable to load texture.\n";
     quit(-4);
   }  
+
+  const Texture *tex = ResourceMgr::instance().getTexture("minecraft_tiles_big.png");
+
+  Sprite *sprite = new Sprite(tex);
+  sprites.push_back(sprite);
 
   SDL_WM_SetCaption(title, title);
 
@@ -184,5 +207,6 @@ int main()
     last_time = curr_time;
   }
 
+  delete sprite;
   quit(0);
 }

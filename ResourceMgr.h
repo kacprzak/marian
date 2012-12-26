@@ -18,7 +18,7 @@ class ResourceMgr
 
   // Textures management
   bool addTexture(const std::string& filename);
-  Texture *getTexture(const std::string& filename);
+  const Texture* getTexture(const std::string& filename);
 
  private:
   ResourceMgr();

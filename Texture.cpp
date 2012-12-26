@@ -12,7 +12,7 @@ Texture::Texture()
 
 Texture::~Texture()
 {
-  glDeleteTextures(1, &m_textureId);
+  //
 }
 
 bool Texture::loadFromFile(const std::string& filename)
