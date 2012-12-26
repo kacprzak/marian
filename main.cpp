@@ -1,16 +1,16 @@
 #include <iostream>
 #include <cstdlib> // exit
 #include <SDL.h>
-#include "Util.h"
-
 #include <GL/gl.h>
 #include <GL/glu.h>
+
+#include "Texture.h"
+#include "ResourceMgr.h"
 
 // Globals
 const char *title = "Marian";
 const int screen_width = 640;
 const int screen_height = 640;
-GLuint textures[10];
 
 void drawQuad(float x, float y, float w, float h)
 {
@@ -150,7 +150,9 @@ void draw()
   static float scale = 0.02f;
   glScalef(scale, scale, 1.0f);
 
-  drawQuad(0, 0, 512, 512, textures[0]);
+  Texture *tex = ResourceMgr::instance().getTexture("minecraft_tiles_big.png");
+
+  drawQuad(0, 0, tex->w(), tex->h(), tex->textureId());
 
   SDL_GL_SwapBuffers(); 
 }
@@ -160,8 +162,7 @@ int main()
   initializeSDL();
   initializeOpenGL();
 
-  textures[0] = load_texture("minecraft_tiles_big.png");
-  if (!textures[0]) {
+  if (!ResourceMgr::instance().addTexture("minecraft_tiles_big.png")) {
     std::cerr << "Unable to load texture.\n";
     quit(-4);
   }  

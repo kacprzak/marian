@@ -1,8 +1,8 @@
 CC = g++
-CFLAGS = -Wall -Wextra -g `sdl-config --cflags`
+CFLAGS = -Wall -Wextra -g -std=c++0x `sdl-config --cflags`
 LIBS = `sdl-config --libs` -lGL -lGLU -lSDL_image
 
-OBJS = main.o Util.o Map.o
+OBJS = main.o Util.o Map.o Texture.o ResourceMgr.o
 
 all: marian
 

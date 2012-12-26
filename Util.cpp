@@ -4,7 +4,7 @@
 #include <SDL_image.h>
 #include <iostream>
 
-GLuint load_texture(const char *filename)
+GLuint load_texture(const char *filename, int *w, int *h)
 {
   SDL_Surface *surface;
   GLuint textureid;
@@ -46,6 +46,9 @@ GLuint load_texture(const char *filename)
     surface = nimg;
     mode = GL_RGBA;
   }
+
+  *w = surface->w;
+  *h = surface->h;
 
   // Create one texture name
   glGenTextures(1, &textureid);
