@@ -105,16 +105,30 @@ void Engine::drawQuad(float x, float y, float w, float h)
   w /= 2.0f; h /= 2.0f;
 
   glBegin(GL_QUADS);
-  glTexCoord2f(0.0f, 0.0f); glVertex2f(x - w, y - h);
-  glTexCoord2f(1.0f, 0.0f); glVertex2f(x + w, y - h);
-  glTexCoord2f(1.0f, 1.0f); glVertex2f(x + w, y + h);
-  glTexCoord2f(0.0f, 1.0f); glVertex2f(x - w, y + h);
+    glTexCoord2f(0.0f, 0.0f); glVertex2f(x - w, y - h);
+    glTexCoord2f(1.0f, 0.0f); glVertex2f(x + w, y - h);
+    glTexCoord2f(1.0f, 1.0f); glVertex2f(x + w, y + h);
+    glTexCoord2f(0.0f, 1.0f); glVertex2f(x - w, y + h);
   glEnd();
 }
 
 //------------------------------------------------------------------------------
 
-void Engine::drawQuad(float x, float y, float w, float h, GLuint texture_id)
+void Engine::drawQuad(float x, float y, float w, float h, float texCoords[])
+{
+  w /= 2.0f; h /= 2.0f;
+
+  glBegin(GL_QUADS);
+    glTexCoord2f(texCoords[0], texCoords[1]); glVertex2f(x - w, y - h);
+    glTexCoord2f(texCoords[2], texCoords[3]); glVertex2f(x + w, y - h);
+    glTexCoord2f(texCoords[4], texCoords[5]); glVertex2f(x + w, y + h);
+    glTexCoord2f(texCoords[6], texCoords[7]); glVertex2f(x - w, y + h);
+  glEnd();
+}
+
+//------------------------------------------------------------------------------
+
+  void Engine::drawQuad(float x, float y, float w, float h, GLuint texture_id, float texCoords[])
 {
   // Enable texturing if needed.
   bool texturing_enabled = glIsEnabled(GL_TEXTURE_2D);
@@ -123,7 +137,8 @@ void Engine::drawQuad(float x, float y, float w, float h, GLuint texture_id)
 
   // Bind texture and draw.
   glBindTexture(GL_TEXTURE_2D, texture_id);
-  drawQuad(x, y, w, h);
+  
+  drawQuad(x, y, w, h, texCoords);
 
   // Disable if was disable.
   if(!texturing_enabled)
@@ -135,12 +150,15 @@ void Engine::drawQuad(float x, float y, float w, float h, GLuint texture_id)
 void Engine::drawSprite(const Sprite& sprite)
 {
   const Texture *tex = sprite.texture();
+  float texCoords[8];
+  sprite.getTextureCoords(texCoords);
 
   drawQuad(sprite.position().x,
 	   sprite.position().y,
-	   tex->w(),
-	   tex->h(),
-	   tex->textureId());
+	   sprite.width(),
+	   sprite.height(),
+	   tex->textureId(),
+           texCoords);
 }
 
 //------------------------------------------------------------------------------

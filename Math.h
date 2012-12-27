@@ -1,5 +1,5 @@
-#ifndef VECTOR2_H
-#define VECTOR2_H
+#ifndef MATH_H
+#define MATH_H
 
 template <typename T>
 class Vector2 {
@@ -13,14 +13,34 @@ class Vector2 {
 template <typename T>
 class Rect {
  public:
-  Rect(T ax, T ay, T aw, T ah)
-    : topleft(ax, ay), size(aw, ah) {}
+  Rect(T x, T y, T w, T h)
+    : m_leftbottom(x, y)
+    , m_size(w, h)
+    {}
 
-  Rect(Vector2<T> atopleft, Vector2<T> asize)
-    : topleft(atopleft), size(asize) {}
+  Rect(Vector2<T> topleft, Vector2<T> size)
+    : m_leftbottom(topleft)
+    , m_size(size)
+    {}
 
-  Vector2<T> topleft;
-  Vector2<T> size;
+  const Vector2<T> leftbottom() const { return m_leftbottom; }
+  const Vector2<T> size()    const { return m_size; }
+
+  T left()   const { return m_leftbottom.x; }
+  T right()  const { return m_leftbottom.x + m_size.x; }
+  T top()    const { return m_leftbottom.y + m_size.y; }
+  T bottom() const { return m_leftbottom.y; }
+
+  const Vector2<T> center() const
+  {
+    T x = left() + m_size.x / 2;
+    T y = bottom() + m_size.y / 2;
+    return Vector2<T>(x, y);
+  }
+
+ private:
+  Vector2<T> m_leftbottom;
+  Vector2<T> m_size;
 };
 
 #endif

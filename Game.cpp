@@ -17,7 +17,11 @@ Game::Game()
 
   const Texture *tex = resMgr.getTexture("minecraft_tiles_big.png");
 
-  Sprite *sprite = new Sprite(tex);
+  int tilesize = 32 * 1;
+  int x = 8 * tilesize;
+  int y = -7 * tilesize + tex->h() - tilesize;
+  //Sprite *sprite = new Sprite(tex);
+  Sprite *sprite = new Sprite(tex, Rect<int>(x, y, tilesize, tilesize));
   m_sprites.push_back(sprite);
 }
 
@@ -53,7 +57,7 @@ void Game::update(Engine */*e*/, float elapsedTime)
   float x = s->position().x;
   float y = s->position().y;
   
-  float new_x = x + v * elapsedTime;
+  float new_x = x;// + v * elapsedTime;
   
   s->setPosition(new_x, y);
 }
