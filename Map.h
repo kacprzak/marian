@@ -2,7 +2,28 @@
 #define MAP_H
 
 #include <string>
+#include <vector>
 #include <boost/utility.hpp>
+
+class Tileset
+{
+ public:
+  std::string name;
+  int firstGid;
+  int tileWidth;
+  int tileHeight;
+  std::string imageSource;
+};
+
+class Layer 
+{
+ public:
+  std::string name;
+  int width;
+  int height;
+  std::string dataEncoding;
+  std::vector<int> data;
+};
 
 class Map : boost::noncopyable
 {
@@ -16,6 +37,9 @@ class Map : boost::noncopyable
   int height;
   int tileWidth;
   int tileHeight;
+
+  std::vector<Tileset> tilesets;
+  std::vector<Layer> layers;
 };
 
 #endif
