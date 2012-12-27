@@ -10,11 +10,9 @@ all: marian
 marian: $(OBJS) $(MAIN)
 	$(CC) $^ -o $@ $(LIBS)
 
-map_test: Map.cpp Map.h map_test.cpp
-	$(CC) $^ -o $@ -lboost_unit_test_framework	
-
-test: map_test
-	./map_test
+.PHONY : test
+test:
+	cd test; make test;
 
 $(OBJS): %.o: %.cpp %.h
 	$(CC) $< -o $@ -c $(CFLAGS)
@@ -23,7 +21,8 @@ $(MAIN): %.o: %.cpp
 	$(CC) $< -o $@ -c $(CFLAGS)
 
 clean:
-	rm marian $(OBJS) map_test
+	rm marian $(OBJS)
+	cd test; make clean;
 
 cleantmp:
 	rm *~

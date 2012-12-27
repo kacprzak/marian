@@ -12,9 +12,14 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight)
   , m_screenWidth(screenWidth)
   , m_screenHeight(screenHeight)
 {
-  initializeSDL();
-  initializeOpenGL();
-  SDL_WM_SetCaption(title.c_str(), title.c_str());
+  try {
+    initializeSDL();
+    initializeOpenGL();
+    SDL_WM_SetCaption(title.c_str(), title.c_str());
+  } catch (SdlError e) {
+    SDL_Quit();
+    throw e;
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -173,7 +178,7 @@ void Engine::initializeSDL()
 					 screen_bpp, screen_flags);
 
   if (!screen) {
-    throw SdlError("Setting video mode faild", SDL_GetError());
+    throw SdlError("Setting video mode failed", SDL_GetError());
   }
 
   SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);  
