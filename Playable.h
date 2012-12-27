@@ -2,10 +2,11 @@
 #define PLAYABLE_H
 
 #include <SDL.h>
+#include <boost/utility.hpp>
 
 class Engine;
 
-class Playable
+class Playable : boost::noncopyable
 {
  public:
   virtual void processInput(const SDL_Event& event) = 0;

@@ -5,10 +5,13 @@
 
 int main()
 {
-  Engine e("Marian", 640, 640);
-  Game game;
+  Engine *e = new Engine("Marian", 640, 640);
+  Game *game = new Game;
 
-  e.mainLoop(&game);
+  e->mainLoop(game);
+
+  delete e;
+  delete game;
 
   return 0;
 }

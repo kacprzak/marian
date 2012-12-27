@@ -2,7 +2,7 @@ CC = g++
 CFLAGS = -Wall -Wextra -g -std=c++0x `sdl-config --cflags`
 LIBS = `sdl-config --libs` -lGL -lGLU -lSDL_image
 
-OBJS = Util.o TmxMap.o Texture.o ResourceMgr.o Sprite.o Engine.o Game.o
+OBJS = Util.o TmxMap.o Map.o Texture.o ResourceMgr.o Sprite.o Engine.o Game.o
 MAIN = main.o
 
 all: marian

@@ -14,22 +14,13 @@ Game::Game()
   if (!resMgr.addTexture("minecraft_tiles_big.png")) {
     std::cerr << "Unable to load texture.\n";
   }  
-
-  const Texture *tex = resMgr.getTexture("minecraft_tiles_big.png");
-
-  int tilesize = 32 * 1;
-  int x = 8 * tilesize;
-  int y = -7 * tilesize + tex->h() - tilesize;
-  //Sprite *sprite = new Sprite(tex);
-  Sprite *sprite = new Sprite(tex, Rect<int>(x, y, tilesize, tilesize));
-  m_sprites.push_back(sprite);
 }
 
 //------------------------------------------------------------------------------
 
 Game::~Game()
 {
-  delete m_sprites[0];
+  //delete m_sprites[0];
 }
 
 //------------------------------------------------------------------------------
@@ -50,21 +41,22 @@ void Game::processInput(const SDL_Event& event)
 
 void Game::update(Engine */*e*/, float elapsedTime)
 {
-  Sprite *s = m_sprites[0];
+  //Sprite *s = m_sprites[0];
   
-  float v = 20.0f;
+  //float v = 20.0f;
   
-  float x = s->position().x;
-  float y = s->position().y;
+  //float x = s->position().x;
+  //float y = s->position().y;
   
-  float new_x = x;// + v * elapsedTime;
+  //float new_x = x;// + v * elapsedTime;
   
-  s->setPosition(new_x, y);
+  //s->setPosition(new_x, y);
 }
 
 //------------------------------------------------------------------------------
 
 void Game::draw(Engine *e)
 {
-  e->drawSprite(*m_sprites[0]);
+  //e->drawSprite(*m_sprites[0]);
+  m_map.draw(e);
 }
