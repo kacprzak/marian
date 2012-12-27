@@ -1,4 +1,4 @@
-#include "Map.h"
+#include "TmxMap.h"
 
 #include <boost/lexical_cast.hpp>
 #include <boost/tokenizer.hpp>
@@ -7,6 +7,8 @@
 #include "rapidxml/rapidxml_utils.hpp"
 
 using namespace boost;
+
+namespace tmx {
 
 Map::Map()
   : width(0)
@@ -91,3 +93,5 @@ bool Map::loadFromFile(const std::string& filename)
   
   return true;
 }
+
+} // namespace tmx

@@ -1,9 +1,12 @@
-#ifndef MAP_H
-#define MAP_H
+#ifndef TMX_MAP_H
+#define TMX_MAP_H
 
 #include <string>
 #include <vector>
 #include <boost/utility.hpp>
+
+namespace tmx
+{
 
 class Tileset
 {
@@ -41,5 +44,7 @@ class Map : boost::noncopyable
   std::vector<Tileset> tilesets;
   std::vector<Layer> layers;
 };
+
+} // namespace tmx
 
 #endif

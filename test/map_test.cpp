@@ -1,11 +1,11 @@
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE MapTest
 #include <boost/test/unit_test.hpp>
-#include "Map.h"
+#include "TmxMap.h"
 
 BOOST_AUTO_TEST_CASE(map_test)
 {
-  Map map;
+  tmx::Map map;
   map.loadFromFile("../media/map1.tmx");
 
   BOOST_REQUIRE( map.width == 20 );
