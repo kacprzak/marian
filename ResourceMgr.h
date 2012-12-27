@@ -23,6 +23,7 @@ class ResourceMgr : boost::noncopyable
   // Textures management
   bool addTexture(const std::string& filename);
   const Texture* getTexture(const std::string& filename);
+  void releaseTextures();
 
  private:
   ResourceMgr();

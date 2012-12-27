@@ -8,12 +8,7 @@ ResourceMgr::ResourceMgr()
 
 ResourceMgr::~ResourceMgr()
 {
-  // Delete textures
-  for (auto item : m_textures) {
-    item.second->release();
-    delete item.second;
-  }
-
+  releaseTextures();
   std::cout << "ResourceMgr destroyed\n";
 }
 
@@ -32,6 +27,16 @@ bool ResourceMgr::addTexture(const std::string& filename)
 
   m_textures.push_back(std::make_pair(filename, tex));
   return true;
+}
+
+void ResourceMgr::releaseTextures()
+{
+  // Delete textures
+  for (auto item : m_textures) {
+    item.second->release();
+    delete item.second;
+  }
+  m_textures.clear();
 }
 
 const Texture* ResourceMgr::getTexture(const std::string& filename)
