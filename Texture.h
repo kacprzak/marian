@@ -14,6 +14,7 @@ class Texture {
   int h() const { return m_h; }
 
   bool loadFromFile(const std::string& filename);
+  void release();
 
  private:
   GLuint m_textureId;

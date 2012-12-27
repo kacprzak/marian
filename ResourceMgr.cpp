@@ -10,19 +10,24 @@ ResourceMgr::~ResourceMgr()
 {
   // Delete textures
   for (auto item : m_textures) {
-    GLuint tex_id = item.second->textureId();
-    glDeleteTextures(1, &tex_id);
+    item.second->release();
     delete item.second;
   }
 
   std::cout << "ResourceMgr destroyed\n";
 }
 
+void ResourceMgr::setDataFolder(const std::string& folder)
+{
+  dataFolder = folder;
+}
+
+
 bool ResourceMgr::addTexture(const std::string& filename)
 {
   Texture *tex = new Texture;
 
-  if(!tex->loadFromFile(filename))
+  if(!tex->loadFromFile(dataFolder + filename))
     return false;
 
   m_textures.push_back(std::make_pair(filename, tex));

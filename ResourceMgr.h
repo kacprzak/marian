@@ -3,9 +3,10 @@
 
 #include <vector>
 #include <utility>
+#include <boost/utility.hpp>
 #include "Texture.h"
 
-class ResourceMgr
+class ResourceMgr : boost::noncopyable
 {
  public:
   static ResourceMgr& instance()
@@ -16,13 +17,16 @@ class ResourceMgr
 
   ~ResourceMgr();
 
+  // Set data folder ex: "media/"
+  void setDataFolder(const std::string& folder);
+
   // Textures management
   bool addTexture(const std::string& filename);
   const Texture* getTexture(const std::string& filename);
 
  private:
   ResourceMgr();
-
+  std::string dataFolder;
   std::vector<std::pair<std::string, Texture*> > m_textures;
 };
 

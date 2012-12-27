@@ -2,16 +2,14 @@
 #define MAP_H
 
 #include <string>
+#include <boost/utility.hpp>
 
-class Map {
+class Map : boost::noncopyable
+{
  public:
-  Map(const std::string& filename);
+  Map();
+  bool loadFromFile(const std::string& filename);
 
- private:
-  Map(const Map& map); // no impl
-  Map& operator=(const Map& map); // no impl
-
- public:
   std::string version;
   std::string orientation;
   int width;

@@ -20,3 +20,8 @@ bool Texture::loadFromFile(const std::string& filename)
   m_textureId = load_texture(filename.c_str(), &m_w, &m_h);
   return m_textureId == 0 ? false : true;
 }
+
+void Texture::release()
+{
+    glDeleteTextures(1, &m_textureId);  
+}

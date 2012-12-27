@@ -5,7 +5,8 @@
 
 BOOST_AUTO_TEST_CASE(map_test)
 {
-  Map map("map1.tmx");
+  Map map;
+  map.loadFromFile("media/map1.tmx");
 
   BOOST_REQUIRE( map.width == 20 );
   BOOST_REQUIRE( map.height == 20 );

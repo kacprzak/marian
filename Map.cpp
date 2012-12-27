@@ -2,12 +2,21 @@
 
 #include <boost/lexical_cast.hpp>
 #include <iostream>
-#include "rapidxml.hpp"
-#include "rapidxml_utils.hpp"
+#include "rapidxml/rapidxml.hpp"
+#include "rapidxml/rapidxml_utils.hpp"
 
 using namespace boost;
 
-Map::Map(const std::string& filename)
+Map::Map()
+  : width(0)
+  , height(0)
+  , tileWidth(0)
+  , tileHeight(0)
+{
+  //
+}
+
+bool Map::loadFromFile(const std::string& filename)
 {
   // File has to exist while working with XML
   rapidxml::file<> xmlfile(filename.c_str());
@@ -28,5 +37,8 @@ Map::Map(const std::string& filename)
     tileHeight = lexical_cast<int>(map_node->first_attribute("tileheight")->value());
   } catch (const bad_lexical_cast& e) {
     std::cerr << e.what() << std::endl;
+    return false;
   }
+
+  return true;
 }

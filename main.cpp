@@ -184,12 +184,16 @@ int main()
   initializeSDL();
   initializeOpenGL();
 
-  if (!ResourceMgr::instance().addTexture("minecraft_tiles_big.png")) {
+  ResourceMgr& resMgr = ResourceMgr::instance();
+  resMgr.setDataFolder("media/");
+
+  if (!resMgr.addTexture("minecraft_tiles_big.png")) {
     std::cerr << "Unable to load texture.\n";
     quit(-4);
   }  
 
-  const Texture *tex = ResourceMgr::instance().getTexture("minecraft_tiles_big.png");
+  
+  const Texture *tex = resMgr.getTexture("minecraft_tiles_big.png");
 
   Sprite *sprite = new Sprite(tex);
   sprites.push_back(sprite);
