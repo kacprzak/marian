@@ -17,6 +17,8 @@ Game::Game()
 
   m_map.loadFromFile("media/map1.tmx");
 
+  m_map.getObjects(m_sprites);
+
   m_x = 0.0f;
 }
 
@@ -56,4 +58,8 @@ void Game::draw(Engine *e)
   //e->drawSprite(*m_sprites[0]);
   glTranslatef(m_x, 0.0f, 0.0f);
   m_map.draw(e);
+
+  for (const Sprite& s : m_sprites) {
+    e->drawSprite(s);
+  }
 }

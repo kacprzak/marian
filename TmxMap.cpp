@@ -80,7 +80,6 @@ bool Map::loadFromFile(const std::string& filename)
         for (auto it = tok.begin(); it != tok.end(); ++it) {
           layer.data.push_back(lexical_cast<unsigned>(*it));
         }
-
       } else {
         std::cerr << "WARNING: Map layer data loading from " << layer.dataEncoding
                   << " is not implemented." << std::endl;
@@ -90,6 +89,31 @@ bool Map::loadFromFile(const std::string& filename)
       layer_node = layer_node->next_sibling("layer");
     }
     
+    xml_node<> *objectGroup_node = map_node->first_node("objectgroup");
+
+    while (objectGroup_node) {
+      ObjectGroup objectGroup;
+
+      objectGroup.name   = objectGroup_node->first_attribute("name")->value();
+      objectGroup.width  = lexical_cast<int>(objectGroup_node->first_attribute("width")->value());
+      objectGroup.height = lexical_cast<int>(objectGroup_node->first_attribute("height")->value());
+
+      xml_node<> *object_node = objectGroup_node->first_node("object");
+
+      while (object_node) {
+        Object object;
+
+        object.gid = lexical_cast<unsigned>(object_node->first_attribute("gid")->value());
+        object.x   = lexical_cast<int>(object_node->first_attribute("x")->value());
+        object.y   = lexical_cast<int>(object_node->first_attribute("y")->value());
+
+        objectGroup.objects.push_back(object);
+        object_node = object_node->next_sibling("object");
+      }
+
+      objectGroups.push_back(objectGroup);
+      objectGroup_node = objectGroup_node->next_sibling("objectgroup");
+    }
 
   } catch (const bad_lexical_cast& e) {
     std::cerr << e.what() << std::endl;

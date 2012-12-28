@@ -19,7 +19,7 @@ class Game : public Playable
   void draw(Engine *e);
 
  private:
-  //std::vector<Sprite *> m_sprites;
+  std::vector<Sprite> m_sprites;
   Map m_map;
   float m_x;
 };

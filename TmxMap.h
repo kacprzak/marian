@@ -30,6 +30,23 @@ class Layer
   std::vector<unsigned> data;
 };
 
+class Object
+{
+ public:
+  unsigned gid;
+  int x;
+  int y;
+};
+
+class ObjectGroup
+{
+ public:
+  std::string name;
+  int width;
+  int height;
+  std::vector<Object> objects;
+};
+
 class Map : boost::noncopyable
 {
  public:
@@ -45,6 +62,7 @@ class Map : boost::noncopyable
 
   std::vector<Tileset> tilesets;
   std::vector<Layer> layers;
+  std::vector<ObjectGroup> objectGroups;
 };
 
 } // namespace tmx

@@ -17,14 +17,27 @@ bool Map::loadFromFile(const std::string& filename)
   return m_tmxMap.loadFromFile(filename);
 }
 
-void Map::draw(Engine *e)
+void Map::getObjects(std::vector<Sprite>& v)
+{
+  const Texture *tex = ResourceMgr::instance().getTexture("minecraft_tiles_big.png");
+
+  for (const tmx::ObjectGroup& og : m_tmxMap.objectGroups) {
+    for (const tmx::Object& obj : og.objects) {
+      Sprite sprite(tex, rectForTile(obj.gid));
+      sprite.setPosition(obj.x, m_tmxMap.height * m_tmxMap.tileHeight - obj.y - m_tmxMap.tileHeight);
+      v.push_back(sprite);
+    }
+  }
+}
+
+void Map::draw(Engine *e) const
 {
   for (const tmx::Layer& layer : m_tmxMap.layers) {
     drawLayer(e, layer);
   }
 }
 
-void Map::drawLayer(Engine *e, const tmx::Layer& layer)
+void Map::drawLayer(Engine *e, const tmx::Layer& layer) const
 {
   const Texture *tex = ResourceMgr::instance().getTexture("minecraft_tiles_big.png");
 
@@ -56,7 +69,7 @@ void Map::drawLayer(Engine *e, const tmx::Layer& layer)
   }
 }
 
-Rect<int> Map::rectForTile(unsigned global_tile_id)
+Rect<int> Map::rectForTile(unsigned global_tile_id) const
 {
   for (int i = m_tmxMap.tilesets.size() - 1; i >= 0; --i) {
     const tmx::Tileset& tileset = m_tmxMap.tilesets[i];
@@ -81,3 +94,4 @@ Rect<int> Map::rectForTile(unsigned global_tile_id)
 
   return Rect<int>(0, 0, 0, 0);
 }
+
