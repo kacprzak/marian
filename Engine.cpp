@@ -116,20 +116,21 @@ void Engine::drawQuad(float x, float y, float w, float h)
 
 void Engine::drawQuad(float x, float y, float w, float h, float texCoords[])
 {
-  w /= 2.0f; h /= 2.0f;
-
   glBegin(GL_QUADS);
-    glTexCoord2f(texCoords[0], texCoords[1]); glVertex2f(x - w, y - h);
-    glTexCoord2f(texCoords[2], texCoords[3]); glVertex2f(x + w, y - h);
+    glTexCoord2f(texCoords[0], texCoords[1]); glVertex2f(x, y);
+    glTexCoord2f(texCoords[2], texCoords[3]); glVertex2f(x + w, y);
     glTexCoord2f(texCoords[4], texCoords[5]); glVertex2f(x + w, y + h);
-    glTexCoord2f(texCoords[6], texCoords[7]); glVertex2f(x - w, y + h);
+    glTexCoord2f(texCoords[6], texCoords[7]); glVertex2f(x, y + h);
   glEnd();
 }
 
 //------------------------------------------------------------------------------
 
-  void Engine::drawQuad(float x, float y, float w, float h, GLuint texture_id, float texCoords[])
+void Engine::drawQuad(float x, float y, float w, float h, GLuint texture_id, float texCoords[])
 {
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glEnable(GL_BLEND);
+
   // Enable texturing if needed.
   bool texturing_enabled = glIsEnabled(GL_TEXTURE_2D);
   if(!texturing_enabled)
@@ -143,6 +144,8 @@ void Engine::drawQuad(float x, float y, float w, float h, float texCoords[])
   // Disable if was disable.
   if(!texturing_enabled)
     glDisable(GL_TEXTURE_2D);
+
+  glDisable(GL_BLEND);
 }
 
 //------------------------------------------------------------------------------
@@ -155,8 +158,8 @@ void Engine::drawSprite(const Sprite& sprite)
 
   drawQuad(sprite.position().x,
 	   sprite.position().y,
-	   sprite.width(),
-	   sprite.height(),
+	   (float)sprite.width(),
+	   (float)sprite.height(),
 	   tex->textureId(),
            texCoords);
 }

@@ -21,6 +21,7 @@ class Game : public Playable
  private:
   //std::vector<Sprite *> m_sprites;
   Map m_map;
+  float m_x;
 };
 
 #endif

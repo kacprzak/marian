@@ -16,6 +16,8 @@ Game::Game()
   }  
 
   m_map.loadFromFile("media/map1.tmx");
+
+  m_x = 0.0f;
 }
 
 //------------------------------------------------------------------------------
@@ -43,16 +45,8 @@ void Game::processInput(const SDL_Event& event)
 
 void Game::update(Engine */*e*/, float elapsedTime)
 {
-  //Sprite *s = m_sprites[0];
-  
   //float v = 20.0f;
-  
-  //float x = s->position().x;
-  //float y = s->position().y;
-  
-  //float new_x = x;// + v * elapsedTime;
-  
-  //s->setPosition(new_x, y);
+  //m_x += v * elapsedTime;
 }
 
 //------------------------------------------------------------------------------
@@ -60,5 +54,6 @@ void Game::update(Engine */*e*/, float elapsedTime)
 void Game::draw(Engine *e)
 {
   //e->drawSprite(*m_sprites[0]);
+  glTranslatef(m_x, 0.0f, 0.0f);
   m_map.draw(e);
 }
