@@ -1,27 +1,26 @@
-CC = g++
-CFLAGS = -Wall -Wextra -g -std=c++0x `sdl-config --cflags`
-LIBS = `sdl-config --libs` -lGL -lGLU -lSDL_image
+CC := g++
+CFLAGS := -Wall -Wextra -g -std=c++0x `sdl-config --cflags`
+LIBS := `sdl-config --libs` -lGL -lGLU -lSDL_image
 
-OBJS = Util.o TmxMap.o Map.o Texture.o ResourceMgr.o Sprite.o Engine.o Game.o
-MAIN = main.o
+OBJS := main.o Util.o TmxMap.o Map.o Texture.o ResourceMgr.o Sprite.o Engine.o Game.o
 
 all: marian
 
 marian: $(OBJS) $(MAIN)
 	$(CC) $^ -o $@ $(LIBS)
 
-.PHONY : test
+-include $(OBJS:.o=.d)
+
+%.o: %.cpp
+	$(CC) $< -o $@ -c $(CFLAGS)
+	$(CC) -MM $(CFLAGS) $*.cpp > $*.d
+
+.PHONY : test clean cleantmp
 test:
 	cd test; make test;
 
-$(OBJS): %.o: %.cpp %.h
-	$(CC) $< -o $@ -c $(CFLAGS)
-
-$(MAIN): %.o: %.cpp
-	$(CC) $< -o $@ -c $(CFLAGS)
-
 clean:
-	rm marian $(OBJS)
+	rm -f marian $(OBJS) *.d
 	cd test; make clean;
 
 cleantmp:

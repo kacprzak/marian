@@ -8,4 +8,4 @@ test: map_test
 	./map_test
 
 clean:
-	rm map_test
+	rm -f map_test
