@@ -14,6 +14,8 @@ Game::Game()
   if (!resMgr.addTexture("minecraft_tiles_big.png")) {
     std::cerr << "Unable to load texture.\n";
   }  
+
+  m_map.loadFromFile("media/map1.tmx");
 }
 
 //------------------------------------------------------------------------------

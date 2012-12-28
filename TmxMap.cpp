@@ -44,11 +44,16 @@ bool Map::loadFromFile(const std::string& filename)
     while (tileset_node) {
         Tileset tileset;
         
-        tileset.firstGid    = lexical_cast<int>(tileset_node->first_attribute("firstgid")->value());
+        tileset.firstGid    = lexical_cast<unsigned>(tileset_node->first_attribute("firstgid")->value());
         tileset.name        = tileset_node->first_attribute("name")->value();
         tileset.tileWidth   = lexical_cast<int>(tileset_node->first_attribute("tilewidth")->value());
         tileset.tileHeight  = lexical_cast<int>(tileset_node->first_attribute("tileheight")->value());
         tileset.imageSource = tileset_node->first_node("image")->first_attribute("source")->value();
+
+        xml_node<> *image_node = tileset_node->first_node("image");
+        tileset.imageSource = image_node->first_attribute("source")->value();
+        tileset.imageWidth  = lexical_cast<int>(image_node->first_attribute("width")->value());
+        tileset.imageHeight = lexical_cast<int>(image_node->first_attribute("height")->value());
         
         tilesets.push_back(tileset);       
         tileset_node = tileset_node->next_sibling("tileset");
@@ -73,7 +78,7 @@ bool Map::loadFromFile(const std::string& filename)
         boost::char_separator<char> sep(", \t\n\r");
         boost::tokenizer< boost::char_separator<char> > tok(data, sep);
         for (auto it = tok.begin(); it != tok.end(); ++it) {
-          layer.data.push_back(lexical_cast<int>(*it));
+          layer.data.push_back(lexical_cast<unsigned>(*it));
         }
 
       } else {
@@ -82,7 +87,7 @@ bool Map::loadFromFile(const std::string& filename)
       }
 
       layers.push_back(layer);
-      layer_node = map_node->next_sibling("layer");
+      layer_node = layer_node->next_sibling("layer");
     }
     
 

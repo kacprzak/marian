@@ -12,10 +12,12 @@ class Tileset
 {
  public:
   std::string name;
-  int firstGid;
+  unsigned firstGid;
   int tileWidth;
   int tileHeight;
   std::string imageSource;
+  int imageWidth;
+  int imageHeight;
 };
 
 class Layer 
@@ -25,7 +27,7 @@ class Layer
   int width;
   int height;
   std::string dataEncoding;
-  std::vector<int> data;
+  std::vector<unsigned> data;
 };
 
 class Map : boost::noncopyable
@@ -33,7 +35,7 @@ class Map : boost::noncopyable
  public:
   Map();
   bool loadFromFile(const std::string& filename);
-
+ 
   std::string version;
   std::string orientation;
   int width;
