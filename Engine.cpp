@@ -102,7 +102,7 @@ void Engine::update(float elapsedTime)
 void Engine::draw()
 {
   //m_translate_z = -10.0f;
-  //m_scale = 0.03f;
+  //m_scale = 2.0f;
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glMatrixMode(GL_MODELVIEW);
@@ -234,12 +234,14 @@ void Engine::initializeOpenGL()
   std::cout << "Initializing OpenGl...\n";
   //float ratio = float(m_screenWidth) / float(m_screenHeight);
 
-  glShadeModel(GL_SMOOTH);
+  //glShadeModel(GL_SMOOTH); // smooth is default
   glClearColor(0, 0, 0, 0);
   glViewport(0, 0, m_screenWidth, m_screenHeight);
   glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
   //gluPerspective(60.0, ratio, 1.0, 1024.0);
   //glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-  glOrtho(-m_screenWidth/2, m_screenWidth/2, -m_screenHeight/2, m_screenHeight/2, -11, 1);
+  glOrtho(-m_screenWidth/2, m_screenWidth/2, -m_screenHeight/2, m_screenHeight/2, -1, 1);
+
   glDisable(GL_DEPTH_TEST); // uncomment this if going 2D
 }

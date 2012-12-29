@@ -23,3 +23,13 @@ void Sprite::getTextureCoords(float texCoords[]) const
     texCoords[6] = 0.0f; texCoords[7] = 1.0f;
   }
 }
+
+std::string Sprite::toString() const
+{
+  std::stringstream ss;
+  ss << "Sprite: {" << this << ", pos: {" << m_position.x
+     << ", " << m_position.y << "}, size: {"
+     << m_size.x << ", " << m_size.y << "}, texId: "
+     << m_texture->textureId() << "}";
+  return ss.str();
+}

@@ -12,10 +12,31 @@ Map::Map()
   //
 }
 
+//------------------------------------------------------------------------------
+
 bool Map::loadFromFile(const std::string& filename)
 {
   return m_tmxMap.loadFromFile(filename);
 }
+
+//------------------------------------------------------------------------------
+
+Vector2<int> Map::pixelSize() const
+{
+  int w = m_tmxMap.width  * m_tmxMap.tileWidth;
+  int h = m_tmxMap.height * m_tmxMap.tileHeight;
+
+  return Vector2<int>(w, h);
+}
+
+//------------------------------------------------------------------------------
+
+Vector2<int> Map::tileSize() const
+{
+  return Vector2<int>(m_tmxMap.width, m_tmxMap.height);
+}
+
+//------------------------------------------------------------------------------
 
 void Map::getObjects(std::vector<Sprite>& v)
 {
@@ -30,12 +51,58 @@ void Map::getObjects(std::vector<Sprite>& v)
   }
 }
 
+//------------------------------------------------------------------------------
+
+unsigned Map::getTileGidAt(int x, int y, const std::string& layerName)
+{
+  for (const tmx::Layer& layer : m_tmxMap.layers) {
+    if (layer.name == layerName) {
+      // Map coords
+      int tile_x = x / m_tmxMap.tileWidth;
+      int tile_y = m_tmxMap.height - (y / m_tmxMap.tileHeight) - 1;
+
+      return layer.data[tile_y * layer.width + tile_x];
+    }
+  }
+
+  return 0;
+}
+
+//------------------------------------------------------------------------------
+
+Rect<int> Map::getTileRectAt(int x, int y)
+{
+  int t_w = m_tmxMap.tileWidth;
+  int t_h = m_tmxMap.tileHeight;
+
+  // Purposely int/int
+  int t_x = x / t_w;
+  int t_y = y / t_h;
+
+  return Rect<int>(t_x * t_w, t_y * t_h, t_w, t_h);
+}
+
+//------------------------------------------------------------------------------
+
 void Map::draw(Engine *e) const
 {
   for (const tmx::Layer& layer : m_tmxMap.layers) {
     drawLayer(e, layer);
   }
 }
+
+//------------------------------------------------------------------------------
+
+void Map::drawLayer(Engine *e, const std::string& layerName) const
+{
+  for (const tmx::Layer& layer : m_tmxMap.layers) {
+    if (layer.name == layerName) {
+      drawLayer(e, layer);
+    }
+  }
+}
+
+//------------------------------------------------------------------------------
 
 void Map::drawLayer(Engine *e, const tmx::Layer& layer) const
 {
@@ -68,6 +135,8 @@ void Map::drawLayer(Engine *e, const tmx::Layer& layer) const
     }
   }
 }
+
+//------------------------------------------------------------------------------
 
 Rect<int> Map::rectForTile(unsigned global_tile_id) const
 {
