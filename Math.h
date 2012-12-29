@@ -38,6 +38,14 @@ class Rect {
     return Vector2<T>(x, y);
   }
 
+  bool intersects(const Rect<T>& other)
+  {
+    return !(other.left()      > right()
+             || other.right()  < left()
+             || other.bottom() > top()
+             || other.top()    < bottom());
+  }
+
  private:
   Vector2<T> m_leftbottom;
   Vector2<T> m_size;
