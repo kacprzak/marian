@@ -8,7 +8,7 @@ ResourceMgr::ResourceMgr()
 
 ResourceMgr::~ResourceMgr()
 {
-  releaseTextures();
+  release();
   std::cout << "ResourceMgr destroyed\n";
 }
 
@@ -17,6 +17,10 @@ void ResourceMgr::setDataFolder(const std::string& folder)
   dataFolder = folder;
 }
 
+void ResourceMgr::release()
+{
+  releaseTextures();
+}
 
 bool ResourceMgr::addTexture(const std::string& filename)
 {

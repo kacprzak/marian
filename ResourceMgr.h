@@ -20,6 +20,9 @@ class ResourceMgr : boost::noncopyable
   // Set data folder ex: "media/"
   void setDataFolder(const std::string& folder);
 
+  // Releases all resources.
+  void release();
+
   // Textures management
   bool addTexture(const std::string& filename);
   const Texture* getTexture(const std::string& filename);

@@ -6,6 +6,7 @@
 
 #include "Texture.h"
 #include <vector>
+#include "ResourceMgr.h"
 
 Engine::Engine(const std::string& title, int screenWidth, int screenHeight)
   : m_titile(title)
@@ -15,6 +16,7 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight)
   , m_translate_y(0.0f)
   , m_translate_z(0.0f)
   , m_scale(1.0f)
+  , m_game(0)
 {
   try {
     initializeSDL();
@@ -30,6 +32,9 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight)
 
 Engine::~Engine()
 {
+  // Release all resources
+  ResourceMgr::instance().release();
+
   std::cout << "Quitting SDL...\n";
   SDL_Quit();
 }
@@ -226,6 +231,7 @@ void Engine::initializeSDL()
 
 void Engine::initializeOpenGL()
 {
+  std::cout << "Initializing OpenGl...\n";
   //float ratio = float(m_screenWidth) / float(m_screenHeight);
 
   glShadeModel(GL_SMOOTH);
