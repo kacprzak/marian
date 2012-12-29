@@ -14,13 +14,14 @@ class Game : public Playable
   ~Game();
 
   // Playable interface
-  void processInput(const SDL_Event& event);
+  bool processInput(const SDL_Event& event);
   void update(Engine *e, float elapsedTime);
   void draw(Engine *e);
 
  private:
   std::vector<Sprite> m_sprites;
   Map m_map;
+  bool m_keys[SDLK_LAST];
 };
 
 #endif

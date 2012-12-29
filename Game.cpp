@@ -8,6 +8,10 @@
 
 Game::Game()
 {
+  for (int i = 0; i < SDLK_LAST; ++i) {
+    m_keys[i] = false;
+  }
+
   ResourceMgr& resMgr = ResourceMgr::instance();
   resMgr.setDataFolder("media/");
 
@@ -28,28 +32,44 @@ Game::Game()
 
 Game::~Game()
 {
-  //delete m_sprites[0];
+  //
 }
 
 //------------------------------------------------------------------------------
 
-void Game::processInput(const SDL_Event& event)
+bool Game::processInput(const SDL_Event& event)
 {
   switch (event.type) {
   case SDL_KEYUP:
-    std::cout << "Key Up: " << event.key.keysym.sym << std::endl;
+    m_keys[event.key.keysym.sym] = false;
+    //std::cout << "Key Up: " << event.key.keysym.sym << std::endl;
     break;
   case SDL_KEYDOWN:
-    std::cout << "Key Down: " << event.key.keysym.sym << std::endl;
+    m_keys[event.key.keysym.sym] = true;
+    if (m_keys[SDLK_ESCAPE]) return false;
+    //std::cout << "Key Down: " << event.key.keysym.sym << std::endl;
     break;
   }
+  return true; // keep going
 }
 
 //------------------------------------------------------------------------------
 
 void Game::update(Engine *e, float elapsedTime)
 {
-  const Sprite& s = m_sprites[0];
+  Sprite& s = m_sprites[0];
+
+  float x = s.position().x;
+  float y = s.position().y;
+
+  static float v = 100.0f;
+
+  if (m_keys[SDLK_RIGHT]) x += v * elapsedTime;
+  if (m_keys[SDLK_LEFT])  x -= v * elapsedTime;
+  if (m_keys[SDLK_UP])    y += v * elapsedTime;
+  if (m_keys[SDLK_DOWN])  y -= v * elapsedTime;
+
+  s.setPosition(x, y);
 
   e->centerOnPixel(s.position().x, s.position().y);
 }

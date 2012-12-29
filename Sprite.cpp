@@ -3,6 +3,7 @@
 void Sprite::getTextureCoords(float texCoords[]) const
 {
   const Rect<int>& rect = m_textureRect;
+
   float w = static_cast<float>(m_texture->w());
   float h = static_cast<float>(m_texture->h());
   

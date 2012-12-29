@@ -11,7 +11,7 @@ class Playable : boost::noncopyable
  public:
   virtual ~Playable() {}
 
-  virtual void processInput(const SDL_Event& event) = 0;
+  virtual bool processInput(const SDL_Event& event) = 0;
   virtual void update(Engine *e, float elapsedTime) = 0;
   virtual void draw(Engine *e) = 0;
 };

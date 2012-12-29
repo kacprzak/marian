@@ -16,9 +16,6 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight)
   , m_translate_z(0.0f)
   , m_scale(1.0f)
 {
-  m_translate_z = -10.0f;
-  m_scale = 0.03f;
-
   try {
     initializeSDL();
     initializeOpenGL();
@@ -78,8 +75,7 @@ bool Engine::processEvents()
     switch (event.type) {
     case SDL_KEYUP:
     case SDL_KEYDOWN:
-      m_game->processInput(event);
-      break;
+      return m_game->processInput(event);
     case SDL_QUIT:
       return false;
     }
@@ -100,6 +96,9 @@ void Engine::update(float elapsedTime)
 
 void Engine::draw()
 {
+  //m_translate_z = -10.0f;
+  //m_scale = 0.03f;
+
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
@@ -233,7 +232,8 @@ void Engine::initializeOpenGL()
   glClearColor(0, 0, 0, 0);
   glViewport(0, 0, m_screenWidth, m_screenHeight);
   glMatrixMode(GL_PROJECTION);
-  gluPerspective(60.0, ratio, 1.0, 1024.0);
-  glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+  //gluPerspective(60.0, ratio, 1.0, 1024.0);
+  //glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+  glOrtho(-m_screenWidth/2, m_screenWidth/2, -m_screenHeight/2, m_screenHeight/2, -11, 1);
   glDisable(GL_DEPTH_TEST); // uncomment this if going 2D
 }
