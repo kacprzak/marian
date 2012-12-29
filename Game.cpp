@@ -18,6 +18,10 @@ Game::Game()
   m_map.loadFromFile("media/map1.tmx");
 
   m_map.getObjects(m_sprites);
+  std::cout << "INFO: " << m_sprites.size() << " objects loaded.\n";
+  for (const Sprite& s : m_sprites) {
+    std::cout << "INFO: " << s.toString() << '\n';
+  }
 
   m_x = 0.0f;
 }

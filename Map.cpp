@@ -24,7 +24,7 @@ void Map::getObjects(std::vector<Sprite>& v)
   for (const tmx::ObjectGroup& og : m_tmxMap.objectGroups) {
     for (const tmx::Object& obj : og.objects) {
       Sprite sprite(tex, rectForTile(obj.gid));
-      sprite.setPosition(obj.x, m_tmxMap.height * m_tmxMap.tileHeight - obj.y - m_tmxMap.tileHeight);
+      sprite.setPosition(obj.x, m_tmxMap.height * m_tmxMap.tileHeight - obj.y);
       v.push_back(sprite);
     }
   }
@@ -63,7 +63,7 @@ void Map::drawLayer(Engine *e, const tmx::Layer& layer) const
 
       Sprite sprite(tex, rectForTile(global_tile_id));
 
-      sprite.setPosition(x * tileWidth, -y * tileHeight + tex->h());
+      sprite.setPosition(x * tileWidth, (m_tmxMap.height - y - 1) * tileHeight);
       e->drawSprite(sprite);
     }
   }

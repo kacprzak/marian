@@ -3,6 +3,8 @@
 
 #include "Math.h"
 #include "Texture.h"
+#include <string>
+#include <sstream>
 
 class Sprite {
  public:
@@ -51,6 +53,16 @@ class Sprite {
   }
 
   void getTextureCoords(float texCoords[]) const;
+
+  std::string toString() const
+  {
+    std::stringstream ss;
+    ss << "Sprite: {" << this << ", pos={" << m_position.x
+       << ", " << m_position.y << "}, size={"
+       << m_size.x << ", " << m_size.y << "} texId="
+       << m_texture->textureId() << "}\n";
+    return ss.str();
+  }
 
  private:
   Vector2<float> m_position;

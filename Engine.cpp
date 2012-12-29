@@ -89,8 +89,9 @@ void Engine::draw()
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
-  glTranslatef(-5.0f, -5.0f, -10.0f);
-  static float scale = 0.02f;
+  // glTranslatef(-5.0f, -5.0f, -10.0f);
+  glTranslatef(0.0f, 0.0f, -10.0f);
+  static float scale = 0.03f;
   glScalef(scale, scale, 1.0f);
 
   m_game->draw(this);
