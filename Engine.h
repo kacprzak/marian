@@ -45,6 +45,8 @@ class Engine
   void drawQuad(float x, float y, float w, float h, GLuint textureId, float texCoords[]);
   void drawSprite(const Sprite& sprite);
 
+  void centerOnPixel(float x, float y);
+
  private:
   void initializeSDL();
   void initializeOpenGL();
@@ -57,6 +59,11 @@ class Engine
   std::string m_titile;
   int m_screenWidth;
   int m_screenHeight;
+
+  float m_translate_x;
+  float m_translate_y;
+  float m_translate_z;
+  float m_scale;
 
   Playable *m_game;
 };

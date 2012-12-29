@@ -11,7 +11,14 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight)
   : m_titile(title)
   , m_screenWidth(screenWidth)
   , m_screenHeight(screenHeight)
+  , m_translate_x(0.0f)
+  , m_translate_y(0.0f)
+  , m_translate_z(0.0f)
+  , m_scale(1.0f)
 {
+  m_translate_z = -10.0f;
+  m_scale = 0.03f;
+
   try {
     initializeSDL();
     initializeOpenGL();
@@ -54,6 +61,14 @@ void Engine::mainLoop(Playable *game)
 
 //------------------------------------------------------------------------------
 
+void Engine::centerOnPixel(float x, float y)
+{
+  m_translate_x = -x * m_scale;
+  m_translate_y = -y * m_scale;
+}
+
+//------------------------------------------------------------------------------
+
 /** Return true if should keep going. */
 bool Engine::processEvents()
 {
@@ -89,10 +104,10 @@ void Engine::draw()
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
-  // glTranslatef(-5.0f, -5.0f, -10.0f);
-  glTranslatef(0.0f, 0.0f, -10.0f);
-  static float scale = 0.03f;
-  glScalef(scale, scale, 1.0f);
+  glTranslatef(m_translate_x,
+               m_translate_y,
+               m_translate_z);
+  glScalef(m_scale, m_scale, 1.0f);
 
   m_game->draw(this);
 

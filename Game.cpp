@@ -22,8 +22,6 @@ Game::Game()
   for (const Sprite& s : m_sprites) {
     std::cout << "INFO: " << s.toString() << '\n';
   }
-
-  m_x = 0.0f;
 }
 
 //------------------------------------------------------------------------------
@@ -49,18 +47,17 @@ void Game::processInput(const SDL_Event& event)
 
 //------------------------------------------------------------------------------
 
-void Game::update(Engine */*e*/, float elapsedTime)
+void Game::update(Engine *e, float elapsedTime)
 {
-  //float v = 20.0f;
-  //m_x += v * elapsedTime;
+  const Sprite& s = m_sprites[0];
+
+  e->centerOnPixel(s.position().x, s.position().y);
 }
 
 //------------------------------------------------------------------------------
 
 void Game::draw(Engine *e)
 {
-  //e->drawSprite(*m_sprites[0]);
-  glTranslatef(m_x, 0.0f, 0.0f);
   m_map.draw(e);
 
   for (const Sprite& s : m_sprites) {

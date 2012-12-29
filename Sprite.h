@@ -32,6 +32,11 @@ class Sprite {
     m_position.y = y;
   }
 
+  const Vector2<float> position() const
+  {
+    return m_position;
+  }
+
   int width() const
   {
     return m_size.x;
@@ -40,11 +45,6 @@ class Sprite {
   int height() const
   {
     return m_size.y;
-  }
-
-  const Vector2<float> position() const
-  {
-    return m_position;
   }
 
   const Texture *texture() const
