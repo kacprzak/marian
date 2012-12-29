@@ -226,7 +226,7 @@ void Engine::initializeSDL()
 
 void Engine::initializeOpenGL()
 {
-  float ratio = float(m_screenWidth) / float(m_screenHeight);
+  //float ratio = float(m_screenWidth) / float(m_screenHeight);
 
   glShadeModel(GL_SMOOTH);
   glClearColor(0, 0, 0, 0);

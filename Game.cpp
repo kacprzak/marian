@@ -62,7 +62,7 @@ void Game::update(Engine *e, float elapsedTime)
   float x = s.position().x;
   float y = s.position().y;
 
-  static float v = 100.0f;
+  static float v = 250.0f;
 
   if (m_keys[SDLK_RIGHT]) x += v * elapsedTime;
   if (m_keys[SDLK_LEFT])  x -= v * elapsedTime;

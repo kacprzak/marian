@@ -7,6 +7,10 @@ void Sprite::getTextureCoords(float texCoords[]) const
   float w = static_cast<float>(m_texture->w());
   float h = static_cast<float>(m_texture->h());
   
+  // Weird but this repairs glitches while rendering tiles
+  //w += 32.0f / w;
+  h += 32.0f / h;
+
   if (rect.size().x > 0 && rect.size().y > 0) {
     texCoords[0] = rect.left()  / w; texCoords[1] = rect.bottom() / h;
     texCoords[2] = rect.right() / w; texCoords[3] = rect.bottom() / h;
