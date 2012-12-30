@@ -1,5 +1,5 @@
 #ifndef ENGINE_H
-#define ENGINE_h
+#define ENGINE_H
 
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -18,6 +18,8 @@ class SdlError : public std::exception
   {
     //
   }
+
+  ~SdlError() throw() {}
 
   const char* what() const noexcept
   {
