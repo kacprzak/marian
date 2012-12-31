@@ -5,6 +5,7 @@
 #include "Texture.h"
 #include <string>
 #include <sstream>
+#include <ostream>
 
 class Sprite {
  public:
@@ -52,7 +53,7 @@ class Sprite {
     return m_texture;
   }
 
-  void getTextureCoords(float texCoords[]) const;
+  void getTextureCoords(GLfloat texCoords[]) const;
   std::string toString() const;
 
  private:
@@ -61,5 +62,12 @@ class Sprite {
   Rect<int>      m_textureRect;
   Vector2<int>   m_size;
 };
+
+
+inline std::ostream& operator<<(std::ostream& os, const Sprite& sprite)
+{
+  os << sprite.toString();
+  return os;
+}
 
 #endif

@@ -43,11 +43,13 @@ class Engine
   void mainLoop(Playable *game);
 
   void drawQuad(float x, float y, float w, float h);
-  void drawQuad(float x, float y, float w, float h, float texCoords[]);
-  void drawQuad(float x, float y, float w, float h, GLuint textureId, float texCoords[]);
+  void drawQuad(float x, float y, float w, float h, GLfloat texCoords[]);
+  void drawQuad(float x, float y, float w, float h, GLuint textureId, GLfloat texCoords[]);
   void drawSprite(const Sprite& sprite);
 
   void centerOnPixel(float x, float y);
+
+  bool isPressed(int keycode) { return m_keys[keycode]; }
 
  private:
   void initializeSDL();
@@ -68,6 +70,8 @@ class Engine
   float m_scale;
 
   Playable *m_game;
+
+  bool m_keys[SDLK_LAST];
 };
 
 #endif

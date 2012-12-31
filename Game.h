@@ -4,8 +4,10 @@
 #include "Playable.h"
 #include <vector>
 #include "Map.h"
+#include "FpsCounter.h"
 
 class Sprite;
+class GameObject;
 
 class Game : public Playable
 {
@@ -18,10 +20,13 @@ class Game : public Playable
   void update(Engine *e, float elapsedTime);
   void draw(Engine *e);
 
+  Map *map() { return &m_map; }
+
  private:
-  std::vector<Sprite> m_sprites;
+  std::vector<GameObject *> m_gameObjects;
   Map m_map;
-  bool m_keys[SDLK_LAST];
+
+  FpsCounter m_fpsCounter;
 };
 
 #endif

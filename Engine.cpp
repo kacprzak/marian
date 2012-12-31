@@ -26,6 +26,10 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight)
     SDL_Quit();
     throw e;
   }
+
+  for (int i = 0; i < SDLK_LAST; ++i) {
+    m_keys[i] = false;
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -79,7 +83,10 @@ bool Engine::processEvents()
   while (SDL_PollEvent(&event)) {
     switch (event.type) {
     case SDL_KEYUP:
+      m_keys[event.key.keysym.sym] = false;
+      return m_game->processInput(event);
     case SDL_KEYDOWN:
+      m_keys[event.key.keysym.sym] = true;
       return m_game->processInput(event);
     case SDL_QUIT:
       return false;
@@ -122,19 +129,17 @@ void Engine::draw()
 
 void Engine::drawQuad(float x, float y, float w, float h)
 {
-  w /= 2.0f; h /= 2.0f;
-
   glBegin(GL_QUADS);
-    glTexCoord2f(0.0f, 0.0f); glVertex2f(x - w, y - h);
-    glTexCoord2f(1.0f, 0.0f); glVertex2f(x + w, y - h);
+    glTexCoord2f(0.0f, 0.0f); glVertex2f(x, y);
+    glTexCoord2f(1.0f, 0.0f); glVertex2f(x + w, y);
     glTexCoord2f(1.0f, 1.0f); glVertex2f(x + w, y + h);
-    glTexCoord2f(0.0f, 1.0f); glVertex2f(x - w, y + h);
+    glTexCoord2f(0.0f, 1.0f); glVertex2f(x, y + h);
   glEnd();
 }
 
 //------------------------------------------------------------------------------
 
-void Engine::drawQuad(float x, float y, float w, float h, float texCoords[])
+void Engine::drawQuad(float x, float y, float w, float h, GLfloat texCoords[])
 {
   glBegin(GL_QUADS);
     glTexCoord2f(texCoords[0], texCoords[1]); glVertex2f(x, y);
@@ -146,7 +151,7 @@ void Engine::drawQuad(float x, float y, float w, float h, float texCoords[])
 
 //------------------------------------------------------------------------------
 
-void Engine::drawQuad(float x, float y, float w, float h, GLuint texture_id, float texCoords[])
+void Engine::drawQuad(float x, float y, float w, float h, GLuint texture_id, GLfloat texCoords[])
 {
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_BLEND);
@@ -178,8 +183,8 @@ void Engine::drawSprite(const Sprite& sprite)
 
   drawQuad(sprite.position().x,
 	   sprite.position().y,
-	   (float)sprite.width(),
-	   (float)sprite.height(),
+	   sprite.width(),
+	   sprite.height(),
 	   tex->textureId(),
            texCoords);
 }

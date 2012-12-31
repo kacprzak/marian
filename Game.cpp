@@ -3,15 +3,13 @@
 #include "Sprite.h"
 #include "ResourceMgr.h"
 #include "Engine.h"
+#include "GameObject.h"
+#include "Hero.h"
 
 #include <iostream>
 
 Game::Game()
 {
-  for (int i = 0; i < SDLK_LAST; ++i) {
-    m_keys[i] = false;
-  }
-
   ResourceMgr& resMgr = ResourceMgr::instance();
   resMgr.setDataFolder("media/");
 
@@ -21,10 +19,16 @@ Game::Game()
 
   m_map.loadFromFile("media/map1.tmx");
 
-  m_map.getObjects(m_sprites);
-  std::cout << "INFO: " << m_sprites.size() << " objects loaded.\n";
-  for (const Sprite& s : m_sprites) {
-    std::cout << "INFO: " << s.toString() << '\n';
+  std::vector<Sprite> sprites;
+  m_map.getObjects(sprites);
+
+  std::cout << "INFO: " << sprites.size() << " objects loaded.\n";
+
+  for (const Sprite& s : sprites) {
+    std::cout << "INFO: " << s << '\n';
+
+    GameObject *gameObject = new Hero(this, s);
+    m_gameObjects.push_back(gameObject);
   }
 }
 
@@ -32,7 +36,9 @@ Game::Game()
 
 Game::~Game()
 {
-  //
+  for (GameObject *go : m_gameObjects) {
+    delete go;
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -41,12 +47,10 @@ bool Game::processInput(const SDL_Event& event)
 {
   switch (event.type) {
   case SDL_KEYUP:
-    m_keys[event.key.keysym.sym] = false;
     //std::cout << "Key Up: " << event.key.keysym.sym << std::endl;
     break;
   case SDL_KEYDOWN:
-    m_keys[event.key.keysym.sym] = true;
-    if (m_keys[SDLK_ESCAPE]) return false;
+    if (event.key.keysym.sym == SDLK_ESCAPE) return false;
     //std::cout << "Key Down: " << event.key.keysym.sym << std::endl;
     break;
   }
@@ -57,58 +61,11 @@ bool Game::processInput(const SDL_Event& event)
 
 void Game::update(Engine *e, float elapsedTime)
 {
-  Sprite& s = m_sprites[0];
+  for (GameObject *go : m_gameObjects) {
+    go->update(e, elapsedTime);
+  } 
 
-  float x = s.position().x;
-  float y = s.position().y;
-
-  static float v = 250.0f;
-
-  if (m_keys[SDLK_RIGHT]) x += v * elapsedTime;
-  if (m_keys[SDLK_LEFT])  x -= v * elapsedTime;
-  if (m_keys[SDLK_UP])    y += v * elapsedTime;
-  if (m_keys[SDLK_DOWN])  y -= v * elapsedTime;
-
-  // Dont leave the map
-  if (x < 0) x = 0;
-  if (y < 0) y = 0;
-  if (x > m_map.pixelSize().x - s.width())  x = m_map.pixelSize().x - s.width();
-  if (y > m_map.pixelSize().y - s.height()) y = m_map.pixelSize().y - s.height();
-
-  // Respect walls ;)
-  // Hotspots
-  Vector2<int> top   (x + s.width()/2, y + s.height());
-  Vector2<int> bottom(x + s.width()/2, y);
-  Vector2<int> left  (x              , y + s.height()/2);
-  Vector2<int> right (x + s.width()  , y + s.height()/2);
-
-  unsigned gid = m_map.getTileGidAt(left.x, left.y, "collision");
-  if (gid != 0) {
-    const Rect<int> tileRect = m_map.getTileRectAt(left.x, left.y);
-    x = tileRect.right();
-  }
-
-  gid = m_map.getTileGidAt(right.x, right.y, "collision");
-  if (gid != 0) {
-    const Rect<int> tileRect = m_map.getTileRectAt(right.x, right.y);
-    x = tileRect.left() - s.width();
-  }
-
-  gid = m_map.getTileGidAt(bottom.x, bottom.y, "collision");
-  if (gid != 0) {
-    const Rect<int> tileRect = m_map.getTileRectAt(bottom.x, bottom.y);
-    y = tileRect.top();
-  }
-
-  gid = m_map.getTileGidAt(top.x, top.y, "collision");
-  if (gid != 0) {
-    const Rect<int> tileRect = m_map.getTileRectAt(top.x, top.y);
-    y = tileRect.bottom() - s.height();
-  }
-
-  s.setPosition(x, y);
-
-  e->centerOnPixel(s.position().x, s.position().y);
+  m_fpsCounter.update(elapsedTime);
 }
 
 //------------------------------------------------------------------------------
@@ -118,8 +75,8 @@ void Game::draw(Engine *e)
   m_map.drawLayer(e, "back");
   m_map.drawLayer(e, "collision");
 
-  for (const Sprite& s : m_sprites) {
-    e->drawSprite(s);
+  for (GameObject* go : m_gameObjects) {
+    go->draw(e);
   }
 
   m_map.drawLayer(e, "front");

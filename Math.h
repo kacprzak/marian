@@ -7,6 +7,14 @@ class Vector2 {
   Vector2(T ax, T ay)
     : x(ax), y(ay) {}
 
+  Vector2()
+    : x(0), y(0) {}
+
+  bool isZero() const
+  {
+    return (x == 0 && y == 0) ? true : false;
+  }
+
   T x, y;
 };
 
@@ -23,8 +31,12 @@ class Rect {
     , m_size(size)
     {}
 
+  Rect() {}
+
   const Vector2<T> leftbottom() const { return m_leftbottom; }
-  const Vector2<T> size()    const { return m_size; }
+  const Vector2<T> size()       const { return m_size; }
+
+  bool isNull() const { return m_size.isZero(); }
 
   T left()   const { return m_leftbottom.x; }
   T right()  const { return m_leftbottom.x + m_size.x; }
@@ -38,7 +50,7 @@ class Rect {
     return Vector2<T>(x, y);
   }
 
-  bool intersects(const Rect<T>& other)
+  bool intersects(const Rect<T>& other) const
   {
     return !(other.left()      > right()
              || other.right()  < left()

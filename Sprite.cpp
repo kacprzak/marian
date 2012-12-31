@@ -1,6 +1,6 @@
 #include "Sprite.h"
 
-void Sprite::getTextureCoords(float texCoords[]) const
+void Sprite::getTextureCoords(GLfloat texCoords[]) const
 {
   const Rect<int>& rect = m_textureRect;
 
