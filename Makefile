@@ -4,7 +4,9 @@ LIBS := `sdl-config --libs` -lGL -lGLU -lSDL_image
 
 OBJS := main.o Util.o TmxMap.o Map.o Texture.o \
 	ResourceMgr.o Sprite.o Engine.o Game.o \
-	GameObject.o Hero.o FpsCounter.o
+	GameObject.o Hero.o FpsCounter.o base64.o
+
+VPATH=base64
 
 all: marian
 
@@ -15,7 +17,7 @@ marian: $(OBJS) $(MAIN)
 
 %.o: %.cpp
 	$(CC) $< -o $@ -c $(CFLAGS)
-	$(CC) -MM $(CFLAGS) $*.cpp > $*.d
+	$(CC) $< -MM $(CFLAGS) > $*.d
 
 .PHONY : test clean cleantmp
 test:

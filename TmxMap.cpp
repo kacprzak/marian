@@ -2,9 +2,11 @@
 
 #include <boost/lexical_cast.hpp>
 #include <boost/tokenizer.hpp>
+#include <boost/algorithm/string.hpp>
 #include <iostream>
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_utils.hpp"
+#include "base64/base64.h"
 
 using namespace boost;
 
@@ -71,7 +73,8 @@ bool Map::loadFromFile(const std::string& filename)
       xml_node<> *data_node = layer_node->first_node("data");
       layer.dataEncoding = data_node->first_attribute("encoding")->value();
 
-      if (layer.dataEncoding == "csv") {
+      if (layer.dataEncoding == "csv")
+      {
         //std::cout << data_node->value();
         std::string data = data_node->value();
 
@@ -80,7 +83,26 @@ bool Map::loadFromFile(const std::string& filename)
         for (auto it = tok.begin(); it != tok.end(); ++it) {
           layer.data.push_back(lexical_cast<unsigned>(*it));
         }
-      } else {
+      }
+      else if (layer.dataEncoding == "base64")
+      {
+        std::string nodevalue = data_node->value();
+        boost::algorithm::trim(nodevalue);
+        std::string datastr = base64_decode(nodevalue);
+
+        const unsigned char *data = reinterpret_cast<const unsigned char*>(datastr.data());
+
+        for (unsigned i = 0; i < datastr.size() * 4; i += 4) {
+          unsigned global_tile_id = data[i]
+            | data[i + 1] << 8
+            | data[i + 2] << 16
+            | data[i + 3] << 24;
+          
+          layer.data.push_back(global_tile_id);
+        }
+      }
+      else
+      {
         std::cerr << "WARNING: Map layer data loading from " << layer.dataEncoding
                   << " is not implemented." << std::endl;
       }
