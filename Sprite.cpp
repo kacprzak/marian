@@ -1,20 +1,27 @@
 #include "Sprite.h"
 
+#include <cmath>
+
 void Sprite::getTextureCoords(GLfloat texCoords[]) const
 {
   const Rect<int>& rect = m_textureRect;
 
   float w = static_cast<float>(m_texture->w());
   float h = static_cast<float>(m_texture->h());
-  
-  // Weird but this repairs glitches while rendering tiles on mesa libs
-  //h += 32.0f / h;
 
-  if (rect.size().x > 0 && rect.size().y > 0) {
-    texCoords[0] = rect.left()  / w; texCoords[1] = rect.bottom() / h;
-    texCoords[2] = rect.right() / w; texCoords[3] = rect.bottom() / h;
-    texCoords[4] = rect.right() / w; texCoords[5] = rect.top()    / h;
-    texCoords[6] = rect.left()  / w; texCoords[7] = rect.top()    / h;      
+  if (!rect.isNull()) {
+    GLfloat u0 = rect.left()   / w;
+    GLfloat v0 = rect.bottom() / h;
+    GLfloat u1 = rect.right()  / w;
+    GLfloat v1 = rect.top()    / h;
+
+    // Weird but this repairs glitches while rendering tiles on mesa libs
+    v1 -= 0.0001f;
+
+    texCoords[0] = u0; texCoords[1] = v0;
+    texCoords[2] = u1; texCoords[3] = v0;
+    texCoords[4] = u1; texCoords[5] = v1;
+    texCoords[6] = u0; texCoords[7] = v1;      
   } else {
     texCoords[0] = 0.0f; texCoords[1] = 0.0f;
     texCoords[2] = 1.0f; texCoords[3] = 0.0f;

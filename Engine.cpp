@@ -127,7 +127,7 @@ void Engine::draw()
 
 //------------------------------------------------------------------------------
 
-void Engine::drawQuad(float x, float y, float w, float h)
+void Engine::drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h)
 {
   glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f); glVertex2f(x, y);
@@ -139,7 +139,7 @@ void Engine::drawQuad(float x, float y, float w, float h)
 
 //------------------------------------------------------------------------------
 
-void Engine::drawQuad(float x, float y, float w, float h, GLfloat texCoords[])
+void Engine::drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h, GLfloat texCoords[])
 {
   glBegin(GL_QUADS);
     glTexCoord2f(texCoords[0], texCoords[1]); glVertex2f(x, y);
@@ -151,7 +151,7 @@ void Engine::drawQuad(float x, float y, float w, float h, GLfloat texCoords[])
 
 //------------------------------------------------------------------------------
 
-void Engine::drawQuad(float x, float y, float w, float h, GLuint texture_id, GLfloat texCoords[])
+void Engine::drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h, GLuint texture_id, GLfloat texCoords[])
 {
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_BLEND);
@@ -178,7 +178,7 @@ void Engine::drawQuad(float x, float y, float w, float h, GLuint texture_id, GLf
 void Engine::drawSprite(const Sprite& sprite)
 {
   const Texture *tex = sprite.texture();
-  float texCoords[8];
+  GLfloat texCoords[8];
   sprite.getTextureCoords(texCoords);
 
   drawQuad(sprite.position().x,

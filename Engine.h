@@ -42,9 +42,9 @@ class Engine
   
   void mainLoop(Playable *game);
 
-  void drawQuad(float x, float y, float w, float h);
-  void drawQuad(float x, float y, float w, float h, GLfloat texCoords[]);
-  void drawQuad(float x, float y, float w, float h, GLuint textureId, GLfloat texCoords[]);
+  void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h);
+  void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h, GLfloat texCoords[]);
+  void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h, GLuint textureId, GLfloat texCoords[]);
   void drawSprite(const Sprite& sprite);
 
   void centerOnPixel(float x, float y);

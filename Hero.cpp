@@ -2,6 +2,7 @@
 
 #include "Engine.h"
 #include "Game.h"
+#include <iostream>
 
 void Hero::update(Engine *e, float elapsedTime)
 {
