@@ -229,6 +229,7 @@ void Engine::initializeSDL()
     throw SdlError("Setting video mode failed", SDL_GetError());
   }
 
+  SDL_ShowCursor(SDL_DISABLE);
   SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);  
 
   std::cout << "SDL initialized.\n";
@@ -241,8 +242,10 @@ void Engine::initializeOpenGL()
   std::cout << "Initializing OpenGl...\n";
   //float ratio = float(m_screenWidth) / float(m_screenHeight);
 
+  int r = 102, g = 140, b = 255;
+
   //glShadeModel(GL_SMOOTH); // smooth is default
-  glClearColor(0, 0, 0, 0);
+  glClearColor(r/255.0f, g/255.0f, b/255.0f, 0);
   glViewport(0, 0, m_screenWidth, m_screenHeight);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
