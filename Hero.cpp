@@ -27,8 +27,8 @@ void Hero::update(Engine *e, float elapsedTime)
     m_vx /= frictionFactor;
   }
 
-  if (e->isPressed(SDLK_UP) && m_vy == 0.0f) m_vy = 250.0f;
-  //if (e->isPressed(SDLK_DOWN)) y -= v * elapsedTime;
+  if (e->isPressed(SDLK_UP) && m_vy == 0.0f)   m_vy = 250.0f;
+  if (e->isPressed(SDLK_DOWN) && m_vy == 0.0f) m_vy = -250.0f;
 
   m_vx += (m_ax * elapsedTime) / 2.0f;
   m_vy += (m_ay * elapsedTime) / 2.0f;
@@ -106,8 +106,26 @@ void Hero::update(Engine *e, float elapsedTime)
     m_vy = 0.0f;
   }
 
-  s.setPosition(x, y);
   resetAcceleration();
+
+  bool isOnLadder = false;
+  // Ladders
+  gid = map->getTileGidAt(bottom1.x, bottom1.y, "ladders");
+  if (gid != 0) {
+    isOnLadder = true;
+  }
+
+  gid = map->getTileGidAt(bottom2.x, bottom2.y, "ladders");
+  if (gid != 0) {
+    isOnLadder = true;
+  }
+
+  if (isOnLadder) {
+    m_ay = 0.0f;
+    m_vy = 0.0f;
+  }
+
+  s.setPosition(x, y);
   // Center on player
   e->centerOnPixel(s.position().x + s.width()/2, s.position().y + s.height()/2);
 }

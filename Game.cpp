@@ -74,6 +74,7 @@ void Game::draw(Engine *e)
 {
   m_map.drawLayer(e, "back");
   m_map.drawLayer(e, "collision");
+  m_map.drawLayer(e, "ladders");
 
   for (GameObject* go : m_gameObjects) {
     go->draw(e);

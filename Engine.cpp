@@ -243,9 +243,9 @@ void Engine::initializeOpenGL()
   //float ratio = float(m_screenWidth) / float(m_screenHeight);
 
   int r = 102, g = 140, b = 255;
+  glClearColor(r/255.0f, g/255.0f, b/255.0f, 0);
 
   //glShadeModel(GL_SMOOTH); // smooth is default
-  glClearColor(r/255.0f, g/255.0f, b/255.0f, 0);
   glViewport(0, 0, m_screenWidth, m_screenHeight);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
