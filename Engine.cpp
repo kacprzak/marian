@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <cstdlib> // exit
+#include <cmath> // floor
 #include <SDL.h>
 
 #include "Texture.h"
@@ -69,8 +70,8 @@ void Engine::mainLoop(Playable *game)
 
 void Engine::centerOnPixel(float x, float y)
 {
-  m_translate_x = -x * m_scale;
-  m_translate_y = -y * m_scale;
+  m_translate_x = std::floor(-x * m_scale);
+  m_translate_y = std::floor(-y * m_scale);
 }
 
 //------------------------------------------------------------------------------
@@ -181,8 +182,8 @@ void Engine::drawSprite(const Sprite& sprite)
   GLfloat texCoords[8];
   sprite.getTextureCoords(texCoords);
 
-  drawQuad(sprite.position().x,
-	   sprite.position().y,
+  drawQuad(std::floor(sprite.position().x),
+	   std::floor(sprite.position().y),
 	   sprite.width(),
 	   sprite.height(),
 	   tex->textureId(),

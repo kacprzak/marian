@@ -10,18 +10,18 @@ void Sprite::getTextureCoords(GLfloat texCoords[]) const
   float h = static_cast<float>(m_texture->h());
 
   if (!rect.isNull()) {
-    GLfloat u0 = rect.left()   / w;
-    GLfloat v0 = rect.bottom() / h;
-    GLfloat u1 = rect.right()  / w;
-    GLfloat v1 = rect.top()    / h;
+    GLfloat s0 = rect.left()   / w;
+    GLfloat t0 = rect.bottom() / h;
+    GLfloat s1 = rect.right()  / w;
+    GLfloat t1 = rect.top()    / h;
 
     // Weird but this repairs glitches while rendering tiles on mesa libs
-    v1 -= 0.0001f;
+    //t1 -= 0.0001f;
 
-    texCoords[0] = u0; texCoords[1] = v0;
-    texCoords[2] = u1; texCoords[3] = v0;
-    texCoords[4] = u1; texCoords[5] = v1;
-    texCoords[6] = u0; texCoords[7] = v1;      
+    texCoords[0] = s0; texCoords[1] = t0;
+    texCoords[2] = s1; texCoords[3] = t0;
+    texCoords[4] = s1; texCoords[5] = t1;
+    texCoords[6] = s0; texCoords[7] = t1;      
   } else {
     texCoords[0] = 0.0f; texCoords[1] = 0.0f;
     texCoords[2] = 1.0f; texCoords[3] = 0.0f;
