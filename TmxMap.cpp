@@ -75,7 +75,6 @@ bool Map::loadFromFile(const std::string& filename)
 
       if (layer.dataEncoding == "csv")
       {
-        //std::cout << data_node->value();
         std::string data = data_node->value();
 
         boost::char_separator<char> sep(", \t\n\r");
@@ -92,11 +91,11 @@ bool Map::loadFromFile(const std::string& filename)
 
         const unsigned char *data = reinterpret_cast<const unsigned char*>(datastr.data());
 
-        for (unsigned i = 0; i < datastr.size() * 4; i += 4) {
+        for (unsigned i = 0; i < datastr.size(); i += 4) {
           unsigned global_tile_id = data[i]
-            | data[i + 1] << 8
-            | data[i + 2] << 16
-            | data[i + 3] << 24;
+                                  | data[i + 1] << 8
+                                  | data[i + 2] << 16
+                                  | data[i + 3] << 24;
           
           layer.data.push_back(global_tile_id);
         }

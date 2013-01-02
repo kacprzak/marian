@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_CASE(map_test)
   BOOST_REQUIRE( map.tileHeight == 32 );
 
   BOOST_TEST_MESSAGE( "Layers size == " << map.layers.size() );
-  BOOST_REQUIRE( map.layers.size() == 3 );
+  BOOST_REQUIRE( map.layers.size() == 4 );
 
   BOOST_REQUIRE( map.objectGroups.size() == 1 );
   BOOST_REQUIRE( map.objectGroups[0].objects.size() == 1 );

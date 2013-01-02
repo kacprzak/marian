@@ -12,19 +12,17 @@ class Sprite {
   Sprite(const Texture *texture)
     : m_position(0.0f, 0.0f)
     , m_texture(texture)
-    , m_textureRect(0, 0, m_texture->w(), m_texture->h())
-    , m_size(m_textureRect.size())
+    , m_size(m_texture->w(), m_texture->h())
   {
-    //
+    calculateTextureCoords(Rect<int>());
   }
 
  Sprite(const Texture *texture, Rect<int> textureRect)
     : m_position(0.0f, 0.0f)
     , m_texture(texture)
-    , m_textureRect(textureRect)
-    , m_size(m_textureRect.size())
+    , m_size(textureRect.size())
   {
-    //
+    calculateTextureCoords(textureRect);
   }
 
   void setPosition(float x, float y)
@@ -53,14 +51,16 @@ class Sprite {
     return m_texture;
   }
 
-  void getTextureCoords(GLfloat texCoords[]) const;
+  const GLfloat *getTextureCoords() const;
   std::string toString() const;
 
  private:
+  void calculateTextureCoords(const Rect<int>& textureRect);
+
   Vector2<float> m_position;
   const Texture *m_texture;
-  Rect<int>      m_textureRect;
   Vector2<int>   m_size;
+  GLfloat        m_texCoords[8];
 };
 
 

@@ -2,10 +2,13 @@
 
 #include <cmath>
 
-void Sprite::getTextureCoords(GLfloat texCoords[]) const
+const GLfloat *Sprite::getTextureCoords() const
 {
-  const Rect<int>& rect = m_textureRect;
+  return m_texCoords;
+}
 
+void Sprite::calculateTextureCoords(const Rect<int>& rect)
+{
   float w = static_cast<float>(m_texture->w());
   float h = static_cast<float>(m_texture->h());
 
@@ -18,15 +21,15 @@ void Sprite::getTextureCoords(GLfloat texCoords[]) const
     // Weird but this repairs glitches while rendering tiles on mesa libs
     //t1 -= 0.0001f;
 
-    texCoords[0] = s0; texCoords[1] = t0;
-    texCoords[2] = s1; texCoords[3] = t0;
-    texCoords[4] = s1; texCoords[5] = t1;
-    texCoords[6] = s0; texCoords[7] = t1;      
+    m_texCoords[0] = s0; m_texCoords[1] = t0;
+    m_texCoords[2] = s1; m_texCoords[3] = t0;
+    m_texCoords[4] = s1; m_texCoords[5] = t1;
+    m_texCoords[6] = s0; m_texCoords[7] = t1;      
   } else {
-    texCoords[0] = 0.0f; texCoords[1] = 0.0f;
-    texCoords[2] = 1.0f; texCoords[3] = 0.0f;
-    texCoords[4] = 1.0f; texCoords[5] = 1.0f;
-    texCoords[6] = 0.0f; texCoords[7] = 1.0f;
+    m_texCoords[0] = 0.0f; m_texCoords[1] = 0.0f;
+    m_texCoords[2] = 1.0f; m_texCoords[3] = 0.0f;
+    m_texCoords[4] = 1.0f; m_texCoords[5] = 1.0f;
+    m_texCoords[6] = 0.0f; m_texCoords[7] = 1.0f;
   }
 }
 
