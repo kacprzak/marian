@@ -7,6 +7,66 @@ const unsigned FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
 const unsigned FLIPPED_VERTICALLY_FLAG   = 0x40000000;
 const unsigned FLIPPED_DIAGONALLY_FLAG   = 0x20000000;
 
+Layer::Layer(const tmx::Map& tmxMap, const tmx::Layer& tmxLayer)
+{
+  name = tmxLayer.name;
+  width = tmxLayer.width;
+  height = tmxLayer.height;
+
+  sprites = new Sprite*[width * height];
+  
+  const Texture *tex = ResourceMgr::instance().getTexture("minecraft_tiles_big.png");
+  
+  int tileWidth  = tmxMap.tileWidth;
+  int tileHeight = tmxMap.tileHeight;
+  
+  for (int y = 0; y < height; ++y) {
+    for (int x = 0; x < width; ++x) {
+      
+      unsigned global_tile_id = tmxLayer.data[y * tmxLayer.width + x];
+      
+      if (global_tile_id == 0) {
+        sprites[y * width + x] = 0;
+      } else {
+        // Read out the flags
+        //bool flipped_horizontally = (global_tile_id & FLIPPED_HORIZONTALLY_FLAG);
+        //bool flipped_vertically   = (global_tile_id & FLIPPED_VERTICALLY_FLAG);
+        //bool flipped_diagonally   = (global_tile_id & FLIPPED_DIAGONALLY_FLAG);
+        
+        // Clear the flags
+        global_tile_id &= ~(FLIPPED_HORIZONTALLY_FLAG |
+                            FLIPPED_VERTICALLY_FLAG |
+                            FLIPPED_DIAGONALLY_FLAG);
+        
+        sprites[y * width + x] = new Sprite(tex, Map::rectForTile(tmxMap, global_tile_id));
+        sprites[y * width + x]->setPosition(x * tileWidth, (tmxMap.height - y - 1) * tileHeight);
+      }
+    }
+  }
+}
+
+Layer::~Layer()
+{
+  for (int i = 0; i < width * height; ++i) {
+    const Sprite* s = sprites[i];
+    if (s)
+      delete s;
+  }
+
+  delete [] sprites;
+}
+
+void Layer::draw(Engine *e) const
+{
+  for (int i = 0; i < width * height; ++i) {
+    const Sprite* s = sprites[i];
+    if (s)
+      e->drawSprite(*s);
+  }
+}
+
+//------------------------------------------------------------------------------
+
 Map::Map()
 {
   //
@@ -14,9 +74,23 @@ Map::Map()
 
 //------------------------------------------------------------------------------
 
+Map::~Map()
+{
+  for (const Layer* layer : m_layers) {
+    delete layer;
+  }
+}
+
+//------------------------------------------------------------------------------
+
 bool Map::loadFromFile(const std::string& filename)
 {
-  return m_tmxMap.loadFromFile(filename);
+  m_tmxMap.loadFromFile(filename);
+
+  for (const tmx::Layer& layer : m_tmxMap.layers) {
+    m_layers.push_back(new Layer(m_tmxMap, layer));
+  }
+  return true;
 }
 
 //------------------------------------------------------------------------------
@@ -44,7 +118,7 @@ void Map::getObjects(std::vector<Sprite>& v)
 
   for (const tmx::ObjectGroup& og : m_tmxMap.objectGroups) {
     for (const tmx::Object& obj : og.objects) {
-      Sprite sprite(tex, rectForTile(obj.gid));
+      Sprite sprite(tex, rectForTile(m_tmxMap, obj.gid));
       sprite.setPosition(obj.x, m_tmxMap.height * m_tmxMap.tileHeight - obj.y);
       v.push_back(sprite);
     }
@@ -86,8 +160,8 @@ Rect<int> Map::getTileRectAt(int x, int y)
 
 void Map::draw(Engine *e) const
 {
-  for (const tmx::Layer& layer : m_tmxMap.layers) {
-    drawLayer(e, layer);
+  for (const Layer* layer : m_layers) {
+    layer->draw(e);
   }
 }
 
@@ -95,53 +169,18 @@ void Map::draw(Engine *e) const
 
 void Map::drawLayer(Engine *e, const std::string& layerName) const
 {
-  for (const tmx::Layer& layer : m_tmxMap.layers) {
-    if (layer.name == layerName) {
-      drawLayer(e, layer);
-    }
+  for (const Layer* layer : m_layers) {
+    if (layer->name == layerName)
+      layer->draw(e);
   }
 }
 
 //------------------------------------------------------------------------------
 
-void Map::drawLayer(Engine *e, const tmx::Layer& layer) const
+Rect<int> Map::rectForTile(const tmx::Map& tmxMap, unsigned global_tile_id)
 {
-  const Texture *tex = ResourceMgr::instance().getTexture("minecraft_tiles_big.png");
-
-  int tileWidth  = m_tmxMap.tileWidth;
-  int tileHeight = m_tmxMap.tileHeight;
-
-  for (int y = 0; y < layer.height; ++y) {
-    for (int x = 0; x < layer.width; ++x) {
-
-      unsigned global_tile_id = layer.data[y * layer.width + x];
-
-      if (global_tile_id == 0) continue;
-
-      // Read out the flags
-      //bool flipped_horizontally = (global_tile_id & FLIPPED_HORIZONTALLY_FLAG);
-      //bool flipped_vertically   = (global_tile_id & FLIPPED_VERTICALLY_FLAG);
-      //bool flipped_diagonally   = (global_tile_id & FLIPPED_DIAGONALLY_FLAG);
-
-      // Clear the flags
-      global_tile_id &= ~(FLIPPED_HORIZONTALLY_FLAG |
-                          FLIPPED_VERTICALLY_FLAG |
-                          FLIPPED_DIAGONALLY_FLAG);
-
-      Sprite sprite(tex, rectForTile(global_tile_id));
-
-      sprite.setPosition(x * tileWidth, (m_tmxMap.height - y - 1) * tileHeight);
-      e->drawSprite(sprite);
-    }
-  }
-}
-
-//------------------------------------------------------------------------------
-
-Rect<int> Map::rectForTile(unsigned global_tile_id) const
-{
-  for (int i = m_tmxMap.tilesets.size() - 1; i >= 0; --i) {
-    const tmx::Tileset& tileset = m_tmxMap.tilesets[i];
+  for (int i = tmxMap.tilesets.size() - 1; i >= 0; --i) {
+    const tmx::Tileset& tileset = tmxMap.tilesets[i];
     
     if (tileset.firstGid <= global_tile_id) {
       int local_id = global_tile_id - tileset.firstGid;
@@ -161,6 +200,5 @@ Rect<int> Map::rectForTile(unsigned global_tile_id) const
     }
   }
 
-  return Rect<int>(0, 0, 0, 0);
+  return Rect<int>();
 }
-

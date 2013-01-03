@@ -9,6 +9,9 @@
 #include <vector>
 #include "ResourceMgr.h"
 
+#define SCALE 1
+#define FLOOR 1
+
 Engine::Engine(const std::string& title, int screenWidth, int screenHeight)
   : m_titile(title)
   , m_screenWidth(screenWidth)
@@ -16,7 +19,7 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight)
   , m_translate_x(0.0f)
   , m_translate_y(0.0f)
   , m_translate_z(0.0f)
-  , m_scale(1.0f)
+  , m_scale(SCALE)
   , m_game(0)
 {
   try {
@@ -70,8 +73,13 @@ void Engine::mainLoop(Playable *game)
 
 void Engine::centerOnPixel(float x, float y)
 {
-  m_translate_x = std::floor(-x * m_scale);
-  m_translate_y = std::floor(-y * m_scale);
+#if FLOOR
+  m_translate_x = std::floor(-x + 0.5f) * m_scale;
+  m_translate_y = std::floor(-y + 0.5f) * m_scale;
+#else
+  m_translate_x = -x * m_scale;
+  m_translate_y = -y * m_scale;
+#endif
 }
 
 //------------------------------------------------------------------------------
@@ -183,12 +191,21 @@ void Engine::drawSprite(const Sprite& sprite)
   const Texture *tex = sprite.texture();
   const GLfloat *texCoords = sprite.getTextureCoords();
 
-  drawQuad(std::floor(sprite.position().x),
-	   std::floor(sprite.position().y),
+#if FLOOR
+  drawQuad(std::floor(sprite.position().x + 0.5f),
+	   std::floor(sprite.position().y + 0.5f),
 	   sprite.width(),
 	   sprite.height(),
 	   tex->textureId(),
            texCoords);
+#else
+  drawQuad(sprite.position().x,
+	   sprite.position().y,
+	   sprite.width(),
+	   sprite.height(),
+	   tex->textureId(),
+           texCoords);
+#endif
 }
 
 //------------------------------------------------------------------------------

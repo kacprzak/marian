@@ -10,10 +10,25 @@
 
 class Engine;
 
+class Layer : boost::noncopyable
+{
+ public:
+  Layer(const tmx::Map& map, const tmx::Layer& layer);
+  ~Layer();
+
+  void draw(Engine *e) const;  
+
+  std::string name;
+  int width;
+  int height;
+  Sprite **sprites;
+};
+
 class Map : boost::noncopyable
 {
  public:
   Map();
+  ~Map();
   bool loadFromFile(const std::string& filename);
 
   Vector2<int> pixelSize() const;
@@ -25,11 +40,11 @@ class Map : boost::noncopyable
   unsigned getTileGidAt(int x, int y, const std::string& layer);
   Rect<int> getTileRectAt(int x, int y);
 
- private:
-  void drawLayer(Engine *e, const tmx::Layer& layer) const;
-  Rect<int> rectForTile(unsigned globalId) const;
+  static Rect<int> rectForTile(const tmx::Map& map, unsigned globalId);
 
-  tmx::Map m_tmxMap;
+ private:
+  tmx::Map m_tmxMap;  
+  std::vector<Layer *> m_layers;
 };
 
 #endif
