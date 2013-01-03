@@ -117,9 +117,6 @@ void Engine::update(float elapsedTime)
 
 void Engine::draw()
 {
-  //m_translate_z = -10.0f;
-  //m_scale = 2.0f;
-
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
@@ -240,7 +237,9 @@ void Engine::initializeSDL()
 
   int screen_flags = SDL_OPENGL;
 
-  // Drawing surface
+  std::cout << "Screen: " << m_screenWidth << "x" << m_screenHeight
+            << "x" << screen_bpp << "\n";
+  // Screen surface
   SDL_Surface *screen = SDL_SetVideoMode(m_screenWidth, m_screenHeight,
                                          screen_bpp, screen_flags);
 
@@ -261,7 +260,8 @@ void Engine::initializeOpenGL()
   std::cout << "Initializing OpenGl...\n";
   //float ratio = float(m_screenWidth) / float(m_screenHeight);
 
-  int r = 102, g = 140, b = 255;
+  //int r = 102, g = 140, b = 255; // blue
+  int r = 0, g = 0, b = 0; // black
   glClearColor(r/255.0f, g/255.0f, b/255.0f, 0);
 
   //glShadeModel(GL_SMOOTH); // smooth is default
