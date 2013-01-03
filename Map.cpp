@@ -3,6 +3,7 @@
 #include "ResourceMgr.h"
 
 #include <cstring>
+#include <iostream>
 
 // Bits on the far end of the 32-bit global tile ID are used for tile flags
 const unsigned FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
@@ -15,8 +16,6 @@ Layer::Layer(const tmx::Map& tmxMap, const tmx::Layer& tmxLayer)
   , height(tmxLayer.height)
   , sprites(width * height, nullptr)
 {
-  const Texture *tex = ResourceMgr::instance().getTexture("minecraft_tiles_big.png");
-  
   int tileWidth  = tmxMap.tileWidth;
   int tileHeight = tmxMap.tileHeight;
   
@@ -24,6 +23,8 @@ Layer::Layer(const tmx::Map& tmxMap, const tmx::Layer& tmxLayer)
     for (int x = 0; x < width; ++x) {
       
       unsigned global_tile_id = tmxLayer.data[y * tmxLayer.width + x];
+      std::string imageSource = Map::imageForTile(tmxMap, global_tile_id);
+      const Texture *tex = ResourceMgr::instance().getTexture(imageSource);
       
       if (global_tile_id != 0) {
         // Read out the flags
@@ -80,6 +81,13 @@ bool Map::loadFromFile(const std::string& filename)
 {
   m_tmxMap.loadFromFile(filename);
 
+  auto images = externalImages();
+  for (const std::string& image : images) {
+    if (!ResourceMgr::instance().addTexture(image)) {
+      std::cerr << "Unable to load texture.\n";
+    }     
+  }
+
   for (const tmx::Layer& layer : m_tmxMap.layers) {
     m_layers.push_back(new Layer(m_tmxMap, layer));
   }
@@ -107,10 +115,12 @@ Vector2<int> Map::tileSize() const
 
 void Map::getObjects(std::vector<Sprite>& v)
 {
-  const Texture *tex = ResourceMgr::instance().getTexture("minecraft_tiles_big.png");
-
   for (const tmx::ObjectGroup& og : m_tmxMap.objectGroups) {
     for (const tmx::Object& obj : og.objects) {
+
+      std::string imageSource = Map::imageForTile(m_tmxMap, obj.gid);
+      const Texture *tex = ResourceMgr::instance().getTexture(imageSource);     
+
       Sprite sprite(tex, rectForTile(m_tmxMap, obj.gid));
       sprite.setPosition(obj.x, m_tmxMap.height * m_tmxMap.tileHeight - obj.y);
       v.push_back(sprite);
@@ -166,6 +176,34 @@ void Map::drawLayer(Engine *e, const std::string& layerName) const
     if (layer->name == layerName)
       layer->draw(e);
   }
+}
+
+//------------------------------------------------------------------------------
+
+std::vector<std::string> Map::externalImages() const
+{
+  std::vector<std::string> ret;
+
+  for (const tmx::Tileset& tileset : m_tmxMap.tilesets) {
+    ret.push_back(tileset.imageSource);
+  }
+
+  return ret;
+}
+
+//------------------------------------------------------------------------------
+
+std::string Map::imageForTile(const tmx::Map& tmxMap, unsigned global_tile_id)
+{
+  for (int i = tmxMap.tilesets.size() - 1; i >= 0; --i) {
+    const tmx::Tileset& tileset = tmxMap.tilesets[i];
+    
+    if (tileset.firstGid <= global_tile_id) {
+      return tileset.imageSource;
+    }
+  }
+
+  return std::string();
 }
 
 //------------------------------------------------------------------------------

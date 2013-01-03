@@ -40,6 +40,9 @@ class Map : boost::noncopyable
   unsigned getTileGidAt(int x, int y, const std::string& layer);
   Rect<int> getTileRectAt(int x, int y);
 
+  std::vector<std::string> externalImages() const;
+
+  static std::string imageForTile(const tmx::Map& map, unsigned globalId);
   static Rect<int> rectForTile(const tmx::Map& map, unsigned globalId);
 
  private:

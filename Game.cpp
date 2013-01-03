@@ -13,11 +13,7 @@ Game::Game()
   ResourceMgr& resMgr = ResourceMgr::instance();
   resMgr.setDataFolder("media/");
 
-  if (!resMgr.addTexture("minecraft_tiles_big.png")) {
-    std::cerr << "Unable to load texture.\n";
-  }  
-
-  m_map.loadFromFile("media/map1.tmx");
+  m_map.loadFromFile("media/map2.tmx");
 
   std::vector<Sprite> sprites;
   m_map.getObjects(sprites);
@@ -72,6 +68,8 @@ void Game::update(Engine *e, float elapsedTime)
 
 void Game::draw(Engine *e)
 {
+  // TODO: read order from map
+  m_map.drawLayer(e, "sky");
   m_map.drawLayer(e, "back");
   m_map.drawLayer(e, "collision");
   m_map.drawLayer(e, "ladders");
@@ -80,5 +78,6 @@ void Game::draw(Engine *e)
     go->draw(e);
   }
 
+  m_map.drawLayer(e, "water");
   m_map.drawLayer(e, "front");
 }
