@@ -10,14 +10,11 @@ const unsigned FLIPPED_VERTICALLY_FLAG   = 0x40000000;
 const unsigned FLIPPED_DIAGONALLY_FLAG   = 0x20000000;
 
 Layer::Layer(const tmx::Map& tmxMap, const tmx::Layer& tmxLayer)
+  : name(tmxLayer.name)
+  , width(tmxLayer.width)
+  , height(tmxLayer.height)
+  , sprites(width * height, nullptr)
 {
-  name = tmxLayer.name;
-  width = tmxLayer.width;
-  height = tmxLayer.height;
-
-  sprites = new Sprite*[width * height];
-  memset(sprites, 0, width * height * sizeof(void*));
-
   const Texture *tex = ResourceMgr::instance().getTexture("minecraft_tiles_big.png");
   
   int tileWidth  = tmxMap.tileWidth;
@@ -48,19 +45,14 @@ Layer::Layer(const tmx::Map& tmxMap, const tmx::Layer& tmxLayer)
 
 Layer::~Layer()
 {
-  for (int i = 0; i < width * height; ++i) {
-    const Sprite* s = sprites[i];
-    if (s)
-      delete s;
+  for (const Sprite* s : sprites) {
+    delete s;
   }
-
-  delete [] sprites;
 }
 
 void Layer::draw(Engine *e) const
 {
-  for (int i = 0; i < width * height; ++i) {
-    const Sprite* s = sprites[i];
+  for (const Sprite* s : sprites) {
     if (s)
       e->drawSprite(*s);
   }

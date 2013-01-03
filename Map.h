@@ -21,7 +21,7 @@ class Layer : boost::noncopyable
   std::string name;
   int width;
   int height;
-  Sprite **sprites;
+  std::vector<Sprite *> sprites;
 };
 
 class Map : boost::noncopyable
