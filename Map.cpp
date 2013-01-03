@@ -2,6 +2,8 @@
 #include "Engine.h"
 #include "ResourceMgr.h"
 
+#include <cstring>
+
 // Bits on the far end of the 32-bit global tile ID are used for tile flags
 const unsigned FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
 const unsigned FLIPPED_VERTICALLY_FLAG   = 0x40000000;
@@ -14,7 +16,8 @@ Layer::Layer(const tmx::Map& tmxMap, const tmx::Layer& tmxLayer)
   height = tmxLayer.height;
 
   sprites = new Sprite*[width * height];
-  
+  memset(sprites, 0, width * height * sizeof(void*));
+
   const Texture *tex = ResourceMgr::instance().getTexture("minecraft_tiles_big.png");
   
   int tileWidth  = tmxMap.tileWidth;
@@ -25,9 +28,7 @@ Layer::Layer(const tmx::Map& tmxMap, const tmx::Layer& tmxLayer)
       
       unsigned global_tile_id = tmxLayer.data[y * tmxLayer.width + x];
       
-      if (global_tile_id == 0) {
-        sprites[y * width + x] = 0;
-      } else {
+      if (global_tile_id != 0) {
         // Read out the flags
         //bool flipped_horizontally = (global_tile_id & FLIPPED_HORIZONTALLY_FLAG);
         //bool flipped_vertically   = (global_tile_id & FLIPPED_VERTICALLY_FLAG);
