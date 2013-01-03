@@ -193,17 +193,17 @@ void Engine::drawSprite(const Sprite& sprite)
 
 #if FLOOR
   drawQuad(std::floor(sprite.position().x + 0.5f),
-	   std::floor(sprite.position().y + 0.5f),
-	   sprite.width(),
-	   sprite.height(),
-	   tex->textureId(),
+           std::floor(sprite.position().y + 0.5f),
+           sprite.width(),
+           sprite.height(),
+           tex->textureId(),
            texCoords);
 #else
   drawQuad(sprite.position().x,
-	   sprite.position().y,
-	   sprite.width(),
-	   sprite.height(),
-	   tex->textureId(),
+           sprite.position().y,
+           sprite.width(),
+           sprite.height(),
+           tex->textureId(),
            texCoords);
 #endif
 }
@@ -242,7 +242,7 @@ void Engine::initializeSDL()
 
   // Drawing surface
   SDL_Surface *screen = SDL_SetVideoMode(m_screenWidth, m_screenHeight,
-					 screen_bpp, screen_flags);
+                                         screen_bpp, screen_flags);
 
   if (!screen) {
     throw SdlError("Setting video mode failed", SDL_GetError());
