@@ -1,5 +1,5 @@
 CC           := g++
-CFLAGS       := -Wall -Wextra -std=c++0x `sdl-config --cflags`
+CFLAGS       := -Wall -Wextra -std=c++0x `sdl-config --cflags` -I.
 LIBS         := -lGL -lGLU -lSDL_image `sdl-config --libs`
 DEBUGFLAGS   := -O0 -g
 RELEASEFLAGS := -O2 -DNDEBUG
@@ -10,7 +10,7 @@ OBJS := main.o Util.o TmxMap.o Map.o Texture.o \
 	ResourceMgr.o Sprite.o Engine.o Game.o \
 	GameObject.o Hero.o FpsCounter.o base64.o
 
-VPATH=base64
+VPATH=src base64
 
 all: $(TARGET)
 
@@ -32,14 +32,10 @@ profile: $(OBJS) $(MAIN)
 	$(CC) $< -o $@ -c $(CFLAGS)
 	$(CC) $< -MM $(CFLAGS) > $*.d
 
-test:
-	cd test; make test;
-
 clean:
 	rm -f $(TARGET) $(OBJS) *.d
-	cd test; make clean;
 
 cleantmp:
 	rm *~
 
-.PHONY : test clean cleantmp release
+.PHONY : clean cleantmp release profile
