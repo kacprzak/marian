@@ -14,6 +14,8 @@ class GameObject : public Playable
     , m_sprite(sprite)
   {}
 
+  Vector2<float> position() const { return m_sprite.position(); }
+
   // Playable interface impl
   bool processInput(const SDL_Event& event);
   void update(Engine *e, float elapsedTime);

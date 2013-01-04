@@ -5,6 +5,22 @@
 #include <cstring>
 #include <iostream>
 
+class Layer : boost::noncopyable
+{
+ public:
+  Layer(const tmx::Map& map, const tmx::Layer& layer);
+  ~Layer();
+
+  void draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const;  
+
+  std::string name;
+  int width;
+  int height;
+  std::vector<Sprite *> sprites;
+};
+
+//------------------------------------------------------------------------------
+
 // Bits on the far end of the 32-bit global tile ID are used for tile flags
 const unsigned FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
 const unsigned FLIPPED_VERTICALLY_FLAG   = 0x40000000;
@@ -51,15 +67,18 @@ Layer::~Layer()
   }
 }
 
-void Layer::draw(Engine *e) const
+void Layer::draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const
 {
-  for (const Sprite* s : sprites) {
-    if (s)
-      e->drawSprite(*s);
+  for (int y = yFrom; y < yTo; ++y) {
+    for (int x = xFrom; x < xTo; ++x) {
+      const Sprite* s = sprites[y * width + x];
+      if (s)
+        e->drawSprite(*s);
+    }
   }
 }
 
-//------------------------------------------------------------------------------
+//##############################################################################
 
 Map::Map()
 {
@@ -161,20 +180,21 @@ Rect<int> Map::getTileRectAt(int x, int y)
 
 //------------------------------------------------------------------------------
 
-void Map::draw(Engine *e) const
+void Map::draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const
 {
   for (const Layer* layer : m_layers) {
-    layer->draw(e);
+    layer->draw(e, xFrom, xTo, yFrom, yTo);
   }
 }
 
 //------------------------------------------------------------------------------
 
-void Map::drawLayer(Engine *e, const std::string& layerName) const
+void Map::drawLayer(Engine *e, const std::string& layerName,
+                    int xFrom, int xTo, int yFrom, int yTo) const
 {
   for (const Layer* layer : m_layers) {
     if (layer->name == layerName)
-      layer->draw(e);
+      layer->draw(e, xFrom, xTo, yFrom, yTo);
   }
 }
 

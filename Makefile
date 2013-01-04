@@ -2,7 +2,7 @@ CC           := g++
 CFLAGS       := -Wall -Wextra -std=c++0x `sdl-config --cflags` -I.
 LIBS         := -lGL -lGLU -lSDL_image `sdl-config --libs`
 DEBUGFLAGS   := -O0 -g
-RELEASEFLAGS := -O2 -DNDEBUG
+RELEASEFLAGS := -O3 -DNDEBUG
 
 TARGET       := marian
 

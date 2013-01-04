@@ -42,16 +42,20 @@ class Engine
   
   void mainLoop(Playable *game);
 
-  void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h);
-  void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h, const GLfloat *texCoords);
-  void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h, GLuint textureId, const GLfloat *texCoords);
-  void drawSprite(const Sprite& sprite);
+  void drawSprite(const Sprite& sprite) const;
 
   void centerOnPixel(float x, float y);
 
-  bool isPressed(int keycode) { return m_keys[keycode]; }
+  bool isPressed(int keycode) const { return m_keys[keycode]; }
+  int screenWidth() const  { return m_screenWidth; }
+  int screenHeight() const { return m_screenHeight; }
 
  private:
+  void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h) const;
+  void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h, const GLfloat *texCoords) const;
+  void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
+                GLuint textureId, const GLfloat *texCoords) const;
+
   void initializeSDL();
   void initializeOpenGL();
 

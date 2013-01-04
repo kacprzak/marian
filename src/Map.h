@@ -9,20 +9,7 @@
 #include "Sprite.h"
 
 class Engine;
-
-class Layer : boost::noncopyable
-{
- public:
-  Layer(const tmx::Map& map, const tmx::Layer& layer);
-  ~Layer();
-
-  void draw(Engine *e) const;  
-
-  std::string name;
-  int width;
-  int height;
-  std::vector<Sprite *> sprites;
-};
+class Layer;
 
 class Map : boost::noncopyable
 {
@@ -34,8 +21,13 @@ class Map : boost::noncopyable
   Vector2<int> pixelSize() const;
   Vector2<int> tileSize() const;
 
-  void draw(Engine *e) const;
-  void drawLayer(Engine *e, const std::string& layer) const;
+  int tileWidth() const { return m_tmxMap.tileWidth; }
+  int tileHeight() const { return m_tmxMap.tileHeight; }
+
+  void draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const;
+  void drawLayer(Engine *e, const std::string& layer,
+                 int xFrom, int xTo, int yFrom, int yTo) const;
+
   void getObjects(std::vector<Sprite>& v);
   unsigned getTileGidAt(int x, int y, const std::string& layer);
   Rect<int> getTileRectAt(int x, int y);
