@@ -52,6 +52,7 @@ class Map : boost::noncopyable
  public:
   Map();
   bool loadFromFile(const std::string& filename);
+  const tmx::Tileset* tilesetForTile(unsigned gid) const;
  
   std::string version;
   std::string orientation;

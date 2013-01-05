@@ -8,7 +8,7 @@
 class Layer : boost::noncopyable
 {
  public:
-  Layer(const tmx::Map& map, const tmx::Layer& layer);
+  Layer(const Map& map, const tmx::Layer& layer);
   ~Layer();
 
   void draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const;  
@@ -26,23 +26,24 @@ const unsigned FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
 const unsigned FLIPPED_VERTICALLY_FLAG   = 0x40000000;
 const unsigned FLIPPED_DIAGONALLY_FLAG   = 0x20000000;
 
-Layer::Layer(const tmx::Map& tmxMap, const tmx::Layer& tmxLayer)
+Layer::Layer(const Map& map, const tmx::Layer& tmxLayer)
   : name(tmxLayer.name)
   , width(tmxLayer.width)
   , height(tmxLayer.height)
   , sprites(width * height, nullptr)
 {
-  int tileWidth  = tmxMap.tileWidth;
-  int tileHeight = tmxMap.tileHeight;
+  int tileWidth  = map.tileWidth();
+  int tileHeight = map.tileHeight();
   
   for (int y = 0; y < height; ++y) {
     for (int x = 0; x < width; ++x) {
       
       unsigned global_tile_id = tmxLayer.data[y * tmxLayer.width + x];
-      std::string imageSource = Map::imageForTile(tmxMap, global_tile_id);
-      const Texture *tex = ResourceMgr::instance().getTexture(imageSource);
       
       if (global_tile_id != 0) {
+        std::string imageSource = map.imageForTile(global_tile_id);
+        const Texture *tex = ResourceMgr::instance().getTexture(imageSource);
+
         // Read out the flags
         //bool flipped_horizontally = (global_tile_id & FLIPPED_HORIZONTALLY_FLAG);
         //bool flipped_vertically   = (global_tile_id & FLIPPED_VERTICALLY_FLAG);
@@ -53,8 +54,8 @@ Layer::Layer(const tmx::Map& tmxMap, const tmx::Layer& tmxLayer)
                             FLIPPED_VERTICALLY_FLAG |
                             FLIPPED_DIAGONALLY_FLAG);
         
-        sprites[y * width + x] = new Sprite(tex, Map::rectForTile(tmxMap, global_tile_id));
-        sprites[y * width + x]->setPosition(x * tileWidth, (tmxMap.height - y - 1) * tileHeight);
+        sprites[y * width + x] = new Sprite(tex, map.rectForTile(global_tile_id));
+        sprites[y * width + x]->setPosition(x * tileWidth, (map.tileSize().y - y - 1) * tileHeight);
       }
     }
   }
@@ -108,7 +109,7 @@ bool Map::loadFromFile(const std::string& filename)
   }
 
   for (const tmx::Layer& layer : m_tmxMap.layers) {
-    m_layers.push_back(new Layer(m_tmxMap, layer));
+    m_layers.push_back(new Layer(*this, layer));
   }
   return true;
 }
@@ -137,10 +138,10 @@ void Map::getObjects(std::vector<Sprite>& v)
   for (const tmx::ObjectGroup& og : m_tmxMap.objectGroups) {
     for (const tmx::Object& obj : og.objects) {
 
-      std::string imageSource = Map::imageForTile(m_tmxMap, obj.gid);
+      std::string imageSource = imageForTile(obj.gid);
       const Texture *tex = ResourceMgr::instance().getTexture(imageSource);     
 
-      Sprite sprite(tex, rectForTile(m_tmxMap, obj.gid));
+      Sprite sprite(tex, rectForTile(obj.gid));
       sprite.setPosition(obj.x, m_tmxMap.height * m_tmxMap.tileHeight - obj.y);
       v.push_back(sprite);
     }
@@ -213,43 +214,29 @@ std::vector<std::string> Map::externalImages() const
 
 //------------------------------------------------------------------------------
 
-std::string Map::imageForTile(const tmx::Map& tmxMap, unsigned global_tile_id)
+std::string Map::imageForTile(unsigned global_tile_id) const
 {
-  for (int i = tmxMap.tilesets.size() - 1; i >= 0; --i) {
-    const tmx::Tileset& tileset = tmxMap.tilesets[i];
-    
-    if (tileset.firstGid <= global_tile_id) {
-      return tileset.imageSource;
-    }
-  }
-
-  return std::string();
+  return m_tmxMap.tilesetForTile(global_tile_id)->imageSource;
 }
 
 //------------------------------------------------------------------------------
 
-Rect<int> Map::rectForTile(const tmx::Map& tmxMap, unsigned global_tile_id)
+Rect<int> Map::rectForTile(unsigned global_tile_id) const
 {
-  for (int i = tmxMap.tilesets.size() - 1; i >= 0; --i) {
-    const tmx::Tileset& tileset = tmxMap.tilesets[i];
-    
-    if (tileset.firstGid <= global_tile_id) {
-      int local_id = global_tile_id - tileset.firstGid;
-      
-      int width = tileset.imageWidth / tileset.tileWidth;
-      //int height = tileset.imageHeight / tileset.tileHeight;
-
-      // Tile coords (y pointing down)
-      int local_x = local_id % width;
-      int local_y = local_id / width;
-
-      // Pixel coords (y pointing up)
-      int opengl_x = local_x * tileset.tileWidth;
-      int opengl_y = tileset.imageHeight - (local_y * tileset.tileHeight) - tileset.tileHeight;
-
-      return Rect<int>(opengl_x, opengl_y, tileset.tileWidth, tileset.tileHeight);
-    }
-  }
-
-  return Rect<int>();
+  const tmx::Tileset *tileset = m_tmxMap.tilesetForTile(global_tile_id);
+  
+  int local_id = global_tile_id - tileset->firstGid;
+  
+  int width = tileset->imageWidth / tileset->tileWidth;
+  //int height = tileset->imageHeight / tileset->tileHeight;
+  
+  // Tile coords (y pointing down)
+  int local_x = local_id % width;
+  int local_y = local_id / width;
+  
+  // Pixel coords (y pointing up)
+  int opengl_x = local_x * tileset->tileWidth;
+  int opengl_y = tileset->imageHeight - (local_y * tileset->tileHeight) - tileset->tileHeight;
+  
+  return Rect<int>(opengl_x, opengl_y, tileset->tileWidth, tileset->tileHeight);
 }

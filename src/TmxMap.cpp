@@ -144,4 +144,21 @@ bool Map::loadFromFile(const std::string& filename)
   return true;
 }
 
+//------------------------------------------------------------------------------
+
+const Tileset* Map::tilesetForTile(unsigned gid) const
+{
+  for (int i = tilesets.size() - 1; i >= 0; --i) {
+    const tmx::Tileset& tileset = tilesets[i];
+    
+    if (tileset.firstGid <= gid) {
+      return &tileset;
+    }
+  }
+
+  // Should never happen
+  std::cerr << "ERROR: Unable to find tileset for tile #" << gid << "\n";
+  return nullptr;
+}
+
 } // namespace tmx

@@ -34,8 +34,8 @@ class Map : boost::noncopyable
 
   std::vector<std::string> externalImages() const;
 
-  static std::string imageForTile(const tmx::Map& map, unsigned globalId);
-  static Rect<int> rectForTile(const tmx::Map& map, unsigned globalId);
+  std::string imageForTile(unsigned globalId) const;
+  Rect<int> rectForTile(unsigned globalId) const;
 
  private:
   tmx::Map m_tmxMap;  
