@@ -29,8 +29,23 @@ class Map : boost::noncopyable
                  int xFrom, int xTo, int yFrom, int yTo) const;
 
   void getObjects(std::vector<Sprite>& v);
+
   unsigned getTileGidAt(int x, int y, const std::string& layer);
+  unsigned getTileGidAtf(float x, float y, const std::string& layer)
+  {
+    return getTileGidAt(round(x), round(y), layer);
+  }
+
   Rect<int> getTileRectAt(int x, int y);
+  Rect<float> getTileRectAtf(float x, float y)
+  {
+    const Rect<int>& rect = getTileRectAt(round(x), round(y));
+
+    return Rect<float>(rect.position().x,
+                       rect.position().y,
+                       rect.size().x,
+                       rect.size().y); 
+  }
 
   std::vector<std::string> externalImages() const;
 

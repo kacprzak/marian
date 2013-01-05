@@ -50,9 +50,9 @@ Layer::Layer(const Map& map, const tmx::Layer& tmxLayer)
         //bool flipped_diagonally   = (global_tile_id & FLIPPED_DIAGONALLY_FLAG);
         
         // Clear the flags
-        global_tile_id &= ~(FLIPPED_HORIZONTALLY_FLAG |
-                            FLIPPED_VERTICALLY_FLAG |
-                            FLIPPED_DIAGONALLY_FLAG);
+        global_tile_id &= ~(FLIPPED_HORIZONTALLY_FLAG
+                            | FLIPPED_VERTICALLY_FLAG
+                            | FLIPPED_DIAGONALLY_FLAG);
         
         sprites[y * width + x] = new Sprite(tex, map.rectForTile(global_tile_id));
         sprites[y * width + x]->setPosition(x * tileWidth, (map.tileSize().y - y - 1) * tileHeight);
