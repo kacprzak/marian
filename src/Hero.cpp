@@ -131,43 +131,43 @@ void Hero::update(Engine *e, float elapsedTime)
 
 #else
   Rect<float> newBounds(x, y, s.width(), s.height());
-  const Vector2<float>& lb = newBounds.leftbottom();
-  const Vector2<float>& rb = newBounds.rightbottom();
-  const Vector2<float>& lt = newBounds.lefttop();
-  const Vector2<float>& rt = newBounds.righttop();
 
+  const Vector2<float>& lb = newBounds.leftbottom();
   unsigned lb_gid = map->getTileGidAtf(lb.x, lb.y, "collision");
-  unsigned rb_gid = map->getTileGidAtf(rb.x, rb.y, "collision");
-  unsigned lt_gid = map->getTileGidAtf(lt.x, lt.y, "collision");
-  unsigned rt_gid = map->getTileGidAtf(rt.x, rt.y, "collision");
 
   if (lb_gid) {
     Vector2<float> pv = newBounds.escapeVector(map->getTileRectAtf(lb.x, lb.y));
-
     if (pv.x) m_vx = 0;
     if (pv.y) m_vy = 0;
     newBounds.move(pv);
   }
+
+
+  const Vector2<float>& rb = newBounds.rightbottom();
+  unsigned rb_gid = map->getTileGidAtf(rb.x, rb.y, "collision");
 
   if (rb_gid) {
     Vector2<float> pv = newBounds.escapeVector(map->getTileRectAtf(rb.x, rb.y));
- 
     if (pv.x) m_vx = 0;
     if (pv.y) m_vy = 0;
     newBounds.move(pv);
   }
+  
+  const Vector2<float>& lt = newBounds.lefttop();
+  unsigned lt_gid = map->getTileGidAtf(lt.x, lt.y, "collision");
 
   if (lt_gid) {
     Vector2<float> pv = newBounds.escapeVector(map->getTileRectAtf(lt.x, lt.y));
-
     if (pv.x) m_vx = 0;
     if (pv.y) m_vy = 0;
     newBounds.move(pv);
   }
+  
+  const Vector2<float>& rt = newBounds.righttop();
+  unsigned rt_gid = map->getTileGidAtf(rt.x, rt.y, "collision");
 
   if (rt_gid) {
     Vector2<float> pv = newBounds.escapeVector(map->getTileRectAtf(rt.x, rt.y));
- 
     if (pv.x) m_vx = 0;
     if (pv.y) m_vy = 0;
     newBounds.move(pv);
@@ -181,6 +181,7 @@ void Hero::update(Engine *e, float elapsedTime)
   // Ladders
   lb_gid = map->getTileGidAtf(lb.x, lb.y, "ladders");
   rb_gid = map->getTileGidAtf(rb.x, rb.y, "ladders");
+  
   if (lb_gid || rb_gid) {
     // We are on ladder
     m_ay = 0.0f;

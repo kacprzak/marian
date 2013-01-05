@@ -10,7 +10,7 @@
 #include "ResourceMgr.h"
 
 #define SCALE 1
-#define FLOOR 1
+#define ROUND 1
 
 Engine::Engine(const std::string& title, int screenWidth, int screenHeight)
   : m_titile(title)
@@ -60,7 +60,8 @@ void Engine::mainLoop(Playable *game)
   for (;;) {
     if (!processEvents())
       break;
-    update(delta);
+    if (delta > 0.0f)
+      update(delta);
     draw();
     
     curr_time = SDL_GetTicks();
@@ -73,9 +74,9 @@ void Engine::mainLoop(Playable *game)
 
 void Engine::centerOnPixel(float x, float y)
 {
-#if FLOOR
-  m_translate_x = std::floor(-x + 0.5f) * m_scale;
-  m_translate_y = std::floor(-y + 0.5f) * m_scale;
+#if ROUND
+  m_translate_x = std::round(-x) * m_scale;
+  m_translate_y = std::round(-y) * m_scale;
 #else
   m_translate_x = -x * m_scale;
   m_translate_y = -y * m_scale;
@@ -188,9 +189,9 @@ void Engine::drawSprite(const Sprite& sprite) const
   const Texture *tex = sprite.texture();
   const GLfloat *texCoords = sprite.getTextureCoords();
 
-#if FLOOR
-  drawQuad(std::floor(sprite.position().x + 0.5f),
-           std::floor(sprite.position().y + 0.5f),
+#if ROUND
+  drawQuad(std::round(sprite.position().x),
+           std::round(sprite.position().y),
            sprite.width(),
            sprite.height(),
            tex->textureId(),

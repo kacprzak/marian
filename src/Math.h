@@ -25,7 +25,7 @@ class Vector2
 {
  public:
   Vector2()
-    : x(0), y(0)
+    : x(T(0)), y(T(0))
   {}
 
   Vector2(T ax, T ay)
@@ -258,9 +258,9 @@ class Rect
     Vector2<T> pv = penetrationVector(other);
 
     if (std::abs(pv.x) > std::abs(pv.y))
-      pv.x = 0;
+      pv.x = T(0);
     else if (std::abs(pv.y) > std::abs(pv.x))
-      pv.y = 0;
+      pv.y = T(0);
 
     return pv;
   }
