@@ -33,13 +33,13 @@ class Map : boost::noncopyable
   unsigned getTileGidAt(int x, int y, const std::string& layer);
   unsigned getTileGidAtf(float x, float y, const std::string& layer)
   {
-    return getTileGidAt(round(x), round(y), layer);
+    return getTileGidAt(std::round(x), std::round(y), layer);
   }
 
   Rect<int> getTileRectAt(int x, int y);
   Rect<float> getTileRectAtf(float x, float y)
   {
-    const Rect<int>& rect = getTileRectAt(round(x), round(y));
+    const Rect<int>& rect = getTileRectAt(std::round(x), std::round(y));
 
     return Rect<float>(rect.position().x,
                        rect.position().y,

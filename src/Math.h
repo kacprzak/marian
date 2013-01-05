@@ -253,9 +253,18 @@ class Rect
     return pv;
   }
 
+  // Discard corner collisions
+#define CORNER_EPSILON 5.0f
+
   const Vector2<T> escapeVector(const Rect<T>& other) const
   {
     Vector2<T> pv = penetrationVector(other);
+
+    // Corner collision
+    if (std::abs(pv.x) < CORNER_EPSILON
+        && std::abs(pv.y) < CORNER_EPSILON) {
+      return Vector2<T>();
+    }
 
     if (std::abs(pv.x) > std::abs(pv.y))
       pv.x = T(0);
