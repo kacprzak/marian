@@ -22,4 +22,4 @@ Third-party code
 Tools
 -----
 
-* [Tiled Map Editor](www.mapeditor.org/ "Tiled")
+* [Tiled Map Editor](http://www.mapeditor.org/ "Tiled")
