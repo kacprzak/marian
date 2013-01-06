@@ -3,22 +3,21 @@
 
 #include <cmath>
 
-//int round(float n)
-//{
-//  return std::floor(n + 0.5f);
-//}
-
 template <typename T>
 int sig(T val)
 {
   return (val < T(0)) ? -1 : 1;
 }
 
+//------------------------------------------------------------------------------
+
 template <typename T>
 int signum(T val)
 {
   return (T(0) < val) - (val < T(0));
 }
+
+//------------------------------------------------------------------------------
 
 template <typename T>
 class Vector2
@@ -82,7 +81,7 @@ class Vector2
     return *this;
   }
 
-  // Negation
+  /** Negation */
   const Vector2<T> operator-(void) const
   {
     return Vector2<T>(-x, -y);
@@ -114,7 +113,7 @@ class Vector2
     return temp /= num;
   }	
 
-  // Dot product
+  /** Dot product */
   T operator* (const Vector2<T>& v) const
   {
     return x * v.x + y * v.y;
@@ -151,6 +150,9 @@ class Rect
     : m_leftbottom(leftbottom)
     , m_size(size)
   {}
+
+  void setX(T x) { m_leftbottom.x = x; }
+  void setY(T y) { m_leftbottom.y = y; }
 
   const Vector2<T>& position() const { return m_leftbottom; }
   const Vector2<T>& size()     const { return m_size; }
@@ -209,7 +211,9 @@ class Rect
     return Vector2<T>(x, y);
   }
 
-  // Very simple true/false collision detection
+  /**
+   *  Very simple yes/no collision detection.
+   */
   bool intersects(const Rect<T>& other) const
   {
     return !(other.left()      > right()
@@ -218,16 +222,6 @@ class Rect
              || other.top()    < bottom());
   }
 
-  /**
-   *  _______
-   * |       |
-   * |    __ |__
-   * |   |\  |  |
-   * |   | \ |  |
-   * |___|__\|  |
-   *     |      |
-   *     |______|
-   */
   const Vector2<T> penetrationVector(const Rect<T>& other) const
   {
     Vector2<T> pv; // null vector
@@ -245,9 +239,11 @@ class Rect
     if (ad_x > cw || ad_y > ch)
       return pv;
 
+    // Keep vector positive
     pv.x = -(ad_x - cw);
     pv.y = -(ad_y - ch);
 
+    // Correct orientation
     pv.x *= sig<T>(dist.x);
     pv.y *= sig<T>(dist.y);
     return pv;
@@ -256,6 +252,10 @@ class Rect
   // Discard corner collisions
 #define CORNER_EPSILON 5.0f
 
+  /**
+   * Shortest translation vector to remove this rectangle from
+   * collision with other rectangle.
+   */
   const Vector2<T> escapeVector(const Rect<T>& other) const
   {
     Vector2<T> pv = penetrationVector(other);

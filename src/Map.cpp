@@ -150,7 +150,7 @@ void Map::getObjects(std::vector<Sprite>& v)
 
 //------------------------------------------------------------------------------
 
-unsigned Map::getTileGidAt(int x, int y, const std::string& layerName)
+unsigned Map::getTileGidAt(int x, int y, const std::string& layerName) const
 {
   for (const tmx::Layer& layer : m_tmxMap.layers) {
     if (layer.name == layerName) {
@@ -167,7 +167,7 @@ unsigned Map::getTileGidAt(int x, int y, const std::string& layerName)
 
 //------------------------------------------------------------------------------
 
-Rect<int> Map::getTileRectAt(int x, int y)
+Rect<int> Map::getTileRectAt(int x, int y) const
 {
   int t_w = m_tmxMap.tileWidth;
   int t_h = m_tmxMap.tileHeight;

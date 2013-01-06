@@ -30,14 +30,14 @@ class Map : boost::noncopyable
 
   void getObjects(std::vector<Sprite>& v);
 
-  unsigned getTileGidAt(int x, int y, const std::string& layer);
-  unsigned getTileGidAtf(float x, float y, const std::string& layer)
+  unsigned getTileGidAt(int x, int y, const std::string& layer) const;
+  unsigned getTileGidAtf(float x, float y, const std::string& layer) const
   {
     return getTileGidAt(std::round(x), std::round(y), layer);
   }
 
-  Rect<int> getTileRectAt(int x, int y);
-  Rect<float> getTileRectAtf(float x, float y)
+  Rect<int> getTileRectAt(int x, int y) const;
+  Rect<float> getTileRectAtf(float x, float y) const
   {
     const Rect<int>& rect = getTileRectAt(std::round(x), std::round(y));
 
