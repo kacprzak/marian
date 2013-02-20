@@ -24,7 +24,6 @@ set( marian_SRCS
 )
 
 include_directories(
-  .
   src
   tmx
   ${SDL_INCLUDE_DIR}
