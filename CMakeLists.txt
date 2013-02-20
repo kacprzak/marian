@@ -19,22 +19,23 @@ set( marian_SRCS
   src/ResourceMgr.cpp
   src/Sprite.cpp
   src/Texture.cpp
-  src/TmxMap.cpp
   src/Util.cpp
   src/main.cpp
-  base64/base64.cpp
 )
 
 include_directories(
   .
   src
+  tmx
   ${SDL_INCLUDE_DIR}
 )
+
+add_subdirectory( tmx )
 
 add_executable( ${PROJECT_NAME}
   ${marian_SRCS}
 )
 
 target_link_libraries( ${PROJECT_NAME}
-  ${SDL_LIBRARY} ${SDLIMAGE_LIBRARY} ${OPENGL_LIBRARIES}
+  tmx ${SDL_LIBRARY} ${SDLIMAGE_LIBRARY} ${OPENGL_LIBRARIES}
 )
