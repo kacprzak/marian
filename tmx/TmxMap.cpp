@@ -41,6 +41,8 @@ bool Map::loadFromFile(const std::string& filename)
     tileWidth   = lexical_cast<int>(map_node->first_attribute("tilewidth")->value());
     tileHeight  = lexical_cast<int>(map_node->first_attribute("tileheight")->value());
 
+    //---------- TILESETS ----------
+
     xml_node<> *tileset_node = map_node->first_node("tileset");
     
     while (tileset_node) {
@@ -60,6 +62,8 @@ bool Map::loadFromFile(const std::string& filename)
         tilesets.push_back(tileset);       
         tileset_node = tileset_node->next_sibling("tileset");
     }
+
+    //---------- LAYERS ----------
 
     xml_node<> *layer_node = map_node->first_node("layer");
 
@@ -110,6 +114,8 @@ bool Map::loadFromFile(const std::string& filename)
       layer_node = layer_node->next_sibling("layer");
     }
     
+    //---------- OBJECTS ----------
+
     xml_node<> *objectGroup_node = map_node->first_node("objectgroup");
 
     while (objectGroup_node) {
@@ -124,10 +130,54 @@ bool Map::loadFromFile(const std::string& filename)
       while (object_node) {
         Object object;
 
+        xml_attribute<> *name_attr = object_node->first_attribute("name");
+        if (name_attr) object.name = name_attr->value();
+
+        xml_attribute<> *type_attr = object_node->first_attribute("type");
+        if (type_attr) object.type = type_attr->value();
+
         xml_attribute<> *gid_attr = object_node->first_attribute("gid");
         object.gid = (gid_attr) ? lexical_cast<unsigned>(gid_attr->value()) : 0;
+
         object.x   = lexical_cast<int>(object_node->first_attribute("x")->value());
         object.y   = lexical_cast<int>(object_node->first_attribute("y")->value());
+
+        xml_attribute<> *width_attr = object_node->first_attribute("width");
+        object.width = (width_attr) ? lexical_cast<unsigned>(width_attr->value()) : 0;
+
+        xml_attribute<> *height_attr = object_node->first_attribute("height");
+        object.height = (height_attr) ? lexical_cast<unsigned>(height_attr->value()) : 0;
+
+        object.visible = "1";
+        xml_attribute<> *visible_attr = object_node->first_attribute("visible");
+        if (visible_attr)
+          object.visible = visible_attr->value();
+
+        xml_node<> *shape_node;
+        bool readPoints = false;
+        if ((shape_node = object_node->first_node("ellipse"))) {
+          object.shape = "ellipse";
+        } else if ((shape_node = object_node->first_node("polygon"))) {
+          object.shape = "polygon";
+          readPoints = true;
+        } else if ((shape_node = object_node->first_node("polyline"))) {
+          object.shape = "polyline";
+          readPoints = true;
+        }
+
+        if (readPoints) {
+          std::string pointsStr = shape_node->first_attribute("points")->value();
+
+          boost::char_separator<char> sep(", ");
+          boost::tokenizer< boost::char_separator<char> > tok(pointsStr, sep);
+          for (auto it = tok.begin(); it != tok.end(); ++it) {
+            int x = lexical_cast<int>(*it);
+            ++it;
+            int y = lexical_cast<int>(*it);
+
+            object.points.push_back({x, y});
+          } 
+        }
 
         objectGroup.objects.push_back(object);
         object_node = object_node->next_sibling("object");

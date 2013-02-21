@@ -33,9 +33,16 @@ class Layer
 class Object
 {
  public:
+  std::string name;
+  std::string type;
   unsigned gid; //< 0 by default
   int x;
   int y;
+  int width;    //< 0 by default
+  int height;   //< 0 by default
+  std::string visible; //< "1" by default
+  std::string shape;   //< ellipse, polygon, polyline or null
+  std::vector<std::pair<int, int> > points; //< polygon or polyline points
 };
 
 // In fact it's ObjectLayer
