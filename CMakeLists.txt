@@ -10,7 +10,7 @@ find_package( Boost COMPONENTS system filesystem unit_test_framework REQUIRED )
 
 set( CMAKE_DEBUG_POSTFIX "_d" )
 
-file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/media DESTINATION ${CMAKE_BINARY_DIR}/ )
+file( COPY ${CMAKE_SOURCE_DIR}/media DESTINATION ${CMAKE_BINARY_DIR}/ )
 
 set( marian_SRCS
   src/Engine.cpp
