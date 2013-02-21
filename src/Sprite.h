@@ -6,6 +6,7 @@
 #include <string>
 #include <sstream>
 #include <ostream>
+#include "Util.h"
 
 class Sprite {
  public:
@@ -14,7 +15,7 @@ class Sprite {
     , m_texture(texture)
     , m_size(m_texture->w(), m_texture->h())
   {
-    calculateTextureCoords(Rect<int>());
+    calculateTextureCoords(texture->w(), texture->h(), Rect<int>(), m_texCoords);
   }
 
  Sprite(const Texture *texture, Rect<int> textureRect)
@@ -22,7 +23,7 @@ class Sprite {
     , m_texture(texture)
     , m_size(textureRect.size())
   {
-    calculateTextureCoords(textureRect);
+    calculateTextureCoords(texture->w(), texture->h(), textureRect, m_texCoords);
   }
 
   void setPosition(float x, float y)
@@ -55,8 +56,6 @@ class Sprite {
   std::string toString() const;
 
  private:
-  void calculateTextureCoords(const Rect<int>& textureRect);
-
   Vector2<float> m_position;
   const Texture *m_texture;
   Vector2<int>   m_size;

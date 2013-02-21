@@ -15,16 +15,24 @@ Game::Game()
 
   m_map.loadFromFile("media/map2.tmx");
 
-  std::vector<Sprite> sprites;
-  m_map.getObjects(sprites);
+  std::vector<MapObject> mapObjects;
+  m_map.getObjects(mapObjects);
 
-  std::cout << "INFO: " << sprites.size() << " objects loaded.\n";
+  std::cout << "INFO: " << mapObjects.size() << " objects loaded.\n";
 
-  for (const Sprite& s : sprites) {
-    std::cout << "INFO: " << s << '\n';
-
-    GameObject *gameObject = new Hero(this, s);
-    m_gameObjects.push_back(gameObject);
+  for (const MapObject& obj : mapObjects) {
+    if (obj.gid) {
+      std::string imageSource = m_map.imageForTile(obj.gid);
+      const Texture *tex = ResourceMgr::instance().getTexture(imageSource);     
+      
+      Sprite sprite(tex, m_map.rectForTile(obj.gid));
+      sprite.setPosition(obj.x, obj.y);
+      
+      std::cout << "INFO: " << sprite << '\n';
+      
+      GameObject *gameObject = new Hero(this, sprite);
+      m_gameObjects.push_back(gameObject);
+    }
   }
 }
 

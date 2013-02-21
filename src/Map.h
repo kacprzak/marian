@@ -6,10 +6,20 @@
 #include <boost/utility.hpp>
 #include "TmxMap.h"
 #include "Math.h"
-#include "Sprite.h"
 
 class Engine;
 class Layer;
+
+/** Map object but in game pixel coords */
+class MapObject
+{
+ public:
+  unsigned gid;
+  int x;
+  int y;
+};
+
+//------------------------------------------------------------------------------
 
 class Map : boost::noncopyable
 {
@@ -28,7 +38,8 @@ class Map : boost::noncopyable
   void drawLayer(Engine *e, const std::string& layer,
                  int xFrom, int xTo, int yFrom, int yTo) const;
 
-  void getObjects(std::vector<Sprite>& v);
+  /** Get map objects */
+  void getObjects(std::vector<MapObject>& v);
 
   unsigned getTileGidAt(int x, int y, const std::string& layer) const;
   unsigned getTileGidAtf(float x, float y, const std::string& layer) const

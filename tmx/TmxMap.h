@@ -33,11 +33,12 @@ class Layer
 class Object
 {
  public:
-  unsigned gid;
+  unsigned gid; //< 0 by default
   int x;
   int y;
 };
 
+// In fact it's ObjectLayer
 class ObjectGroup
 {
  public:

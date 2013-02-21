@@ -39,7 +39,7 @@ add_executable( ${PROJECT_NAME}
 )
 
 target_link_libraries( ${PROJECT_NAME}
-  tmx ${SDL_LIBRARY} ${SDLIMAGE_LIBRARY} ${OPENGL_LIBRARIES}
+  tmx Box2D ${SDL_LIBRARY} ${SDLIMAGE_LIBRARY} ${OPENGL_LIBRARIES}
 )
 
 enable_testing()

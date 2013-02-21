@@ -9,6 +9,8 @@
 #include "Playable.h"
 #include "Sprite.h"
 
+#include <Box2D/Box2D.h>
+
 class SdlError : public std::exception
 {
  public:
@@ -43,6 +45,8 @@ class Engine
   void mainLoop(Playable *game);
 
   void drawSprite(const Sprite& sprite) const;
+  void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
+                GLuint textureId, const GLfloat *texCoords) const;
 
   void centerOnPixel(float x, float y);
 
@@ -53,11 +57,9 @@ class Engine
  private:
   void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h) const;
   void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h, const GLfloat *texCoords) const;
-  void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
-                GLuint textureId, const GLfloat *texCoords) const;
-
   void initializeSDL();
   void initializeOpenGL();
+  void initializeWorld();
 
   bool processEvents();
 
@@ -76,6 +78,8 @@ class Engine
   Playable *m_game;
 
   bool m_keys[SDLK_LAST];
+
+  b2World *m_world;
 };
 
 #endif

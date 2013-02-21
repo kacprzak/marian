@@ -124,7 +124,8 @@ bool Map::loadFromFile(const std::string& filename)
       while (object_node) {
         Object object;
 
-        object.gid = lexical_cast<unsigned>(object_node->first_attribute("gid")->value());
+        xml_attribute<> *gid_attr = object_node->first_attribute("gid");
+        object.gid = (gid_attr) ? lexical_cast<unsigned>(gid_attr->value()) : 0;
         object.x   = lexical_cast<int>(object_node->first_attribute("x")->value());
         object.y   = lexical_cast<int>(object_node->first_attribute("y")->value());
 

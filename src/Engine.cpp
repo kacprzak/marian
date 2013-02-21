@@ -34,17 +34,30 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight)
   for (int i = 0; i < SDLK_LAST; ++i) {
     m_keys[i] = false;
   }
+
+  initializeWorld();
 }
 
 //------------------------------------------------------------------------------
 
 Engine::~Engine()
 {
+  delete m_world;
+
   // Release all resources
   ResourceMgr::instance().release();
 
   std::cout << "Quitting SDL...\n";
   SDL_Quit();
+}
+
+//------------------------------------------------------------------------------
+
+void Engine::initializeWorld()
+{
+  b2Vec2 gravity(0.0f, -10.0f);
+  m_world = new b2World(gravity);
+  m_world->SetAllowSleeping(true);
 }
 
 //------------------------------------------------------------------------------
