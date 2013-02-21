@@ -1,13 +1,16 @@
 cmake_minimum_required( VERSION 2.8 )
 project( marian )
 
-add_definitions( "-Wall -Wextra -g -std=c++0x" )
+add_definitions( "-Wall -Wextra -std=c++0x" )
 
 find_package( SDL REQUIRED )
 find_package( SDL_image REQUIRED )
 find_package( OpenGL REQUIRED )
+find_package( Boost COMPONENTS system filesystem unit_test_framework REQUIRED )
 
 set( CMAKE_DEBUG_POSTFIX "_d" )
+
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/media DESTINATION ${CMAKE_BINARY_DIR}/ )
 
 set( marian_SRCS
   src/Engine.cpp
@@ -38,3 +41,7 @@ add_executable( ${PROJECT_NAME}
 target_link_libraries( ${PROJECT_NAME}
   tmx ${SDL_LIBRARY} ${SDLIMAGE_LIBRARY} ${OPENGL_LIBRARIES}
 )
+
+enable_testing()
+add_subdirectory( test )
+
