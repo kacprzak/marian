@@ -169,9 +169,25 @@ void Map::getObjects(std::vector<MapObject>& v)
     for (const tmx::Object& obj : og.objects) {
 
       MapObject mapObject;
+      mapObject.name = obj.name;
+      mapObject.type = obj.type;
       mapObject.gid = obj.gid;
       mapObject.x = obj.x;
       mapObject.y = m_tmxMap.height * m_tmxMap.tileHeight - obj.y;
+      
+      mapObject.width = obj.width;
+      mapObject.height = obj.height;
+
+      mapObject.shape = obj.shape;
+      mapObject.visible = (obj.visible == "1") ? true : false;
+
+      for (const std::pair<int, int>& point : obj.points) {
+        int x = mapObject.x + point.first;
+        int y = mapObject.y - point.second;
+
+        mapObject.points.push_back({x, y});
+      }
+
       v.push_back(mapObject);
     }
   }

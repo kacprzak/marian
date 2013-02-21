@@ -32,6 +32,12 @@ Game::Game()
       
       GameObject *gameObject = new Hero(this, sprite);
       m_gameObjects.push_back(gameObject);
+    } else {
+      std::cout << "INFO: " << obj.shape << '\n';
+      std::cout << "INFO: {";
+      for (auto& p : obj.points)
+        std::cout << " " << p.first << "," << p.second << ' ';
+      std::cout << "}\n";
     }
   }
 }

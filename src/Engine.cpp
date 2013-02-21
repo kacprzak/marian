@@ -58,6 +58,17 @@ void Engine::initializeWorld()
   b2Vec2 gravity(0.0f, -10.0f);
   m_world = new b2World(gravity);
   m_world->SetAllowSleeping(true);
+
+  b2BodyDef groundBodyDef;
+  groundBodyDef.position.Set(0.0f, -10.0f);
+
+  b2Body *groundBody = m_world->CreateBody(&groundBodyDef);
+  b2PolygonShape groundBox;
+  groundBox.SetAsBox(50.0f, 10.0f);
+
+  groundBody->CreateFixture(&groundBox, 0.0f);
+
+  // TODO: Continue here
 }
 
 //------------------------------------------------------------------------------
@@ -123,6 +134,11 @@ bool Engine::processEvents()
 
 void Engine::update(float elapsedTime)
 {
+  // Update Physics
+  int32 velocityIterations = 6;
+  int32 positionIterations = 2;
+  m_world->Step(elapsedTime, velocityIterations, positionIterations);
+
   // Update world
   m_game->update(this, elapsedTime);
 }

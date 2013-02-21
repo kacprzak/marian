@@ -14,9 +14,16 @@ class Layer;
 class MapObject
 {
  public:
-  unsigned gid;
+  std::string name;
+  std::string type;
+  unsigned gid; //< 0 is no gid
   int x;
   int y;
+  int width;
+  int height;
+  bool visible;
+  std::string shape;   //< ellipse, polygon, polyline or null
+  std::vector<std::pair<int, int> > points; //< polygon or polyline points
 };
 
 //------------------------------------------------------------------------------
