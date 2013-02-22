@@ -79,7 +79,7 @@ void Hero::update(Engine *e, float elapsedTime)
   }
 
   // Center view on player
-  e->centerOnPixel(s.position().x + s.width()/2, s.position().y + s.height()/2);
+  e->centerViewOn(s.position().x + s.width()/2, s.position().y + s.height()/2);
 }
 
 //------------------------------------------------------------------------------

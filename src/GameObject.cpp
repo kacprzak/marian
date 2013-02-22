@@ -7,7 +7,7 @@ bool GameObject::processInput(const SDL_Event& /*event*/)
   return true;
 }
 
-void GameObject::update(Engine */*e*/, float /*elapsedTime*/)
+void GameObject::update(Engine * /*e*/, float /*elapsedTime*/)
 {
   //
 }

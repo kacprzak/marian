@@ -10,6 +10,7 @@ find_package( SDL_image REQUIRED )
 find_package( OpenGL REQUIRED )
 find_package( Boost COMPONENTS unit_test_framework REQUIRED )
 find_package( Box2D REQUIRED )
+find_package( GLUT REQUIRED )
 
 set( CMAKE_DEBUG_POSTFIX "_d" )
 
@@ -27,12 +28,15 @@ set( marian_SRCS
   src/Texture.cpp
   src/Util.cpp
   src/main.cpp
+  src/debugdraw/Render.cpp
 )
 
 include_directories(
   src
   tmx
   ${SDL_INCLUDE_DIR}
+  ${OPENGL_INCLUDE_DIR}
+  ${GLUT_INCLUDE_DIRS}
 )
 
 add_subdirectory( tmx )
@@ -42,7 +46,7 @@ add_executable( ${PROJECT_NAME}
 )
 
 target_link_libraries( ${PROJECT_NAME}
-  tmx ${BOX2D_LIBRARY} ${SDL_LIBRARY} ${SDLIMAGE_LIBRARY} ${OPENGL_LIBRARIES}
+  tmx ${BOX2D_LIBRARY} ${SDL_LIBRARY} ${SDLIMAGE_LIBRARY} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY}
 )
 
 enable_testing()

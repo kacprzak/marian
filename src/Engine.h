@@ -10,6 +10,7 @@
 #include "Sprite.h"
 
 #include <Box2D/Box2D.h>
+#include "debugdraw/Render.h"
 
 class SdlError : public std::exception
 {
@@ -48,7 +49,9 @@ class Engine
   void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
                 GLuint textureId, const GLfloat *texCoords) const;
 
-  void centerOnPixel(float x, float y);
+  void toggleDrawDebug();
+
+  void centerViewOn(float x, float y);
 
   bool isPressed(int keycode) const { return m_keys[keycode]; }
   int screenWidth() const  { return m_screenWidth; }
@@ -79,7 +82,9 @@ class Engine
 
   bool m_keys[SDLK_LAST];
 
-  b2World *m_world;
+  b2World   *m_world;
+  DebugDraw *m_debugDraw;
+  bool       m_drawDebugData;
 };
 
 #endif

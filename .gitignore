@@ -3,6 +3,7 @@
 *.d
 *.log
 gmon.out
+TAGS
 
 marian
 *_test

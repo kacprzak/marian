@@ -31,6 +31,7 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight)
     throw e;
   }
 
+  // Mark all keys as not pressed
   for (int i = 0; i < SDLK_LAST; ++i) {
     m_keys[i] = false;
   }
@@ -43,6 +44,7 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight)
 Engine::~Engine()
 {
   delete m_world;
+  delete m_debugDraw;
 
   // Release all resources
   ResourceMgr::instance().release();
@@ -59,6 +61,10 @@ void Engine::initializeWorld()
   m_world = new b2World(gravity);
   m_world->SetAllowSleeping(true);
 
+  // Debug drawing
+  m_debugDraw = new DebugDraw;
+  m_drawDebugData = false;
+
   b2BodyDef groundBodyDef;
   groundBodyDef.position.Set(0.0f, -10.0f);
 
@@ -69,6 +75,21 @@ void Engine::initializeWorld()
   groundBody->CreateFixture(&groundBox, 0.0f);
 
   // TODO: Continue here
+}
+
+//------------------------------------------------------------------------------
+
+void Engine::toggleDrawDebug()
+{
+  if (m_drawDebugData == false) {
+    m_debugDraw->SetFlags(b2Draw::e_shapeBit);
+    m_world->SetDebugDraw(m_debugDraw);    
+  } else {
+    m_debugDraw->ClearFlags(b2Draw::e_shapeBit);
+    m_world->SetDebugDraw(nullptr);
+  }
+
+  m_drawDebugData = !m_drawDebugData;
 }
 
 //------------------------------------------------------------------------------
@@ -96,7 +117,7 @@ void Engine::mainLoop(Playable *game)
 
 //------------------------------------------------------------------------------
 
-void Engine::centerOnPixel(float x, float y)
+void Engine::centerViewOn(float x, float y)
 {
 #if ROUND
   m_translate_x = std::round(-x) * m_scale;
@@ -121,6 +142,8 @@ bool Engine::processEvents()
       return m_game->processInput(event);
     case SDL_KEYDOWN:
       m_keys[event.key.keysym.sym] = true;
+      if (event.key.keysym.sym == SDLK_g)
+        toggleDrawDebug();
       return m_game->processInput(event);
     case SDL_QUIT:
       return false;
@@ -157,6 +180,10 @@ void Engine::draw()
   glScalef(m_scale, m_scale, 1.0f);
 
   m_game->draw(this);
+  if (m_drawDebugData) {
+    m_world->DrawDebugData();
+    glColor4f(1,1,1,1); // Reset color
+  }
 
   SDL_GL_SwapBuffers(); 
 }
