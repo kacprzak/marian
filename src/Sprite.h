@@ -28,28 +28,11 @@ class Sprite {
         calculateTextureCoords(texture->w(), texture->h(), textureRect, m_texCoords);
     }
 
-    /** Pixel width */
-    int width() const
-    {
-        return m_size.x;
-    }
+    int pixelWidth() const  { return m_size.x; }
+    int pixelHeight() const { return m_size.y; }
 
-    /** Pixel height */
-    int height() const
-    {
-        return m_size.y;
-    }
-
-    const Texture *texture() const
-    {
-        return m_texture;
-    }
-
-
-    const GLfloat *getTextureCoords() const
-    {
-        return m_texCoords;
-    }
+    const Texture *texture() const { return m_texture; }
+    const GLfloat *getTextureCoords() const { return m_texCoords; }
     
     std::string toString() const
     {
@@ -62,7 +45,7 @@ class Sprite {
 
  private:
     const Texture *m_texture;
-    Vector2<int>   m_size;
+    Vector2<int>   m_size; //< Pixel size
     GLfloat        m_texCoords[8];
 };
 

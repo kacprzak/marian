@@ -42,7 +42,7 @@ void Game::initialize(Engine *e)
             b2Body* body = e->world()->CreateBody(&bodyDef);
 
             b2PolygonShape dynamicBox;
-            dynamicBox.SetAsBox(10.0f, 10.0f);
+            dynamicBox.SetAsBox(0.5f, 0.5f, b2Vec2(0.5f, 0.5f), 0.0f);
             
             b2FixtureDef fixtureDef;
             fixtureDef.shape = &dynamicBox;
@@ -133,15 +133,15 @@ void Game::draw(Engine *e)
     Vector2<float> pos = m_gameObjects[0]->position();
 
     // Draw only visible part of the map
-    int mapPixHeight   = m_map.pixelSize().y;
+    float mapHeight   = m_map.size().y;
 
-    int xFrom = (pos.x - e->screenWidth()  / 2) / m_map.tileWidth();
-    int xTo   = (pos.x + e->screenWidth()  / 2) / m_map.tileWidth() + 2;
-    int yFrom = (mapPixHeight - pos.y - e->screenHeight() / 2) / m_map.tileHeight() - 1;
-    int yTo   = (mapPixHeight - pos.y + e->screenHeight() / 2) / m_map.tileHeight() + 1;
+    float xFrom = pos.x - e->screenWidth()  / 2;
+    float xTo   = pos.x + e->screenWidth()  / 2;
+    float yFrom = mapHeight - pos.y - e->screenHeight() / 2;
+    float yTo   = mapHeight - pos.y + e->screenHeight() / 2;
 
     // Clamp coords
-    Vector2<int> mapSize = m_map.tileSize();
+    Vector2<float> mapSize = m_map.size();
     if (xFrom < 0) xFrom = 0;
     if (xTo   > mapSize.x) xTo = mapSize.x;
     if (yFrom < 0) yFrom = 0;

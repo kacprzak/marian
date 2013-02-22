@@ -10,8 +10,8 @@
 #include <vector>
 #include "ResourceMgr.h"
 
-#define SCALE 1
-#define ROUND 1
+#define SCALE 32
+#define ROUND 0
 
 Engine::Engine(const std::string& title, int screenWidth, int screenHeight)
     : m_titile(title)
@@ -113,8 +113,8 @@ void Engine::mainLoop(Playable *game)
 void Engine::centerViewOn(float x, float y)
 {
 #if ROUND
-    m_translate_x = std::round(-x) * m_scale;
-    m_translate_y = std::round(-y) * m_scale;
+    m_translate_x = std::round(-x * m_scale);
+    m_translate_y = std::round(-y * m_scale);
 #else
     m_translate_x = -x * m_scale;
     m_translate_y = -y * m_scale;
@@ -233,18 +233,19 @@ void Engine::drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
 
 //------------------------------------------------------------------------------
 
-void Engine::drawSprite(float x, float y, const Sprite& sprite) const
+void Engine::drawSprite(float x, float y, float w, float h,
+                        const Sprite& sprite) const
 {
     const Texture *tex = sprite.texture();
     const GLfloat *texCoords = sprite.getTextureCoords();
 
 #if ROUND
     drawQuad(std::round(x), std::round(y),
-             sprite.width(), sprite.height(),
+             w, h,
              tex->textureId(), texCoords);
 #else
     drawQuad(x, y,
-             sprite.width(), sprite.height(),
+             w, h,
              tex->textureId(), texCoords);
 #endif
 }

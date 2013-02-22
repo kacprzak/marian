@@ -88,15 +88,14 @@ Layer::~Layer()
 
 void Layer::draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const
 {
-    int tileWidth  = map->tileWidth();
-    int tileHeight = map->tileHeight();
-
     for (int y = yFrom; y < yTo; ++y) {
         for (int x = xFrom; x < xTo; ++x) {
             const Tile *tile = tiles[y * width + x];
             if (tile) {
-                e->drawQuad(x * tileWidth, (map->tileSize().y - y - 1) * tileHeight,
-                            tileWidth, tileHeight,
+                e->drawQuad(x,
+                            map->tileSize().y - y - 1,
+                            1.0f,
+                            1.0f,
                             tile->texture->textureId(), tile->texCoords);
             }
         }
@@ -161,6 +160,15 @@ Vector2<int> Map::tileSize() const
     return Vector2<int>(m_tmxMap.width, m_tmxMap.height);
 }
 
+/**
+ * Map size in game coords.
+ */
+Vector2<float> Map::size() const
+{
+    return Vector2<float>(m_tmxMap.width, m_tmxMap.height);
+}
+
+
 //------------------------------------------------------------------------------
 
 void Map::getObjects(std::vector<MapObject>& v)
@@ -172,8 +180,9 @@ void Map::getObjects(std::vector<MapObject>& v)
             mapObject.name = obj.name;
             mapObject.type = obj.type;
             mapObject.gid = obj.gid;
-            mapObject.x = obj.x;
-            mapObject.y = m_tmxMap.height * m_tmxMap.tileHeight - obj.y;
+
+            mapObject.x = obj.x / m_tmxMap.tileWidth;;
+            mapObject.y = m_tmxMap.height - obj.y / m_tmxMap.tileHeight;
       
             mapObject.width = obj.width;
             mapObject.height = obj.height;
@@ -182,8 +191,8 @@ void Map::getObjects(std::vector<MapObject>& v)
             mapObject.visible = (obj.visible == "1") ? true : false;
 
             for (const std::pair<int, int>& point : obj.points) {
-                int x = point.first;
-                int y = -point.second;
+                float x = point.first / float(m_tmxMap.tileWidth);
+                float y = -point.second / float(m_tmxMap.tileHeight);
 
                 mapObject.points.push_back({x, y});
             }
@@ -191,43 +200,6 @@ void Map::getObjects(std::vector<MapObject>& v)
             v.push_back(mapObject);
         }
     }
-}
-
-//------------------------------------------------------------------------------
-
-/**
- * GlobalID of tile in position (x,y) i selected layer.
- *
- * @param x pixel coord
- * @param y pixel coord (y points up)
- */
-unsigned Map::getTileGidAt(int x, int y, const std::string& layerName) const
-{
-    for (const tmx::Layer& layer : m_tmxMap.layers) {
-        if (layer.name == layerName) {
-            // Map coords (y points down)
-            int tile_x = x / m_tmxMap.tileWidth;
-            int tile_y = m_tmxMap.height - (y / m_tmxMap.tileHeight) - 1;
-
-            return layer.data[tile_y * layer.width + tile_x];
-        }
-    }
-
-    return 0;
-}
-
-//------------------------------------------------------------------------------
-
-Rect<int> Map::getTileRectAt(int x, int y) const
-{
-    int t_w = m_tmxMap.tileWidth;
-    int t_h = m_tmxMap.tileHeight;
-
-    // Purposely int/int
-    int t_x = x / t_w;
-    int t_y = y / t_h;
-
-    return Rect<int>(t_x * t_w, t_y * t_h, t_w, t_h);
 }
 
 //------------------------------------------------------------------------------

@@ -35,9 +35,9 @@ class Vector2
     {}
 
     const Vector2<T>& operator=(const Vector2<T> &v)
-    {	
+    {   
         x = v.x;
-        y = v.y;			
+        y = v.y;                        
         return *this;
     }
 
@@ -85,32 +85,32 @@ class Vector2
     {
         return Vector2<T>(-x, -y);
     }
-		
+                
     const Vector2<T>& operator*=(const T num)
     {
         x *= num;
-        y *= num;										
+        y *= num;
         return *this;
     }
-	
+        
     const Vector2<T>& operator/=(const T num)
     {
         x /= num;
-        y /= num;										
+        y /= num;
         return *this;
     }
 
     const Vector2<T> operator*(const T num) const
     {
-        Vector2<T> temp(*this);			
+        Vector2<T> temp(*this);                 
         return temp *= num;
     }
   
     const Vector2<T> operator/(const T num) const
     {
-        Vector2<T> temp(*this);			
+        Vector2<T> temp(*this);                 
         return temp /= num;
-    }	
+    }   
 
     /** Dot product */
     T operator* (const Vector2<T>& v) const
