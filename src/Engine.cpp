@@ -97,6 +97,7 @@ void Engine::toggleDrawDebug()
 void Engine::mainLoop(Playable *game)
 {
   m_game = game;
+  m_game->initialize(this);
 
   unsigned int curr_time = SDL_GetTicks();
   unsigned int last_time = curr_time;
@@ -113,6 +114,8 @@ void Engine::mainLoop(Playable *game)
     delta = (float)(curr_time - last_time) / 1000.0f;
     last_time = curr_time;
   }
+
+  m_game->clear(this);
 }
 
 //------------------------------------------------------------------------------

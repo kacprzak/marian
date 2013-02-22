@@ -1,3 +1,4 @@
+/* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef FPSCOUNTER_H
 #define FPSCOUNTER_H
 

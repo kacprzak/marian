@@ -42,6 +42,8 @@ class Engine
  public:
   Engine(const std::string& title, int screenWidth, int screenHeight);
   ~Engine();
+
+  b2World *world() { return m_world; }
   
   void mainLoop(Playable *game);
 

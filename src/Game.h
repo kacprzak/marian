@@ -16,6 +16,8 @@ class Game : public Playable
   ~Game();
 
   // Playable interface
+  void initialize(Engine *e);
+  void clear(Engine *e);
   bool processInput(const SDL_Event& event);
   void update(Engine *e, float elapsedTime);
   void draw(Engine *e);
