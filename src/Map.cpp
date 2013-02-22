@@ -216,6 +216,21 @@ void Map::draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const
 void Map::drawLayer(Engine *e, const std::string& layerName,
                     int xFrom, int xTo, int yFrom, int yTo) const
 {
+    const Vector2<float>& mapSize = size();
+    float mapHeight   = mapSize.y;
+
+    xFrom += 1;
+    xTo -= 1;
+    float tmp = yFrom;
+    yFrom = mapHeight - yTo;
+    yTo   = mapHeight - tmp - 1;
+
+    // Clamp coords
+    if (xFrom < 0) xFrom = 0;
+    if (xTo   > mapSize.x) xTo = mapSize.x;
+    if (yFrom < 0) yFrom = 0;
+    if (yTo   > mapSize.y) yTo = mapSize.y;
+
     for (const Layer* layer : m_layers) {
         if (layer->name == layerName)
             layer->draw(e, xFrom, xTo, yFrom, yTo);

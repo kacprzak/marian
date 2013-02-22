@@ -133,30 +133,22 @@ void Game::draw(Engine *e)
     Vector2<float> pos = m_gameObjects[0]->position();
 
     // Draw only visible part of the map
-    float mapHeight   = m_map.size().y;
 
-    float xFrom = pos.x - e->screenWidth()  / 2;
-    float xTo   = pos.x + e->screenWidth()  / 2;
-    float yFrom = mapHeight - pos.y - e->screenHeight() / 2;
-    float yTo   = mapHeight - pos.y + e->screenHeight() / 2;
 
-    // Clamp coords
-    Vector2<float> mapSize = m_map.size();
-    if (xFrom < 0) xFrom = 0;
-    if (xTo   > mapSize.x) xTo = mapSize.x;
-    if (yFrom < 0) yFrom = 0;
-    if (yTo   > mapSize.y) yTo = mapSize.y;
+    float x1, x2, y1, y2;
+
+    e->viewBounds(&x1, &x2, &y1, &y2);
 
     // TODO: read order from map
-    m_map.drawLayer(e, "sky",       xFrom, xTo, yFrom, yTo);
-    m_map.drawLayer(e, "back",      xFrom, xTo, yFrom, yTo);
-    m_map.drawLayer(e, "collision", xFrom, xTo, yFrom, yTo);
-    m_map.drawLayer(e, "ladders",   xFrom, xTo, yFrom, yTo);
+    m_map.drawLayer(e, "sky",       x1, x2, y1, y2);
+    m_map.drawLayer(e, "back",      x1, x2, y1, y2);
+    m_map.drawLayer(e, "collision", x1, x2, y1, y2);
+    m_map.drawLayer(e, "ladders",   x1, x2, y1, y2);
 
     for (GameObject* go : m_gameObjects) {
         go->draw(e);
     }
 
-    m_map.drawLayer(e, "water", xFrom, xTo, yFrom, yTo);
-    m_map.drawLayer(e, "front", xFrom, xTo, yFrom, yTo);
+    m_map.drawLayer(e, "water", x1, x2, y1, y2);
+    m_map.drawLayer(e, "front", x1, x2, y1, y2);
 }

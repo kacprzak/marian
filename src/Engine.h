@@ -55,14 +55,18 @@ class Engine
     void toggleDrawDebug();
 
     void centerViewOn(float x, float y);
+    void viewBounds(float *left, float *right, float *bottom, float *top);
 
     bool isPressed(int keycode) const { return m_keys[keycode]; }
+
+    /** Screen size in pixels */
     int screenWidth() const  { return m_screenWidth; }
     int screenHeight() const { return m_screenHeight; }
 
  private:
     void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h) const;
-    void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h, const GLfloat *texCoords) const;
+    void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
+                  const GLfloat *texCoords) const;
     void initializeSDL();
     void initializeOpenGL();
     void initializeWorld();

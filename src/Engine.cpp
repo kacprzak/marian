@@ -123,6 +123,16 @@ void Engine::centerViewOn(float x, float y)
 
 //------------------------------------------------------------------------------
 
+void Engine::viewBounds(float *left, float *right, float *bottom, float *top)
+{
+    *left    = (-m_translate_x - m_screenWidth  / 2) / m_scale;
+    *right   = (-m_translate_x + m_screenWidth  / 2) / m_scale;
+    *bottom  = (-m_translate_y - m_screenHeight / 2) / m_scale;
+    *top     = (-m_translate_y + m_screenHeight / 2) / m_scale;
+}
+
+//------------------------------------------------------------------------------
+
 /** Return true if should keep going. */
 bool Engine::processEvents()
 {
