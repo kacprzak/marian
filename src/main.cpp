@@ -1,3 +1,4 @@
+/* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include <iostream>
 
 #include "Engine.h"
@@ -5,13 +6,13 @@
 
 int main()
 {
-  Engine *e = new Engine("Marian", 640, 640);
-  Game *game = new Game;
+    Engine *e = new Engine("Marian", 640, 640);
+    Game *game = new Game;
 
-  e->mainLoop(game);
+    e->mainLoop(game);
 
-  delete e;
-  delete game;
+    delete e;
+    delete game;
 
-  return 0;
+    return 0;
 }

@@ -1,3 +1,4 @@
+/* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
@@ -6,20 +7,20 @@
 
 class Texture {
  public:
-  Texture();
-  ~Texture();
+    Texture();
+    ~Texture();
 
-  GLuint textureId() const { return m_textureId; }
-  int w() const { return m_w; }
-  int h() const { return m_h; }
+    GLuint textureId() const { return m_textureId; }
+    int w() const { return m_w; }
+    int h() const { return m_h; }
 
-  bool loadFromFile(const std::string& filename);
-  void release();
+    bool loadFromFile(const std::string& filename);
+    void release();
 
  private:
-  GLuint m_textureId;
-  int m_w;
-  int m_h;
+    GLuint m_textureId;
+    int m_w;
+    int m_h;
 };
 
 #endif

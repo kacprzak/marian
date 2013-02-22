@@ -4,15 +4,15 @@
 
 bool GameObject::processInput(const SDL_Event& /*event*/)
 {
-  return true;
+    return true;
 }
 
 void GameObject::update(Engine * /*e*/, float /*elapsedTime*/)
 {
-  //
+    //
 }
 
 void GameObject::draw(Engine *e)
 {
-  e->drawSprite(m_sprite);
+    e->drawSprite(m_sprite);
 }
