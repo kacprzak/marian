@@ -182,8 +182,8 @@ void Map::getObjects(std::vector<MapObject>& v)
             mapObject.visible = (obj.visible == "1") ? true : false;
 
             for (const std::pair<int, int>& point : obj.points) {
-                int x = mapObject.x + point.first;
-                int y = mapObject.y - point.second;
+                int x = point.first;
+                int y = -point.second;
 
                 mapObject.points.push_back({x, y});
             }

@@ -45,13 +45,32 @@ void Game::initialize(Engine *e)
             for (auto& p : obj.points)
                 std::cout << " " << p.first << "," << p.second << ' ';
             std::cout << "}\n";
+
+            size_t numOfPoints = obj.points.size();
+            b2Vec2 vs[numOfPoints];
+            for (size_t i = 0; i < numOfPoints; ++i) {
+                auto& p = obj.points[i];
+                vs[i].Set(p.first, p.second);
+            }
+
+            b2ChainShape chain;
+            if (obj.shape == "polyline")
+                chain.CreateChain(vs, numOfPoints);
+            else if (obj.shape == "polygon")
+                chain.CreateLoop(vs, numOfPoints);
+
+            b2BodyDef groundBodyDef;
+            groundBodyDef.position.Set(obj.x, obj.y);
+
+            b2Body *groundBody = e->world()->CreateBody(&groundBodyDef);
+            groundBody->CreateFixture(&chain, 0.0f);
         }
     }
 }
 
 //------------------------------------------------------------------------------
 
-void Game::clear(Engine *e)
+void Game::clear(Engine * /*e*/)
 {
     //
 }
