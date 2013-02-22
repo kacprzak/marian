@@ -3,10 +3,13 @@ project( marian )
 
 add_definitions( "-Wall -Wextra -std=c++0x" )
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+
 find_package( SDL REQUIRED )
 find_package( SDL_image REQUIRED )
 find_package( OpenGL REQUIRED )
-find_package( Boost COMPONENTS system filesystem unit_test_framework REQUIRED )
+find_package( Boost COMPONENTS unit_test_framework REQUIRED )
+find_package( Box2D REQUIRED )
 
 set( CMAKE_DEBUG_POSTFIX "_d" )
 
@@ -39,7 +42,7 @@ add_executable( ${PROJECT_NAME}
 )
 
 target_link_libraries( ${PROJECT_NAME}
-  tmx Box2D ${SDL_LIBRARY} ${SDLIMAGE_LIBRARY} ${OPENGL_LIBRARIES}
+  tmx ${BOX2D_LIBRARY} ${SDL_LIBRARY} ${SDLIMAGE_LIBRARY} ${OPENGL_LIBRARIES}
 )
 
 enable_testing()
