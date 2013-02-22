@@ -11,6 +11,7 @@
 
 void Hero::update(Engine *e, float elapsedTime)
 {
+#if 0
     //static float v = 250.0f;
     static float frictionFactor = 1.2f;
 
@@ -78,9 +79,9 @@ void Hero::update(Engine *e, float elapsedTime)
         m_ay = 0.0f;
         m_vy = 0.0f;
     }
-
+#endif
     // Center view on player
-    e->centerViewOn(s.position().x + s.width()/2, s.position().y + s.height()/2);
+    e->centerViewOn(position().x + m_sprite.width()/2, position().y + m_sprite.height()/2);
 }
 
 //------------------------------------------------------------------------------

@@ -233,25 +233,19 @@ void Engine::drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
 
 //------------------------------------------------------------------------------
 
-void Engine::drawSprite(const Sprite& sprite) const
+void Engine::drawSprite(float x, float y, const Sprite& sprite) const
 {
     const Texture *tex = sprite.texture();
     const GLfloat *texCoords = sprite.getTextureCoords();
 
 #if ROUND
-    drawQuad(std::round(sprite.position().x),
-             std::round(sprite.position().y),
-             sprite.width(),
-             sprite.height(),
-             tex->textureId(),
-             texCoords);
+    drawQuad(std::round(x), std::round(y),
+             sprite.width(), sprite.height(),
+             tex->textureId(), texCoords);
 #else
-    drawQuad(sprite.position().x,
-             sprite.position().y,
-             sprite.width(),
-             sprite.height(),
-             tex->textureId(),
-             texCoords);
+    drawQuad(x, y,
+             sprite.width(), sprite.height(),
+             tex->textureId(), texCoords);
 #endif
 }
 

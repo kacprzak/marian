@@ -24,7 +24,6 @@ set( marian_SRCS
   src/Hero.cpp
   src/Map.cpp
   src/ResourceMgr.cpp
-  src/Sprite.cpp
   src/Texture.cpp
   src/Util.cpp
   src/main.cpp

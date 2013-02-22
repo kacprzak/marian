@@ -9,40 +9,32 @@
 #include <ostream>
 #include "Util.h"
 
+/**
+ * An image. Represents whole or part of a texture.
+ */
 class Sprite {
  public:
     Sprite(const Texture *texture)
-        : m_position(0.0f, 0.0f)
-        , m_texture(texture)
+        : m_texture(texture)
         , m_size(m_texture->w(), m_texture->h())
     {
         calculateTextureCoords(texture->w(), texture->h(), Rect<int>(), m_texCoords);
     }
 
     Sprite(const Texture *texture, Rect<int> textureRect)
-        : m_position(0.0f, 0.0f)
-        , m_texture(texture)
+        : m_texture(texture)
         , m_size(textureRect.size())
     {
         calculateTextureCoords(texture->w(), texture->h(), textureRect, m_texCoords);
     }
 
-    void setPosition(float x, float y)
-    {
-        m_position.x = x;
-        m_position.y = y;
-    }
-
-    const Vector2<float> position() const
-    {
-        return m_position;
-    }
-
+    /** Pixel width */
     int width() const
     {
         return m_size.x;
     }
 
+    /** Pixel height */
     int height() const
     {
         return m_size.y;
@@ -53,11 +45,22 @@ class Sprite {
         return m_texture;
     }
 
-    const GLfloat *getTextureCoords() const;
-    std::string toString() const;
+
+    const GLfloat *getTextureCoords() const
+    {
+        return m_texCoords;
+    }
+    
+    std::string toString() const
+    {
+        std::stringstream ss;
+        ss << "Sprite: {" << this
+           << ", size: {" << m_size.x << ", " << m_size.y << "}"
+           << ", texId: " << m_texture->textureId() << "}";
+        return ss.str();
+    }
 
  private:
-    Vector2<float> m_position;
     const Texture *m_texture;
     Vector2<int>   m_size;
     GLfloat        m_texCoords[8];

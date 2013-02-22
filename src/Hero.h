@@ -10,8 +10,8 @@ class Map;
 class Hero : public GameObject
 {
  public:
-    explicit Hero(Game *game, const Sprite& sprite)
-        : GameObject(game, sprite)
+    explicit Hero(Game *game, const Sprite& sprite, b2Body *body)
+        : GameObject(game, sprite, body)
         , m_vx(0.0f)
         , m_vy(0.0f)
         , m_ax(0.0f)

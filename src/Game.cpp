@@ -33,11 +33,25 @@ void Game::initialize(Engine *e)
             const Texture *tex = ResourceMgr::instance().getTexture(imageSource);     
       
             Sprite sprite(tex, m_map.rectForTile(obj.gid));
-            sprite.setPosition(obj.x, obj.y);
       
             std::cout << "INFO: " << sprite << '\n';
       
-            GameObject *gameObject = new Hero(this, sprite);
+            b2BodyDef bodyDef;
+            bodyDef.type = b2_dynamicBody;
+            bodyDef.position.Set(obj.x, obj.y);
+            b2Body* body = e->world()->CreateBody(&bodyDef);
+
+            b2PolygonShape dynamicBox;
+            dynamicBox.SetAsBox(10.0f, 10.0f);
+            
+            b2FixtureDef fixtureDef;
+            fixtureDef.shape = &dynamicBox;
+            fixtureDef.density = 1.0f;
+            fixtureDef.friction = 0.3f;
+
+            body->CreateFixture(&fixtureDef);
+
+            GameObject *gameObject = new Hero(this, sprite, body);
             m_gameObjects.push_back(gameObject);
         } else {
             std::cout << "INFO: " << obj.shape << '\n';

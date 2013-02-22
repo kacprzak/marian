@@ -48,7 +48,7 @@ class Engine
   
     void mainLoop(Playable *game);
 
-    void drawSprite(const Sprite& sprite) const;
+    void drawSprite(float x, float y, const Sprite& sprite) const;
     void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
                   GLuint textureId, const GLfloat *texCoords) const;
 

@@ -14,5 +14,6 @@ void GameObject::update(Engine * /*e*/, float /*elapsedTime*/)
 
 void GameObject::draw(Engine *e)
 {
-    e->drawSprite(m_sprite);
+    const b2Vec2& pos = m_body->GetPosition();
+    e->drawSprite(pos.x, pos.y, m_sprite);
 }
