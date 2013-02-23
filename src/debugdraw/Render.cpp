@@ -16,13 +16,18 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "Render.h"
+#define NO_GLUT
 
-#ifdef __APPLE__
+#include "Render.h"
+#include <GL/gl.h>
+
+#ifndef NO_GLUT
+  #ifdef __APPLE__
 	#include <GLUT/glut.h>
-#else
-//	#include "freeglut/freeglut.h"
+  #else
+        //#include "freeglut/freeglut.h"
 	#include <GL/glut.h>
+  #endif
 #endif
 
 #include <cstdio>
@@ -155,6 +160,9 @@ void DebugDraw::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color)
 
 void DebugDraw::DrawString(int x, int y, const char *string, ...)
 {
+#ifdef NO_GLUT
+        puts("WARNING: GLUT is disabled. DrawString does nothing");
+#else
 	char buffer[128];
 
 	va_list arg;
@@ -184,6 +192,7 @@ void DebugDraw::DrawString(int x, int y, const char *string, ...)
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
+#endif
 }
 
 void DebugDraw::DrawAABB(b2AABB* aabb, const b2Color& c)
