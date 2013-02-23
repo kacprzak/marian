@@ -16,7 +16,7 @@ class GameObject : public Playable
         , m_body(body)
     {}
 
-    const b2Vec2 position() const {
+    const b2Vec2& position() const {
         return m_body->GetPosition();
     }
 
