@@ -9,11 +9,7 @@ class Engine;
 class Hero : public GameObject
 {
  public:
-    explicit Hero(Game *game, const Sprite& sprite, b2Body *body)
-        : GameObject(game, sprite, body)
-    {
-        //
-    }
+    Hero(Engine *e, Game *game, const Sprite& sprite, const b2Vec2& pos);
   
     void update(Engine *e, float elapsedTime);
 };

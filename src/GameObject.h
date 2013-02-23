@@ -32,7 +32,6 @@ class GameObject : public Playable
     Game *m_game;
     Sprite m_sprite;
     b2Body* m_body;
-    Rect<float> collisionRect;
 
 };
 

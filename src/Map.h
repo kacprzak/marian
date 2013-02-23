@@ -41,9 +41,9 @@ class Map : boost::noncopyable
 
     Vector2<float> size() const;
 
-    void draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const;
+    void draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const;
     void drawLayer(Engine *e, const std::string& layer,
-                   int xFrom, int xTo, int yFrom, int yTo) const;
+                   float xFrom, float xTo, float yFrom, float yTo) const;
 
     /** Get map objects */
     void getObjects(std::vector<MapObject>& v);

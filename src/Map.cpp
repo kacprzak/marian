@@ -204,8 +204,10 @@ void Map::getObjects(std::vector<MapObject>& v)
 
 //------------------------------------------------------------------------------
 
-void Map::draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const
+void Map::draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const
 {
+    assert(false); // Fix me
+
     for (const Layer* layer : m_layers) {
         layer->draw(e, xFrom, xTo, yFrom, yTo);
     }
@@ -214,16 +216,16 @@ void Map::draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const
 //------------------------------------------------------------------------------
 
 void Map::drawLayer(Engine *e, const std::string& layerName,
-                    int xFrom, int xTo, int yFrom, int yTo) const
+                    float xFrom, float xTo, float yFrom, float yTo) const
 {
     const Vector2<float>& mapSize = size();
     float mapHeight   = mapSize.y;
 
-    xFrom += 1;
-    xTo -= 1;
+    xFrom = std::floor(xFrom);
+    xTo = std::ceil(xTo);
     float tmp = yFrom;
-    yFrom = mapHeight - yTo;
-    yTo   = mapHeight - tmp - 1;
+    yFrom = std::floor(mapHeight - yTo);
+    yTo   = std::ceil(mapHeight - tmp);
 
     // Clamp coords
     if (xFrom < 0) xFrom = 0;

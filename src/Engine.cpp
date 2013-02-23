@@ -10,8 +10,8 @@
 #include <vector>
 #include "ResourceMgr.h"
 
-#define SCALE 32
-#define ROUND 0
+#define SCALE 64
+#define ROUND 1 // Retro style pixel perfect rendering
 
 Engine::Engine(const std::string& title, int screenWidth, int screenHeight)
     : m_titile(title)
@@ -72,10 +72,9 @@ void Engine::initializeWorld()
 void Engine::toggleDrawDebug()
 {
     if (m_drawDebugData == false) {
-        m_debugDraw->SetFlags(b2Draw::e_shapeBit);
+        m_debugDraw->SetFlags(b2Draw::e_shapeBit | b2Draw::e_centerOfMassBit);
         m_world->SetDebugDraw(m_debugDraw);    
     } else {
-        m_debugDraw->ClearFlags(b2Draw::e_shapeBit);
         m_world->SetDebugDraw(nullptr);
     }
 
@@ -250,7 +249,8 @@ void Engine::drawSprite(float x, float y, float w, float h,
     const GLfloat *texCoords = sprite.getTextureCoords();
 
 #if ROUND
-    drawQuad(std::round(x), std::round(y),
+    drawQuad(std::round(x * m_scale) / m_scale,
+             std::round(y * m_scale) / m_scale,
              w, h,
              tex->textureId(), texCoords);
 #else

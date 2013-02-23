@@ -4,26 +4,47 @@
 #include "Engine.h"
 #include <iostream>
 
+Hero::Hero(Engine *e, Game *game, const Sprite& sprite, const b2Vec2& pos)
+    : GameObject(game, sprite, nullptr)
+{
+    b2BodyDef bodyDef;
+    bodyDef.type = b2_dynamicBody;
+    bodyDef.position = pos;
+    bodyDef.fixedRotation = true;
+    b2Body* body = e->world()->CreateBody(&bodyDef);
+    
+    b2PolygonShape dynamicBox;
+    dynamicBox.SetAsBox(0.5f, 0.5f, b2Vec2(0.5f, 0.5f), 0.0f);
+    
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &dynamicBox;
+    fixtureDef.density = 1.0f;
+    fixtureDef.friction = 0.3f;
+    fixtureDef.userData = this;
+
+    body->CreateFixture(&fixtureDef);
+
+    m_body = body;
+}
+
 void Hero::update(Engine *e, float /*elapsedTime*/)
 {
-#if 0
-    //static float v = 250.0f;
-    static float frictionFactor = 1.2f;
-
     if (e->isPressed(SDLK_RIGHT)) {
-        if (m_vx < 0.0f)
-            m_vx /= frictionFactor;
-        m_ax = 1000.0f;
-    } else if (e->isPressed(SDLK_LEFT)) {
-        if (m_vx > 0.0f)
-            m_vx /= frictionFactor;
-        m_ax = -1000.0f;
-    } else {
-        m_vx /= frictionFactor;
+        m_body->ApplyForceToCenter(b2Vec2(10.0f, 0.0f));
     }
-#endif
+
+    if (e->isPressed(SDLK_LEFT)) {
+        m_body->ApplyForceToCenter(b2Vec2(-10.0f, 0.0f));
+    }
+
+    if (e->isPressed(SDLK_UP)) {
+        m_body->ApplyForceToCenter(b2Vec2(0.0f, 20.0f));
+    } 
+
+    const b2Vec2& centerOfMass = m_body->GetWorldCenter(); 
+
     // Center view on player
-    e->centerViewOn(position().x, position().y);
+    e->centerViewOn(centerOfMass.x, centerOfMass.y);
 }
 
 //------------------------------------------------------------------------------

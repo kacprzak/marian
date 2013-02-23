@@ -29,31 +29,18 @@ void Game::initialize(Engine *e)
 
     for (const MapObject& obj : mapObjects) {
         if (obj.gid) {
+            // Tile based GameObject
             std::string imageSource = m_map.imageForTile(obj.gid);
             const Texture *tex = ResourceMgr::instance().getTexture(imageSource);     
       
-            Sprite sprite(tex, m_map.rectForTile(obj.gid));
-      
+            Sprite sprite(tex, m_map.rectForTile(obj.gid));     
             std::cout << "INFO: " << sprite << '\n';
       
-            b2BodyDef bodyDef;
-            bodyDef.type = b2_dynamicBody;
-            bodyDef.position.Set(obj.x, obj.y);
-            b2Body* body = e->world()->CreateBody(&bodyDef);
-
-            b2PolygonShape dynamicBox;
-            dynamicBox.SetAsBox(0.5f, 0.5f, b2Vec2(0.5f, 0.5f), 0.0f);
-            
-            b2FixtureDef fixtureDef;
-            fixtureDef.shape = &dynamicBox;
-            fixtureDef.density = 1.0f;
-            fixtureDef.friction = 0.3f;
-
-            body->CreateFixture(&fixtureDef);
-
-            GameObject *gameObject = new Hero(this, sprite, body);
+            GameObject *gameObject = new Hero(e, this, sprite, b2Vec2(obj.x, obj.y));
             m_gameObjects.push_back(gameObject);
+
         } else {
+            // Static shape
             std::cout << "INFO: " << obj.shape << '\n';
             std::cout << "INFO: {";
             for (auto& p : obj.points)
@@ -129,14 +116,8 @@ void Game::update(Engine *e, float elapsedTime)
 
 void Game::draw(Engine *e)
 {
-    // Hero pos
-    Vector2<float> pos = m_gameObjects[0]->position();
-
     // Draw only visible part of the map
-
-
     float x1, x2, y1, y2;
-
     e->viewBounds(&x1, &x2, &y1, &y2);
 
     // TODO: read order from map
