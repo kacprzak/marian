@@ -4,8 +4,11 @@
 #include "Engine.h"
 #include <iostream>
 
+#define JUMP_DELAY 1.0f
+
 Hero::Hero(Engine *e, Game *game, const b2Vec2& pos, const b2Vec2& size)
     : GameObject(game, nullptr)
+    , m_jumpTimeout(0.0f)
 {
     float hw = size.x / 2;
     float hh = size.y / 2;
@@ -30,8 +33,10 @@ Hero::Hero(Engine *e, Game *game, const b2Vec2& pos, const b2Vec2& size)
     m_body = body;
 }
 
-void Hero::update(Engine *e, float /*elapsedTime*/)
+void Hero::update(Engine *e, float elapsedTime)
 {
+    const b2Vec2& centerOfMass = m_body->GetWorldCenter(); 
+
     if (e->isPressed(SDLK_RIGHT)) {
         m_body->ApplyForceToCenter(b2Vec2(10.0f, 0.0f));
     }
@@ -41,13 +46,17 @@ void Hero::update(Engine *e, float /*elapsedTime*/)
     }
 
     if (e->isPressed(SDLK_UP)) {
-        m_body->ApplyForceToCenter(b2Vec2(0.0f, 20.0f));
+        if (m_jumpTimeout <= 0.0f) {
+            m_body->ApplyLinearImpulse(b2Vec2(0.0f, 5.0f), centerOfMass);
+            m_jumpTimeout = JUMP_DELAY;
+        }
     } 
-
-    const b2Vec2& centerOfMass = m_body->GetWorldCenter(); 
 
     // Center view on player
     e->centerViewOn(centerOfMass.x, centerOfMass.y);
+
+    if (m_jumpTimeout > 0.0f)
+        m_jumpTimeout -= elapsedTime;
 }
 
 //------------------------------------------------------------------------------

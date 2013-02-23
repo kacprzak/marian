@@ -95,7 +95,7 @@ void Layer::draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const
             const Tile *tile = tiles[y * width + x];
             if (tile) {
                 e->drawQuad(x,
-                            map->tileSize().y - y - 1,
+                            map->m_height - y - 1.0f,
                             1.0f,
                             1.0f,
                             tile->texture->textureId(), tile->texCoords);
@@ -107,6 +107,10 @@ void Layer::draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const
 //##############################################################################
 
 Map::Map()
+    : m_width(0)
+    , m_height(0)
+    , m_tileWidth(32)
+    , m_tileHeight(32)
 {
     //
 }
@@ -126,6 +130,12 @@ bool Map::loadFromFile(const std::string& filename)
 {
     m_tmxMap.loadFromFile(filename);
 
+    m_width = m_tmxMap.width;
+    m_height = m_tmxMap.height;
+
+    m_tileWidth = m_tmxMap.tileWidth;
+    m_tileHeight = m_tmxMap.tileHeight;
+
     auto images = externalImages();
     for (const std::string& image : images) {
         if (!ResourceMgr::instance().addTexture(image)) {
@@ -141,38 +151,6 @@ bool Map::loadFromFile(const std::string& filename)
 
 //------------------------------------------------------------------------------
 
-/**
- * Size of map in pixels.
- */
-Vector2<int> Map::pixelSize() const
-{
-    int w = m_tmxMap.width  * m_tmxMap.tileWidth;
-    int h = m_tmxMap.height * m_tmxMap.tileHeight;
-
-    return Vector2<int>(w, h);
-}
-
-//------------------------------------------------------------------------------
-
-/**
- * Size of map in tiles.
- */
-Vector2<int> Map::tileSize() const
-{
-    return Vector2<int>(m_tmxMap.width, m_tmxMap.height);
-}
-
-/**
- * Map size in game coords.
- */
-Vector2<float> Map::size() const
-{
-    return Vector2<float>(m_tmxMap.width, m_tmxMap.height);
-}
-
-
-//------------------------------------------------------------------------------
-
 void Map::getObjects(std::vector<MapObject>& v)
 {
     for (const tmx::ObjectGroup& og : m_tmxMap.objectGroups) {
@@ -183,18 +161,18 @@ void Map::getObjects(std::vector<MapObject>& v)
             mapObject.type = obj.type;
             mapObject.gid = obj.gid;
 
-            mapObject.x = obj.x / float(m_tmxMap.tileWidth);
-            mapObject.y = m_tmxMap.height - (obj.height + obj.y) / float(m_tmxMap.tileHeight);
+            mapObject.x = obj.x / float(m_tileWidth);
+            mapObject.y = m_height - (obj.height + obj.y) / float(m_tileHeight);
       
-            mapObject.width   = obj.width   / float(m_tmxMap.tileWidth);
-            mapObject.height  = obj.height / float(m_tmxMap.tileHeight);
+            mapObject.width   = obj.width  / float(m_tileWidth);
+            mapObject.height  = obj.height / float(m_tileHeight);
 
             mapObject.shape   = obj.shape;
             mapObject.visible = (obj.visible == "1") ? true : false;
 
             for (const std::pair<int, int>& point : obj.points) {
-                float x = point.first / float(m_tmxMap.tileWidth);
-                float y = -point.second / float(m_tmxMap.tileHeight);
+                float x = point.first / float(m_tileWidth);
+                float y = -point.second / float(m_tileHeight);
 
                 mapObject.points.push_back({x, y});
             }
@@ -228,20 +206,17 @@ void Map::drawLayer(Engine *e, const std::string& layerName,
     }
 
     if (layer && layer->visible) {
-        const Vector2<float>& mapSize = size();
-        float mapHeight   = mapSize.y;
-        
         xFrom = std::floor(xFrom);
         xTo = std::ceil(xTo);
         float tmp = yFrom;
-        yFrom = std::floor(mapHeight - yTo);
-        yTo   = std::ceil(mapHeight - tmp);
+        yFrom = std::floor(m_height - yTo);
+        yTo   = std::ceil(m_height - tmp);
         
         // Clamp coords
         if (xFrom < 0) xFrom = 0;
-        if (xTo   > mapSize.x) xTo = mapSize.x;
+        if (xTo   > m_width) xTo = m_width;
         if (yFrom < 0) yFrom = 0;
-        if (yTo   > mapSize.y) yTo = mapSize.y;
+        if (yTo   > m_height) yTo = m_height;
         
         layer->draw(e, xFrom, xTo, yFrom, yTo);
     }

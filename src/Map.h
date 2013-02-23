@@ -50,18 +50,20 @@ class Map : boost::noncopyable
 
     std::vector<std::string> externalImages() const;
 
+ private:
     std::string imageForTile(unsigned globalId) const;
     Rect<int> rectForTile(unsigned globalId) const;
 
- private:
-    Vector2<int> pixelSize() const;
-    Vector2<int> tileSize() const;
+    /** Size in game (tile) coords */
+    int m_width;
+    int m_height;
 
-    int tileWidth() const { return m_tmxMap.tileWidth; }
-    int tileHeight() const { return m_tmxMap.tileHeight; }
+    /** Size of one tile in pixels */
+    int m_tileWidth;
+    int m_tileHeight;
 
-    tmx::Map m_tmxMap;  
     std::vector<Layer *> m_layers;
+    tmx::Map m_tmxMap;
 };
 
 #endif
