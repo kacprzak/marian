@@ -100,7 +100,7 @@ void Engine::mainLoop(Playable *game)
         draw();
     
         curr_time = SDL_GetTicks();
-        delta = (float)(curr_time - last_time) / 1000.0f;
+        delta = float(curr_time - last_time) / 1000.0f;
         last_time = curr_time;
     }
 

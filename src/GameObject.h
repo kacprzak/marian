@@ -3,7 +3,6 @@
 #define GAME_OBJECT_H
 
 #include "Playable.h"
-
 #include <Box2D/Box2D.h>
 
 class Game;
@@ -26,8 +25,8 @@ class GameObject : public Playable
     void draw(Engine *e);
 
  protected:
-    Game *m_game;
-    b2Body* m_body;
+    Game   *m_game;
+    b2Body *m_body;
 };
 
 #endif

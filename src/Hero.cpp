@@ -24,7 +24,7 @@ Hero::Hero(Engine *e, Game *game, const b2Vec2& pos, const b2Vec2& size)
     
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &dynamicBox;
-    fixtureDef.density = 1.0f;
+    fixtureDef.density = 0.8f;
     fixtureDef.friction = 0.3f;
     fixtureDef.userData = this;
 
@@ -47,7 +47,7 @@ void Hero::update(Engine *e, float elapsedTime)
 
     if (e->isPressed(SDLK_UP)) {
         if (m_jumpTimeout <= 0.0f) {
-            m_body->ApplyLinearImpulse(b2Vec2(0.0f, 5.0f), centerOfMass);
+            m_body->ApplyLinearImpulse(b2Vec2(0.0f, 3.0f), centerOfMass);
             m_jumpTimeout = JUMP_DELAY;
         }
     } 

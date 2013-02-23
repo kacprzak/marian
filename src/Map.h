@@ -17,13 +17,13 @@ class MapObject
  public:
     std::string name;
     std::string type;
-    unsigned gid; //< 0 is no gid
+    unsigned gid; //< 0 means no gid
     float x;
     float y;
     float width;
     float height;
     bool visible;
-    std::string shape;   //< ellipse, polygon, polyline or null
+    std::string shape; //< ellipse, polygon, polyline or null
     std::vector<std::pair<float, float> > points; //< polygon or polyline points
 };
 
