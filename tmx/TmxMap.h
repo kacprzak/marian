@@ -26,6 +26,7 @@ class Layer
   std::string name;
   int width;
   int height;
+  std::string visible; //< "1" by default
   std::string dataEncoding;
   std::vector<unsigned> data;
 };

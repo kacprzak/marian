@@ -9,7 +9,8 @@ class Engine;
 class Hero : public GameObject
 {
  public:
-    Hero(Engine *e, Game *game, const Sprite& sprite, const b2Vec2& pos);
+    Hero(Engine *e, Game *game,
+         const b2Vec2& pos, const b2Vec2& size);
   
     void update(Engine *e, float elapsedTime);
 };

@@ -8,7 +8,7 @@
 #include <string>
 #include <exception>
 #include "Playable.h"
-#include "Sprite.h"
+#include "Image.h"
 
 #include <Box2D/Box2D.h>
 #include "debugdraw/Render.h"
@@ -48,7 +48,7 @@ class Engine
   
     void mainLoop(Playable *game);
 
-    void drawSprite(float x, float y, float w, float h, const Sprite& sprite) const;
+    void drawImage(float x, float y, float w, float h, const Image& image) const;
     void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
                   GLuint textureId, const GLfloat *texCoords) const;
 

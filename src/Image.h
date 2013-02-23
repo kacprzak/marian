@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
-#ifndef SPRITE_H
-#define SPRITE_H
+#ifndef IMAGE_H
+#define IMAGE_H
 
 #include "Math.h"
 #include "Texture.h"
@@ -12,16 +12,16 @@
 /**
  * An image. Represents whole or part of a texture.
  */
-class Sprite {
+class Image {
  public:
-    Sprite(const Texture *texture)
+    Image(const Texture *texture)
         : m_texture(texture)
         , m_size(m_texture->w(), m_texture->h())
     {
         calculateTextureCoords(texture->w(), texture->h(), Rect<int>(), m_texCoords);
     }
 
-    Sprite(const Texture *texture, Rect<int> textureRect)
+    Image(const Texture *texture, Rect<int> textureRect)
         : m_texture(texture)
         , m_size(textureRect.size())
     {
@@ -37,7 +37,7 @@ class Sprite {
     std::string toString() const
     {
         std::stringstream ss;
-        ss << "Sprite: {" << this
+        ss << "Image: {" << this
            << ", size: {" << m_size.x << ", " << m_size.y << "}"
            << ", texId: " << m_texture->textureId() << "}";
         return ss.str();
@@ -50,9 +50,9 @@ class Sprite {
 };
 
 
-inline std::ostream& operator<<(std::ostream& os, const Sprite& sprite)
+inline std::ostream& operator<<(std::ostream& os, const Image& image)
 {
-    os << sprite.toString();
+    os << image.toString();
     return os;
 }
 

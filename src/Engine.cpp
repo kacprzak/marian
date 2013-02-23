@@ -10,7 +10,7 @@
 #include <vector>
 #include "ResourceMgr.h"
 
-#define SCALE 64
+#define SCALE 32
 #define ROUND 1 // Retro style pixel perfect rendering
 
 Engine::Engine(const std::string& title, int screenWidth, int screenHeight)
@@ -242,22 +242,13 @@ void Engine::drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
 
 //------------------------------------------------------------------------------
 
-void Engine::drawSprite(float x, float y, float w, float h,
-                        const Sprite& sprite) const
+void Engine::drawImage(float x, float y, float w, float h,
+                        const Image& image) const
 {
-    const Texture *tex = sprite.texture();
-    const GLfloat *texCoords = sprite.getTextureCoords();
+    const Texture *tex = image.texture();
+    const GLfloat *texCoords = image.getTextureCoords();
 
-#if ROUND
-    drawQuad(std::round(x * m_scale) / m_scale,
-             std::round(y * m_scale) / m_scale,
-             w, h,
-             tex->textureId(), texCoords);
-#else
-    drawQuad(x, y,
-             w, h,
-             tex->textureId(), texCoords);
-#endif
+    drawQuad(x, y, w, h, tex->textureId(), texCoords);
 }
 
 //------------------------------------------------------------------------------

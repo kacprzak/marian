@@ -27,7 +27,7 @@
   </data>
  </layer>
  <objectgroup name="player" width="70" height="36">
-  <object gid="348" x="352" y="704"/>
+  <object name="hero" x="419" y="802" width="26" height="26"/>
  </objectgroup>
  <layer name="water" width="70" height="36">
   <data encoding="base64">
@@ -40,11 +40,25 @@
   </data>
  </layer>
  <objectgroup name="Collision" width="70" height="36">
-  <object x="288" y="832">
+  <object name="ground1" x="288" y="832">
    <polygon points="0,0 0,32 32,32 32,96 64,96 64,320 128,320 128,96 160,96 160,32 192,32 192,0"/>
   </object>
-  <object x="544" y="832">
-   <polygon points="0,0 0,96 32,96 32,13 160,14 160,96 192,96 192,320 352,320 352,96 384,96 384,0"/>
+  <object name="ground2" x="544" y="832">
+   <polygon points="0,0 0,96 32,96 32,32 160,32 160,96 192,96 192,320 352,320 352,96 384,96 384,0"/>
+  </object>
+  <object name="ground3" x="448" y="576">
+   <polygon points="0,0 0,32 288,32 288,64 352,64 352,32 320,32 320,0"/>
+  </object>
+  <object name="ground4" x="576" y="480" width="32" height="32"/>
+  <object name="ground5" x="480" y="384" width="192" height="32"/>
+  <object name="ground6" x="1440" y="448" width="224" height="32"/>
+  <object name="ground7" x="1632" y="608">
+   <polygon points="0,0 0,32 32,32 32,96 64,96 64,128 128,128 128,96 160,96 160,32 192,32 192,0"/>
+  </object>
+  <object name="ground8" x="1280" y="544" width="32" height="32"/>
+  <object name="ground9" x="1344" y="480" width="32" height="32"/>
+  <object name="ground10" x="832" y="608">
+   <polygon points="0,0 0,32 160,32 160,0 384,0 384,-32 128,-32 128,0"/>
   </object>
  </objectgroup>
 </map>

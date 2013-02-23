@@ -74,6 +74,11 @@ bool Map::loadFromFile(const std::string& filename)
       layer.width  = lexical_cast<int>(layer_node->first_attribute("width")->value());
       layer.height = lexical_cast<int>(layer_node->first_attribute("height")->value());
 
+      layer.visible = "1";
+      xml_attribute<> *visible_attr = layer_node->first_attribute("visible");
+      if (visible_attr)
+        layer.visible = visible_attr->value();
+
       xml_node<> *data_node = layer_node->first_node("data");
       layer.dataEncoding = data_node->first_attribute("encoding")->value();
 

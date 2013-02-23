@@ -32,6 +32,7 @@ public:
     std::string name;
     int width;
     int height;
+    bool visible;
     std::vector<Tile *> tiles;
 };
 
@@ -47,6 +48,7 @@ Layer::Layer(const Map *parent, const tmx::Layer& tmxLayer)
     , name(tmxLayer.name)
     , width(tmxLayer.width)
     , height(tmxLayer.height)
+    , visible((tmxLayer.visible == "1"))
     , tiles(width * height, nullptr)
 {
     for (int y = 0; y < height; ++y) {
@@ -181,13 +183,13 @@ void Map::getObjects(std::vector<MapObject>& v)
             mapObject.type = obj.type;
             mapObject.gid = obj.gid;
 
-            mapObject.x = obj.x / m_tmxMap.tileWidth;;
-            mapObject.y = m_tmxMap.height - obj.y / m_tmxMap.tileHeight;
+            mapObject.x = obj.x / float(m_tmxMap.tileWidth);
+            mapObject.y = m_tmxMap.height - (obj.height + obj.y) / float(m_tmxMap.tileHeight);
       
-            mapObject.width = obj.width;
-            mapObject.height = obj.height;
+            mapObject.width   = obj.width   / float(m_tmxMap.tileWidth);
+            mapObject.height  = obj.height / float(m_tmxMap.tileHeight);
 
-            mapObject.shape = obj.shape;
+            mapObject.shape   = obj.shape;
             mapObject.visible = (obj.visible == "1") ? true : false;
 
             for (const std::pair<int, int>& point : obj.points) {
@@ -218,24 +220,30 @@ void Map::draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const
 void Map::drawLayer(Engine *e, const std::string& layerName,
                     float xFrom, float xTo, float yFrom, float yTo) const
 {
-    const Vector2<float>& mapSize = size();
-    float mapHeight   = mapSize.y;
+    const Layer *layer = nullptr;
 
-    xFrom = std::floor(xFrom);
-    xTo = std::ceil(xTo);
-    float tmp = yFrom;
-    yFrom = std::floor(mapHeight - yTo);
-    yTo   = std::ceil(mapHeight - tmp);
+    for (const Layer* l : m_layers) {
+        if (l->name == layerName)
+            layer = l;
+    }
 
-    // Clamp coords
-    if (xFrom < 0) xFrom = 0;
-    if (xTo   > mapSize.x) xTo = mapSize.x;
-    if (yFrom < 0) yFrom = 0;
-    if (yTo   > mapSize.y) yTo = mapSize.y;
-
-    for (const Layer* layer : m_layers) {
-        if (layer->name == layerName)
-            layer->draw(e, xFrom, xTo, yFrom, yTo);
+    if (layer && layer->visible) {
+        const Vector2<float>& mapSize = size();
+        float mapHeight   = mapSize.y;
+        
+        xFrom = std::floor(xFrom);
+        xTo = std::ceil(xTo);
+        float tmp = yFrom;
+        yFrom = std::floor(mapHeight - yTo);
+        yTo   = std::ceil(mapHeight - tmp);
+        
+        // Clamp coords
+        if (xFrom < 0) xFrom = 0;
+        if (xTo   > mapSize.x) xTo = mapSize.x;
+        if (yFrom < 0) yFrom = 0;
+        if (yTo   > mapSize.y) yTo = mapSize.y;
+        
+        layer->draw(e, xFrom, xTo, yFrom, yTo);
     }
 }
 

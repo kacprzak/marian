@@ -1,7 +1,6 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "Game.h"
 
-#include "Sprite.h"
 #include "ResourceMgr.h"
 #include "Engine.h"
 #include "GameObject.h"
@@ -28,43 +27,55 @@ void Game::initialize(Engine *e)
     std::cout << "INFO: " << mapObjects.size() << " objects loaded.\n";
 
     for (const MapObject& obj : mapObjects) {
-        if (obj.gid) {
+        if (obj.name == "hero") {
             // Tile based GameObject
-            std::string imageSource = m_map.imageForTile(obj.gid);
-            const Texture *tex = ResourceMgr::instance().getTexture(imageSource);     
+            //std::string imageSource = m_map.imageForTile(obj.gid);
+            //const Texture *tex = ResourceMgr::instance().getTexture(imageSource);     
       
-            Sprite sprite(tex, m_map.rectForTile(obj.gid));     
-            std::cout << "INFO: " << sprite << '\n';
+            //Sprite sprite(tex, m_map.rectForTile(obj.gid));     
+            //std::cout << "INFO: " << sprite << '\n';
       
-            GameObject *gameObject = new Hero(e, this, sprite, b2Vec2(obj.x, obj.y));
+            GameObject *gameObject = new Hero(e, this,
+                                              b2Vec2(obj.x + obj.width/2,
+                                                     obj.y + obj.width/2),
+                                              b2Vec2(obj.width, obj.height));
             m_gameObjects.push_back(gameObject);
 
         } else {
-            // Static shape
-            std::cout << "INFO: " << obj.shape << '\n';
-            std::cout << "INFO: {";
-            for (auto& p : obj.points)
-                std::cout << " " << p.first << "," << p.second << ' ';
-            std::cout << "}\n";
-
-            size_t numOfPoints = obj.points.size();
-            b2Vec2 vs[numOfPoints];
-            for (size_t i = 0; i < numOfPoints; ++i) {
-                auto& p = obj.points[i];
-                vs[i].Set(p.first, p.second);
-            }
-
-            b2ChainShape chain;
-            if (obj.shape == "polyline")
-                chain.CreateChain(vs, numOfPoints);
-            else if (obj.shape == "polygon")
-                chain.CreateLoop(vs, numOfPoints);
-
+            // Static collision shape
             b2BodyDef groundBodyDef;
             groundBodyDef.position.Set(obj.x, obj.y);
 
             b2Body *groundBody = e->world()->CreateBody(&groundBodyDef);
-            groundBody->CreateFixture(&chain, 0.0f);
+
+
+            const std::string& shape = obj.shape;
+            if (shape == "polyline" || shape == "polygon") {
+                size_t numOfPoints = obj.points.size();
+                b2Vec2 vs[numOfPoints];
+                
+                for (size_t i = 0; i < numOfPoints; ++i) {
+                    auto& p = obj.points[i];
+                    vs[i].Set(p.first, p.second);
+                }
+
+                b2ChainShape chain;
+                if (obj.shape == "polyline")
+                    chain.CreateChain(vs, numOfPoints);
+                else
+                    chain.CreateLoop(vs, numOfPoints);
+
+                groundBody->CreateFixture(&chain, 0.0f);
+
+            } else {
+                // Rect object
+                b2PolygonShape box;
+                float hw = obj.width / 2;
+                float hh = obj.height / 2;
+                box.SetAsBox(hw, hh, b2Vec2(hw, hh), 0.0f);
+
+                groundBody->CreateFixture(&box, 0.0f);
+            }
         }
     }
 }

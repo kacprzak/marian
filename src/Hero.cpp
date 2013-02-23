@@ -4,9 +4,12 @@
 #include "Engine.h"
 #include <iostream>
 
-Hero::Hero(Engine *e, Game *game, const Sprite& sprite, const b2Vec2& pos)
-    : GameObject(game, sprite, nullptr)
+Hero::Hero(Engine *e, Game *game, const b2Vec2& pos, const b2Vec2& size)
+    : GameObject(game, nullptr)
 {
+    float hw = size.x / 2;
+    float hh = size.y / 2;
+
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position = pos;
@@ -14,7 +17,7 @@ Hero::Hero(Engine *e, Game *game, const Sprite& sprite, const b2Vec2& pos)
     b2Body* body = e->world()->CreateBody(&bodyDef);
     
     b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(0.5f, 0.5f, b2Vec2(0.5f, 0.5f), 0.0f);
+    dynamicBox.SetAsBox(hw, hh);
     
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &dynamicBox;
