@@ -70,6 +70,7 @@ class Map : boost::noncopyable
   int height;
   int tileWidth;
   int tileHeight;
+  std::string backgroundColor;
 
   std::vector<Tileset> tilesets;
   std::vector<Layer> layers;

@@ -2,11 +2,12 @@
 #include "Hero.h"
 
 #include "Engine.h"
+#include "Game.h"
 #include <iostream>
 
 #define JUMP_DELAY 1.0f
 
-Hero::Hero(Engine *e, Game *game, const b2Vec2& pos, const b2Vec2& size)
+Hero::Hero(Game *game, const b2Vec2& pos, const b2Vec2& size)
     : GameObject(game, nullptr)
     , m_jumpTimeout(0.0f)
 {
@@ -17,7 +18,7 @@ Hero::Hero(Engine *e, Game *game, const b2Vec2& pos, const b2Vec2& size)
     bodyDef.type = b2_dynamicBody;
     bodyDef.position = pos;
     bodyDef.fixedRotation = true;
-    b2Body* body = e->world()->CreateBody(&bodyDef);
+    b2Body* body = game->world()->CreateBody(&bodyDef);
     
     b2PolygonShape dynamicBox;
     dynamicBox.SetAsBox(hw, hh);

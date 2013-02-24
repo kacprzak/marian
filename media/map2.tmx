@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="70" height="36" tilewidth="32" tileheight="32">
+<map version="1.0" orientation="orthogonal" width="70" height="36" tilewidth="32" tileheight="32" backgroundcolor="#668cff">
  <tileset firstgid="1" name="TileKit" tilewidth="32" tileheight="32">
   <image source="TileKit.png" width="384" height="608"/>
  </tileset>
  <tileset firstgid="229" name="minecraft_tiles_big" tilewidth="32" tileheight="32">
   <image source="minecraft_tiles_big.png" width="512" height="512"/>
  </tileset>
- <layer name="sky" width="70" height="36" visible="0">
-  <data encoding="base64" compression="zlib">
-   eJztj8ENwDAIAzNK95+y/whosKFUlU+6HwZzrbUuKaWUUkoppZSUHtO9pvWY7jWtx99vf7nb5O2vd5u8ne31Zrepu9leFkgevX+a6xbhJI/eP811ewKyA7mf7d6pB7MDzbK/VGvB5NFs1T9VMn+xeeZut8xf7G9MttudN39jslXuPHWL8OaYTtlslTtP3SK8OaZTNltp9i+LaAbtg2QrtTpE3SyiGbQPkq3U6hB1s4hm0D5INrNbCCFEPzf3Yu7B
-  </data>
- </layer>
  <layer name="back" width="70" height="36">
   <data encoding="base64" compression="zlib">
    eJztl7lSwzAQhnfoeB0q6P5AyzHUvB1QcnWcFem5Sq5nYTWxJrKxZFkry05mv5l/XCS7Wv1ZaR0iRVEURVHWgRfWK+uN9c76mGDOIWrs4pP1xfpm/bB+A9+NrS82Z+58sTlTfT5lnbHOBfXFkDtfbM7Uda9Y16wbeZlrxQPrkfU0diETYSvw2U6xKhZcsC4LrxkCrBlr19FewfXn1fOOdV9w3S5AC1+shvTluXqG+tSwTeX7tQlo6YfUF99cM1gv3P2C6n1auldDgPznqO+Z7zvX9lkHnrXHxPQ1yN8vsWf+tnq2zbW2PnEBLT05ZB1FVT4ctl5Q9/3StqeuO8IX1wQ0rV6xgOq+NGU59sQ3z0Hf/SEybrNHzhyA/nth+vnEUai3pXcEaDpnyAVUv1tS+tnmSNmfjZ3SGTLkmAnIEDumL773C5BsJrjxq+iL7/0CJJsJNl7i6Zi++P43g/L4kho7S4yVshH4zMw/UP/f252bNn7VfOkCJOtlSbyJVV/aY9fZl9S9SWKHBqS+KIqiKHL+AD/RjXw=

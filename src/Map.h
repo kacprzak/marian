@@ -52,6 +52,7 @@ class Map : boost::noncopyable
     void getObjects(std::vector<MapObject>& v);
 
     std::vector<std::string> externalImages() const;
+    std::string backgroundColor() const;
 
  private:
     std::string imageForTile(unsigned globalId) const;

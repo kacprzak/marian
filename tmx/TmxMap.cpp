@@ -66,6 +66,9 @@ bool Map::loadFromFile(const std::string& filename)
     tileWidth   = lexical_cast<int>(map_node->first_attribute("tilewidth")->value());
     tileHeight  = lexical_cast<int>(map_node->first_attribute("tileheight")->value());
 
+    xml_attribute<> *bgColor_attr = map_node->first_attribute("backgroundcolor");
+    if (bgColor_attr) backgroundColor = bgColor_attr->value();
+
     //---------- TILESETS ----------
 
     xml_node<> *tileset_node = map_node->first_node("tileset");

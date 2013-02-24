@@ -5,11 +5,31 @@
 #include "Engine.h"
 #include "GameObject.h"
 #include "Hero.h"
+#include "Util.h"
 
 #include <iostream>
 
 Game::Game()
 {
+    b2Vec2 gravity(0.0f, -10.0f);
+    m_world = new b2World(gravity);
+    m_world->SetAllowSleeping(true);
+    
+    // Debug drawing
+    m_debugDraw = new DebugDraw;
+    m_drawDebugData = false;
+}
+
+//------------------------------------------------------------------------------
+
+Game::~Game()
+{
+    for (GameObject *go : m_gameObjects) {
+        delete go;
+    }
+
+    delete m_world;
+    delete m_debugDraw;
 }
 
 //------------------------------------------------------------------------------
@@ -29,13 +49,7 @@ void Game::initialize(Engine *e)
     for (const MapObject& obj : mapObjects) {
         if (obj.name == "hero") {
             // Tile based GameObject
-            //std::string imageSource = m_map.imageForTile(obj.gid);
-            //const Texture *tex = ResourceMgr::instance().getTexture(imageSource);     
-      
-            //Sprite sprite(tex, m_map.rectForTile(obj.gid));     
-            //std::cout << "INFO: " << sprite << '\n';
-      
-            GameObject *gameObject = new Hero(e, this,
+            GameObject *gameObject = new Hero(this,
                                               b2Vec2(obj.x + obj.width/2,
                                                      obj.y + obj.width/2),
                                               b2Vec2(obj.width, obj.height));
@@ -46,7 +60,7 @@ void Game::initialize(Engine *e)
             b2BodyDef groundBodyDef;
             groundBodyDef.position.Set(obj.x, obj.y);
 
-            b2Body *groundBody = e->world()->CreateBody(&groundBodyDef);
+            b2Body *groundBody = m_world->CreateBody(&groundBodyDef);
 
 
             const std::string& shape = obj.shape;
@@ -78,21 +92,12 @@ void Game::initialize(Engine *e)
             }
         }
     }
-}
 
-//------------------------------------------------------------------------------
-
-void Game::clear(Engine * /*e*/)
-{
-    //
-}
-
-//------------------------------------------------------------------------------
-
-Game::~Game()
-{
-    for (GameObject *go : m_gameObjects) {
-        delete go;
+    // Set backgound color
+    std::string bgColor = m_map.backgroundColor(); 
+    if (!bgColor.empty()) {
+        std::vector<int> color = hexColorToRgb(bgColor);
+        e->setBackgroundColor(color[0], color[1], color[2]);
     }
 }
 
@@ -102,11 +107,10 @@ bool Game::processInput(const SDL_Event& event)
 {
     switch (event.type) {
     case SDL_KEYUP:
-        //std::cout << "Key Up: " << event.key.keysym.sym << std::endl;
         break;
     case SDL_KEYDOWN:
         if (event.key.keysym.sym == SDLK_ESCAPE) return false;
-        //std::cout << "Key Down: " << event.key.keysym.sym << std::endl;
+        if (event.key.keysym.sym == SDLK_g) toggleDrawDebug();
         break;
     }
     return true; // keep going
@@ -116,6 +120,11 @@ bool Game::processInput(const SDL_Event& event)
 
 void Game::update(Engine *e, float elapsedTime)
 {
+    // Update Physics
+    int32 velocityIterations = 6;
+    int32 positionIterations = 2;
+    m_world->Step(elapsedTime, velocityIterations, positionIterations);
+
     for (GameObject *go : m_gameObjects) {
         go->update(e, elapsedTime);
     } 
@@ -143,4 +152,23 @@ void Game::draw(Engine *e)
 
     m_map.drawLayer(e, "water", x1, x2, y1, y2);
     m_map.drawLayer(e, "front", x1, x2, y1, y2);
+
+    if (m_drawDebugData) {
+        m_world->DrawDebugData();
+        glColor4f(1,1,1,1); // Reset color
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void Game::toggleDrawDebug()
+{
+    if (m_drawDebugData == false) {
+        m_debugDraw->SetFlags(b2Draw::e_shapeBit | b2Draw::e_centerOfMassBit);
+        m_world->SetDebugDraw(m_debugDraw);    
+    } else {
+        m_world->SetDebugDraw(nullptr);
+    }
+
+    m_drawDebugData = !m_drawDebugData;
 }

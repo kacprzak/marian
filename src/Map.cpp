@@ -186,7 +186,7 @@ void Map::getObjects(std::vector<MapObject>& v)
 
 void Map::draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const
 {
-    assert(false); // Fix me
+    // No bounds checking // Fix me
 
     for (const Layer* layer : m_layers) {
         layer->draw(e, xFrom, xTo, yFrom, yTo);
@@ -242,6 +242,13 @@ std::vector<std::string> Map::externalImages() const
     }
 
     return ret;
+}
+
+//------------------------------------------------------------------------------
+
+std::string Map::backgroundColor() const
+{
+    return m_tmxMap.backgroundColor;
 }
 
 //------------------------------------------------------------------------------

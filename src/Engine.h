@@ -10,9 +10,6 @@
 #include "Playable.h"
 #include "Image.h"
 
-#include <Box2D/Box2D.h>
-#include "debugdraw/Render.h"
-
 class SdlError : public std::exception
 {
  public:
@@ -44,18 +41,16 @@ class Engine
     Engine(const std::string& title, int screenWidth, int screenHeight);
     ~Engine();
 
-    b2World *world() { return m_world; }
-  
     void mainLoop(Playable *game);
 
     void drawImage(float x, float y, float w, float h, const Image& image) const;
     void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
                   GLuint textureId, const GLfloat *texCoords) const;
 
-    void toggleDrawDebug();
-
     void centerViewOn(float x, float y);
     void viewBounds(float *left, float *right, float *bottom, float *top);
+
+    void setBackgroundColor(int r, int g, int b);
 
     bool isPressed(int keycode) const { return m_keys[keycode]; }
 
@@ -69,10 +64,8 @@ class Engine
                   const GLfloat *texCoords) const;
     void initializeSDL();
     void initializeOpenGL();
-    void initializeWorld();
 
     bool processEvents();
-
     void update(float elapsedTime);
     void draw();
 
@@ -88,10 +81,6 @@ class Engine
     Playable *m_game;
 
     bool m_keys[SDLK_LAST];
-
-    b2World   *m_world;
-    DebugDraw *m_debugDraw;
-    bool       m_drawDebugData;
 };
 
 #endif

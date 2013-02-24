@@ -6,7 +6,7 @@
 
 int main()
 {
-    Engine *e = new Engine("Marian", 800, 600);
+    Engine *e = new Engine("Marian", 1024, 768);
     Game *game = new Game;
 
     e->mainLoop(game);

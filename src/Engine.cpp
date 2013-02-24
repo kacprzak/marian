@@ -36,17 +36,12 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight)
     for (int i = 0; i < SDLK_LAST; ++i) {
         m_keys[i] = false;
     }
-
-    initializeWorld();
 }
 
 //------------------------------------------------------------------------------
 
 Engine::~Engine()
 {
-    delete m_world;
-    delete m_debugDraw;
-
     // Release all resources
     ResourceMgr::instance().release();
 
@@ -56,38 +51,11 @@ Engine::~Engine()
 
 //------------------------------------------------------------------------------
 
-void Engine::initializeWorld()
-{
-    b2Vec2 gravity(0.0f, -10.0f);
-    m_world = new b2World(gravity);
-    m_world->SetAllowSleeping(true);
-
-    // Debug drawing
-    m_debugDraw = new DebugDraw;
-    m_drawDebugData = false;
-}
-
-//------------------------------------------------------------------------------
-
-void Engine::toggleDrawDebug()
-{
-    if (m_drawDebugData == false) {
-        m_debugDraw->SetFlags(b2Draw::e_shapeBit | b2Draw::e_centerOfMassBit);
-        m_world->SetDebugDraw(m_debugDraw);    
-    } else {
-        m_world->SetDebugDraw(nullptr);
-    }
-
-    m_drawDebugData = !m_drawDebugData;
-}
-
-//------------------------------------------------------------------------------
-
 void Engine::mainLoop(Playable *game)
 {
     m_game = game;
     m_game->initialize(this);
-
+ 
     unsigned int curr_time = SDL_GetTicks();
     unsigned int last_time = curr_time;
     float delta = 0.0f;
@@ -104,7 +72,7 @@ void Engine::mainLoop(Playable *game)
         last_time = curr_time;
     }
 
-    m_game->clear(this);
+    m_game->cleanup(this);
 }
 
 //------------------------------------------------------------------------------
@@ -144,8 +112,6 @@ bool Engine::processEvents()
             return m_game->processInput(event);
         case SDL_KEYDOWN:
             m_keys[event.key.keysym.sym] = true;
-            if (event.key.keysym.sym == SDLK_g)
-                toggleDrawDebug();
             return m_game->processInput(event);
         case SDL_QUIT:
             return false;
@@ -159,11 +125,6 @@ bool Engine::processEvents()
 
 void Engine::update(float elapsedTime)
 {
-    // Update Physics
-    int32 velocityIterations = 6;
-    int32 positionIterations = 2;
-    m_world->Step(elapsedTime, velocityIterations, positionIterations);
-
     // Update world
     m_game->update(this, elapsedTime);
 }
@@ -182,10 +143,6 @@ void Engine::draw()
     glScalef(m_scale, m_scale, 1.0f);
 
     m_game->draw(this);
-    if (m_drawDebugData) {
-        m_world->DrawDebugData();
-        glColor4f(1,1,1,1); // Reset color
-    }
 
     SDL_GL_SwapBuffers(); 
 }
@@ -243,7 +200,7 @@ void Engine::drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
 //------------------------------------------------------------------------------
 
 void Engine::drawImage(float x, float y, float w, float h,
-                        const Image& image) const
+                       const Image& image) const
 {
     const Texture *tex = image.texture();
     const GLfloat *texCoords = image.getTextureCoords();
@@ -319,4 +276,11 @@ void Engine::initializeOpenGL()
     glOrtho(-m_screenWidth/2, m_screenWidth/2, -m_screenHeight/2, m_screenHeight/2, -1, 1);
 
     glDisable(GL_DEPTH_TEST); // uncomment this if going 2D
+}
+
+//------------------------------------------------------------------------------
+
+void Engine::setBackgroundColor(int r, int g, int b)
+{
+    glClearColor(r/255.0f, g/255.0f, b/255.0f, 0);
 }
