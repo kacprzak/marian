@@ -10,6 +10,8 @@ Dependencies
 * SDL
 * SDL_image
 * boost
+* OpenGL
+* Box2D
 
 
 Third-party code
