@@ -10,7 +10,7 @@ class Game;
 class GameObject : public Playable
 {
  public:
-    explicit GameObject(Game *game, b2Body *body)
+    GameObject(Game *game, b2Body *body)
         : m_game(game)
         , m_body(body)
     {}
@@ -20,9 +20,9 @@ class GameObject : public Playable
     }
 
     // Playable interface impl
-    bool processInput(const SDL_Event& event);
-    void update(Engine *e, float elapsedTime);
-    void draw(Engine *e);
+    bool processInput(const SDL_Event& /*event*/) { return true; };
+    void update(Engine * /*e*/, float /*elapsedTime*/) {};
+    void draw(Engine * /*e*/) {};
 
  protected:
     Game   *m_game;

@@ -5,6 +5,8 @@ add_definitions( "-Wall -Wextra -std=c++0x" )
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+
 find_package( SDL REQUIRED )
 find_package( SDL_image REQUIRED )
 find_package( OpenGL REQUIRED )
@@ -16,20 +18,6 @@ set( CMAKE_DEBUG_POSTFIX "_d" )
 
 file( COPY ${CMAKE_SOURCE_DIR}/media DESTINATION ${CMAKE_BINARY_DIR}/ )
 
-set( marian_SRCS
-  src/Engine.cpp
-  src/FpsCounter.cpp
-  src/Game.cpp
-  src/GameObject.cpp
-  src/Hero.cpp
-  src/Map.cpp
-  src/ResourceMgr.cpp
-  src/Texture.cpp
-  src/Util.cpp
-  src/main.cpp
-  src/debugdraw/Render.cpp
-)
-
 include_directories(
   src
   tmx
@@ -40,17 +28,7 @@ include_directories(
 )
 
 add_subdirectory( tmx )
-
-add_executable( ${PROJECT_NAME}
-  ${marian_SRCS}
-)
-
-target_link_libraries( ${PROJECT_NAME}
-  tmx ${BOX2D_LIBRARY} ${SDL_LIBRARY}
-  ${SDLIMAGE_LIBRARY} ${OPENGL_LIBRARIES}
-#  ${Boost_LIBRARIES}
-#  ${GLUT_LIBRARY}
-)
+add_subdirectory( src )
 
 enable_testing()
 add_subdirectory( test )
