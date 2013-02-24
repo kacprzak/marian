@@ -28,6 +28,7 @@ class Layer
   int height;
   std::string visible; //< "1" by default
   std::string dataEncoding;
+  std::string compression;
   std::vector<unsigned> data;
 };
 

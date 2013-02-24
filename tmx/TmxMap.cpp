@@ -8,7 +8,32 @@
 #include "rapidxml/rapidxml_utils.hpp"
 #include "base64/base64.h"
 
+#include <sstream>
+#include <boost/iostreams/filtering_streambuf.hpp>
+#include <boost/iostreams/copy.hpp>
+#include <boost/iostreams/filter/gzip.hpp>
+#include <boost/iostreams/filter/zlib.hpp>
+
 using namespace boost;
+
+// gzip or zlib
+std::string decompress(std::string data, std::string method) {
+  if (!method.empty()) {
+    std::stringstream ss(data);
+    iostreams::filtering_streambuf<iostreams::input> in;
+
+    if (method == "gzip")
+      in.push(iostreams::gzip_decompressor());
+    else if (method == "zlib") 
+      in.push(iostreams::zlib_decompressor());
+
+    in.push(ss);
+    std::stringstream dst;
+    iostreams::copy(in, dst);
+    return dst.str();
+  } else
+    return data;
+}
 
 namespace tmx {
 
@@ -82,6 +107,9 @@ bool Map::loadFromFile(const std::string& filename)
       xml_node<> *data_node = layer_node->first_node("data");
       layer.dataEncoding = data_node->first_attribute("encoding")->value();
 
+      xml_attribute<> *compression_attr = data_node->first_attribute("compression");
+      if (compression_attr) layer.compression = compression_attr->value();
+
       if (layer.dataEncoding == "csv")
       {
         std::string data = data_node->value();
@@ -96,7 +124,7 @@ bool Map::loadFromFile(const std::string& filename)
       {
         std::string nodevalue = data_node->value();
         boost::algorithm::trim(nodevalue);
-        std::string datastr = base64_decode(nodevalue);
+        std::string datastr = decompress(base64_decode(nodevalue), layer.compression);
 
         const unsigned char *data = reinterpret_cast<const unsigned char*>(datastr.data());
 
