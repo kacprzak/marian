@@ -10,10 +10,14 @@
 class Tile
 {
 public:
-    Tile()
-        : gid(0)
-        , texture(nullptr)
-    {}
+    Tile(const Map *map, unsigned agid, const Texture *tex)
+        : gid(agid)
+        , texture(tex)
+    {
+        calculateTextureCoords(tex->w(), tex->h(),
+                               map->rectForTile(gid),
+                               texCoords);
+    }
   
     unsigned       gid;
     const Texture *texture;
@@ -70,11 +74,7 @@ Layer::Layer(const Map *parent, const tmx::Layer& tmxLayer)
                                     | FLIPPED_VERTICALLY_FLAG
                                     | FLIPPED_DIAGONALLY_FLAG);
         
-                Tile *tile = new Tile;
-                tile->gid = global_tile_id;
-                tile->texture = tex;
-                calculateTextureCoords(tex->w(), tex->h(), map->rectForTile(global_tile_id),
-                                       tile->texCoords);
+                Tile *tile = new Tile(map, global_tile_id, tex);
                 tiles[y * width + x] = tile;
             }
         }
@@ -159,7 +159,7 @@ void Map::getObjects(std::vector<MapObject>& v)
             MapObject mapObject;
             mapObject.name = obj.name;
             mapObject.type = obj.type;
-            mapObject.gid = obj.gid;
+            mapObject.gid  = obj.gid;
 
             mapObject.x = obj.x / float(m_tileWidth);
             mapObject.y = m_height - (obj.height + obj.y) / float(m_tileHeight);
@@ -198,16 +198,11 @@ void Map::draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const
 void Map::drawLayer(Engine *e, const std::string& layerName,
                     float xFrom, float xTo, float yFrom, float yTo) const
 {
-    const Layer *layer = nullptr;
-
-    for (const Layer* l : m_layers) {
-        if (l->name == layerName)
-            layer = l;
-    }
+    const Layer *layer = findLayer(layerName);
 
     if (layer && layer->visible) {
         xFrom = std::floor(xFrom);
-        xTo = std::ceil(xTo);
+        xTo   = std::ceil(xTo);
         float tmp = yFrom;
         yFrom = std::floor(m_height - yTo);
         yTo   = std::ceil(m_height - tmp);
@@ -220,6 +215,17 @@ void Map::drawLayer(Engine *e, const std::string& layerName,
         
         layer->draw(e, xFrom, xTo, yFrom, yTo);
     }
+}
+
+//------------------------------------------------------------------------------
+
+Layer * Map::findLayer(const std::string& layerName) const
+{
+    for (Layer* layer : m_layers) {
+        if (layer->name == layerName)
+            return layer;
+    }
+    return nullptr;
 }
 
 //------------------------------------------------------------------------------

@@ -29,10 +29,13 @@ class MapObject
 
 //------------------------------------------------------------------------------
 
+class Tile;
+
 /** Interface to game map in game coords */
 class Map : boost::noncopyable
 {
     friend Layer;
+    friend Tile;
 
  public:
     Map();
@@ -53,6 +56,8 @@ class Map : boost::noncopyable
  private:
     std::string imageForTile(unsigned globalId) const;
     Rect<int> rectForTile(unsigned globalId) const;
+
+    Layer *findLayer(const std::string& layerName) const;
 
     /** Size in game (tile) coords */
     int m_width;

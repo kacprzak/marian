@@ -7,7 +7,6 @@
 #include "Map.h"
 #include "FpsCounter.h"
 
-//class Sprite;
 class GameObject;
 
 class Game : public Playable
