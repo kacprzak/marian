@@ -3,9 +3,9 @@
 #define GAME_OBJECT_H
 
 #include "Playable.h"
-#include <Box2D/Box2D.h>
 
 class Game;
+class b2Body; // Box2D
 
 class GameObject : public Playable
 {
@@ -14,10 +14,6 @@ class GameObject : public Playable
         : m_game(game)
         , m_body(body)
     {}
-
-    const b2Vec2& position() const {
-        return m_body->GetPosition();
-    }
 
     // Playable interface impl
     bool processInput(const SDL_Event& /*event*/) { return true; };

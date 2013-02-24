@@ -61,7 +61,7 @@ Layer::Layer(const Map *parent, const tmx::Layer& tmxLayer)
             unsigned global_tile_id = tmxLayer.data[y * tmxLayer.width + x];
       
             if (global_tile_id != 0) {
-                std::string imageSource = map->imageForTile(global_tile_id);
+                std::string imageSource = map->imageNameForTile(global_tile_id);
                 const Texture *tex = ResourceMgr::instance().getTexture(imageSource);
 
                 // Read out the flags
@@ -253,7 +253,7 @@ std::string Map::backgroundColor() const
 
 //------------------------------------------------------------------------------
 
-std::string Map::imageForTile(unsigned global_tile_id) const
+std::string Map::imageNameForTile(unsigned global_tile_id) const
 {
     return m_tmxMap.tilesetForTile(global_tile_id)->imageSource;
 }
@@ -281,4 +281,14 @@ Rect<int> Map::rectForTile(unsigned global_tile_id) const
     int opengl_y = tileset->imageHeight - (local_y * tileset->tileHeight) - tileset->tileHeight;
   
     return Rect<int>(opengl_x, opengl_y, tileset->tileWidth, tileset->tileHeight);
+}
+
+//------------------------------------------------------------------------------
+
+Image Map::imageForTile(unsigned gid) const
+{
+    std::string imageSource = imageNameForTile(gid);
+    const Texture *tex = ResourceMgr::instance().getTexture(imageSource);
+
+    return Image(tex, rectForTile(gid));
 }

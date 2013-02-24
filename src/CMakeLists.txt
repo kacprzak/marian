@@ -4,6 +4,7 @@ set( marian_SRCS
   Engine.cpp
   FpsCounter.cpp
   Game.cpp
+  Ground.cpp
   Hero.cpp
   Map.cpp
   ResourceMgr.cpp

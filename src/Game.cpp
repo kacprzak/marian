@@ -5,19 +5,46 @@
 #include "Engine.h"
 #include "GameObject.h"
 #include "Hero.h"
+#include "Ground.h"
 #include "Util.h"
 
 #include <iostream>
 
 Game::Game()
 {
-    b2Vec2 gravity(0.0f, -10.0f);
+    b2Vec2 gravity(0.0f, -9.8f);
     m_world = new b2World(gravity);
     m_world->SetAllowSleeping(true);
     
     // Debug drawing
     m_debugDraw = new DebugDraw;
     m_drawDebugData = false;
+    
+    // Read map from file
+    ResourceMgr& resMgr = ResourceMgr::instance();
+    resMgr.setDataFolder("media/");
+
+    m_map.loadFromFile("media/map2.tmx");
+
+    std::vector<MapObject> mapObjects;
+    m_map.getObjects(mapObjects);
+
+    std::cout << "INFO: " << mapObjects.size() << " objects loaded.\n";
+
+    for (const MapObject& obj : mapObjects) {
+        if (obj.name == "hero") {
+            // Hero
+            const Image& img = m_map.imageForTile(348);
+            GameObject *go = new Hero(this, img,
+                                      b2Vec2(obj.x + obj.width/2, obj.y + obj.width/2),
+                                      b2Vec2(obj.width, obj.height));
+            m_gameObjects.push_back(go);
+        } else {
+            // Static collision shape
+            GameObject *go = new Ground(this, obj);
+            m_gameObjects.push_back(go);
+        }
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -36,63 +63,6 @@ Game::~Game()
 
 void Game::initialize(Engine *e)
 {
-    ResourceMgr& resMgr = ResourceMgr::instance();
-    resMgr.setDataFolder("media/");
-
-    m_map.loadFromFile("media/map2.tmx");
-
-    std::vector<MapObject> mapObjects;
-    m_map.getObjects(mapObjects);
-
-    std::cout << "INFO: " << mapObjects.size() << " objects loaded.\n";
-
-    for (const MapObject& obj : mapObjects) {
-        if (obj.name == "hero") {
-            // Tile based GameObject
-            GameObject *gameObject = new Hero(this,
-                                              b2Vec2(obj.x + obj.width/2,
-                                                     obj.y + obj.width/2),
-                                              b2Vec2(obj.width, obj.height));
-            m_gameObjects.push_back(gameObject);
-
-        } else {
-            // Static collision shape
-            b2BodyDef groundBodyDef;
-            groundBodyDef.position.Set(obj.x, obj.y);
-
-            b2Body *groundBody = m_world->CreateBody(&groundBodyDef);
-
-
-            const std::string& shape = obj.shape;
-            if (shape == "polyline" || shape == "polygon") {
-                size_t numOfPoints = obj.points.size();
-                b2Vec2 vs[numOfPoints];
-                
-                for (size_t i = 0; i < numOfPoints; ++i) {
-                    auto& p = obj.points[i];
-                    vs[i].Set(p.first, p.second);
-                }
-
-                b2ChainShape chain;
-                if (obj.shape == "polyline")
-                    chain.CreateChain(vs, numOfPoints);
-                else
-                    chain.CreateLoop(vs, numOfPoints);
-
-                groundBody->CreateFixture(&chain, 0.0f);
-
-            } else {
-                // Rect object
-                b2PolygonShape box;
-                float hw = obj.width / 2;
-                float hh = obj.height / 2;
-                box.SetAsBox(hw, hh, b2Vec2(hw, hh), 0.0f);
-
-                groundBody->CreateFixture(&box, 0.0f);
-            }
-        }
-    }
-
     // Set backgound color
     std::string bgColor = m_map.backgroundColor(); 
     if (!bgColor.empty()) {
@@ -141,11 +111,9 @@ void Game::draw(Engine *e)
     e->viewBounds(&x1, &x2, &y1, &y2);
 
     // TODO: read order from map
-    m_map.drawLayer(e, "sky",       x1, x2, y1, y2);
-    m_map.drawLayer(e, "back",      x1, x2, y1, y2);
-    m_map.drawLayer(e, "collision", x1, x2, y1, y2);
-    m_map.drawLayer(e, "ladders",   x1, x2, y1, y2);
-
+    m_map.drawLayer(e, "back",   x1, x2, y1, y2);
+    m_map.drawLayer(e, "ground", x1, x2, y1, y2);
+ 
     for (GameObject* go : m_gameObjects) {
         go->draw(e);
     }

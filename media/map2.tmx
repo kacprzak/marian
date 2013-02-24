@@ -11,18 +11,13 @@
    eJztl7lSwzAQhnfoeB0q6P5AyzHUvB1QcnWcFem5Sq5nYTWxJrKxZFkry05mv5l/XCS7Wv1ZaR0iRVEURVHWgRfWK+uN9c76mGDOIWrs4pP1xfpm/bB+A9+NrS82Z+58sTlTfT5lnbHOBfXFkDtfbM7Uda9Y16wbeZlrxQPrkfU0diETYSvw2U6xKhZcsC4LrxkCrBlr19FewfXn1fOOdV9w3S5AC1+shvTluXqG+tSwTeX7tQlo6YfUF99cM1gv3P2C6n1auldDgPznqO+Z7zvX9lkHnrXHxPQ1yN8vsWf+tnq2zbW2PnEBLT05ZB1FVT4ctl5Q9/3StqeuO8IX1wQ0rV6xgOq+NGU59sQ3z0Hf/SEybrNHzhyA/nth+vnEUai3pXcEaDpnyAVUv1tS+tnmSNmfjZ3SGTLkmAnIEDumL773C5BsJrjxq+iL7/0CJJsJNl7i6Zi++P43g/L4kho7S4yVshH4zMw/UP/f252bNn7VfOkCJOtlSbyJVV/aY9fZl9S9SWKHBqS+KIqiKHL+AD/RjXw=
   </data>
  </layer>
- <layer name="collision" width="70" height="36">
+ <layer name="ground" width="70" height="36">
   <data encoding="base64" compression="zlib">
-   eJztlskKwjAURQNadadWdOO0FHXp1LW0H+BO8D/8fm+QYEgxWEqbwXvgUAiP5pEmuRWCEEIIIYQQQkhdcng2LJx2REiZAzzCk+HFZVNfuAf+fhIHoe0TecYz+DSU4+q827IpF+X7Qd0RWWNd+8FVfO7Cm+Gjgfk6sAsT2IN9OGhgnhAZwTFM4cRxLz6xgEu4gmvHvfjGFu5cN0EI+Qk9/5R6/g1F+T9mKt5ZmRjPWWtdt4Mt/+aWetPYstOWfxtLvb4msWan3APye+8r1Kease0VhVqXKvX/sC6EEELq8wI3zhGT
-  </data>
- </layer>
- <layer name="ladders" width="70" height="36">
-  <data encoding="base64" compression="zlib">
-   eJzt0kERACAMBLHKRwCCMXBvaIdEwT62CgAAAPjdeh3Q1H4d0JRfMr9kk36Z1HqTtzO/ZH7J/JL5JfMLAAD0cgCw7Qad
+   eJztlksKwjAURQNadaZWdOJvKOrQX8eiC3AmuA/X4AJcsDdIsKQSaGqTpt4DB6EE3yO+vqsQhBBCCCGEEEKKcoJ7zbPXjgjJsoFbuNM8wIfHvr5xrcj3P0vtIlyqNi9lkXcOfc+LfMcTeNeUz9X7bsqmk8juB7UjkgJ9hTAvR/HZhRfNWwn1GrAJI9iCbdgpoc6vcDnbPdiHMRw4rGuDy9mewCmcwbnDuja43oVLuHJc04YQdqEPfGdnVanrvKTzT5nOv67I/o8ZindWRtrnyFnXbjDl39hwXrfq2ZkXU/4tDOfTdxJCdtogZ0D+3usc5+OUdZsVhbqXPOf/4V4IIYQU5wXBWxgv
   </data>
  </layer>
  <objectgroup name="player" width="70" height="36">
-  <object name="hero" x="416" y="768" width="26" height="26"/>
+  <object name="hero" x="431" y="762" width="29" height="29"/>
  </objectgroup>
  <layer name="water" width="70" height="36">
   <data encoding="base64" compression="zlib">
@@ -34,7 +29,7 @@
    eJzt1rENgDAMBMCIkehYhw4GzAIwGBQUiCbQ4BDuJCsuLPk7JyUAAIBn8qlfw1IAreqPdwhNQe3GveZLTaGJvml5eV8ujzSviw4AQLi7/5g/3U33EQCAmm0gkwj/
   </data>
  </layer>
- <objectgroup name="Collision" width="70" height="36">
+ <objectgroup name="collision" width="70" height="36">
   <object name="ground1" x="288" y="832">
    <polygon points="0,0 0,32 32,32 32,96 64,96 64,320 128,320 128,96 160,96 160,32 192,32 192,0"/>
   </object>

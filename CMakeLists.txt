@@ -16,8 +16,6 @@ find_package( Box2D REQUIRED )
 
 set( CMAKE_DEBUG_POSTFIX "_d" )
 
-file( COPY ${CMAKE_SOURCE_DIR}/media DESTINATION ${CMAKE_BINARY_DIR}/ )
-
 include_directories(
   src
   tmx
@@ -29,6 +27,7 @@ include_directories(
 
 add_subdirectory( tmx )
 add_subdirectory( src )
+add_subdirectory( media )
 
 enable_testing()
 add_subdirectory( test )
