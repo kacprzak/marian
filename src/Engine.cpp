@@ -151,12 +151,22 @@ void Engine::draw()
 
 void Engine::drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h) const
 {
+    // Disable texturing if needed.
+    bool texturing_enabled = glIsEnabled(GL_TEXTURE_2D);
+    if(texturing_enabled)
+        glDisable(GL_TEXTURE_2D);
+
     glBegin(GL_QUADS);
-    glTexCoord2f(0.0f, 0.0f); glVertex2f(x, y);
-    glTexCoord2f(1.0f, 0.0f); glVertex2f(x + w, y);
-    glTexCoord2f(1.0f, 1.0f); glVertex2f(x + w, y + h);
-    glTexCoord2f(0.0f, 1.0f); glVertex2f(x, y + h);
+    {
+        glTexCoord2f(0.0f, 0.0f); glVertex2f(x, y);
+        glTexCoord2f(1.0f, 0.0f); glVertex2f(x + w, y);
+        glTexCoord2f(1.0f, 1.0f); glVertex2f(x + w, y + h);
+        glTexCoord2f(0.0f, 1.0f); glVertex2f(x, y + h);
+    }
     glEnd();
+
+    if(texturing_enabled)
+        glEnable(GL_TEXTURE_2D);
 }
 
 //------------------------------------------------------------------------------
@@ -165,10 +175,12 @@ void Engine::drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
                       const GLfloat *texCoords) const
 {
     glBegin(GL_QUADS);
-    glTexCoord2f(texCoords[0], texCoords[1]); glVertex2f(x, y);
-    glTexCoord2f(texCoords[2], texCoords[3]); glVertex2f(x + w, y);
-    glTexCoord2f(texCoords[4], texCoords[5]); glVertex2f(x + w, y + h);
-    glTexCoord2f(texCoords[6], texCoords[7]); glVertex2f(x, y + h);
+    {
+        glTexCoord2f(texCoords[0], texCoords[1]); glVertex2f(x, y);
+        glTexCoord2f(texCoords[2], texCoords[3]); glVertex2f(x + w, y);
+        glTexCoord2f(texCoords[4], texCoords[5]); glVertex2f(x + w, y + h);
+        glTexCoord2f(texCoords[6], texCoords[7]); glVertex2f(x, y + h);
+    }
     glEnd();
 }
 
@@ -263,10 +275,7 @@ void Engine::initializeOpenGL()
     std::cout << "Initializing OpenGl...\n";
     //float ratio = float(m_screenWidth) / float(m_screenHeight);
 
-    //int r = 102, g = 140, b = 255; // blue
-    int r = 0, g = 0, b = 0; // black
-    glClearColor(r/255.0f, g/255.0f, b/255.0f, 0);
-
+    glClearColor(0.0f, 0.0f, 0.0f, 0); // black
     //glShadeModel(GL_SMOOTH); // smooth is default
     glViewport(0, 0, m_screenWidth, m_screenHeight);
     glMatrixMode(GL_PROJECTION);
@@ -276,6 +285,8 @@ void Engine::initializeOpenGL()
     glOrtho(-m_screenWidth/2, m_screenWidth/2, -m_screenHeight/2, m_screenHeight/2, -1, 1);
 
     glDisable(GL_DEPTH_TEST); // uncomment this if going 2D
+
+    glEnable(GL_TEXTURE_2D); // Enable textures by default
 }
 
 //------------------------------------------------------------------------------
