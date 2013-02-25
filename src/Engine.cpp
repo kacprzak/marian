@@ -189,9 +189,6 @@ void Engine::drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
 void Engine::drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
                       GLuint texture_id, const GLfloat *texCoords) const
 {
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-
     // Enable texturing if needed.
     bool texturing_enabled = glIsEnabled(GL_TEXTURE_2D);
     if(!texturing_enabled)
@@ -202,11 +199,9 @@ void Engine::drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
   
     drawQuad(x, y, w, h, texCoords);
 
-    // Disable if was disable.
+    // Disable if it was disabled.
     if(!texturing_enabled)
         glDisable(GL_TEXTURE_2D);
-
-    glDisable(GL_BLEND);
 }
 
 //------------------------------------------------------------------------------
@@ -287,6 +282,9 @@ void Engine::initializeOpenGL()
     glDisable(GL_DEPTH_TEST); // uncomment this if going 2D
 
     glEnable(GL_TEXTURE_2D); // Enable textures by default
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
 }
 
 //------------------------------------------------------------------------------

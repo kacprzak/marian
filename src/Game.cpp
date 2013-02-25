@@ -122,10 +122,12 @@ void Game::draw(Engine *e)
     m_map.drawLayer(e, "front", x1, x2, y1, y2);
 
     if (m_drawDebugData) {
+        glPushAttrib(GL_COLOR_BUFFER_BIT | GL_CURRENT_BIT | GL_ENABLE_BIT);
+
         glDisable(GL_TEXTURE_2D);
         m_world->DrawDebugData();
-        glEnable(GL_TEXTURE_2D);
-        glColor4f(1,1,1,1); // Reset color
+
+        glPopAttrib();
     }
 }
 
