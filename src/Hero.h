@@ -4,16 +4,15 @@
 
 #include "GameObject.h"
 
+#include "Map.h"
 #include "Image.h"
-#include <Box2D/Box2D.h>
 
 class Engine;
 
 class Hero : public GameObject
 {
  public:
-    Hero(Game *game, const Image& image,
-         const b2Vec2& pos, const b2Vec2& size);
+    Hero(Game *game, const MapObject& obj, const Image& image);
   
     void update(Engine *e, float elapsedTime);
     void draw(Engine *e);

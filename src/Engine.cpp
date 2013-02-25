@@ -10,6 +10,9 @@
 #include <vector>
 #include "ResourceMgr.h"
 
+const double PI   = 3.141592653589793238462;
+const float  PI_F = 3.14159265358979f;
+
 #define SCALE 32
 #define ROUND 1 // Retro style pixel perfect rendering
 
@@ -213,6 +216,27 @@ void Engine::drawImage(float x, float y, float w, float h,
     const GLfloat *texCoords = image.getTextureCoords();
 
     drawQuad(x, y, w, h, tex->textureId(), texCoords);
+}
+
+//------------------------------------------------------------------------------
+
+void Engine::drawImage(float x, float y, float w, float h, float rotation,
+                       const Image& image) const
+{
+    float deg = rotation * 180.0f / PI_F;
+    float hw = w / 2.0f;
+    float hh = h / 2.0f;
+    
+    const Texture *tex = image.texture();
+    const GLfloat *texCoords = image.getTextureCoords();
+
+    glPushMatrix();
+    glTranslatef(x + hw, y + hh, 0.0f);
+    glRotatef(deg, 0.0f, 0.0f, 1.0f);
+
+    drawQuad(0.0f - hw, 0.0f - hh, w, h, tex->textureId(), texCoords);
+
+    glPopMatrix();
 }
 
 //------------------------------------------------------------------------------

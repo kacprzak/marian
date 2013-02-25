@@ -2,6 +2,7 @@
 #include "Ground.h"
 
 #include "Game.h"
+#include <Box2D/Box2D.h>
 
 Ground::Ground(Game *game, const MapObject& obj)
     : GameObject(game, nullptr)

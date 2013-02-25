@@ -4,8 +4,7 @@
 #include "ResourceMgr.h"
 #include "Engine.h"
 #include "GameObject.h"
-#include "Hero.h"
-#include "Ground.h"
+#include "GameObjectFactory.h"
 #include "Util.h"
 
 #include <iostream>
@@ -26,24 +25,14 @@ Game::Game()
 
     m_map.loadFromFile("media/map2.tmx");
 
+    // Build objects
     std::vector<MapObject> mapObjects;
     m_map.getObjects(mapObjects);
 
     std::cout << "INFO: " << mapObjects.size() << " objects loaded.\n";
 
     for (const MapObject& obj : mapObjects) {
-        if (obj.name == "hero") {
-            // Hero
-            const Image& img = m_map.imageForTile(348);
-            GameObject *go = new Hero(this, img,
-                                      b2Vec2(obj.x + obj.width/2, obj.y + obj.width/2),
-                                      b2Vec2(obj.width, obj.height));
-            m_gameObjects.push_back(go);
-        } else {
-            // Static collision shape
-            GameObject *go = new Ground(this, obj);
-            m_gameObjects.push_back(go);
-        }
+        m_gameObjects.push_back(GameObjectFactory::create(this, obj));        
     }
 }
 
@@ -63,7 +52,7 @@ Game::~Game()
 
 void Game::initialize(Engine *e)
 {
-    // Set backgound color
+    // Set background color
     std::string bgColor = m_map.backgroundColor(); 
     if (!bgColor.empty()) {
         std::vector<int> color = hexColorToRgb(bgColor);

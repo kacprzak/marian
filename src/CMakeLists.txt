@@ -1,6 +1,7 @@
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 set( marian_SRCS
+  Box.cpp
   Engine.cpp
   FpsCounter.cpp
   Game.cpp

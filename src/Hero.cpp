@@ -4,21 +4,22 @@
 #include "Engine.h"
 #include "Game.h"
 #include <iostream>
+#include <Box2D/Box2D.h>
 
 #define JUMP_DELAY 1.0f
 
-Hero::Hero(Game *game, const Image& image,
-           const b2Vec2& pos, const b2Vec2& size)
+Hero::Hero(Game *game, const MapObject& obj, const Image& image)
     : GameObject(game, nullptr)
     , m_jumpTimeout(0.0f)
     , m_image(image)
 {
-    float hw = size.x / 2;
-    float hh = size.y / 2;
+    float hw = obj.width / 2;
+    float hh = obj.height / 2;
 
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
-    bodyDef.position = pos;
+    // Set origin in center
+    bodyDef.position.Set(obj.x + hw, obj.y + hh);
     bodyDef.fixedRotation = true;
     b2Body* body = game->world()->CreateBody(&bodyDef);
     
@@ -72,5 +73,5 @@ void Hero::draw(Engine *e)
     float w = 1.0f;
     float h = 1.0f;
     e->drawImage(pos.x - w/2, pos.y - h/2,
-                 w, h,  m_image);
+                 w, h, m_image);
 }
