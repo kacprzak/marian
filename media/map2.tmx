@@ -17,7 +17,12 @@
   </data>
  </layer>
  <objectgroup name="player" width="70" height="36">
-  <object name="hero" x="431" y="762" width="29" height="29"/>
+  <object name="hero" x="431" y="762" width="29" height="29">
+   <properties>
+    <property name="density" value="0.8"/>
+    <property name="maxSpeed" value="2.0"/>
+   </properties>
+  </object>
  </objectgroup>
  <layer name="water" width="70" height="36">
   <data encoding="base64" compression="zlib">
