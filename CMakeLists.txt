@@ -10,9 +10,10 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 find_package( SDL REQUIRED )
 find_package( SDL_image REQUIRED )
 find_package( OpenGL REQUIRED )
-find_package( Boost COMPONENTS iostreams unit_test_framework REQUIRED )
+find_package( Boost COMPONENTS unit_test_framework REQUIRED )
 find_package( Box2D REQUIRED )
 #find_package( GLUT REQUIRED )
+find_package( ZLIB REQUIRED )
 
 set( CMAKE_DEBUG_POSTFIX "_d" )
 
@@ -23,6 +24,7 @@ include_directories(
   ${OPENGL_INCLUDE_DIR}
   ${Boost_INCLUDE_DIR}
 #  ${GLUT_INCLUDE_DIRS}
+  ${ZLIB_INCLUDE_DIR}
 )
 
 add_subdirectory( tmx )

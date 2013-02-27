@@ -9,34 +9,87 @@
 #include "rapidxml/rapidxml_utils.hpp"
 #include "base64/base64.h"
 
-#include <sstream>
-#include <boost/iostreams/filtering_streambuf.hpp>
-#include <boost/iostreams/copy.hpp>
-#include <boost/iostreams/filter/gzip.hpp>
-#include <boost/iostreams/filter/zlib.hpp>
+#include <zlib.h>
 
 namespace tmx {
 
 using namespace boost;
 
-// gzip or zlib
-std::string decompress(std::string data, std::string method)
+static void logZlibError(int error)
 {
-    if (!method.empty()) {
-        std::stringstream ss(data);
-        iostreams::filtering_streambuf<iostreams::input> in;
+    switch (error) {
+    case Z_MEM_ERROR:
+        std::cerr << "Out of memory while (de)compressing data!\n";
+        break;
+    case Z_VERSION_ERROR:
+        std::cerr << "Incompatible zlib version!\n";
+        break;
+    case Z_NEED_DICT:
+    case Z_DATA_ERROR:
+        std::cerr << "Incorrect zlib compressed data!\n";
+        break;
+    default:
+        std::cerr << "Unknown error while (de)compressing data!\n";
+    }
+}
 
-        if (method == "gzip")
-            in.push(iostreams::gzip_decompressor());
-        else if (method == "zlib") 
-            in.push(iostreams::zlib_decompressor());
+// gzip or zlib
+std::vector<unsigned char> decompress(std::string data, int expectedSize = 256)
+{
+    std::vector<Bytef> out(expectedSize);
+    const Bytef* in = reinterpret_cast<const Bytef*>(data.c_str());
 
-        in.push(ss);
-        std::stringstream dst;
-        iostreams::copy(in, dst);
-        return dst.str();
-    } else
-        return data;
+    z_stream strm;
+
+    strm.zalloc    = Z_NULL;
+    strm.zfree     = Z_NULL;
+    strm.opaque    = Z_NULL;
+    strm.next_in   = (Bytef *) in;
+    strm.avail_in  = data.length();
+    strm.next_out  = (Bytef *) out.data();
+    strm.avail_out = out.size();
+
+    int ret = inflateInit2(&strm, 15 + 32);
+
+    if (ret != Z_OK) {
+        logZlibError(ret);
+        return std::vector<unsigned char>();
+    }
+
+    do {
+        ret = inflate(&strm, Z_SYNC_FLUSH);
+
+        switch (ret) {
+            case Z_NEED_DICT:
+            case Z_STREAM_ERROR:
+                ret = Z_DATA_ERROR;
+            case Z_DATA_ERROR:
+            case Z_MEM_ERROR:
+                inflateEnd(&strm);
+                logZlibError(ret);
+                return std::vector<unsigned char>();
+        }
+
+        if (ret != Z_STREAM_END) {
+            int oldSize = out.size();
+            out.resize(out.size() * 2);
+
+            strm.next_out = (Bytef *)(out.data() + oldSize);
+            strm.avail_out = oldSize;
+        }
+    }
+    while (ret != Z_STREAM_END);
+
+    if (strm.avail_in != 0) {
+        logZlibError(Z_DATA_ERROR);
+        return std::vector<unsigned char>();
+    }
+
+    const int outLength = out.size() - strm.avail_out;
+    inflateEnd(&strm);
+
+    out.resize(outLength);
+    return out;
 }
 
 
@@ -159,11 +212,10 @@ bool Map::loadFromFile(const std::string& filename)
 
                 std::string nodevalue = data_node->value();
                 boost::algorithm::trim(nodevalue);
-                std::string datastr = decompress(base64_decode(nodevalue), layer.compression);
 
-                const unsigned char *data = reinterpret_cast<const unsigned char*>(datastr.data());
+                std::vector<unsigned char> data = decompress(base64_decode(nodevalue));
 
-                for (unsigned i = 0; i < datastr.size(); i += 4) {
+                for (unsigned i = 0; i < data.size(); i += 4) {
                     unsigned global_tile_id = data[i]
                         | data[i + 1] << 8
                         | data[i + 2] << 16

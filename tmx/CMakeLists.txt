@@ -4,5 +4,5 @@ add_library(tmx
 )
 
 target_link_libraries( tmx
-  ${Boost_LIBRARIES}
+  ${ZLIB_LIBRARIES}
 )
