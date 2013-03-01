@@ -4,7 +4,7 @@
 #include "Engine.h"
 #include "Game.h"
 
-int main()
+int main(int argc, char *argv[])
 {
     Engine *e = new Engine("Marian", 1024, 768);
     Game *game = new Game;

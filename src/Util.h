@@ -2,10 +2,14 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+#if _MSC_VER
+  #include <windows.h>
+#endif
+
 #include <GL/gl.h>
 #include <vector>
 #include <string>
-#include "Math.h"
+#include "Vect.h"
 
 GLuint load_texture(const char *filename, int *w, int *h);
 

@@ -19,6 +19,11 @@
 #define NO_GLUT
 
 #include "Render.h"
+
+#if _MSC_VER
+  #include <windows.h>
+#endif
+
 #include <GL/gl.h>
 
 #ifndef NO_GLUT

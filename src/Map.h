@@ -6,7 +6,7 @@
 #include <vector>
 #include <boost/utility.hpp>
 #include "TmxMap.h"
-#include "Math.h"
+#include "Vect.h"
 #include "Image.h"
 
 class Engine;

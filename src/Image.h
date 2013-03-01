@@ -2,7 +2,7 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-#include "Math.h"
+#include "Vect.h"
 #include "Texture.h"
 #include <string>
 #include <sstream>

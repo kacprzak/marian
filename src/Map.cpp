@@ -174,7 +174,7 @@ void Map::getObjects(std::vector<MapObject>& v)
                 float x = point.first / float(m_tileWidth);
                 float y = -point.second / float(m_tileHeight);
 
-                mapObject.points.push_back({x, y});
+                mapObject.points.push_back(std::pair<float, float>(x, y));
             }
 
             v.push_back(mapObject);

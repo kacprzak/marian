@@ -1,5 +1,21 @@
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
+set( marian_HDRS
+  Box.h
+  Engine.h
+  FpsCounter.h
+  Game.h
+  Ground.h
+  Hero.h
+  Image.h
+  Map.h
+  ResourceMgr.h
+  Texture.h
+  Util.h
+  Vect.h
+  debugdraw/Render.h
+)
+
 set( marian_SRCS
   Box.cpp
   Engine.cpp
@@ -16,7 +32,7 @@ set( marian_SRCS
 )
 
 add_executable( marian
-  ${marian_SRCS}
+  ${marian_HDRS} ${marian_SRCS}
 )
 
 set_target_properties( marian PROPERTIES DEBUG_POSTFIX _d)

@@ -9,89 +9,11 @@
 #include "rapidxml/rapidxml_utils.hpp"
 #include "base64/base64.h"
 
-#include <zlib.h>
+static std::vector<unsigned char> decompress(std::string data, int expectedSize = 256);
 
 namespace tmx {
 
 using namespace boost;
-
-static void logZlibError(int error)
-{
-    switch (error) {
-    case Z_MEM_ERROR:
-        std::cerr << "Out of memory while (de)compressing data!\n";
-        break;
-    case Z_VERSION_ERROR:
-        std::cerr << "Incompatible zlib version!\n";
-        break;
-    case Z_NEED_DICT:
-    case Z_DATA_ERROR:
-        std::cerr << "Incorrect zlib compressed data!\n";
-        break;
-    default:
-        std::cerr << "Unknown error while (de)compressing data!\n";
-    }
-}
-
-// gzip or zlib
-std::vector<unsigned char> decompress(std::string data, int expectedSize = 256)
-{
-    std::vector<Bytef> out(expectedSize);
-    const Bytef* in = reinterpret_cast<const Bytef*>(data.c_str());
-
-    z_stream strm;
-
-    strm.zalloc    = Z_NULL;
-    strm.zfree     = Z_NULL;
-    strm.opaque    = Z_NULL;
-    strm.next_in   = (Bytef *) in;
-    strm.avail_in  = data.length();
-    strm.next_out  = (Bytef *) out.data();
-    strm.avail_out = out.size();
-
-    int ret = inflateInit2(&strm, 15 + 32);
-
-    if (ret != Z_OK) {
-        logZlibError(ret);
-        return std::vector<unsigned char>();
-    }
-
-    do {
-        ret = inflate(&strm, Z_SYNC_FLUSH);
-
-        switch (ret) {
-            case Z_NEED_DICT:
-            case Z_STREAM_ERROR:
-                ret = Z_DATA_ERROR;
-            case Z_DATA_ERROR:
-            case Z_MEM_ERROR:
-                inflateEnd(&strm);
-                logZlibError(ret);
-                return std::vector<unsigned char>();
-        }
-
-        if (ret != Z_STREAM_END) {
-            int oldSize = out.size();
-            out.resize(out.size() * 2);
-
-            strm.next_out = (Bytef *)(out.data() + oldSize);
-            strm.avail_out = oldSize;
-        }
-    }
-    while (ret != Z_STREAM_END);
-
-    if (strm.avail_in != 0) {
-        logZlibError(Z_DATA_ERROR);
-        return std::vector<unsigned char>();
-    }
-
-    const int outLength = out.size() - strm.avail_out;
-    inflateEnd(&strm);
-
-    out.resize(outLength);
-    return out;
-}
-
 
 std::vector<Property> loadProperties(rapidxml::xml_node<> *node)
 {
@@ -298,7 +220,7 @@ bool Map::loadFromFile(const std::string& filename)
                         ++it;
                         int y = lexical_cast<int>(*it);
 
-                        object.points.push_back({x, y});
+                        object.points.push_back(std::pair<int, int>(x, y));
                     } 
                 }
 
@@ -336,3 +258,82 @@ const Tileset* Map::tilesetForTile(unsigned gid) const
 }
 
 } // namespace tmx
+
+#include <zlib.h>
+
+static void logZlibError(int error)
+{
+    switch (error) {
+    case Z_MEM_ERROR:
+        std::cerr << "Out of memory while (de)compressing data!\n";
+        break;
+    case Z_VERSION_ERROR:
+        std::cerr << "Incompatible zlib version!\n";
+        break;
+    case Z_NEED_DICT:
+    case Z_DATA_ERROR:
+        std::cerr << "Incorrect zlib compressed data!\n";
+        break;
+    default:
+        std::cerr << "Unknown error while (de)compressing data!\n";
+    }
+}
+
+// gzip or zlib
+static std::vector<unsigned char> decompress(std::string data, int expectedSize)
+{
+    std::vector<Bytef> out(expectedSize);
+    const Bytef* in = reinterpret_cast<const Bytef*>(data.c_str());
+
+    z_stream strm;
+
+    strm.zalloc    = Z_NULL;
+    strm.zfree     = Z_NULL;
+    strm.opaque    = Z_NULL;
+    strm.next_in   = (Bytef *) in;
+    strm.avail_in  = data.length();
+    strm.next_out  = (Bytef *) out.data();
+    strm.avail_out = out.size();
+
+    int ret = inflateInit2(&strm, 15 + 32);
+
+    if (ret != Z_OK) {
+        logZlibError(ret);
+        return std::vector<unsigned char>();
+    }
+
+    do {
+        ret = inflate(&strm, Z_SYNC_FLUSH);
+
+        switch (ret) {
+            case Z_NEED_DICT:
+            case Z_STREAM_ERROR:
+                ret = Z_DATA_ERROR;
+            case Z_DATA_ERROR:
+            case Z_MEM_ERROR:
+                inflateEnd(&strm);
+                logZlibError(ret);
+                return std::vector<unsigned char>();
+        }
+
+        if (ret != Z_STREAM_END) {
+            int oldSize = out.size();
+            out.resize(out.size() * 2);
+
+            strm.next_out = (Bytef *)(out.data() + oldSize);
+            strm.avail_out = oldSize;
+        }
+    }
+    while (ret != Z_STREAM_END);
+
+    if (strm.avail_in != 0) {
+        logZlibError(Z_DATA_ERROR);
+        return std::vector<unsigned char>();
+    }
+
+    const int outLength = out.size() - strm.avail_out;
+    inflateEnd(&strm);
+
+    out.resize(outLength);
+    return out;
+}

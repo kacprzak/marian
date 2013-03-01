@@ -2,6 +2,10 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
+#if _MSC_VER
+  #include <windows.h>
+#endif
+
 #include <GL/gl.h>
 #include <GL/glu.h>
 
@@ -22,7 +26,7 @@ class SdlError : public std::exception
 
     ~SdlError() throw() {}
 
-    const char* what() const noexcept
+    const char* what() const //noexcept (MSVC er C3646)
     {
         std::string fullMsg = m_msg + ": " + m_sdlError;
         return fullMsg.c_str();

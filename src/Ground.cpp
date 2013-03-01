@@ -15,7 +15,7 @@ Ground::Ground(Game *game, const MapObject& obj)
     const std::string& shape = obj.shape;
     if (shape == "polyline" || shape == "polygon") {
         size_t numOfPoints = obj.points.size();
-        b2Vec2 vs[numOfPoints];
+        std::vector<b2Vec2> vs(numOfPoints);
                 
         for (size_t i = 0; i < numOfPoints; ++i) {
             auto& p = obj.points[i];
@@ -24,9 +24,9 @@ Ground::Ground(Game *game, const MapObject& obj)
 
         b2ChainShape chain;
         if (obj.shape == "polyline")
-            chain.CreateChain(vs, numOfPoints);
+			chain.CreateChain(vs.data(), numOfPoints);
         else
-            chain.CreateLoop(vs, numOfPoints);
+            chain.CreateLoop(vs.data(), numOfPoints);
 
         groundBody->CreateFixture(&chain, 0.0f);
 
