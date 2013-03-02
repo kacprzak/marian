@@ -26,7 +26,11 @@ class SdlError : public std::exception
 
     ~SdlError() throw() {}
 
+#if _MSV_VER
     const char* what() const //noexcept (MSVC er C3646)
+#else
+    const char* what() const noexcept
+#endif
     {
         std::string fullMsg = m_msg + ": " + m_sdlError;
         return fullMsg.c_str();

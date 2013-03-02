@@ -5,10 +5,13 @@ set( marian_HDRS
   Engine.h
   FpsCounter.h
   Game.h
+  GameObject.h
+  GameObjectFactory.h
   Ground.h
   Hero.h
   Image.h
   Map.h
+  Playable.h
   ResourceMgr.h
   Texture.h
   Util.h

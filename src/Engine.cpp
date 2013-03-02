@@ -83,8 +83,8 @@ void Engine::mainLoop(Playable *game)
 void Engine::centerViewOn(float x, float y)
 {
 #if ROUND
-	m_translate_x = std::floorf(-x * m_scale + 0.5f); // No std::round in MSVC
-	m_translate_y = std::floorf(-y * m_scale + 0.5f);
+	m_translate_x = std::floor(-x * m_scale + 0.5f); // No std::round in MSVC
+	m_translate_y = std::floor(-y * m_scale + 0.5f);
 #else
     m_translate_x = -x * m_scale;
     m_translate_y = -y * m_scale;

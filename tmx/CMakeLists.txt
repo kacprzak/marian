@@ -1,4 +1,5 @@
 add_library(tmx
+  TmxMap.h
   TmxMap.cpp
   base64/base64.cpp
 )
