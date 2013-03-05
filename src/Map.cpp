@@ -94,8 +94,8 @@ void Layer::draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const
         for (int x = xFrom; x < xTo; ++x) {
             const Tile *tile = tiles[y * width + x];
             if (tile) {
-                e->drawQuad(x,
-                            map->m_height - y - 1.0f,
+                e->drawQuad(static_cast<float>(x),
+                            static_cast<float>(map->m_height - y - 1),
                             1.0f,
                             1.0f,
                             tile->texture->textureId(), tile->texCoords);
@@ -188,9 +188,9 @@ void Map::draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const
 {
     // No bounds checking // Fix me
 
-    for (const Layer* layer : m_layers) {
-        layer->draw(e, xFrom, xTo, yFrom, yTo);
-    }
+    //for (const Layer* layer : m_layers) {
+    //    layer->draw(e, xFrom, xTo, yFrom, yTo);
+    //}
 }
 
 //------------------------------------------------------------------------------
@@ -201,19 +201,18 @@ void Map::drawLayer(Engine *e, const std::string& layerName,
     const Layer *layer = findLayer(layerName);
 
     if (layer && layer->visible) {
-        xFrom = std::floor(xFrom);
-        xTo   = std::ceil(xTo);
-        float tmp = yFrom;
-        yFrom = std::floor(m_height - yTo);
-        yTo   = std::ceil(m_height - tmp);
+        int x1 = static_cast<int>(std::floor(xFrom));
+        int x2 = static_cast<int>(std::ceil(xTo));
+        int y1 = static_cast<int>(std::floor(m_height - yTo));
+        int y2 = static_cast<int>(std::ceil(m_height - yFrom));
         
         // Clamp coords
-        if (xFrom < 0) xFrom = 0;
-        if (xTo   > m_width) xTo = m_width;
-        if (yFrom < 0) yFrom = 0;
-        if (yTo   > m_height) yTo = m_height;
+        if (x1 < 0)        x1 = 0;
+        if (x2 > m_width)  x2 = m_width;
+        if (y1 < 0)        y1 = 0;
+        if (y2 > m_height) y2 = m_height;
         
-        layer->draw(e, xFrom, xTo, yFrom, yTo);
+        layer->draw(e, x1, x2, y1, y2);
     }
 }
 

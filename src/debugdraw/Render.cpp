@@ -20,7 +20,7 @@
 
 #include "Render.h"
 
-#if _MSC_VER
+#ifdef _MSC_VER
   #include <windows.h>
 #endif
 
@@ -166,7 +166,7 @@ void DebugDraw::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color)
 void DebugDraw::DrawString(int x, int y, const char *string, ...)
 {
 #ifdef NO_GLUT
-        puts("WARNING: GLUT is disabled. DrawString does nothing");
+    puts("WARNING: GLUT is disabled. DrawString does nothing");
 #else
 	char buffer[128];
 

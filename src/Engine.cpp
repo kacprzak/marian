@@ -83,8 +83,8 @@ void Engine::mainLoop(Playable *game)
 void Engine::centerViewOn(float x, float y)
 {
 #if ROUND
-	m_translate_x = std::floor(-x * m_scale + 0.5f); // No std::round in MSVC
-	m_translate_y = std::floor(-y * m_scale + 0.5f);
+    m_translate_x = std::floor(-x * m_scale + 0.5f); // No std::round in MSVC
+    m_translate_y = std::floor(-y * m_scale + 0.5f);
 #else
     m_translate_x = -x * m_scale;
     m_translate_y = -y * m_scale;
@@ -155,7 +155,7 @@ void Engine::draw()
 void Engine::drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h) const
 {
     // Disable texturing if needed.
-    bool texturing_enabled = glIsEnabled(GL_TEXTURE_2D);
+    GLboolean texturing_enabled = glIsEnabled(GL_TEXTURE_2D);
     if(texturing_enabled)
         glDisable(GL_TEXTURE_2D);
 
@@ -193,7 +193,7 @@ void Engine::drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
                       GLuint texture_id, const GLfloat *texCoords) const
 {
     // Enable texturing if needed.
-    bool texturing_enabled = glIsEnabled(GL_TEXTURE_2D);
+    GLboolean texturing_enabled = glIsEnabled(GL_TEXTURE_2D);
     if(!texturing_enabled)
         glEnable(GL_TEXTURE_2D);
 

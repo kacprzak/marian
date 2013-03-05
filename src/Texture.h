@@ -2,7 +2,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#if _MSC_VER
+#ifdef _MSC_VER
   #include <windows.h>
 #endif
 

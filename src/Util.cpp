@@ -131,14 +131,14 @@ GLuint load_texture(const char *filename, int *w, int *h)
     return textureid;
 }
 
-void calculateTextureCoords(float texWidth, float texHeight,
+void calculateTextureCoords(int texWidth, int texHeight,
                             const Rect<int>& rect, GLfloat *texCoords)
 {
     if (!rect.isNull()) {
-        GLfloat s0 = rect.left()   / texWidth;
-        GLfloat t0 = rect.bottom() / texHeight;
-        GLfloat s1 = rect.right()  / texWidth;
-        GLfloat t1 = rect.top()    / texHeight;
+        GLfloat s0 = rect.left()   / (float)texWidth;
+        GLfloat t0 = rect.bottom() / (float)texHeight;
+        GLfloat s1 = rect.right()  / (float)texWidth;
+        GLfloat t1 = rect.top()    / (float)texHeight;
 
         texCoords[0] = s0; texCoords[1] = t0;
         texCoords[2] = s1; texCoords[3] = t0;

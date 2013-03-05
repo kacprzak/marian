@@ -2,7 +2,7 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#if _MSC_VER
+#ifdef _MSC_VER
   #include <windows.h>
 #endif
 
@@ -26,7 +26,7 @@ class SdlError : public std::exception
 
     ~SdlError() throw() {}
 
-#if _MSV_VER
+#ifdef _MSC_VER
     const char* what() const //noexcept (MSVC er C3646)
 #else
     const char* what() const noexcept

@@ -2,7 +2,7 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-#if _MSC_VER
+#ifdef _MSC_VER
   #include <windows.h>
 #endif
 
@@ -13,7 +13,7 @@
 
 GLuint load_texture(const char *filename, int *w, int *h);
 
-void calculateTextureCoords(float texWidth, float texHeight,
+void calculateTextureCoords(int texWidth, int texHeight,
                             const Rect<int>& rect, GLfloat *texCoords);
 
 std::vector<int> hexColorToRgb(int hexValue);
