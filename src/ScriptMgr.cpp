@@ -44,9 +44,14 @@ int ScriptMgr::getGlobalInt(const std::string& varname)
     if (!lua_isnumber(L, -1)) {
         throw ScriptMgrError(varname + " should be a number.");
     }
+    
+    int retVal = lua_tonumber(L, -1);
+    lua_pop(L, 1);
 
-    return lua_tonumber(L, -1);
+    return retVal;
 }
+
+//------------------------------------------------------------------------------
 
 bool ScriptMgr::getGlobalBool(const std::string& varname)
 {
@@ -55,5 +60,8 @@ bool ScriptMgr::getGlobalBool(const std::string& varname)
         throw ScriptMgrError(varname + " should be a boolean.");
     }
 
-    return lua_toboolean(L, -1);
+    bool retVal = lua_toboolean(L, -1);
+    lua_pop(L, 1);
+
+    return retVal;
 }
