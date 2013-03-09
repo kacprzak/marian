@@ -1,17 +1,18 @@
 Marian
 ======
 
-2d platformer game. Another Super Mario clone.
+2d platformer game. Another Super Mario clone. Just for fun.
 
 
 Dependencies
 ------------
 
+* boost
 * SDL
 * SDL_image
-* boost
 * OpenGL
 * Box2D
+* Lua
 
 
 Third-party code
