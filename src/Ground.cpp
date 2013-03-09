@@ -5,7 +5,7 @@
 #include <Box2D/Box2D.h>
 
 Ground::Ground(Game *game, const MapObject& obj)
-    : GameObject(game, nullptr)
+    : GameObject(game)
 {
     b2BodyDef groundBodyDef;
     groundBodyDef.position.Set(obj.x, obj.y);

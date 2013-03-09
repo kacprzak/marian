@@ -9,9 +9,10 @@
 #define JUMP_DELAY 1.0f
 
 Hero::Hero(Game *game, const MapObject& obj, const Image& image)
-    : GameObject(game, nullptr)
+    : GameObject(game)
     , m_jumpTimeout(0.0f)
     , m_image(image)
+    , m_boxesInContact(0)
 {
     float hw = obj.width / 2;
     float hh = obj.height / 2;
@@ -21,6 +22,7 @@ Hero::Hero(Game *game, const MapObject& obj, const Image& image)
     // Set origin in center
     bodyDef.position.Set(obj.x + hw, obj.y + hh);
     bodyDef.fixedRotation = true;
+    bodyDef.userData = this;
     b2Body* body = game->world()->CreateBody(&bodyDef);
     
     b2PolygonShape dynamicBox;
@@ -30,7 +32,6 @@ Hero::Hero(Game *game, const MapObject& obj, const Image& image)
     fixtureDef.shape = &dynamicBox;
     fixtureDef.density = 0.8f;
     fixtureDef.friction = 0.3f;
-    fixtureDef.userData = this;
 
     body->CreateFixture(&fixtureDef);
 
@@ -74,4 +75,24 @@ void Hero::draw(Engine *e)
     float h = 1.0f;
     e->drawImage(pos.x - w/2, pos.y - h/2,
                  w, h, m_image);
+}
+
+//------------------------------------------------------------------------------
+
+void Hero::handleBeginContact(GameObject *other)
+{
+    if (m_boxesInContact == 0)
+        std::cout << "is touching" << std::endl;
+    
+    ++m_boxesInContact;
+}
+
+//------------------------------------------------------------------------------
+
+void Hero::handleEndContact(GameObject *other)
+{
+    --m_boxesInContact;
+
+    if (m_boxesInContact == 0)
+        std::cout << "is not touching" << std::endl;
 }

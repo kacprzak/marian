@@ -13,8 +13,8 @@ class Playable : boost::noncopyable
     virtual ~Playable() {}
 
     /**  Use these if you need Engine to create or clean stuff */
-    virtual void initialize(Engine * /*e*/) {};
-    virtual void cleanup(Engine * /*e*/) {};
+    virtual void initialize(Engine * /*e*/) {}
+    virtual void cleanup(Engine * /*e*/) {}
 
     virtual bool processInput(const SDL_Event& event) = 0;
     virtual void update(Engine *e, float elapsedTime) = 0;

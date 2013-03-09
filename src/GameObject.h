@@ -10,15 +10,18 @@ class b2Body; // Box2D
 class GameObject : public Playable
 {
  public:
-    GameObject(Game *game, b2Body *body)
+    GameObject(Game *game, b2Body *body = nullptr)
         : m_game(game)
         , m_body(body)
     {}
 
+    virtual void handleBeginContact(GameObject * /*other*/) {}
+    virtual void handleEndContact(GameObject * /*other*/) {}
+
     // Playable interface impl
-    bool processInput(const SDL_Event& /*event*/) { return true; };
-    void update(Engine * /*e*/, float /*elapsedTime*/) {};
-    void draw(Engine * /*e*/) {};
+    bool processInput(const SDL_Event& /*event*/) override { return true; }
+    void update(Engine * /*e*/, float /*elapsedTime*/) override {}
+    void draw(Engine * /*e*/) override {}
 
  protected:
     Game   *m_game;

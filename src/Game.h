@@ -12,6 +12,14 @@
 
 class GameObject;
 
+class ContactListener : public b2ContactListener
+{
+    void BeginContact(b2Contact *contact) override;
+    void EndContact(b2Contact *contact) override;
+};
+
+//------------------------------------------------------------------------------
+
 class Game : public Playable
 {
  public:
@@ -21,9 +29,9 @@ class Game : public Playable
     // Playable interface
     void initialize(Engine *e);
 
-    bool processInput(const SDL_Event& event);
-    void update(Engine *e, float elapsedTime);
-    void draw(Engine *e);
+    bool processInput(const SDL_Event& event) override;
+    void update(Engine *e, float elapsedTime) override;
+    void draw(Engine *e) override;
 
     Map *map() { return &m_map; }
     b2World *world() { return m_world; }
@@ -37,6 +45,7 @@ class Game : public Playable
     b2World   *m_world;
     DebugDraw *m_debugDraw;
     bool       m_drawDebugData;
+    ContactListener m_contactListener;
 
     FpsCounter m_fpsCounter;
 };

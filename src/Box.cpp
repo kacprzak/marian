@@ -6,7 +6,7 @@
 #include <Box2D/Box2D.h>
 
 Box::Box(Game *game, const MapObject& obj, const Image& image)
-    : GameObject(game, nullptr)
+    : GameObject(game)
     , m_image(image)
 {
     float hw = obj.width / 2;
@@ -17,6 +17,7 @@ Box::Box(Game *game, const MapObject& obj, const Image& image)
     // Set origin in center
     bodyDef.position.Set(obj.x + hw, obj.y + hh);
     //bodyDef.fixedRotation = true;
+    bodyDef.userData = this;
     b2Body* body = game->world()->CreateBody(&bodyDef);
     
     b2PolygonShape dynamicBox;
@@ -27,7 +28,6 @@ Box::Box(Game *game, const MapObject& obj, const Image& image)
     fixtureDef.density = 0.8f;
     fixtureDef.friction = 0.3f;
     fixtureDef.restitution = 0.4f;
-    fixtureDef.userData = this;
 
     body->CreateFixture(&fixtureDef);
 

@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[])
 {
-    Engine *e = new Engine("Marian", 1024, 768);
+    Engine *e = new Engine("Marian", 800, 600);
     Game *game = new Game;
 
     e->mainLoop(game);

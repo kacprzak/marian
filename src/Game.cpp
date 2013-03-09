@@ -14,6 +14,7 @@ Game::Game()
     b2Vec2 gravity(0.0f, -9.8f);
     m_world = new b2World(gravity);
     m_world->SetAllowSleeping(true);
+    m_world->SetContactListener(&m_contactListener);
     
     // Debug drawing
     m_debugDraw = new DebugDraw;
@@ -132,4 +133,32 @@ void Game::toggleDrawDebug()
     }
 
     m_drawDebugData = !m_drawDebugData;
+}
+
+//------------------------------------------------------------------------------
+
+void ContactListener::BeginContact(b2Contact *contact)
+{
+    void *bodyAUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+    void *bodyBUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+    if ( bodyAUserData && bodyBUserData ) {
+        GameObject *gameObjectA = static_cast<GameObject *>(bodyAUserData);
+        GameObject *gameObjectB = static_cast<GameObject *>(bodyBUserData);
+        gameObjectA->handleBeginContact(gameObjectB);
+        gameObjectB->handleBeginContact(gameObjectA);
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void ContactListener::EndContact(b2Contact *contact)
+{
+    void *bodyAUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+    void *bodyBUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+    if ( bodyAUserData && bodyBUserData ) {
+        GameObject *gameObjectA = static_cast<GameObject *>(bodyAUserData);
+        GameObject *gameObjectB = static_cast<GameObject *>(bodyBUserData);
+        gameObjectA->handleEndContact(gameObjectB);
+        gameObjectB->handleEndContact(gameObjectA);
+    }
 }
