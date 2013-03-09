@@ -26,11 +26,14 @@ void ResourceMgr::release()
 bool ResourceMgr::addTexture(const std::string& filename)
 {
     Texture *tex = new Texture;
+    std::string fullpath = dataFolder + filename;
 
-    if(!tex->loadFromFile(dataFolder + filename))
+    if(!tex->loadFromFile(fullpath))
         return false;
 
     m_textures.push_back(std::make_pair(filename, tex));
+    std::cout << "Loaded texture from: " << fullpath << std::endl;
+
     return true;
 }
 
@@ -43,6 +46,7 @@ void ResourceMgr::releaseTextures()
     }
     m_textures.clear();
 }
+
 
 const Texture* ResourceMgr::getTexture(const std::string& filename)
 {

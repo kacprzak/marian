@@ -14,17 +14,17 @@
 #include "Playable.h"
 #include "Image.h"
 
-class SdlError : public std::exception
+class EngineError : public std::exception
 {
  public:
-    SdlError(const std::string& msg, char *sdlError)
+    EngineError(const std::string& msg, char *sdlError)
         : m_msg(msg)
         , m_sdlError(sdlError)
     {
         //
     }
 
-    ~SdlError() throw() {}
+    ~EngineError() throw() {}
 
 #ifdef _MSC_VER
     const char* what() const //noexcept (MSVC er C3646)
@@ -46,7 +46,8 @@ class SdlError : public std::exception
 class Engine
 {
  public:
-    Engine(const std::string& title, int screenWidth, int screenHeight);
+    Engine(const std::string& title, int screenWidth, int screenHeight,
+           bool screenFull = false);
     ~Engine();
 
     void mainLoop(Playable *game);
@@ -82,6 +83,7 @@ class Engine
     std::string m_titile;
     int m_screenWidth;
     int m_screenHeight;
+    bool m_screenFull;
 
     float m_translate_x;
     float m_translate_y;

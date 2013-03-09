@@ -16,10 +16,12 @@ const float  PI_F = 3.14159265358979f;
 #define SCALE 32
 #define ROUND 1 // Retro style pixel perfect rendering
 
-Engine::Engine(const std::string& title, int screenWidth, int screenHeight)
+Engine::Engine(const std::string& title, int screenWidth, int screenHeight,
+               bool screenFull)
     : m_titile(title)
     , m_screenWidth(screenWidth)
     , m_screenHeight(screenHeight)
+    , m_screenFull(screenFull)
     , m_translate_x(0.0f)
     , m_translate_y(0.0f)
     , m_translate_z(0.0f)
@@ -30,7 +32,7 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight)
         initializeSDL();
         initializeOpenGL();
         SDL_WM_SetCaption(title.c_str(), title.c_str());
-    } catch (SdlError e) {
+    } catch (EngineError e) {
         SDL_Quit();
         throw e;
     }
@@ -246,14 +248,14 @@ void Engine::initializeSDL()
     std::cout << "Initializing SDL...\n";
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        throw SdlError("Could not initialize SDL", SDL_GetError());  
+        throw EngineError("Could not initialize SDL", SDL_GetError());  
     }
 
     /* Some video inforamtion */
     const SDL_VideoInfo *info = SDL_GetVideoInfo();
   
     if (!info) {
-        throw SdlError("Video query failed", SDL_GetError());
+        throw EngineError("Video query failed", SDL_GetError());
     }
 
     int screen_bpp = info->vfmt->BitsPerPixel;
@@ -271,6 +273,9 @@ void Engine::initializeSDL()
 
     int screen_flags = SDL_OPENGL;
 
+    if (m_screenFull)
+        screen_flags |= SDL_FULLSCREEN;
+
     std::cout << "Screen: " << m_screenWidth << "x" << m_screenHeight
               << "x" << screen_bpp << "\n";
     // Screen surface
@@ -278,7 +283,7 @@ void Engine::initializeSDL()
                                            screen_bpp, screen_flags);
 
     if (!screen) {
-        throw SdlError("Setting video mode failed", SDL_GetError());
+        throw EngineError("Setting video mode failed", SDL_GetError());
     }
 
     SDL_ShowCursor(SDL_DISABLE);

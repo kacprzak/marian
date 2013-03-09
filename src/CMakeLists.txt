@@ -13,6 +13,7 @@ set( marian_HDRS
   Map.h
   Playable.h
   ResourceMgr.h
+  ScriptMgr.h
   Texture.h
   Util.h
   Vect.h
@@ -28,6 +29,7 @@ set( marian_SRCS
   Hero.cpp
   Map.cpp
   ResourceMgr.cpp
+  ScriptMgr.cpp
   Texture.cpp
   Util.cpp
   main.cpp
@@ -41,8 +43,12 @@ add_executable( marian
 set_target_properties( marian PROPERTIES DEBUG_POSTFIX _d)
 
 target_link_libraries( marian
-  tmx ${BOX2D_LIBRARY} ${SDL_LIBRARY}
-  ${SDLIMAGE_LIBRARY} ${OPENGL_LIBRARIES}
+  tmx
+  ${BOX2D_LIBRARY}
+  ${SDL_LIBRARY}
+  ${SDLIMAGE_LIBRARY}
+  ${OPENGL_LIBRARIES}
+  ${LUA_LIBRARIES}
 #  ${Boost_LIBRARIES}
 #  ${GLUT_LIBRARY}
 )

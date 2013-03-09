@@ -19,6 +19,7 @@ find_package( Boost COMPONENTS unit_test_framework )
 find_package( Box2D REQUIRED )
 #find_package( GLUT REQUIRED )
 find_package( ZLIB REQUIRED )
+find_package( Lua51 REQUIRED )
 
 set( CMAKE_DEBUG_POSTFIX "_d" )
 
@@ -32,11 +33,13 @@ include_directories(
   ${BOX2D_INCLUDE_DIR}
 #  ${GLUT_INCLUDE_DIRS}
   ${ZLIB_INCLUDE_DIR}
+  ${LUA_INCLUDE_DIR}
 )
 
 add_subdirectory( tmx )
 add_subdirectory( src )
 add_subdirectory( media )
+add_subdirectory( scripts )
 
 if ( Boost_UNIT_TEST_FRAMEWORK_FOUND ) 
   enable_testing()

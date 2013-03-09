@@ -126,8 +126,6 @@ GLuint load_texture(const char *filename, int *w, int *h)
     // Clean up
     SDL_FreeSurface(surface);
 
-    std::cout << "Loaded texture from: " << filename << std::endl;
-
     return textureid;
 }
 
