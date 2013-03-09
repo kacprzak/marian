@@ -20,12 +20,15 @@ class GameObjectFactory
         if (obj.name == "hero") {
             // Hero
             const Image& img = game->map()->imageForTile(348);
-            go = new Hero(game, obj, img);
+            go = new Hero(game, img,
+                          obj.x, obj.y,
+                          obj.width, obj.height);
 
         } else if (obj.type == "Box") {
             const Image& img = game->map()->imageForTile(237);
-            go = new Box(game, obj, img);
-            
+            go = new Box(game, img,
+                         obj.x, obj.y,
+                         obj.width, obj.height);            
         } else {
             // Static collision shape
             go = new Ground(game, obj);  
@@ -33,6 +36,24 @@ class GameObjectFactory
         assert(go);
         return go;
     }
+
+    //--------------------------------------------------------------------------
+
+    static GameObject *create(Game *game,
+                              const std::string& type,
+                              const std::string& name,
+                              float x, float y)
+    {
+        GameObject *go = nullptr;
+
+        if (type == "Box") {
+            const Image& img = game->map()->imageForTile(237);
+            go = new Box(game, img, x, y);
+        }
+        assert(go);
+        return go;
+    }
+
 };
 
 #endif

@@ -51,6 +51,7 @@ class Engine
     ~Engine();
 
     void mainLoop(Playable *game);
+    Playable *game() { return m_game; } 
 
     void drawImage(float x, float y, float w, float h, const Image& image) const;
     void drawImage(float x, float y, float w, float h, float rotation,

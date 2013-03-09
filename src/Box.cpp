@@ -5,17 +5,19 @@
 #include "Game.h"
 #include <Box2D/Box2D.h>
 
-Box::Box(Game *game, const MapObject& obj, const Image& image)
+Box::Box(Game *game, const Image& image,
+         float x, float y,
+         float w, float h)
     : GameObject(game)
     , m_image(image)
 {
-    float hw = obj.width / 2;
-    float hh = obj.height / 2;
+    float hw = w / 2;
+    float hh = h / 2;
 
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     // Set origin in center
-    bodyDef.position.Set(obj.x + hw, obj.y + hh);
+    bodyDef.position.Set(x + hw, y + hh);
     //bodyDef.fixedRotation = true;
     bodyDef.userData = this;
     b2Body* body = game->world()->CreateBody(&bodyDef);

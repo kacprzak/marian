@@ -4,6 +4,7 @@
 
 #include "Playable.h"
 #include <vector>
+#include <string>
 #include "Map.h"
 #include "FpsCounter.h"
 
@@ -35,6 +36,10 @@ class Game : public Playable
 
     Map *map() { return &m_map; }
     b2World *world() { return m_world; }
+
+    void addGameObject(const std::string& type,
+                       const std::string& name,
+                       float x, float y);
 
  private:
     void toggleDrawDebug();

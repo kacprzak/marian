@@ -12,7 +12,9 @@ class Engine;
 class Hero : public GameObject
 {
  public:
-    Hero(Game *game, const MapObject& obj, const Image& image);
+    Hero(Game *game, const Image& image,
+         float x, float y,
+         float w, float h);
   
     void update(Engine *e, float elapsedTime) override;
     void draw(Engine *e) override;

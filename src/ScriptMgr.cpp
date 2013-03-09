@@ -2,9 +2,29 @@
 #include "ScriptMgr.h"
 #include <iostream>
 
+#include "Game.h"
+#include "Engine.h"
+extern Engine *engine;
+
+static int l_addBox(lua_State *L)
+{
+    // get args from Lua
+    float x = lua_tonumber(L, 1);
+    float y = lua_tonumber(L, 2);
+
+    Game *currGame = static_cast<Game *>(engine->game());
+    currGame->addGameObject("Box", "Box45", x, y);
+
+    return 0;
+} 
+
+//------------------------------------------------------------------------------
+
 ScriptMgr::ScriptMgr()
 {
     L = luaL_newstate();
+
+    lua_register(L, "addBox", l_addBox);
 
     std::cout << "ScriptMgr created\n";
 }
@@ -25,14 +45,14 @@ void ScriptMgr::setDataFolder(const std::string& folder)
 
 //------------------------------------------------------------------------------
 
-bool ScriptMgr::addScript(const std::string& filename)
+bool ScriptMgr::executeScript(const std::string& filename)
 {
     std::string fullpath = dataFolder + filename;
     if (luaL_dofile(L, fullpath.c_str())) {
         throw ScriptMgrError(lua_tostring(L, -1));
     }
 
-    std::cout << "Loaded script from: " << fullpath << std::endl;
+    std::cout << "Executed script from: " << fullpath << std::endl;
     return true;
 }
 

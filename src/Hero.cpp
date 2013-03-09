@@ -8,19 +8,21 @@
 
 #define JUMP_DELAY 1.0f
 
-Hero::Hero(Game *game, const MapObject& obj, const Image& image)
+Hero::Hero(Game *game, const Image& image,
+           float x, float y,
+           float w, float h)
     : GameObject(game)
     , m_jumpTimeout(0.0f)
     , m_image(image)
     , m_boxesInContact(0)
 {
-    float hw = obj.width / 2;
-    float hh = obj.height / 2;
+    float hw = w / 2;
+    float hh = h / 2;
 
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     // Set origin in center
-    bodyDef.position.Set(obj.x + hw, obj.y + hh);
+    bodyDef.position.Set(x + hw, y + hh);
     bodyDef.fixedRotation = true;
     bodyDef.userData = this;
     b2Body* body = game->world()->CreateBody(&bodyDef);

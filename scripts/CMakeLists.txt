@@ -1,5 +1,6 @@
 set ( script_FILES
   startup.lua
+  map2_init.lua
 )
 
 file( COPY ${script_FILES}

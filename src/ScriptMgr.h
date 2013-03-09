@@ -49,7 +49,7 @@ class ScriptMgr : boost::noncopyable
     void setDataFolder(const std::string& folder);
 
     // Scripts management
-    bool addScript(const std::string& filename);
+    bool executeScript(const std::string& filename);
 
     int  getGlobalInt(const std::string& varname);
     bool getGlobalBool(const std::string& varname);

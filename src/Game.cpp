@@ -6,6 +6,7 @@
 #include "GameObject.h"
 #include "GameObjectFactory.h"
 #include "Util.h"
+#include "ScriptMgr.h"
 
 #include <iostream>
 
@@ -59,6 +60,8 @@ void Game::initialize(Engine *e)
         std::vector<int> color = hexColorToRgb(bgColor);
         e->setBackgroundColor(color[0], color[1], color[2]);
     }
+
+    ScriptMgr::instance().executeScript("map2_init.lua");
 }
 
 //------------------------------------------------------------------------------
@@ -119,6 +122,14 @@ void Game::draw(Engine *e)
 
         glPopAttrib();
     }
+}
+
+//------------------------------------------------------------------------------
+
+void Game::addGameObject(const std::string& type, const std::string& name,
+                         float x, float y)
+{
+    m_gameObjects.push_back(GameObjectFactory::create(this, type, name, x, y));        
 }
 
 //------------------------------------------------------------------------------

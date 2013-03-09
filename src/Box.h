@@ -10,9 +10,11 @@
 class Box : public GameObject
 {
  public:
-    Box(Game *game, const MapObject& obj, const Image& image);
+    Box(Game *game, const Image& image,
+        float x, float y,
+        float w = 1.0f, float h = 1.0f);
 
-    void draw(Engine *e);
+    void draw(Engine *e) override;
 
  private:
     Image m_image;
