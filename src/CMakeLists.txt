@@ -46,3 +46,9 @@ target_link_libraries( marian
 #  ${Boost_LIBRARIES}
 #  ${GLUT_LIBRARY}
 )
+
+add_custom_target(run
+    COMMAND ${CMAKE_BINARY_DIR}/marian_d
+    DEPENDS marian
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)

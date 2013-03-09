@@ -42,4 +42,3 @@ if ( Boost_UNIT_TEST_FRAMEWORK_FOUND )
   enable_testing()
   add_subdirectory( test )
 endif()
-
