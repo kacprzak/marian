@@ -9,8 +9,8 @@ extern Engine *engine;
 static int l_addBox(lua_State *L)
 {
     // get args from Lua
-    float x = lua_tonumber(L, 1);
-    float y = lua_tonumber(L, 2);
+    float x = luaL_checknumber(L, -2);
+    float y = luaL_checknumber(L, -1);
 
     Game *currGame = static_cast<Game *>(engine->game());
     currGame->addGameObject("Box", "Box45", x, y);
