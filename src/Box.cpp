@@ -26,6 +26,8 @@ Box::Box(Game *game, const Image& image,
     dynamicBox.SetAsBox(hw, hh);
     
     b2FixtureDef fixtureDef;
+    fixtureDef.filter.categoryBits = category();
+    fixtureDef.filter.maskBits = GROUND | BOX | HERO;
     fixtureDef.shape = &dynamicBox;
     fixtureDef.density = 0.8f;
     fixtureDef.friction = 0.3f;

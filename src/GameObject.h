@@ -3,6 +3,7 @@
 #define GAME_OBJECT_H
 
 #include "Playable.h"
+#include "GameObjectCategory.h"
 
 class Game;
 class b2Body; // Box2D
@@ -14,6 +15,8 @@ class GameObject : public Playable
         : m_game(game)
         , m_body(body)
     {}
+
+    virtual GameObjectCategory category() = 0;
 
     virtual void handleBeginContact(GameObject * /*other*/) {}
     virtual void handleEndContact(GameObject * /*other*/) {}
@@ -28,4 +31,5 @@ class GameObject : public Playable
     b2Body *m_body;
 };
 
-#endif
+#endif // GAME_OBJECT_H
+

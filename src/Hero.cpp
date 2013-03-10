@@ -31,6 +31,8 @@ Hero::Hero(Game *game, const Image& image,
     dynamicBox.SetAsBox(hw, hh);
     
     b2FixtureDef fixtureDef;
+    fixtureDef.filter.categoryBits = category();
+    fixtureDef.filter.maskBits = GROUND | BOX | SENSOR;
     fixtureDef.shape = &dynamicBox;
     fixtureDef.density = 0.8f;
     fixtureDef.friction = 0.3f;
@@ -83,6 +85,8 @@ void Hero::draw(Engine *e)
 
 void Hero::handleBeginContact(GameObject *other)
 {
+    if (other->category() != SENSOR) return;
+
     if (m_boxesInContact == 0)
         std::cout << "is touching" << std::endl;
     
@@ -93,6 +97,8 @@ void Hero::handleBeginContact(GameObject *other)
 
 void Hero::handleEndContact(GameObject *other)
 {
+    if (other->category() != SENSOR) return;
+
     --m_boxesInContact;
 
     if (m_boxesInContact == 0)

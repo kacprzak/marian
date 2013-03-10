@@ -9,6 +9,7 @@
 #include "Hero.h"
 #include "Ground.h"
 #include "Box.h"
+#include "Sensor.h"
 
 class GameObjectFactory
 {
@@ -17,8 +18,7 @@ class GameObjectFactory
     {
         GameObject *go = nullptr;
 
-        if (obj.name == "hero") {
-            // Hero
+        if (obj.type == "Hero") {
             const Image& img = game->map()->imageForTile(348);
             go = new Hero(game, img,
                           obj.x, obj.y,
@@ -28,7 +28,11 @@ class GameObjectFactory
             const Image& img = game->map()->imageForTile(237);
             go = new Box(game, img,
                          obj.x, obj.y,
-                         obj.width, obj.height);            
+                         obj.width, obj.height);
+            
+        } else if (obj.type == "Sensor") {
+            go = new Sensor(game, obj);
+  
         } else {
             // Static collision shape
             go = new Ground(game, obj);  
@@ -40,13 +44,13 @@ class GameObjectFactory
     //--------------------------------------------------------------------------
 
     static GameObject *create(Game *game,
-                              const std::string& type,
+                              GameObjectCategory type,
                               const std::string& name,
                               float x, float y)
     {
         GameObject *go = nullptr;
 
-        if (type == "Box") {
+        if (type == BOX) {
             const Image& img = game->map()->imageForTile(237);
             go = new Box(game, img, x, y);
         }

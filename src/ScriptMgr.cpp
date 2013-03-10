@@ -13,7 +13,7 @@ static int l_addBox(lua_State *L)
     float y = luaL_checknumber(L, -1);
 
     Game *currGame = static_cast<Game *>(engine->game());
-    currGame->addGameObject("Box", "Box45", x, y);
+    currGame->addGameObject(BOX, "Box45", x, y);
 
     return 0;
 } 

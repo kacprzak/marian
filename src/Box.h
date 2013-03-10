@@ -14,6 +14,9 @@ class Box : public GameObject
         float x, float y,
         float w = 1.0f, float h = 1.0f);
 
+    GameObjectCategory category() override
+    { return BOX; }
+
     void draw(Engine *e) override;
 
  private:

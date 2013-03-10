@@ -126,7 +126,7 @@ void Game::draw(Engine *e)
 
 //------------------------------------------------------------------------------
 
-void Game::addGameObject(const std::string& type, const std::string& name,
+void Game::addGameObject(GameObjectCategory type, const std::string& name,
                          float x, float y)
 {
     m_gameObjects.push_back(GameObjectFactory::create(this, type, name, x, y));        

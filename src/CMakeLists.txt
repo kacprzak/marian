@@ -6,6 +6,7 @@ set( marian_HDRS
   FpsCounter.h
   Game.h
   GameObject.h
+  GameObjectCategory.h
   GameObjectFactory.h
   Ground.h
   Hero.h
@@ -13,6 +14,7 @@ set( marian_HDRS
   Map.h
   Playable.h
   ResourceMgr.h
+  Sensor.h
   ScriptMgr.h
   Texture.h
   Util.h
@@ -29,6 +31,7 @@ set( marian_SRCS
   Hero.cpp
   Map.cpp
   ResourceMgr.cpp
+  Sensor.cpp
   ScriptMgr.cpp
   Texture.cpp
   Util.cpp

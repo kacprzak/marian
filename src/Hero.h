@@ -19,6 +19,9 @@ class Hero : public GameObject
     void update(Engine *e, float elapsedTime) override;
     void draw(Engine *e) override;
 
+    GameObjectCategory category() override
+    { return HERO; }
+
     void handleBeginContact(GameObject *other) override;
     void handleEndContact(GameObject *other) override;
 

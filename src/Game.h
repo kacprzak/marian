@@ -7,11 +7,10 @@
 #include <string>
 #include "Map.h"
 #include "FpsCounter.h"
+#include "GameObject.h"
 
 #include <Box2D/Box2D.h>
 #include "debugdraw/Render.h"
-
-class GameObject;
 
 class ContactListener : public b2ContactListener
 {
@@ -37,7 +36,7 @@ class Game : public Playable
     Map *map() { return &m_map; }
     b2World *world() { return m_world; }
 
-    void addGameObject(const std::string& type,
+    void addGameObject(GameObjectCategory type,
                        const std::string& name,
                        float x, float y);
 

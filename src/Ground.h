@@ -10,6 +10,9 @@ class Ground : public GameObject
 {
  public:
     Ground(Game *game, const MapObject& obj);
+
+    GameObjectCategory category() override
+    { return GROUND; }
 };
 
 #endif
