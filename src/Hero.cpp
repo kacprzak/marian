@@ -2,20 +2,23 @@
 #include "Hero.h"
 
 #include "Engine.h"
+#include "ResourceMgr.h"
 #include "Game.h"
 #include <iostream>
 #include <Box2D/Box2D.h>
 
 #define JUMP_DELAY 1.0f
 
-Hero::Hero(Game *game, const Image& image,
-           float x, float y,
-           float w, float h)
+Hero::Hero(Game *game, float x, float y, float w, float h)
     : GameObject(game)
     , m_jumpTimeout(0.0f)
-    , m_image(image)
     , m_boxesInContact(0)
 {
+    // Image creation
+    const Texture *tex = ResourceMgr::instance().getTexture("minecraft_tiles_big.png");
+    m_image = std::unique_ptr<Image>(new Image(tex, 224, 256, 256, 288));
+
+    // Physics
     float hw = w / 2;
     float hh = h / 2;
 
@@ -78,7 +81,7 @@ void Hero::draw(Engine *e)
     float w = 1.0f;
     float h = 1.0f;
     e->drawImage(pos.x - w/2, pos.y - h/2,
-                 w, h, m_image);
+                 w, h, *m_image);
 }
 
 //------------------------------------------------------------------------------

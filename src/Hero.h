@@ -6,15 +6,14 @@
 
 #include "Map.h"
 #include "Image.h"
+#include <memory>
 
 class Engine;
 
 class Hero : public GameObject
 {
  public:
-    Hero(Game *game, const Image& image,
-         float x, float y,
-         float w, float h);
+    Hero(Game *game, float x, float y, float w, float h);
   
     void update(Engine *e, float elapsedTime) override;
     void draw(Engine *e) override;
@@ -27,7 +26,7 @@ class Hero : public GameObject
 
  private:
     float m_jumpTimeout;
-    Image m_image;
+    std::unique_ptr<Image> m_image;
 
     int m_boxesInContact;
 };

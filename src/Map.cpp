@@ -290,12 +290,3 @@ void Map::rectForTile(int tileCoords[4], unsigned global_tile_id) const
 
 //------------------------------------------------------------------------------
 
-Image Map::imageForTile(unsigned gid) const
-{
-    std::string imageSource = imageNameForTile(gid);
-    const Texture *tex = ResourceMgr::instance().getTexture(imageSource);
-
-    int tileCoords[4];
-    rectForTile(tileCoords, gid);
-    return Image(tex, tileCoords[0], tileCoords[1], tileCoords[2], tileCoords[3]);
-}

@@ -3,14 +3,17 @@
 
 #include "Engine.h"
 #include "Game.h"
+#include "ResourceMgr.h"
 #include <Box2D/Box2D.h>
 
-Box::Box(Game *game, const Image& image,
-         float x, float y,
-         float w, float h)
+Box::Box(Game *game, float x, float y, float w, float h)
     : GameObject(game)
-    , m_image(image)
 {
+    // Image creation
+    const Texture *tex = ResourceMgr::instance().getTexture("minecraft_tiles_big.png");
+    m_image = std::unique_ptr<Image>(new Image(tex, 256, 480, 288, 512));
+
+    // Physics
     float hw = w / 2;
     float hh = h / 2;
 
@@ -46,5 +49,5 @@ void Box::draw(Engine *e)
     float w = 1.0f;
     float h = 1.0f;
     e->drawImage(pos.x - w/2, pos.y - h/2,
-                 w, h, m_body->GetAngle(), m_image);
+                 w, h, m_body->GetAngle(), *m_image);
 }

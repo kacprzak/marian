@@ -19,16 +19,10 @@ class GameObjectFactory
         GameObject *go = nullptr;
 
         if (obj.type == "Hero") {
-            const Image& img = game->map()->imageForTile(348);
-            go = new Hero(game, img,
-                          obj.x, obj.y,
-                          obj.width, obj.height);
+            go = new Hero(game, obj.x, obj.y, obj.width, obj.height);
 
         } else if (obj.type == "Box") {
-            const Image& img = game->map()->imageForTile(237);
-            go = new Box(game, img,
-                         obj.x, obj.y,
-                         obj.width, obj.height);
+            go = new Box(game, obj.x, obj.y, obj.width, obj.height);
             
         } else if (obj.type == "Sensor") {
             go = new Sensor(game, obj);
@@ -51,8 +45,7 @@ class GameObjectFactory
         GameObject *go = nullptr;
 
         if (type == BOX) {
-            const Image& img = game->map()->imageForTile(237);
-            go = new Box(game, img, x, y);
+            go = new Box(game, x, y);
         }
         assert(go);
         return go;

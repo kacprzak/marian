@@ -6,11 +6,12 @@
 
 #include "Map.h"
 #include "Image.h"
+#include <memory>
 
 class Box : public GameObject
 {
  public:
-    Box(Game *game, const Image& image,
+    Box(Game *game,
         float x, float y,
         float w = 1.0f, float h = 1.0f);
 
@@ -20,7 +21,7 @@ class Box : public GameObject
     void draw(Engine *e) override;
 
  private:
-    Image m_image;
+    std::unique_ptr<Image> m_image;
 };
 
 #endif

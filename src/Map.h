@@ -6,7 +6,6 @@
 #include <vector>
 #include <boost/utility.hpp>
 #include "TmxMap.h"
-#include "Image.h"
 
 class Engine;
 class Layer;
@@ -53,8 +52,6 @@ class Map : boost::noncopyable
 
     std::vector<std::string> externalImages() const;
     std::string backgroundColor() const;
-
-    Image imageForTile(unsigned globalId) const;
 
  private:
     std::string imageNameForTile(unsigned globalId) const;
