@@ -78,7 +78,19 @@ void Hero::update(Engine *e, float elapsedTime)
     } 
 
     // Center view on player
-    e->centerViewOn(centerOfMass.x, centerOfMass.y);
+    float x = centerOfMass.x;
+    float y = centerOfMass.y;
+
+    // Respect map borders
+    float bLeft, bRight, bTop, bBottom;
+    e->viewBounds(&bLeft, &bRight, &bBottom, &bTop);
+    float hw = (bRight - bLeft) / 2.0f;
+    float hh = (bTop - bBottom) / 2.0f;
+    if (x < hw) x = hw;
+    if (y < hh) y = hh;
+    if (x > m_game->map()->width() - hw) x = m_game->map()->width() - hw;
+
+    e->centerViewOn(x, y);
 
     if (m_jumpTimeout > 0.0f)
         m_jumpTimeout -= elapsedTime;

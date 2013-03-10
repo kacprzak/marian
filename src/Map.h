@@ -41,7 +41,8 @@ class Map : boost::noncopyable
     ~Map();
     bool loadFromFile(const std::string& filename);
 
-    //Vector2<float> size() const;
+    int width() const { return m_width; }
+    int height() const { return m_height; }
 
     void draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const;
     void drawLayer(Engine *e, const std::string& layer,
