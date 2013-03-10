@@ -222,8 +222,8 @@ void Engine::drawImage(const Image& image, float x, float y, int scale) const
     const Texture *tex = image.texture();
     const GLfloat *texCoords = image.getTextureCoords();
 
-    float hw = image.pixelWidth() * scale / 2.0f / SCALE;
-    float hh = image.pixelHeight() * scale / 2.0f / SCALE;
+    float hw = (image.pixelWidth() / 2.0f / 32) * scale;
+    float hh = (image.pixelHeight() / 2.0f / 32) * scale;
 
     drawQuad(x - hw, y - hh, 2*hw, 2*hh, tex->textureId(), texCoords);
 }
@@ -233,8 +233,8 @@ void Engine::drawImage(const Image& image, float x, float y, int scale) const
 void Engine::drawImage(const Image& image, float x, float y, float rotation) const
 {
     float deg = rotation * 180.0f / PI_F;
-    float hw = image.pixelWidth() / 2.0f / SCALE;
-    float hh = image.pixelHeight() / 2.0f / SCALE;
+    float hw = image.pixelWidth() / 2.0f / 32;
+    float hh = image.pixelHeight() / 2.0f / 32;
     
     const Texture *tex = image.texture();
     const GLfloat *texCoords = image.getTextureCoords();
