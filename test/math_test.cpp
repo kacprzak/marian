@@ -1,7 +1,6 @@
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE MathTest
 #include <boost/test/unit_test.hpp>
-#include "Vect.h"
 
 BOOST_AUTO_TEST_CASE(intersects_test)
 {

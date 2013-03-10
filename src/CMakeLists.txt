@@ -18,7 +18,6 @@ set( marian_HDRS
   ScriptMgr.h
   Texture.h
   Util.h
-  Vect.h
   debugdraw/Render.h
 )
 

@@ -6,7 +6,6 @@
 #include <vector>
 #include <boost/utility.hpp>
 #include "TmxMap.h"
-#include "Vect.h"
 #include "Image.h"
 
 class Engine;
@@ -43,7 +42,7 @@ class Map : boost::noncopyable
     ~Map();
     bool loadFromFile(const std::string& filename);
 
-    Vector2<float> size() const;
+    //Vector2<float> size() const;
 
     void draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const;
     void drawLayer(Engine *e, const std::string& layer,
@@ -59,7 +58,7 @@ class Map : boost::noncopyable
 
  private:
     std::string imageNameForTile(unsigned globalId) const;
-    Rect<int> rectForTile(unsigned globalId) const;
+    void rectForTile(int tileCoords[4], unsigned globalId) const;
 
     Layer *findLayer(const std::string& layerName) const;
 

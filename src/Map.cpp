@@ -6,6 +6,7 @@
 
 #include <cstring>
 #include <iostream>
+#include <cmath>
 
 class Tile
 {
@@ -14,9 +15,11 @@ public:
         : gid(agid)
         , texture(tex)
     {
-        calculateTextureCoords(tex->w(), tex->h(),
-                               map->rectForTile(gid),
-                               texCoords);
+        int tileCoords[4];
+        map->rectForTile(tileCoords, gid);
+        calculateTextureCoords(texCoords, tex->w(), tex->h(),
+                               tileCoords[0], tileCoords[1],
+                               tileCoords[2], tileCoords[3]);
     }
   
     unsigned       gid;
@@ -262,7 +265,7 @@ std::string Map::imageNameForTile(unsigned global_tile_id) const
 /**
  * Pixel coords rectangle that bounds image on it's texture.
  */
-Rect<int> Map::rectForTile(unsigned global_tile_id) const
+void Map::rectForTile(int tileCoords[4], unsigned global_tile_id) const
 {
     const tmx::Tileset *tileset = m_tmxMap.tilesetForTile(global_tile_id);
   
@@ -279,7 +282,10 @@ Rect<int> Map::rectForTile(unsigned global_tile_id) const
     int opengl_x = local_x * tileset->tileWidth;
     int opengl_y = tileset->imageHeight - (local_y * tileset->tileHeight) - tileset->tileHeight;
   
-    return Rect<int>(opengl_x, opengl_y, tileset->tileWidth, tileset->tileHeight);
+    tileCoords[0] = opengl_x;
+    tileCoords[1] = opengl_y;
+    tileCoords[2] = opengl_x + tileset->tileWidth;
+    tileCoords[3] = opengl_y + tileset->tileHeight;
 }
 
 //------------------------------------------------------------------------------
@@ -289,5 +295,7 @@ Image Map::imageForTile(unsigned gid) const
     std::string imageSource = imageNameForTile(gid);
     const Texture *tex = ResourceMgr::instance().getTexture(imageSource);
 
-    return Image(tex, rectForTile(gid));
+    int tileCoords[4];
+    rectForTile(tileCoords, gid);
+    return Image(tex, tileCoords[0], tileCoords[1], tileCoords[2], tileCoords[3]);
 }

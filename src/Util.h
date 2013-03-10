@@ -9,12 +9,12 @@
 #include <GL/gl.h>
 #include <vector>
 #include <string>
-#include "Vect.h"
 
 GLuint load_texture(const char *filename, int *w, int *h);
 
-void calculateTextureCoords(int texWidth, int texHeight,
-                            const Rect<int>& rect, GLfloat *texCoords);
+void calculateTextureCoords(GLfloat texCoords[8],
+                            int texWidth, int texHeight,
+                            int x0 = 0, int y0 = 0, int x1 = 0, int y1 = 0);
 
 std::vector<int> hexColorToRgb(int hexValue);
 

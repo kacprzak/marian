@@ -129,25 +129,21 @@ GLuint load_texture(const char *filename, int *w, int *h)
     return textureid;
 }
 
-void calculateTextureCoords(int texWidth, int texHeight,
-                            const Rect<int>& rect, GLfloat *texCoords)
+void calculateTextureCoords(GLfloat texCoords[8], int texWidth, int texHeight,
+                            int x0, int y0, int x1, int y1)
 {
-    if (!rect.isNull()) {
-        GLfloat s0 = rect.left()   / (float)texWidth;
-        GLfloat t0 = rect.bottom() / (float)texHeight;
-        GLfloat s1 = rect.right()  / (float)texWidth;
-        GLfloat t1 = rect.top()    / (float)texHeight;
+    if (x1 == 0) x1 = texWidth;
+    if (y1 == 0) y1 = texHeight;
 
-        texCoords[0] = s0; texCoords[1] = t0;
-        texCoords[2] = s1; texCoords[3] = t0;
-        texCoords[4] = s1; texCoords[5] = t1;
-        texCoords[6] = s0; texCoords[7] = t1;      
-    } else {
-        texCoords[0] = 0.0f; texCoords[1] = 0.0f;
-        texCoords[2] = 1.0f; texCoords[3] = 0.0f;
-        texCoords[4] = 1.0f; texCoords[5] = 1.0f;
-        texCoords[6] = 0.0f; texCoords[7] = 1.0f;
-    }
+    GLfloat s0 = x0 / (float)texWidth;
+    GLfloat t0 = y0 / (float)texHeight;
+    GLfloat s1 = x1 / (float)texWidth;
+    GLfloat t1 = y1 / (float)texHeight;
+
+    texCoords[0] = s0; texCoords[1] = t0;
+    texCoords[2] = s1; texCoords[3] = t0;
+    texCoords[4] = s1; texCoords[5] = t1;
+    texCoords[6] = s0; texCoords[7] = t1;
 }
 
 std::vector<int> hexColorToRgb(int hexValue)
