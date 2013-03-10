@@ -9,3 +9,4 @@ marian
 *_test
 
 *.user
+callgrind.out.*

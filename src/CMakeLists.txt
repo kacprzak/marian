@@ -1,6 +1,7 @@
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 set( marian_HDRS
+  Animation.h
   Box.h
   Engine.h
   FpsCounter.h

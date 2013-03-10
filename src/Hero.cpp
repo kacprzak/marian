@@ -15,8 +15,17 @@ Hero::Hero(Game *game, float x, float y, float w, float h)
     , m_boxesInContact(0)
 {
     // Image creation
-    const Texture *tex = ResourceMgr::instance().getTexture("minecraft_tiles_big.png");
-    m_image = std::unique_ptr<Image>(new Image(tex, 224, 256, 256, 288));
+    const Texture *tex = ResourceMgr::instance().getTexture("MegaMan_001.png");
+    if (!tex) {
+        ResourceMgr::instance().addTexture("MegaMan_001.png");
+        tex = ResourceMgr::instance().getTexture("MegaMan_001.png");
+    }
+
+    int ax = 38;
+    int ax_off = 36;
+    m_animation.setReversable(true);
+    m_animation.addFrame(Image(tex, ax, 255, ax + 32, 255 + 32), 1.0f);
+    m_animation.addFrame(Image(tex, ax + ax_off, 255, ax + ax_off + 32, 255 + 32), 0.1f); // Blink
 
     // Physics
     float hw = w / 2;
@@ -49,6 +58,8 @@ Hero::Hero(Game *game, float x, float y, float w, float h)
 
 void Hero::update(Engine *e, float elapsedTime)
 {
+    m_animation.update(elapsedTime);
+
     const b2Vec2& centerOfMass = m_body->GetWorldCenter(); 
 
     if (e->isPressed(SDLK_RIGHT)) {
@@ -78,10 +89,7 @@ void Hero::update(Engine *e, float elapsedTime)
 void Hero::draw(Engine *e)
 {
     const b2Vec2& pos = m_body->GetPosition();
-    float w = 1.0f;
-    float h = 1.0f;
-    e->drawImage(pos.x - w/2, pos.y - h/2,
-                 w, h, *m_image);
+    e->drawImage(m_animation.currentFrame(), pos.x, pos.y + 0.5f, 2);
 }
 
 //------------------------------------------------------------------------------

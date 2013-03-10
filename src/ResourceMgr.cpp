@@ -54,6 +54,5 @@ const Texture* ResourceMgr::getTexture(const std::string& filename)
         if (item.first == filename)
             return item.second;
     }
-
     return 0;
 }

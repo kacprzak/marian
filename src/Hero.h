@@ -5,7 +5,7 @@
 #include "GameObject.h"
 
 #include "Map.h"
-#include "Image.h"
+#include "Animation.h"
 #include <memory>
 
 class Engine;
@@ -26,7 +26,7 @@ class Hero : public GameObject
 
  private:
     float m_jumpTimeout;
-    std::unique_ptr<Image> m_image;
+    Animation m_animation;
 
     int m_boxesInContact;
 };

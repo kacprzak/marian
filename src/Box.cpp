@@ -48,6 +48,5 @@ void Box::draw(Engine *e)
     const b2Vec2& pos = m_body->GetPosition();
     float w = 1.0f;
     float h = 1.0f;
-    e->drawImage(pos.x - w/2, pos.y - h/2,
-                 w, h, m_body->GetAngle(), *m_image);
+    e->drawImage(*m_image, pos.x - w/2, pos.y - h/2, m_body->GetAngle());
 }
