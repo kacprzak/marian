@@ -7,11 +7,10 @@
 
 class Animation
 {
-public:
+ public:
     Animation()
         : m_currentTime(0.0f)
         , m_fullTime(0.0f)
-        , m_frameDuartion(1.0f)
         , m_reverse(false)
         , m_playingBack(false)
         , m_currentFrameIndex(0)
@@ -63,12 +62,11 @@ public:
 
     void setReversable(bool reversable) { m_reverse = reversable; }
 
-private:
+ private:
     std::vector<Image> m_frames;
     std::vector<float> m_frameDurations;
     float m_currentTime;
     float m_fullTime;
-    float m_frameDuartion;
     bool m_reverse;
     bool m_playingBack;
     int m_currentFrameIndex;
