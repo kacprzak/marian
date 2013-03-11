@@ -15,15 +15,13 @@ int main(int argc, char *argv[])
     int screenHeight = sm.getGlobalInt("screen_height");
     bool fullScreen = sm.getGlobalBool("screen_full");
 
-    Engine *e = new Engine("Marian",
-                           screenWidth, screenHeight,
-                           fullScreen);
+    Engine::init("Marian", screenWidth, screenHeight, fullScreen);
     Game *game = new Game;
 
-    e->mainLoop(game);
+    Engine::instance().mainLoop(game);
 
-    delete e;
     delete game;
+    Engine::shutdown();
 
     return 0;
 }

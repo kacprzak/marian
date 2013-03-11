@@ -14,10 +14,31 @@ const double PI   = 3.141592653589793238462;
 const float  PI_F = 3.14159265358979f;
 
 // Global pointer (for use in Lua exposed functions)
-Engine *engine = nullptr;
+Engine *Engine::s_instance = nullptr;
 
 #define SCALE 32
 #define ROUND 1 // Retro style pixel perfect rendering
+
+void Engine::init(const std::string& title, int screenWidth, int screenHeight,
+                  bool screenFull)
+{
+    if (s_instance) {
+        std::cerr << "Engine is initialized!";
+        return;
+    }
+
+    s_instance = new Engine(title, screenWidth, screenHeight, screenFull);
+}
+
+//------------------------------------------------------------------------------
+
+void Engine::shutdown()
+{
+    delete s_instance;
+    s_instance = nullptr;
+}
+
+//------------------------------------------------------------------------------
 
 Engine::Engine(const std::string& title, int screenWidth, int screenHeight,
                bool screenFull)
@@ -44,9 +65,6 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight,
     for (int i = 0; i < SDLK_LAST; ++i) {
         m_keys[i] = false;
     }
-
-    // Set global pointer
-    engine = this;
 }
 
 //------------------------------------------------------------------------------

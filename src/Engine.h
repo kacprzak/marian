@@ -46,9 +46,14 @@ class EngineError : public std::exception
 class Engine
 {
  public:
-    Engine(const std::string& title, int screenWidth, int screenHeight,
-           bool screenFull = false);
-    ~Engine();
+    static Engine& instance()
+    {
+        return *s_instance;
+    }
+
+    static void init(const std::string& title, int screenWidth, int screenHeight,
+                     bool screenFull = false);
+    static void shutdown();
 
     void mainLoop(Playable *game);
     Playable *game() { return m_game; } 
@@ -70,6 +75,10 @@ class Engine
     int screenHeight() const { return m_screenHeight; }
 
  private:
+    Engine(const std::string& title, int screenWidth, int screenHeight,
+           bool screenFull = false);
+    ~Engine();
+
     void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h) const;
     void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
                   const GLfloat *texCoords) const;
@@ -79,6 +88,9 @@ class Engine
     bool processEvents();
     void update(float elapsedTime);
     void draw();
+
+    // Singleton instance
+    static Engine *s_instance;
 
     std::string m_titile;
     int m_screenWidth;

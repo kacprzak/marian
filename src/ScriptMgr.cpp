@@ -4,7 +4,6 @@
 
 #include "Game.h"
 #include "Engine.h"
-extern Engine *engine;
 
 static int l_addBox(lua_State *L)
 {
@@ -12,7 +11,7 @@ static int l_addBox(lua_State *L)
     float x = luaL_checknumber(L, -2);
     float y = luaL_checknumber(L, -1);
 
-    Game *currGame = static_cast<Game *>(engine->game());
+    Game *currGame = static_cast<Game *>(Engine::instance().game());
     currGame->addGameObject(BOX, "Box45", x, y);
 
     return 0;
