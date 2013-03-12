@@ -30,6 +30,7 @@ EOS
   File.open(cpp_file, 'w') do |f|
     f.puts <<EOS
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+#include "#{h_file}"
 
 #{klass}::#{klass}()
 {

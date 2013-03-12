@@ -6,6 +6,7 @@
 
 #include "Map.h"
 #include "Animation.h"
+#include "StateMachine.h"
 #include <memory>
 
 class Engine;
@@ -28,7 +29,7 @@ class Hero : public GameObject
     float m_jumpTimeout;
     Animation m_animation;
 
-    int m_boxesInContact;
+    StateMachine<Hero> m_stateMachine;
 };
 
 #endif

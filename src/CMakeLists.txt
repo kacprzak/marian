@@ -17,6 +17,7 @@ set( marian_HDRS
   ResourceMgr.h
   Sensor.h
   ScriptMgr.h
+  StateMachine.h
   Texture.h
   Util.h
   debugdraw/Render.h

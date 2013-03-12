@@ -235,33 +235,20 @@ void Engine::drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
 
 //------------------------------------------------------------------------------
 
-void Engine::drawImage(const Image& image, float x, float y, int scale) const
-{
-    const Texture *tex = image.texture();
-    const GLfloat *texCoords = image.getTextureCoords();
-
-    float hw = (image.pixelWidth() / 2.0f / 32) * scale;
-    float hh = (image.pixelHeight() / 2.0f / 32) * scale;
-
-    drawQuad(x - hw, y - hh, 2*hw, 2*hh, tex->textureId(), texCoords);
-}
-
-//------------------------------------------------------------------------------
-
 void Engine::drawImage(const Image& image, float x, float y, float rotation) const
 {
     float deg = rotation * 180.0f / PI_F;
-    float hw = image.pixelWidth() / 2.0f / 32;
-    float hh = image.pixelHeight() / 2.0f / 32;
+    float hw = image.width()  / 2.0f;
+    float hh = image.height() / 2.0f;
     
     const Texture *tex = image.texture();
     const GLfloat *texCoords = image.getTextureCoords();
 
     glPushMatrix();
-    glTranslatef(x + hw, y + hh, 0.0f);
+    glTranslatef(x, y, 0.0f);
     glRotatef(deg, 0.0f, 0.0f, 1.0f);
 
-    drawQuad(0.0f - hw, 0.0f - hh, 2*hw, 2*hh, tex->textureId(), texCoords);
+    drawQuad(-hw, -hh, image.width(), image.height(), tex->textureId(), texCoords);
 
     glPopMatrix();
 }

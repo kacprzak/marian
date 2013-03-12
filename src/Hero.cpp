@@ -12,8 +12,10 @@
 Hero::Hero(Game *game, float x, float y, float w, float h)
     : GameObject(game)
     , m_jumpTimeout(0.0f)
-    , m_boxesInContact(0)
+    , m_stateMachine(nullptr, 0)
 {
+    m_stateMachine.setOwner(this);
+
     // Image creation
     const Texture *tex = ResourceMgr::instance().getTexture("MegaMan_001.png");
     if (!tex) {
@@ -24,8 +26,12 @@ Hero::Hero(Game *game, float x, float y, float w, float h)
     int ax = 38;
     int ax_off = 36;
     m_animation.setReversable(true);
-    m_animation.addFrame(Image(tex, ax, 255, ax + 32, 255 + 32), 1.0f);
-    m_animation.addFrame(Image(tex, ax + ax_off, 255, ax + ax_off + 32, 255 + 32), 0.1f); // Blink
+    Image idleFrame1(tex, ax, 255, ax + 32, 255 + 32);
+    idleFrame1.scale(2.0f);
+    m_animation.addFrame(idleFrame1, 1.0f);
+    Image idleFrame2(tex, ax + ax_off, 255, ax + ax_off + 32, 255 + 32);
+    idleFrame2.scale(2.0f);
+    m_animation.addFrame(idleFrame2, 0.1f); // Blink
 
     // Physics
     float hw = w / 2;
@@ -101,7 +107,7 @@ void Hero::update(Engine *e, float elapsedTime)
 void Hero::draw(Engine *e)
 {
     const b2Vec2& pos = m_body->GetPosition();
-    e->drawImage(m_animation.currentFrame(), pos.x, pos.y + 0.5f, 2);
+    e->drawImage(m_animation.currentFrame(), pos.x, pos.y + 0.5f);
 }
 
 //------------------------------------------------------------------------------
@@ -110,10 +116,7 @@ void Hero::handleBeginContact(GameObject *other)
 {
     if (other->category() != SENSOR) return;
 
-    if (m_boxesInContact == 0)
-        std::cout << "is touching" << std::endl;
-    
-    ++m_boxesInContact;
+    std::cout << "is touching" << std::endl;
 }
 
 //------------------------------------------------------------------------------
@@ -122,8 +125,5 @@ void Hero::handleEndContact(GameObject *other)
 {
     if (other->category() != SENSOR) return;
 
-    --m_boxesInContact;
-
-    if (m_boxesInContact == 0)
-        std::cout << "is not touching" << std::endl;
+    std::cout << "is not touching" << std::endl;
 }

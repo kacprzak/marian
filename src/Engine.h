@@ -58,8 +58,7 @@ class Engine
     void mainLoop(Playable *game);
     Playable *game() { return m_game; } 
 
-    void drawImage(const Image& image, float x, float y, int scale = 1) const;
-    void drawImage(const Image& image, float x, float y, float rotation) const;
+    void drawImage(const Image& image, float x, float y, float rotation = 0.0f) const;
     void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
                   GLuint textureId, const GLfloat *texCoords) const;
 

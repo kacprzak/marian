@@ -17,6 +17,8 @@ class Image {
         : m_texture(texture)
         , m_pixelWidth(m_texture->w())
         , m_pixelHeight(m_texture->h())
+        , m_width(1.0f)
+        , m_height(1.0f)
     {
         calculateTextureCoords(m_texCoords, texture->w(), texture->h());
     }
@@ -25,6 +27,8 @@ class Image {
         : m_texture(texture)
         , m_pixelWidth(x1 - x0)
         , m_pixelHeight(y1 - y0)
+        , m_width(1.0f)
+        , m_height(1.0f)
     {
         calculateTextureCoords(m_texCoords, texture->w(), texture->h(),
                                x0, y0, x1, y1);
@@ -33,6 +37,17 @@ class Image {
     int pixelWidth() const  { return m_pixelWidth; }
     int pixelHeight() const { return m_pixelHeight; }
 
+    float width() const  { return m_width;  }
+    float height() const { return m_height; }
+    void setWidth(float w)  { m_width = w;  }
+    void setHeight(float h) { m_height = h; }
+
+    void scale(float factor)
+    {
+        m_width *= factor;
+        m_height *= factor;
+    }
+
     const Texture *texture() const { return m_texture; }
     const GLfloat *getTextureCoords() const { return m_texCoords; }
     
@@ -40,7 +55,7 @@ class Image {
     {
         std::stringstream ss;
         ss << "Image: {" << this
-           << ", size: {" << m_pixelWidth << ", " << m_pixelHeight << "}"
+           << ", pixelSize: {" << m_pixelWidth << ", " << m_pixelHeight << "}"
            << ", texId: " << m_texture->textureId() << "}";
         return ss.str();
     }
@@ -49,6 +64,8 @@ class Image {
     const Texture *m_texture;
     int            m_pixelWidth;
     int            m_pixelHeight;
+    float          m_width;
+    float          m_height;
     GLfloat        m_texCoords[8];
 };
 
