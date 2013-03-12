@@ -4,10 +4,121 @@
 #include "Engine.h"
 #include "ResourceMgr.h"
 #include "Game.h"
+#include "Animation.h"
 #include <iostream>
 #include <Box2D/Box2D.h>
 
 #define JUMP_DELAY 1.0f
+
+enum HeroStateId {
+    STAND = 1,
+    RUN
+};
+
+//==============================================================================
+
+class HeroState : public State<Hero>
+{
+ public:
+    HeroState(StateMachine<Hero>& stateMachine)
+        : State<Hero>()
+        , m_stateMachine(stateMachine)
+    {}
+
+    virtual void onEnter(Hero *owner, int prevStateId) override {}
+    virtual void onExit(Hero *owner, int nextStateId) override {}
+
+    virtual void update(Engine *e, float elapsedTime) = 0;
+    virtual void draw(Engine *e) = 0;
+
+    StateMachine<Hero>& m_stateMachine;
+};
+
+//==============================================================================
+
+class StandHeroState : public HeroState
+{
+ public:
+    StandHeroState(StateMachine<Hero>& stateMachine)
+        : HeroState(stateMachine)
+    {
+        const Texture *tex = ResourceMgr::instance().getTexture("MegaMan_001.png");
+
+        int ax = 38;
+        int ax_off = 36;
+        m_animation.setReversable(true);
+        Image idleFrame1(tex, ax, 255, ax + 32, 255 + 32);
+        idleFrame1.scale(2.0f);
+        m_animation.addFrame(idleFrame1, 1.0f);
+        Image idleFrame2(tex, ax + ax_off, 255, ax + ax_off + 32, 255 + 32);
+        idleFrame2.scale(2.0f);
+        m_animation.addFrame(idleFrame2, 0.1f); // Blink
+    }
+
+    void update(Engine * /*e*/, float elapsedTime) override
+    {
+        m_animation.update(elapsedTime);
+    }
+
+    void draw(Engine *e) override
+    {
+        const b2Vec2& pos = m_stateMachine.owner()->body()->GetPosition();
+        e->drawImage(m_animation.currentFrame(), pos.x, pos.y + 0.5f);
+    }
+
+    Animation m_animation;
+};
+
+//==============================================================================
+
+class RunHeroState : public HeroState
+{
+ public:
+    RunHeroState(StateMachine<Hero>& stateMachine)
+        : HeroState(stateMachine)
+    {
+        const Texture *tex = ResourceMgr::instance().getTexture("MegaMan_001.png");
+
+        int ax = 38 + 36;
+        int ax_off = 36;
+        int ay_off = 36;
+        int ay = 219 - 36;
+        float frameSpeed = 0.25f;
+
+        int y = 0;
+        for (int x = 1 ; x < 2; ++x) {
+            Image runFrame(tex,
+                           ax + (ax_off * x),      ay + (ay_off * y),
+                           ax + (ax_off * x) + 32, ay + (ay_off * y) + 32);
+            runFrame.scale(2.0f);
+            m_animation.addFrame(runFrame, frameSpeed);
+        }
+
+        y = 1;
+        for (int x = 2 ; x >= 0; --x) {
+            Image runFrame(tex,
+                           ax + (ax_off * x),      ay + (ay_off * y),
+                           ax + (ax_off * x) + 32, ay + (ay_off * y) + 32);
+            runFrame.scale(2.0f);
+            m_animation.addFrame(runFrame, frameSpeed);
+        }
+    }
+
+    void update(Engine * /*e*/, float elapsedTime) override
+    {
+        m_animation.update(elapsedTime);
+    }
+
+    void draw(Engine *e) override
+    {
+        const b2Vec2& pos = m_stateMachine.owner()->body()->GetPosition();
+        e->drawImage(m_animation.currentFrame(), pos.x, pos.y + 0.5f);
+    }
+
+    Animation m_animation;
+};
+
+//==============================================================================
 
 Hero::Hero(Game *game, float x, float y, float w, float h)
     : GameObject(game)
@@ -15,23 +126,6 @@ Hero::Hero(Game *game, float x, float y, float w, float h)
     , m_stateMachine(nullptr, 0)
 {
     m_stateMachine.setOwner(this);
-
-    // Image creation
-    const Texture *tex = ResourceMgr::instance().getTexture("MegaMan_001.png");
-    if (!tex) {
-        ResourceMgr::instance().addTexture("MegaMan_001.png");
-        tex = ResourceMgr::instance().getTexture("MegaMan_001.png");
-    }
-
-    int ax = 38;
-    int ax_off = 36;
-    m_animation.setReversable(true);
-    Image idleFrame1(tex, ax, 255, ax + 32, 255 + 32);
-    idleFrame1.scale(2.0f);
-    m_animation.addFrame(idleFrame1, 1.0f);
-    Image idleFrame2(tex, ax + ax_off, 255, ax + ax_off + 32, 255 + 32);
-    idleFrame2.scale(2.0f);
-    m_animation.addFrame(idleFrame2, 0.1f); // Blink
 
     // Physics
     float hw = w / 2;
@@ -58,13 +152,32 @@ Hero::Hero(Game *game, float x, float y, float w, float h)
     body->CreateFixture(&fixtureDef);
 
     m_body = body;
+
+    // States
+    State<Hero> *state = new StandHeroState(m_stateMachine);
+    m_states.push_back(state);
+    m_stateMachine.registerState(STAND, state);
+
+    state = new RunHeroState(m_stateMachine);
+    m_states.push_back(state);
+    m_stateMachine.registerState(RUN, state);
+
+    m_stateMachine.changeState(RUN);
+}
+
+//------------------------------------------------------------------------------
+
+Hero::~Hero()
+{
+    for (auto *state : m_states)
+        delete state;
 }
 
 //------------------------------------------------------------------------------
 
 void Hero::update(Engine *e, float elapsedTime)
 {
-    m_animation.update(elapsedTime);
+    static_cast<HeroState *>(m_stateMachine.currentState())->update(e, elapsedTime);
 
     const b2Vec2& centerOfMass = m_body->GetWorldCenter(); 
 
@@ -106,8 +219,7 @@ void Hero::update(Engine *e, float elapsedTime)
 
 void Hero::draw(Engine *e)
 {
-    const b2Vec2& pos = m_body->GetPosition();
-    e->drawImage(m_animation.currentFrame(), pos.x, pos.y + 0.5f);
+    static_cast<HeroState *>(m_stateMachine.currentState())->draw(e);
 }
 
 //------------------------------------------------------------------------------

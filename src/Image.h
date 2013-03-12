@@ -48,6 +48,16 @@ class Image {
         m_height *= factor;
     }
 
+    void flipVertically()
+    {
+        flipVerticallyTextureCoords(m_texCoords);
+    }
+    
+    void flipHorizontally()
+    {
+        flipHorizontallyTextureCoords(m_texCoords);
+    }
+
     const Texture *texture() const { return m_texture; }
     const GLfloat *getTextureCoords() const { return m_texCoords; }
     

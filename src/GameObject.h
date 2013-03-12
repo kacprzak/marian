@@ -26,6 +26,8 @@ class GameObject : public Playable
     void update(Engine * /*e*/, float /*elapsedTime*/) override {}
     void draw(Engine * /*e*/) override {}
 
+    b2Body *body() { return m_body; }
+
  protected:
     Game   *m_game;
     b2Body *m_body;

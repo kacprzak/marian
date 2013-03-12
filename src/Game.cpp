@@ -25,6 +25,9 @@ Game::Game()
     ResourceMgr& resMgr = ResourceMgr::instance();
     resMgr.setDataFolder("media/");
 
+    // Hero texture
+    ResourceMgr::instance().addTexture("MegaMan_001.png");
+
     m_map.loadFromFile("media/map2.tmx");
 
     // Build objects

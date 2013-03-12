@@ -34,8 +34,9 @@ class StateMachine
     void setOwner(T *owner) { m_owner = owner; }
 
     State<T> *state(int stateId) { return m_states[stateId]; }
+    State<T> *currentState() { return m_currentState; }
 
-    const int *stateId(State<T> *state)
+    const int *stateId(State<T> *state) const
     {
         for (const auto& kv : m_states) {
             if (kv.second == state)

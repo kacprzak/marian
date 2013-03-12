@@ -146,6 +146,22 @@ void calculateTextureCoords(GLfloat texCoords[8], int texWidth, int texHeight,
     texCoords[6] = s0; texCoords[7] = t1;
 }
 
+void flipVerticallyTextureCoords(GLfloat texCoords[8])
+{
+    texCoords[0] = texCoords[2];
+    texCoords[2] = texCoords[6];
+    texCoords[4] = texCoords[2];
+    texCoords[6] = texCoords[0];
+}
+
+void flipHorizontallyTextureCoords(GLfloat texCoords[8])
+{
+    texCoords[1] = texCoords[5];
+    texCoords[5] = texCoords[3];
+    texCoords[7] = texCoords[3];
+    texCoords[3] = texCoords[1];
+}
+
 std::vector<int> hexColorToRgb(int hexValue)
 {
     std::vector<int> rgbColor(3, 0); // Black

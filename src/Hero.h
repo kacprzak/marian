@@ -5,16 +5,19 @@
 #include "GameObject.h"
 
 #include "Map.h"
-#include "Animation.h"
 #include "StateMachine.h"
 #include <memory>
 
 class Engine;
+class StandHeroState;
 
 class Hero : public GameObject
 {
+    friend class Stand;
+
  public:
     Hero(Game *game, float x, float y, float w, float h);
+    ~Hero();
   
     void update(Engine *e, float elapsedTime) override;
     void draw(Engine *e) override;
@@ -27,9 +30,8 @@ class Hero : public GameObject
 
  private:
     float m_jumpTimeout;
-    Animation m_animation;
-
     StateMachine<Hero> m_stateMachine;
+    std::vector<State<Hero> *> m_states;
 };
 
 #endif
