@@ -9,6 +9,7 @@
 #include <GL/gl.h>
 #include <string>
 
+/** Class for holding an image in graphics card memory */
 class Texture {
  public:
     Texture();
@@ -19,7 +20,6 @@ class Texture {
     int h() const { return m_h; }
 
     bool loadFromFile(const std::string& filename);
-    void release();
 
  private:
     GLuint m_textureId;

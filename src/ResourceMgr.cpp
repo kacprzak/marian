@@ -41,7 +41,6 @@ void ResourceMgr::releaseTextures()
 {
     // Delete textures
     for (auto item : m_textures) {
-        item.second->release();
         delete item.second;
     }
     m_textures.clear();

@@ -37,7 +37,9 @@ Game::Game()
     std::cout << "INFO: " << mapObjects.size() << " objects loaded.\n";
 
     for (const MapObject& obj : mapObjects) {
-        m_gameObjects.push_back(GameObjectFactory::create(this, obj));        
+        m_gameObjects.push_back(GameObjectFactory::create(this, obj));
+        if (obj.name == "hero")
+            Engine::instance().centerViewOn(obj.x, obj.y);
     }
 }
 

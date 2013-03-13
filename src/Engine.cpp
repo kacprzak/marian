@@ -46,6 +46,9 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight,
     , m_screenWidth(screenWidth)
     , m_screenHeight(screenHeight)
     , m_screenFull(screenFull)
+    , m_appActive(true)
+    , m_mouseFocus(true)
+    , m_inputFocus(true)
     , m_translate_x(0.0f)
     , m_translate_y(0.0f)
     , m_translate_z(0.0f)
@@ -92,9 +95,11 @@ void Engine::mainLoop(Playable *game)
     for (;;) {
         if (!processEvents())
             break;
-        if (delta > 0.0f)
-            update(delta);
-        draw();
+        if (m_appActive) {
+            if (m_mouseFocus && m_inputFocus && delta > 0.0f)
+                update(delta);
+            draw();
+        }
     
         curr_time = SDL_GetTicks();
         delta = float(curr_time - last_time) / 1000.0f;
@@ -142,6 +147,19 @@ bool Engine::processEvents()
         case SDL_KEYDOWN:
             m_keys[event.key.keysym.sym] = true;
             return m_game->processInput(event);
+        case SDL_ACTIVEEVENT:
+            switch (event.active.state)    {
+            case SDL_APPACTIVE:
+                m_appActive = event.active.gain;
+                break;
+            case SDL_APPMOUSEFOCUS:
+                m_mouseFocus = event.active.gain;
+                break;
+            case SDL_APPINPUTFOCUS:
+                m_inputFocus = event.active.gain;
+                break;
+            }
+            break;
         case SDL_QUIT:
             return false;
         }

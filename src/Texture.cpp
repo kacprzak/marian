@@ -13,7 +13,7 @@ Texture::Texture()
 
 Texture::~Texture()
 {
-    //
+    glDeleteTextures(1, &m_textureId);
 }
 
 bool Texture::loadFromFile(const std::string& filename)
@@ -22,7 +22,3 @@ bool Texture::loadFromFile(const std::string& filename)
     return m_textureId == 0 ? false : true;
 }
 
-void Texture::release()
-{
-    glDeleteTextures(1, &m_textureId);  
-}

@@ -96,6 +96,10 @@ class Engine
     int m_screenHeight;
     bool m_screenFull;
 
+    bool m_appActive;
+    bool m_mouseFocus;
+    bool m_inputFocus;
+
     float m_translate_x;
     float m_translate_y;
     float m_translate_z;
