@@ -17,11 +17,11 @@ enum HeroStateId {
 
 //==============================================================================
 
-class HeroState : public State<Hero>
+class HeroState : public State<Hero *>
 {
  public:
-    HeroState(StateMachine<Hero>& stateMachine)
-        : State<Hero>()
+    HeroState(StateMachine<Hero *>& stateMachine)
+        : State<Hero *>()
         , m_stateMachine(stateMachine)
     {}
 
@@ -31,7 +31,7 @@ class HeroState : public State<Hero>
     virtual void update(Engine *e, float elapsedTime) = 0;
     virtual void draw(Engine *e) = 0;
 
-    StateMachine<Hero>& m_stateMachine;
+    StateMachine<Hero *>& m_stateMachine;
 };
 
 //==============================================================================
@@ -39,7 +39,7 @@ class HeroState : public State<Hero>
 class StandHeroState : public HeroState
 {
  public:
-    StandHeroState(StateMachine<Hero>& stateMachine)
+    StandHeroState(StateMachine<Hero *>& stateMachine)
         : HeroState(stateMachine)
     {
         const Texture *tex = ResourceMgr::instance().getTexture("MegaMan_001.png");
@@ -74,7 +74,7 @@ class StandHeroState : public HeroState
 class RunHeroState : public HeroState
 {
  public:
-    RunHeroState(StateMachine<Hero>& stateMachine)
+    RunHeroState(StateMachine<Hero *>& stateMachine)
         : HeroState(stateMachine)
     {
         const Texture *tex = ResourceMgr::instance().getTexture("MegaMan_001.png");
@@ -84,23 +84,18 @@ class RunHeroState : public HeroState
         int ay_off = 36;
         int ay = 219 - 36;
         float frameSpeed = 0.25f;
+        m_animation.setReversable(true);
 
-        int y = 0;
-        for (int x = 1 ; x < 2; ++x) {
-            Image runFrame(tex,
-                           ax + (ax_off * x),      ay + (ay_off * y),
-                           ax + (ax_off * x) + 32, ay + (ay_off * y) + 32);
-            runFrame.scale(2.0f);
-            m_animation.addFrame(runFrame, frameSpeed);
-        }
-
-        y = 1;
+        int y = 1;
         for (int x = 2 ; x >= 0; --x) {
             Image runFrame(tex,
                            ax + (ax_off * x),      ay + (ay_off * y),
                            ax + (ax_off * x) + 32, ay + (ay_off * y) + 32);
             runFrame.scale(2.0f);
-            m_animation.addFrame(runFrame, frameSpeed);
+            float fs = frameSpeed;
+            // Make last and first shorter
+            if (x == 0 || x == 2) fs = frameSpeed / 2.0f;
+            m_animation.addFrame(runFrame, fs);
         }
     }
 
@@ -154,7 +149,7 @@ Hero::Hero(Game *game, float x, float y, float w, float h)
     m_body = body;
 
     // States
-    State<Hero> *state = new StandHeroState(m_stateMachine);
+    State<Hero *> *state = new StandHeroState(m_stateMachine);
     m_states.push_back(state);
     m_stateMachine.registerState(STAND, state);
 

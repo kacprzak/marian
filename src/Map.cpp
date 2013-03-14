@@ -2,7 +2,6 @@
 #include "Map.h"
 #include "Engine.h"
 #include "ResourceMgr.h"
-#include "Util.h"
 
 #include <cstring>
 #include <iostream>
@@ -17,15 +16,17 @@ public:
     {
         int tileCoords[4];
         map->rectForTile(tileCoords, gid);
-        calculateTextureCoords(texCoords, tex->w(), tex->h(),
-                               tileCoords[0], tileCoords[1],
-                               tileCoords[2], tileCoords[3]);
+        Texture::calculateTextureCoords(texCoords, tex->w(), tex->h(),
+                                        tileCoords[0], tileCoords[1],
+                                        tileCoords[2], tileCoords[3]);
     }
   
     unsigned       gid;
     const Texture *texture;
     GLfloat        texCoords[8];
 };
+
+//==============================================================================
 
 class Layer : boost::noncopyable
 {
@@ -84,12 +85,16 @@ Layer::Layer(const Map *parent, const tmx::Layer& tmxLayer)
     }
 }
 
+//------------------------------------------------------------------------------
+
 Layer::~Layer()
 {
     for (const Tile* tile : tiles) {
         delete tile;
     }
 }
+
+//------------------------------------------------------------------------------
 
 void Layer::draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const
 {
@@ -107,7 +112,7 @@ void Layer::draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const
     }
 }
 
-//##############################################################################
+//==============================================================================
 
 Map::Map()
     : m_width(0)
@@ -261,7 +266,6 @@ std::string Map::imageNameForTile(unsigned global_tile_id) const
 }
 
 //------------------------------------------------------------------------------
-
 /**
  * Pixel coords rectangle that bounds image on it's texture.
  */

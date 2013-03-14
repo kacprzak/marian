@@ -6,7 +6,6 @@
 #include <string>
 #include <sstream>
 #include <ostream>
-#include "Util.h"
 
 /**
  * An image. Represents whole or part of a texture.
@@ -20,7 +19,7 @@ class Image {
         , m_width(1.0f)
         , m_height(1.0f)
     {
-        calculateTextureCoords(m_texCoords, texture->w(), texture->h());
+        Texture::calculateTextureCoords(m_texCoords, texture->w(), texture->h());
     }
 
     Image(const Texture *texture, int x0, int y0, int x1, int y1)
@@ -30,8 +29,8 @@ class Image {
         , m_width(1.0f)
         , m_height(1.0f)
     {
-        calculateTextureCoords(m_texCoords, texture->w(), texture->h(),
-                               x0, y0, x1, y1);
+        Texture::calculateTextureCoords(m_texCoords, texture->w(), texture->h(),
+                                        x0, y0, x1, y1);
     }
 
     int pixelWidth() const  { return m_pixelWidth; }
@@ -50,12 +49,12 @@ class Image {
 
     void flipVertically()
     {
-        flipVerticallyTextureCoords(m_texCoords);
+        Texture::flipVerticallyTextureCoords(m_texCoords);
     }
     
     void flipHorizontally()
     {
-        flipHorizontallyTextureCoords(m_texCoords);
+        Texture::flipHorizontallyTextureCoords(m_texCoords);
     }
 
     const Texture *texture() const { return m_texture; }

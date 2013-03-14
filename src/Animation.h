@@ -60,7 +60,22 @@ class Animation
             m_fullTime += dur;
     }
 
-    void setReversable(bool reversable) { m_reverse = reversable; }
+    void setReversable(bool reversable)
+    {
+        m_reverse = reversable;
+    }
+
+    void flipVertically()
+    {
+        for (Image& img : m_frames)
+            img.flipVertically();
+    }
+    
+    void flipHorizontally()
+    {
+        for (Image& img : m_frames)
+            img.flipHorizontally();
+    }
 
  private:
     std::vector<Image> m_frames;

@@ -9,12 +9,9 @@
 #include <memory>
 
 class Engine;
-class StandHeroState;
 
 class Hero : public GameObject
 {
-    friend class Stand;
-
  public:
     Hero(Game *game, float x, float y, float w, float h);
     ~Hero();
@@ -30,8 +27,8 @@ class Hero : public GameObject
 
  private:
     float m_jumpTimeout;
-    StateMachine<Hero> m_stateMachine;
-    std::vector<State<Hero> *> m_states;
+    StateMachine<Hero *> m_stateMachine;
+    std::vector<State<Hero *> *> m_states;
 };
 
 #endif

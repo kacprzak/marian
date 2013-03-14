@@ -11,8 +11,8 @@ class State
  public:
     virtual ~State() {}
 
-    virtual void onEnter(T *owner, int prevStateId) = 0;
-    virtual void onExit(T *owner, int nextStateId) = 0;
+    virtual void onEnter(T owner, int prevStateId) = 0;
+    virtual void onExit(T owner, int nextStateId) = 0;
 };
 
 /**
@@ -22,16 +22,16 @@ template <typename T>
 class StateMachine
 {
  public:
-    StateMachine(T *owner, int idleStateId)
+    StateMachine(T owner, int idleStateId)
         : m_owner(owner)
         , m_idleStateId(idleStateId)
         , m_currentStateId(idleStateId)
         , m_currentState(nullptr)
     {}
 
-    T *owner() { return m_owner; }
-    const T *owner() const { return m_owner; }
-    void setOwner(T *owner) { m_owner = owner; }
+    T owner() { return m_owner; }
+    const T owner() const { return m_owner; }
+    void setOwner(T owner) { m_owner = owner; }
 
     State<T> *state(int stateId) { return m_states[stateId]; }
     State<T> *currentState() { return m_currentState; }
@@ -83,7 +83,7 @@ class StateMachine
     }
 
  private:
-    T *m_owner;
+    T m_owner;
     int m_idleStateId;
     int m_currentStateId;
     State<T> *m_currentState;
