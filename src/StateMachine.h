@@ -15,10 +15,12 @@ class State
     virtual void onExit(T owner, int nextStateId) = 0;
 };
 
+//------------------------------------------------------------------------------
+
 /**
  * Simple state machine. It does not own registered states.
  */
-template <typename T>
+template <typename T, typename S>
 class StateMachine
 {
  public:
@@ -33,10 +35,10 @@ class StateMachine
     const T owner() const { return m_owner; }
     void setOwner(T owner) { m_owner = owner; }
 
-    State<T> *state(int stateId) { return m_states[stateId]; }
-    State<T> *currentState() { return m_currentState; }
+    S *state(int stateId) { return m_states[stateId]; }
+    S *currentState() { return m_currentState; }
 
-    const int *stateId(State<T> *state) const
+    const int *stateId(S *state) const
     {
         for (const auto& kv : m_states) {
             if (kv.second == state)
@@ -45,7 +47,7 @@ class StateMachine
         return nullptr;
     }
 
-    void registerState(int stateId, State<T> *state)
+    void registerState(int stateId, S *state)
     {
         assert(state);
         assert(!registered(stateId));
@@ -59,7 +61,7 @@ class StateMachine
         return m_states.find(stateId) != end(m_states);
     }
 
-    bool registered(State<T> *state) const
+    bool registered(S *state) const
     {
         return stateId(state) != nullptr;
     }
@@ -86,9 +88,9 @@ class StateMachine
     T m_owner;
     int m_idleStateId;
     int m_currentStateId;
-    State<T> *m_currentState;
-    std::map<int, State<T> *> m_states;
-
+    S  *m_currentState;
+    std::map<int, S *> m_states;
 };
 
 #endif // STATEMACHINE_H
+

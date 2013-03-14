@@ -12,45 +12,30 @@
 
 enum HeroStateId {
     STAND = 1,
-    RUN
+    RUN,
+    FALL
 };
 
 //==============================================================================
 
-class HeroState : public State<Hero *>
+class StandHeroState : public GameObjectState
 {
  public:
-    HeroState(StateMachine<Hero *>& stateMachine)
-        : State<Hero *>()
-        , m_stateMachine(stateMachine)
-    {}
-
-    virtual void onEnter(Hero *owner, int prevStateId) override {}
-    virtual void onExit(Hero *owner, int nextStateId) override {}
-
-    virtual void update(Engine *e, float elapsedTime) = 0;
-    virtual void draw(Engine *e) = 0;
-
-    StateMachine<Hero *>& m_stateMachine;
-};
-
-//==============================================================================
-
-class StandHeroState : public HeroState
-{
- public:
-    StandHeroState(StateMachine<Hero *>& stateMachine)
-        : HeroState(stateMachine)
+    StandHeroState(GameObjectStateMachine& stateMachine)
+        : GameObjectState(stateMachine)
+        , m_runsRight(true)
     {
         const Texture *tex = ResourceMgr::instance().getTexture("MegaMan_001.png");
 
         int ax = 38;
         int ax_off = 36;
+        int ay = 255;
+
         m_animation.setReversable(true);
-        Image idleFrame1(tex, ax, 255, ax + 32, 255 + 32);
+        Image idleFrame1(tex, ax, ay, ax + 32, ay + 32);
         idleFrame1.scale(2.0f);
         m_animation.addFrame(idleFrame1, 1.0f);
-        Image idleFrame2(tex, ax + ax_off, 255, ax + ax_off + 32, 255 + 32);
+        Image idleFrame2(tex, ax + ax_off, ay, ax + ax_off + 32, ay + 32);
         idleFrame2.scale(2.0f);
         m_animation.addFrame(idleFrame2, 0.1f); // Blink
     }
@@ -58,6 +43,28 @@ class StandHeroState : public HeroState
     void update(Engine * /*e*/, float elapsedTime) override
     {
         m_animation.update(elapsedTime);
+
+        const b2Vec2& vel = m_stateMachine.owner()->body()->GetLinearVelocity();
+
+        if (vel.x < 0.05f && m_runsRight) {
+            m_animation.flipVertically();
+            m_runsRight = false;
+        }
+
+        if (vel.x > 0.05f && !m_runsRight) {
+            m_animation.flipVertically();
+            m_runsRight = true;
+        }
+ 
+        if (std::abs(vel.y) > 0.2f) {
+            m_stateMachine.changeState(FALL);
+            return;
+        }
+
+        if (std::abs(vel.x) > 0.2f) {
+            m_stateMachine.changeState(RUN);
+            return;
+        }
     }
 
     void draw(Engine *e) override
@@ -67,15 +74,66 @@ class StandHeroState : public HeroState
     }
 
     Animation m_animation;
+    bool m_runsRight;
 };
 
 //==============================================================================
 
-class RunHeroState : public HeroState
+class FallHeroState : public GameObjectState
 {
  public:
-    RunHeroState(StateMachine<Hero *>& stateMachine)
-        : HeroState(stateMachine)
+    FallHeroState(GameObjectStateMachine& stateMachine)
+        : GameObjectState(stateMachine)
+        , m_runsRight(true)
+    {
+        const Texture *tex = ResourceMgr::instance().getTexture("MegaMan_001.png");
+
+        int ax = 38;
+        int ax_off = 4*36;
+        int ay = 219;
+
+        m_image = std::unique_ptr<Image>(new Image(tex, ax + ax_off, ay, ax + ax_off + 32, ay + 32));
+        m_image->scale(2.0f);
+    }
+
+    void update(Engine * /*e*/, float elapsedTime) override
+    {
+        const b2Vec2& vel = m_stateMachine.owner()->body()->GetLinearVelocity();
+
+        if (std::abs(vel.y) < 0.1f) {
+            m_stateMachine.changeState(STAND);
+            return;
+        }
+
+        if (vel.x < 0.02f && m_runsRight) {
+            m_image->flipVertically();
+            m_runsRight = false;
+        }
+
+        if (vel.x > 0.02f && !m_runsRight) {
+            m_image->flipVertically();
+            m_runsRight = true;
+        } 
+    }
+
+    void draw(Engine *e) override
+    {
+        const b2Vec2& pos = m_stateMachine.owner()->body()->GetPosition();
+        e->drawImage(*m_image, pos.x, pos.y + 0.5f);
+    }
+
+    std::unique_ptr<Image> m_image;
+    bool m_runsRight;
+};
+
+//==============================================================================
+
+class RunHeroState : public GameObjectState
+{
+ public:
+    RunHeroState(GameObjectStateMachine& stateMachine)
+        : GameObjectState(stateMachine)
+        , m_runsRight(true)
     {
         const Texture *tex = ResourceMgr::instance().getTexture("MegaMan_001.png");
 
@@ -102,6 +160,28 @@ class RunHeroState : public HeroState
     void update(Engine * /*e*/, float elapsedTime) override
     {
         m_animation.update(elapsedTime);
+
+        const b2Vec2& vel = m_stateMachine.owner()->body()->GetLinearVelocity();
+
+        if (std::abs(vel.y) > 0.1f) {
+            m_stateMachine.changeState(FALL);
+            return;
+        }
+
+        if (std::abs(vel.x) < 0.1f) {
+            m_stateMachine.changeState(STAND);
+            return;
+        }
+
+        if (vel.x < 0 && m_runsRight) {
+            m_animation.flipVertically();
+            m_runsRight = false;
+        }
+
+        if (vel.x > 0 && !m_runsRight) {
+            m_animation.flipVertically();
+            m_runsRight = true;
+        } 
     }
 
     void draw(Engine *e) override
@@ -111,6 +191,7 @@ class RunHeroState : public HeroState
     }
 
     Animation m_animation;
+    bool m_runsRight;
 };
 
 //==============================================================================
@@ -149,7 +230,7 @@ Hero::Hero(Game *game, float x, float y, float w, float h)
     m_body = body;
 
     // States
-    State<Hero *> *state = new StandHeroState(m_stateMachine);
+    GameObjectState *state = new StandHeroState(m_stateMachine);
     m_states.push_back(state);
     m_stateMachine.registerState(STAND, state);
 
@@ -157,7 +238,11 @@ Hero::Hero(Game *game, float x, float y, float w, float h)
     m_states.push_back(state);
     m_stateMachine.registerState(RUN, state);
 
-    m_stateMachine.changeState(RUN);
+    state = new FallHeroState(m_stateMachine);
+    m_states.push_back(state);
+    m_stateMachine.registerState(FALL, state);
+
+    m_stateMachine.changeState(FALL);
 }
 
 //------------------------------------------------------------------------------
@@ -172,7 +257,7 @@ Hero::~Hero()
 
 void Hero::update(Engine *e, float elapsedTime)
 {
-    static_cast<HeroState *>(m_stateMachine.currentState())->update(e, elapsedTime);
+    m_stateMachine.currentState()->update(e, elapsedTime);
 
     const b2Vec2& centerOfMass = m_body->GetWorldCenter(); 
 
@@ -214,7 +299,7 @@ void Hero::update(Engine *e, float elapsedTime)
 
 void Hero::draw(Engine *e)
 {
-    static_cast<HeroState *>(m_stateMachine.currentState())->draw(e);
+    m_stateMachine.currentState()->draw(e);
 }
 
 //------------------------------------------------------------------------------

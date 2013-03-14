@@ -5,7 +5,7 @@
 #include "GameObject.h"
 
 #include "Map.h"
-#include "StateMachine.h"
+#include "GameObjectState.h"
 #include <memory>
 
 class Engine;
@@ -27,8 +27,8 @@ class Hero : public GameObject
 
  private:
     float m_jumpTimeout;
-    StateMachine<Hero *> m_stateMachine;
-    std::vector<State<Hero *> *> m_states;
+    GameObjectStateMachine m_stateMachine;
+    std::vector<GameObjectState *> m_states;
 };
 
 #endif
