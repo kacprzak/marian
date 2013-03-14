@@ -155,13 +155,16 @@ void Game::toggleDrawDebug()
 
 void ContactListener::BeginContact(b2Contact *contact)
 {
+    void *fixAUserData = contact->GetFixtureA()->GetUserData();
+    void *fixBUserData = contact->GetFixtureB()->GetUserData();
+
     void *bodyAUserData = contact->GetFixtureA()->GetBody()->GetUserData();
     void *bodyBUserData = contact->GetFixtureB()->GetBody()->GetUserData();
     if ( bodyAUserData && bodyBUserData ) {
         GameObject *gameObjectA = static_cast<GameObject *>(bodyAUserData);
         GameObject *gameObjectB = static_cast<GameObject *>(bodyBUserData);
-        gameObjectA->handleBeginContact(gameObjectB);
-        gameObjectB->handleBeginContact(gameObjectA);
+        gameObjectA->handleBeginContact(gameObjectB, fixAUserData);
+        gameObjectB->handleBeginContact(gameObjectA, fixBUserData);
     }
 }
 
@@ -169,12 +172,15 @@ void ContactListener::BeginContact(b2Contact *contact)
 
 void ContactListener::EndContact(b2Contact *contact)
 {
+    void *fixAUserData = contact->GetFixtureA()->GetUserData();
+    void *fixBUserData = contact->GetFixtureB()->GetUserData();
+
     void *bodyAUserData = contact->GetFixtureA()->GetBody()->GetUserData();
     void *bodyBUserData = contact->GetFixtureB()->GetBody()->GetUserData();
     if ( bodyAUserData && bodyBUserData ) {
         GameObject *gameObjectA = static_cast<GameObject *>(bodyAUserData);
         GameObject *gameObjectB = static_cast<GameObject *>(bodyBUserData);
-        gameObjectA->handleEndContact(gameObjectB);
-        gameObjectB->handleEndContact(gameObjectA);
+        gameObjectA->handleEndContact(gameObjectB, fixAUserData);
+        gameObjectB->handleEndContact(gameObjectA, fixBUserData);
     }
 }

@@ -22,11 +22,20 @@ class Hero : public GameObject
     GameObjectCategory category() override
     { return HERO; }
 
-    void handleBeginContact(GameObject *other) override;
-    void handleEndContact(GameObject *other) override;
+    void handleBeginContact(GameObject *other, void *fixtureUD = nullptr) override;
+    void handleEndContact  (GameObject *other, void *fixtureUD = nullptr) override;
+
+    bool isOnGround() const { return m_feetContacts > 0; }
+    void setFacingRight(bool right) { m_facingRight = right; }
+    bool isFacingRight() const { return m_facingRight; }
 
  private:
+    void centerViewOn(Engine *e, float x, float y) const;
+
     float m_jumpTimeout;
+    bool m_facingRight;
+    int m_feetContacts;
+
     GameObjectStateMachine m_stateMachine;
     std::vector<GameObjectState *> m_states;
 };

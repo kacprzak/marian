@@ -17,8 +17,8 @@ class GameObjectState : public State<GameObject *>
         , m_stateMachine(stateMachine)
     {}
 
-    virtual void onEnter(GameObject *owner, int prevStateId) override {}
-    virtual void onExit(GameObject *owner, int nextStateId) override {}
+    virtual void onEnter(GameObject * /*owner*/, int /*prevStateId*/) override {}
+    virtual void onExit(GameObject * /*owner*/, int /*nextStateId*/) override {}
 
     virtual void update(Engine *e, float elapsedTime) = 0;
     virtual void draw(Engine *e) = 0;

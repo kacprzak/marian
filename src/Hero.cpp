@@ -8,7 +8,8 @@
 #include <iostream>
 #include <Box2D/Box2D.h>
 
-#define JUMP_DELAY 1.0f
+#define JUMP_DELAY 0.5f
+#define FEET_SENSOR 1248
 
 enum HeroStateId {
     STAND = 1,
@@ -23,7 +24,6 @@ class StandHeroState : public GameObjectState
  public:
     StandHeroState(GameObjectStateMachine& stateMachine)
         : GameObjectState(stateMachine)
-        , m_runsRight(true)
     {
         const Texture *tex = ResourceMgr::instance().getTexture("MegaMan_001.png");
 
@@ -40,28 +40,25 @@ class StandHeroState : public GameObjectState
         m_animation.addFrame(idleFrame2, 0.1f); // Blink
     }
 
+    void onEnter(GameObject * owner, int /*prevStateId*/) override
+    {
+        Hero *hero = static_cast<Hero *>(owner);
+        setFacingRight(hero->isFacingRight());
+    }
+
     void update(Engine * /*e*/, float elapsedTime) override
     {
         m_animation.update(elapsedTime);
 
-        const b2Vec2& vel = m_stateMachine.owner()->body()->GetLinearVelocity();
+        Hero *hero = static_cast<Hero *>(m_stateMachine.owner());
+        const b2Vec2& vel = hero->body()->GetLinearVelocity();
 
-        if (vel.x < 0.05f && m_runsRight) {
-            m_animation.flipVertically();
-            m_runsRight = false;
-        }
-
-        if (vel.x > 0.05f && !m_runsRight) {
-            m_animation.flipVertically();
-            m_runsRight = true;
-        }
- 
-        if (std::abs(vel.y) > 0.2f) {
+        if (!hero->isOnGround() || std::abs(vel.y) > 2.0f) {
             m_stateMachine.changeState(FALL);
             return;
         }
 
-        if (std::abs(vel.x) > 0.2f) {
+        if (std::abs(vel.x) > 0.6f) {
             m_stateMachine.changeState(RUN);
             return;
         }
@@ -73,8 +70,16 @@ class StandHeroState : public GameObjectState
         e->drawImage(m_animation.currentFrame(), pos.x, pos.y + 0.5f);
     }
 
+    void setFacingRight(bool right) 
+    {
+        static bool animFacingRight = true;
+        if (animFacingRight != right) {
+            m_animation.flipVertically();
+            animFacingRight = right;
+        }
+    }
+
     Animation m_animation;
-    bool m_runsRight;
 };
 
 //==============================================================================
@@ -84,7 +89,6 @@ class FallHeroState : public GameObjectState
  public:
     FallHeroState(GameObjectStateMachine& stateMachine)
         : GameObjectState(stateMachine)
-        , m_runsRight(true)
     {
         const Texture *tex = ResourceMgr::instance().getTexture("MegaMan_001.png");
 
@@ -96,24 +100,27 @@ class FallHeroState : public GameObjectState
         m_image->scale(2.0f);
     }
 
-    void update(Engine * /*e*/, float elapsedTime) override
+    void onEnter(GameObject * owner, int /*prevStateId*/) override
     {
-        const b2Vec2& vel = m_stateMachine.owner()->body()->GetLinearVelocity();
+        Hero *hero = static_cast<Hero *>(owner);
+        setFacingRight(hero->isFacingRight());
+    }
 
-        if (std::abs(vel.y) < 0.1f) {
+    void update(Engine * /*e*/, float /*elapsedTime*/) override
+    {
+        Hero *hero = static_cast<Hero *>(m_stateMachine.owner());
+        const b2Vec2& vel = hero->body()->GetLinearVelocity();
+
+        if (std::abs(vel.x) > 0.01f) {
+            bool fr = (vel.x >= 0.0f);
+            hero->setFacingRight(fr);
+            setFacingRight(fr);
+        }
+
+        if (hero->isOnGround() && std::abs(vel.y) < 0.5f) {
             m_stateMachine.changeState(STAND);
             return;
         }
-
-        if (vel.x < 0.02f && m_runsRight) {
-            m_image->flipVertically();
-            m_runsRight = false;
-        }
-
-        if (vel.x > 0.02f && !m_runsRight) {
-            m_image->flipVertically();
-            m_runsRight = true;
-        } 
     }
 
     void draw(Engine *e) override
@@ -122,8 +129,16 @@ class FallHeroState : public GameObjectState
         e->drawImage(*m_image, pos.x, pos.y + 0.5f);
     }
 
+    void setFacingRight(bool right) 
+    {
+        static bool imageFacingRight = true;
+        if (imageFacingRight != right) {
+            m_image->flipVertically();
+            imageFacingRight = right;
+        }
+    }
+
     std::unique_ptr<Image> m_image;
-    bool m_runsRight;
 };
 
 //==============================================================================
@@ -133,7 +148,6 @@ class RunHeroState : public GameObjectState
  public:
     RunHeroState(GameObjectStateMachine& stateMachine)
         : GameObjectState(stateMachine)
-        , m_runsRight(true)
     {
         const Texture *tex = ResourceMgr::instance().getTexture("MegaMan_001.png");
 
@@ -157,31 +171,34 @@ class RunHeroState : public GameObjectState
         }
     }
 
+    void onEnter(GameObject * owner, int /*prevStateId*/) override
+    {
+        Hero *hero = static_cast<Hero *>(owner);
+        setFacingRight(hero->isFacingRight());
+    }
+
     void update(Engine * /*e*/, float elapsedTime) override
     {
         m_animation.update(elapsedTime);
+        
+        Hero *hero = static_cast<Hero *>(m_stateMachine.owner());
+        const b2Vec2& vel = hero->body()->GetLinearVelocity();
 
-        const b2Vec2& vel = m_stateMachine.owner()->body()->GetLinearVelocity();
+        if (std::abs(vel.x) > 0.01f) {
+            bool fr = (vel.x >= 0.0f);
+            hero->setFacingRight(fr);
+            setFacingRight(fr);
+        }
 
         if (std::abs(vel.y) > 0.1f) {
             m_stateMachine.changeState(FALL);
             return;
         }
 
-        if (std::abs(vel.x) < 0.1f) {
+        if (std::abs(vel.x) < 0.5f) {
             m_stateMachine.changeState(STAND);
             return;
         }
-
-        if (vel.x < 0 && m_runsRight) {
-            m_animation.flipVertically();
-            m_runsRight = false;
-        }
-
-        if (vel.x > 0 && !m_runsRight) {
-            m_animation.flipVertically();
-            m_runsRight = true;
-        } 
     }
 
     void draw(Engine *e) override
@@ -190,8 +207,16 @@ class RunHeroState : public GameObjectState
         e->drawImage(m_animation.currentFrame(), pos.x, pos.y + 0.5f);
     }
 
+    void setFacingRight(bool right) 
+    {
+        static bool animFacingRight = true;
+        if (animFacingRight != right) {
+            m_animation.flipVertically();
+            animFacingRight = right;
+        }
+    }
+
     Animation m_animation;
-    bool m_runsRight;
 };
 
 //==============================================================================
@@ -199,6 +224,8 @@ class RunHeroState : public GameObjectState
 Hero::Hero(Game *game, float x, float y, float w, float h)
     : GameObject(game)
     , m_jumpTimeout(0.0f)
+    , m_facingRight(true)
+    , m_feetContacts(0)
     , m_stateMachine(nullptr, 0)
 {
     m_stateMachine.setOwner(this);
@@ -215,17 +242,28 @@ Hero::Hero(Game *game, float x, float y, float w, float h)
     bodyDef.userData = this;
     b2Body* body = game->world()->CreateBody(&bodyDef);
     
-    b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(hw, hh);
+    b2PolygonShape polygonShape;
+    polygonShape.SetAsBox(hw, hh);
     
     b2FixtureDef fixtureDef;
     fixtureDef.filter.categoryBits = category();
     fixtureDef.filter.maskBits = GROUND | BOX | SENSOR;
-    fixtureDef.shape = &dynamicBox;
+    fixtureDef.shape = &polygonShape;
     fixtureDef.density = 0.8f;
     fixtureDef.friction = 0.3f;
+    fixtureDef.restitution = 0.0f;
 
+    // Main fixture
     body->CreateFixture(&fixtureDef);
+
+    // Add foot sensor fixture
+    polygonShape.SetAsBox(hw, 0.3, b2Vec2(0, -hh), 0);
+    fixtureDef.isSensor = true;
+    fixtureDef.filter.maskBits = GROUND | BOX;
+    fixtureDef.density = 0.0f;
+    fixtureDef.friction = 0.0f;
+    b2Fixture* footSensorFixture = body->CreateFixture(&fixtureDef);
+    footSensorFixture->SetUserData(reinterpret_cast<void *>(FEET_SENSOR));
 
     m_body = body;
 
@@ -257,8 +295,6 @@ Hero::~Hero()
 
 void Hero::update(Engine *e, float elapsedTime)
 {
-    m_stateMachine.currentState()->update(e, elapsedTime);
-
     const b2Vec2& centerOfMass = m_body->GetWorldCenter(); 
 
     if (e->isPressed(SDLK_RIGHT)) {
@@ -270,16 +306,27 @@ void Hero::update(Engine *e, float elapsedTime)
     }
 
     if (e->isPressed(SDLK_UP)) {
-        if (m_jumpTimeout <= 0.0f) {
+        if (isOnGround() && m_jumpTimeout <= 0.0f) {
             m_body->ApplyLinearImpulse(b2Vec2(0.0f, 5.0f), centerOfMass);
             m_jumpTimeout = JUMP_DELAY;
         }
     } 
 
-    // Center view on player
-    float x = centerOfMass.x;
-    float y = centerOfMass.y;
+    // States
+    //const b2Vec2& vel = m_stateMachine.owner()->body()->GetLinearVelocity();
+    m_stateMachine.currentState()->update(e, elapsedTime);
 
+    // Center view on player
+    centerViewOn(e, centerOfMass.x, centerOfMass.y);
+
+    if (m_jumpTimeout > 0.0f)
+        m_jumpTimeout -= elapsedTime;
+}
+
+//------------------------------------------------------------------------------
+
+void Hero::centerViewOn(Engine *e, float x, float y) const
+{
     // Respect map borders
     float bLeft, bRight, bTop, bBottom;
     e->viewBounds(&bLeft, &bRight, &bBottom, &bTop);
@@ -290,9 +337,6 @@ void Hero::update(Engine *e, float elapsedTime)
     if (x > m_game->map()->width() - hw) x = m_game->map()->width() - hw;
 
     e->centerViewOn(x, y);
-
-    if (m_jumpTimeout > 0.0f)
-        m_jumpTimeout -= elapsedTime;
 }
 
 //------------------------------------------------------------------------------
@@ -304,8 +348,13 @@ void Hero::draw(Engine *e)
 
 //------------------------------------------------------------------------------
 
-void Hero::handleBeginContact(GameObject *other)
+void Hero::handleBeginContact(GameObject *other, void *fixtureUD)
 {
+    if (fixtureUD == (void*)FEET_SENSOR) {
+        std::cout << "on ground" << std::endl;
+        ++m_feetContacts;
+    }
+
     if (other->category() != SENSOR) return;
 
     std::cout << "is touching" << std::endl;
@@ -313,8 +362,13 @@ void Hero::handleBeginContact(GameObject *other)
 
 //------------------------------------------------------------------------------
 
-void Hero::handleEndContact(GameObject *other)
+void Hero::handleEndContact(GameObject *other, void *fixtureUD)
 {
+    if (fixtureUD == (void*)FEET_SENSOR) {
+        std::cout << "off ground" << std::endl;
+        --m_feetContacts;
+    }
+
     if (other->category() != SENSOR) return;
 
     std::cout << "is not touching" << std::endl;

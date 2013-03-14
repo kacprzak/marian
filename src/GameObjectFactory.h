@@ -39,7 +39,7 @@ class GameObjectFactory
 
     static GameObject *create(Game *game,
                               GameObjectCategory type,
-                              const std::string& name,
+                              const std::string& /*name*/,
                               float x, float y)
     {
         GameObject *go = nullptr;

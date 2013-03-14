@@ -18,8 +18,16 @@ class GameObject : public Playable
 
     virtual GameObjectCategory category() = 0;
 
-    virtual void handleBeginContact(GameObject * /*other*/) {}
-    virtual void handleEndContact(GameObject * /*other*/) {}
+    /**
+     * Handle contact with some other object.
+     *
+     * @param other      object that contacts this object
+     * @param fixtureUD  user data of fixture that collided with other
+     */
+    virtual void handleBeginContact(GameObject * /*other*/,
+                                    void * /*fixtureUD*/ = nullptr) {}
+    virtual void handleEndContact  (GameObject * /*other*/,
+                                    void * /*fixtureUD*/ = nullptr) {}
 
     // Playable interface impl
     bool processInput(const SDL_Event& /*event*/) override { return true; }

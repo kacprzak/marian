@@ -81,7 +81,7 @@ class StateMachine
         m_currentStateId = stateId;
         m_currentState = nextState;
 
-        nextState->onExit(m_owner, prevStateId);
+        nextState->onEnter(m_owner, prevStateId);
     }
 
  private:
