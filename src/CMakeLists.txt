@@ -9,6 +9,7 @@ set( marian_HDRS
   GameObject.h
   GameObjectCategory.h
   GameObjectFactory.h
+  GameObjectState.h
   Ground.h
   Hero.h
   Image.h
