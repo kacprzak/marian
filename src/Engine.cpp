@@ -16,8 +16,12 @@ const float  PI_F = 3.14159265358979f;
 // Global pointer (for use in Lua exposed functions)
 Engine *Engine::s_instance = nullptr;
 
+// Maximum delta value passed to update 1/25 [s]
+#define DELTA_MAX 0.04f
+// Scene scale
 #define SCALE 32
-#define ROUND 1 // Retro style pixel perfect rendering
+// Retro style pixel perfect rendering
+#define ROUND 1
 
 void Engine::init(const std::string& title, int screenWidth, int screenHeight,
                   bool screenFull)
@@ -77,7 +81,7 @@ Engine::~Engine()
     // Release all resources
     ResourceMgr::instance().release();
 
-    std::cout << "Quitting SDL...\n";
+    std::clog << "Quitting SDL...\n";
     SDL_Quit();
 }
 
@@ -96,8 +100,13 @@ void Engine::mainLoop(Playable *game)
         if (!processEvents())
             break;
         if (m_appActive) {
-            if (m_mouseFocus && m_inputFocus && delta > 0.0f)
+            if (/*m_inputFocus &&*/ delta > 0.0f) {
+                while (delta > DELTA_MAX) {
+                    update(DELTA_MAX);
+                    delta -= DELTA_MAX;
+                }
                 update(delta);
+            }
             draw();
         }
     
@@ -151,12 +160,15 @@ bool Engine::processEvents()
             switch (event.active.state)    {
             case SDL_APPACTIVE:
                 m_appActive = event.active.gain;
+                std::clog << "SDL_APPACTIVE.gain = " << m_appActive << '\n';
                 break;
             case SDL_APPMOUSEFOCUS:
                 m_mouseFocus = event.active.gain;
+                std::clog << "SDL_APPMOUSEFOCUS.gain = " << m_mouseFocus << '\n';
                 break;
             case SDL_APPINPUTFOCUS:
                 m_inputFocus = event.active.gain;
+                std::clog << "SDL_APPINPUTFOCUS.gain = " << m_inputFocus << '\n';
                 break;
             }
             break;
@@ -275,7 +287,7 @@ void Engine::drawImage(const Image& image, float x, float y, float rotation) con
 
 void Engine::initializeSDL()
 {
-    std::cout << "Initializing SDL...\n";
+    std::clog << "Initializing SDL...\n";
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         throw EngineError("Could not initialize SDL", SDL_GetError());  
@@ -306,7 +318,7 @@ void Engine::initializeSDL()
     if (m_screenFull)
         screen_flags |= SDL_FULLSCREEN;
 
-    std::cout << "Screen: " << m_screenWidth << "x" << m_screenHeight
+    std::clog << "Screen: " << m_screenWidth << "x" << m_screenHeight
               << "x" << screen_bpp << "\n";
     // Screen surface
     SDL_Surface *screen = SDL_SetVideoMode(m_screenWidth, m_screenHeight,
@@ -319,14 +331,14 @@ void Engine::initializeSDL()
     SDL_ShowCursor(SDL_DISABLE);
     SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);  
 
-    std::cout << "SDL initialized.\n";
+    std::clog << "SDL initialized.\n";
 }
 
 //------------------------------------------------------------------------------
 
 void Engine::initializeOpenGL()
 {
-    std::cout << "Initializing OpenGl...\n";
+    std::clog << "Initializing OpenGl...\n";
     //float ratio = float(m_screenWidth) / float(m_screenHeight);
 
     glClearColor(0.0f, 0.0f, 0.0f, 0); // black

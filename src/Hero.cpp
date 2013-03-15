@@ -257,7 +257,7 @@ Hero::Hero(Game *game, float x, float y, float w, float h)
     body->CreateFixture(&fixtureDef);
 
     // Add foot sensor fixture
-    polygonShape.SetAsBox(hw, 0.3, b2Vec2(0, -hh), 0);
+    polygonShape.SetAsBox(hw, 0.3f, b2Vec2(0, -hh), 0);
     fixtureDef.isSensor = true;
     fixtureDef.filter.maskBits = GROUND | BOX;
     fixtureDef.density = 0.0f;
