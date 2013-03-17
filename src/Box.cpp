@@ -10,7 +10,7 @@ Box::Box(Game *game, float x, float y, float w, float h)
     : GameObject(game)
 {
     // Image creation
-    const Texture *tex = ResourceMgr::instance().getTexture("minecraft_tiles_big.png");
+    const Texture *tex = ResourceMgr::singleton().getTexture("minecraft_tiles_big.png");
     m_image = std::unique_ptr<Image>(new Image(tex, 256, 480, 288, 512));
 
     // Physics

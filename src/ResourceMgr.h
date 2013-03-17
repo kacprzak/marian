@@ -2,21 +2,25 @@
 #ifndef RESOURCE_MGR_H
 #define RESOURCE_MGR_H
 
+#include "Singleton.h"
 #include <vector>
 #include <utility>
-#include <boost/utility.hpp>
+#include <iostream>
 #include "Texture.h"
 
-class ResourceMgr : boost::noncopyable
+class ResourceMgr : public Singleton<ResourceMgr>
 {
  public:
-    static ResourceMgr& instance()
+    ResourceMgr()
     {
-        static ResourceMgr s_instance;
-        return s_instance;
+        std::cout << "ResourceMgr created\n";
     }
 
-    ~ResourceMgr();
+    ~ResourceMgr()
+    {
+        release();
+        std::cout << "ResourceMgr destroyed\n";
+    }
 
     // Set data folder ex: "media/"
     void setDataFolder(const std::string& folder);
@@ -30,7 +34,6 @@ class ResourceMgr : boost::noncopyable
     void releaseTextures();
 
  private:
-    ResourceMgr();
     std::string dataFolder;
     std::vector<std::pair<std::string, Texture*> > m_textures;
 };

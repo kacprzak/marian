@@ -46,7 +46,7 @@ class EngineError : public std::exception
 class Engine
 {
  public:
-    static Engine& instance()
+    static Engine& singleton()
     {
         return *s_instance;
     }

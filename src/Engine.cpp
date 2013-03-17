@@ -72,6 +72,8 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight,
     for (int i = 0; i < SDLK_LAST; ++i) {
         m_keys[i] = false;
     }
+
+    new ResourceMgr;
 }
 
 //------------------------------------------------------------------------------
@@ -79,7 +81,7 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight,
 Engine::~Engine()
 {
     // Release all resources
-    ResourceMgr::instance().release();
+    delete ResourceMgr::singletonPtr();
 
     std::clog << "Quitting SDL...\n";
     SDL_Quit();

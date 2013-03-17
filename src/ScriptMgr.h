@@ -2,8 +2,9 @@
 #ifndef SCRIPT_MGR_H
 #define SCRIPT_MGR_H
 
+#include "Singleton.h"
 #include <exception>
-#include <boost/utility.hpp>
+#include <string>
 #include <lua.hpp>
 
 //------------------------------------------------------------------------------
@@ -29,15 +30,10 @@ class ScriptMgrError : public std::exception
 
 //------------------------------------------------------------------------------
 
-class ScriptMgr : boost::noncopyable
+class ScriptMgr : public Singleton<ScriptMgr>
 {
  public:
-    static ScriptMgr& instance()
-    {
-        static ScriptMgr s_instance;
-        return s_instance;
-    }
-
+    ScriptMgr();
     ~ScriptMgr();
 
     // Set data folder ex: "scripts/"
@@ -50,7 +46,6 @@ class ScriptMgr : boost::noncopyable
     bool getGlobalBool(const std::string& varname);
 
  private:
-    ScriptMgr();
     std::string dataFolder;
 
     lua_State *L;

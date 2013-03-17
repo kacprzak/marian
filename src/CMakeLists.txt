@@ -16,8 +16,9 @@ set( marian_HDRS
   Map.h
   Playable.h
   ResourceMgr.h
-  Sensor.h
   ScriptMgr.h
+  Sensor.h
+  Singleton.h
   StateMachine.h
   Texture.h
   Util.h

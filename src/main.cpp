@@ -7,7 +7,8 @@
 
 int main(int argc, char *argv[])
 {
-    ScriptMgr& sm = ScriptMgr::instance();
+    new ScriptMgr;
+    ScriptMgr& sm = ScriptMgr::singleton();
     sm.setDataFolder("scripts/");
     sm.executeScript("startup.lua");
 
@@ -18,10 +19,12 @@ int main(int argc, char *argv[])
     Engine::init("Marian", screenWidth, screenHeight, fullScreen);
     Game *game = new Game;
 
-    Engine::instance().mainLoop(game);
+    Engine::singleton().mainLoop(game);
 
     delete game;
     Engine::shutdown();
+
+    delete ScriptMgr::singletonPtr();
 
     return 0;
 }

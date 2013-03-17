@@ -22,11 +22,11 @@ Game::Game()
     m_drawDebugData = false;
     
     // Read map from file
-    ResourceMgr& resMgr = ResourceMgr::instance();
+    ResourceMgr& resMgr = ResourceMgr::singleton();
     resMgr.setDataFolder("media/");
 
     // Hero texture
-    ResourceMgr::instance().addTexture("MegaMan_001.png");
+    resMgr.addTexture("MegaMan_001.png");
 
     m_map.loadFromFile("media/map2.tmx");
 
@@ -39,7 +39,7 @@ Game::Game()
     for (const MapObject& obj : mapObjects) {
         m_gameObjects.push_back(GameObjectFactory::create(this, obj));
         if (obj.name == "hero")
-            Engine::instance().centerViewOn(obj.x, obj.y);
+            Engine::singleton().centerViewOn(obj.x, obj.y);
     }
 }
 
@@ -66,7 +66,7 @@ void Game::initialize(Engine *e)
         e->setBackgroundColor(color[0], color[1], color[2]);
     }
 
-    ScriptMgr::instance().executeScript("map2_init.lua");
+    ScriptMgr::singleton().executeScript("map2_init.lua");
 }
 
 //------------------------------------------------------------------------------

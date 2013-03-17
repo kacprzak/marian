@@ -1,17 +1,5 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "ResourceMgr.h"
-#include <iostream>
-
-ResourceMgr::ResourceMgr()
-{
-    std::cout << "ResourceMgr created\n";
-}
-
-ResourceMgr::~ResourceMgr()
-{
-    release();
-    std::cout << "ResourceMgr destroyed\n";
-}
 
 void ResourceMgr::setDataFolder(const std::string& folder)
 {

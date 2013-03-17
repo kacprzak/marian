@@ -25,7 +25,7 @@ class StandHeroState : public GameObjectState
     StandHeroState(GameObjectStateMachine& stateMachine)
         : GameObjectState(stateMachine)
     {
-        const Texture *tex = ResourceMgr::instance().getTexture("MegaMan_001.png");
+        const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
         int ax = 38;
         int ax_off = 36;
@@ -90,7 +90,7 @@ class FallHeroState : public GameObjectState
     FallHeroState(GameObjectStateMachine& stateMachine)
         : GameObjectState(stateMachine)
     {
-        const Texture *tex = ResourceMgr::instance().getTexture("MegaMan_001.png");
+        const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
         int ax = 38;
         int ax_off = 4*36;
@@ -149,7 +149,7 @@ class RunHeroState : public GameObjectState
     RunHeroState(GameObjectStateMachine& stateMachine)
         : GameObjectState(stateMachine)
     {
-        const Texture *tex = ResourceMgr::instance().getTexture("MegaMan_001.png");
+        const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
         int ax = 38 + 36;
         int ax_off = 36;

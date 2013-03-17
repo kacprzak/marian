@@ -66,7 +66,7 @@ Layer::Layer(const Map *parent, const tmx::Layer& tmxLayer)
       
             if (global_tile_id != 0) {
                 std::string imageSource = map->imageNameForTile(global_tile_id);
-                const Texture *tex = ResourceMgr::instance().getTexture(imageSource);
+                const Texture *tex = ResourceMgr::singleton().getTexture(imageSource);
 
                 // Read out the flags
                 //bool flipped_horizontally = (global_tile_id & FLIPPED_HORIZONTALLY_FLAG);
@@ -146,7 +146,7 @@ bool Map::loadFromFile(const std::string& filename)
 
     auto images = externalImages();
     for (const std::string& image : images) {
-        if (!ResourceMgr::instance().addTexture(image)) {
+        if (!ResourceMgr::singleton().addTexture(image)) {
             std::cerr << "Unable to load texture.\n";
         }     
     }
