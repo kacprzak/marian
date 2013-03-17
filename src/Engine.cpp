@@ -14,7 +14,7 @@ const double PI   = 3.141592653589793238462;
 const float  PI_F = 3.14159265358979f;
 
 // Global pointer (for use in Lua exposed functions)
-Engine *Engine::s_instance = nullptr;
+Engine *Engine::s_singleton = nullptr;
 
 // Maximum delta value passed to update 1/25 [s]
 #define DELTA_MAX 0.04f
@@ -26,20 +26,20 @@ Engine *Engine::s_instance = nullptr;
 void Engine::init(const std::string& title, int screenWidth, int screenHeight,
                   bool screenFull)
 {
-    if (s_instance) {
+    if (s_singleton) {
         std::cerr << "Engine is initialized!";
         return;
     }
 
-    s_instance = new Engine(title, screenWidth, screenHeight, screenFull);
+    s_singleton = new Engine(title, screenWidth, screenHeight, screenFull);
 }
 
 //------------------------------------------------------------------------------
 
 void Engine::shutdown()
 {
-    delete s_instance;
-    s_instance = nullptr;
+    delete s_singleton;
+    s_singleton = nullptr;
 }
 
 //------------------------------------------------------------------------------

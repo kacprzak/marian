@@ -48,7 +48,7 @@ class Engine
  public:
     static Engine& singleton()
     {
-        return *s_instance;
+        return *s_singleton;
     }
 
     static void init(const std::string& title, int screenWidth, int screenHeight,
@@ -89,7 +89,7 @@ class Engine
     void draw();
 
     // Singleton instance
-    static Engine *s_instance;
+    static Engine *s_singleton;
 
     std::string m_titile;
     int m_screenWidth;

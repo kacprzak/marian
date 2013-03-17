@@ -32,6 +32,7 @@ class GameObjectFactory
             go = new Ground(game, obj);  
         }
         assert(go);
+        go->setName(obj.name);
         return go;
     }
 
@@ -39,7 +40,7 @@ class GameObjectFactory
 
     static GameObject *create(Game *game,
                               GameObjectCategory type,
-                              const std::string& /*name*/,
+                              const std::string& name,
                               float x, float y)
     {
         GameObject *go = nullptr;
@@ -48,6 +49,7 @@ class GameObjectFactory
             go = new Box(game, x, y);
         }
         assert(go);
+        go->setName(name);
         return go;
     }
 

@@ -3,7 +3,7 @@
 #define GAME_H
 
 #include "Playable.h"
-#include <vector>
+#include <list>
 #include <string>
 #include "Map.h"
 #include "FpsCounter.h"
@@ -40,10 +40,12 @@ class Game : public Playable
                        const std::string& name,
                        float x, float y);
 
+    bool isOnMap(GameObject *go);
+
  private:
     void toggleDrawDebug();
 
-    std::vector<GameObject *> m_gameObjects;
+    std::list<GameObject *> m_gameObjects;
     Map m_map;
 
     b2World   *m_world;

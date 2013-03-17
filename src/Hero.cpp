@@ -53,7 +53,7 @@ class StandHeroState : public GameObjectState
         Hero *hero = static_cast<Hero *>(m_stateMachine.owner());
         const b2Vec2& vel = hero->body()->GetLinearVelocity();
 
-        if (!hero->isOnGround() || std::abs(vel.y) > 2.0f) {
+        if (std::abs(vel.y) > 6.0f) {
             m_stateMachine.changeState(FALL);
             return;
         }
@@ -117,7 +117,7 @@ class FallHeroState : public GameObjectState
             setFacingRight(fr);
         }
 
-        if (hero->isOnGround() && std::abs(vel.y) < 0.5f) {
+        if (hero->isOnGround() && std::abs(vel.y) < 0.1f) {
             m_stateMachine.changeState(STAND);
             return;
         }

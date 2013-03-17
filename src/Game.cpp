@@ -98,6 +98,21 @@ void Game::update(Engine *e, float elapsedTime)
     } 
 
     m_fpsCounter.update(elapsedTime);
+
+    // Remove dead GameObjects
+    auto it = std::begin(m_gameObjects);
+    while (it != std::end(m_gameObjects)) {
+        GameObject *go = *it;
+        if (go->dead()) {
+            delete go;
+            it = m_gameObjects.erase(it);
+        } else {
+            // Kill it if out of map
+            if (!isOnMap(go))
+                go->die();
+            ++it;
+        }
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -135,6 +150,19 @@ void Game::addGameObject(GameObjectCategory type, const std::string& name,
                          float x, float y)
 {
     m_gameObjects.push_back(GameObjectFactory::create(this, type, name, x, y));        
+}
+
+//------------------------------------------------------------------------------
+
+bool Game::isOnMap(GameObject *go)
+{
+    const b2Vec2& pos = go->body()->GetPosition();
+    if (pos.x < 0.0f || pos.x > m_map.width())
+        return false;
+    else if (pos.y < 0.0f)
+        return false;
+
+    return true;
 }
 
 //------------------------------------------------------------------------------
