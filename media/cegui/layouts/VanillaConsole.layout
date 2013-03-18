@@ -4,8 +4,8 @@
         <Property Name="AlwaysOnTop" Value="True" />
         <Property Name="UnifiedMinSize" Value="{{0.2,0},{0.2,0}}" />
         <Property Name="UnifiedMaxSize" Value="{{0.8,0},{0.8,0}}" />
-        <Property Name="UnifiedPosition" Value="{{0.5,0},{0.5,0}}" />
-        <Property Name="UnifiedSize" Value="{{0.5,0},{0.45,0}}" />
+        <Property Name="UnifiedPosition" Value="{{0.1,0},{0.0,0}}" />
+        <Property Name="UnifiedSize" Value="{{0.8,0},{0.3,0}}" />
         <Property Name="Text" Value="Console" />
         <Property Name="CloseButtonEnabled" Value="False" />
 
@@ -34,16 +34,7 @@
             <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
             <Property Name="UnifiedPosition" Value="{{0,7},{0,7}}" />
             <Property Name="UnifiedSize" Value="{{1,-14},{1,-47}}" />
-            <Property Name="Text">CEGUI Demo Console - F12 toggles this window
-
-It's now easy to add multiline text property.
-Line 1
-<![CDATA[
-You can now put <xml>stuff</xml> in your property easly " " "
-]]>
-Line 2
-Line 3
-</Property>
+            <Property Name="Text">Console - F12 toggles this window</Property>
         </Window>
     </Window>
 </GUILayout>
