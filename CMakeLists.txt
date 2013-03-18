@@ -20,6 +20,7 @@ find_package( Box2D REQUIRED )
 #find_package( GLUT REQUIRED )
 find_package( ZLIB REQUIRED )
 find_package( Lua51 REQUIRED )
+find_package( CEGUI REQUIRED COMPONENTS OPENGL )
 
 set( CMAKE_DEBUG_POSTFIX "_d" )
 
@@ -34,6 +35,7 @@ include_directories(
 #  ${GLUT_INCLUDE_DIRS}
   ${ZLIB_INCLUDE_DIR}
   ${LUA_INCLUDE_DIR}
+  ${CEGUI_INCLUDE_DIR}
 )
 
 add_subdirectory( tmx )

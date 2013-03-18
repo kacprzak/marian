@@ -11,6 +11,7 @@ set( marian_HDRS
   GameObjectFactory.h
   GameObjectState.h
   Ground.h
+  GuiMgr.h
   Hero.h
   Image.h
   Map.h
@@ -31,6 +32,7 @@ set( marian_SRCS
   FpsCounter.cpp
   Game.cpp
   Ground.cpp
+  GuiMgr.cpp
   Hero.cpp
   Map.cpp
   ResourceMgr.cpp
@@ -57,6 +59,7 @@ target_link_libraries( marian
   ${LUA_LIBRARIES}
 #  ${Boost_LIBRARIES}
 #  ${GLUT_LIBRARY}
+  ${CEGUI_LIBRARY}
 )
 
 add_custom_target(run

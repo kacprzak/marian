@@ -108,6 +108,7 @@ class Engine
     Playable *m_game;
 
     bool m_keys[SDLK_LAST];
+    bool m_gui;
 };
 
 #endif

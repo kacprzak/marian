@@ -242,13 +242,13 @@ Hero::Hero(Game *game, float x, float y, float w, float h)
     bodyDef.userData = this;
     b2Body* body = game->world()->CreateBody(&bodyDef);
     
-    b2PolygonShape polygonShape;
-    polygonShape.SetAsBox(hw, hh);
+    b2CircleShape circleShape;
+    circleShape.m_radius = hw;
     
     b2FixtureDef fixtureDef;
     fixtureDef.filter.categoryBits = category();
     fixtureDef.filter.maskBits = GROUND | BOX | SENSOR;
-    fixtureDef.shape = &polygonShape;
+    fixtureDef.shape = &circleShape;
     fixtureDef.density = 0.8f;
     fixtureDef.friction = 0.3f;
     fixtureDef.restitution = 0.0f;
@@ -257,7 +257,9 @@ Hero::Hero(Game *game, float x, float y, float w, float h)
     body->CreateFixture(&fixtureDef);
 
     // Add foot sensor fixture
+    b2PolygonShape polygonShape;
     polygonShape.SetAsBox(hw, 0.3f, b2Vec2(0, -hh), 0);
+    fixtureDef.shape = &polygonShape;
     fixtureDef.isSensor = true;
     fixtureDef.filter.maskBits = GROUND | BOX;
     fixtureDef.density = 0.0f;

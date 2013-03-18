@@ -9,6 +9,7 @@
 #include "Texture.h"
 #include <vector>
 #include "ResourceMgr.h"
+#include "GuiMgr.h"
 
 const double PI   = 3.141592653589793238462;
 const float  PI_F = 3.14159265358979f;
@@ -74,12 +75,16 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight,
     }
 
     new ResourceMgr;
+    // Required by GUI
+    SDL_EnableUNICODE(1);
+    new GuiMgr;
 }
 
 //------------------------------------------------------------------------------
 
 Engine::~Engine()
 {
+    delete GuiMgr::singletonPtr();
     // Release all resources
     delete ResourceMgr::singletonPtr();
 
@@ -151,6 +156,9 @@ bool Engine::processEvents()
     SDL_Event event;
   
     while (SDL_PollEvent(&event)) {
+        // Inject to gui
+        GuiMgr::singleton().processInput(event);
+
         switch (event.type) {
         case SDL_KEYUP:
             m_keys[event.key.keysym.sym] = false;
@@ -186,8 +194,10 @@ bool Engine::processEvents()
 
 void Engine::update(float elapsedTime)
 {
-    // Update world
+    // Update game
     m_game->update(this, elapsedTime);
+    // Update gui
+    GuiMgr::singleton().update(elapsedTime);
 }
 
 //------------------------------------------------------------------------------
@@ -203,7 +213,11 @@ void Engine::draw()
                  m_translate_z);
     glScalef(m_scale, m_scale, 1.0f);
 
+    // Draw game
     m_game->draw(this);
+    
+    // Draw gui
+    GuiMgr::singleton().draw();
 
     SDL_GL_SwapBuffers(); 
 }
