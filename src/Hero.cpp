@@ -353,13 +353,13 @@ void Hero::draw(Engine *e)
 void Hero::handleBeginContact(GameObject *other, void *fixtureUD)
 {
     if (fixtureUD == (void*)FEET_SENSOR) {
-        std::cout << "on ground" << std::endl;
+        //std::cout << "on ground" << std::endl;
         ++m_feetContacts;
     }
 
     if (other->category() != SENSOR) return;
 
-    std::cout << "is touching" << std::endl;
+    std::cout << "is touching " << other->name() << std::endl;
 }
 
 //------------------------------------------------------------------------------
@@ -367,11 +367,11 @@ void Hero::handleBeginContact(GameObject *other, void *fixtureUD)
 void Hero::handleEndContact(GameObject *other, void *fixtureUD)
 {
     if (fixtureUD == (void*)FEET_SENSOR) {
-        std::cout << "off ground" << std::endl;
+        //std::cout << "off ground" << std::endl;
         --m_feetContacts;
     }
 
     if (other->category() != SENSOR) return;
 
-    std::cout << "is not touching" << std::endl;
+    std::cout << "is not touching " << other->name() << std::endl;
 }

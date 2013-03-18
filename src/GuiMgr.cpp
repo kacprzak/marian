@@ -3,10 +3,56 @@
 
 #include <CEGUI.h>
 #include <RendererModules/OpenGL/CEGUIOpenGLRenderer.h>
+#include <iostream>
 
 GuiMgr::GuiMgr()
 {
     CEGUI::OpenGLRenderer::bootstrapSystem();
+
+    std::string folder = "media/cegui/";
+    // Initialise the required dirs for the DefaultResourceProvider
+    CEGUI::DefaultResourceProvider* rp = static_cast<CEGUI::DefaultResourceProvider*>
+        (CEGUI::System::getSingleton().getResourceProvider());
+
+    rp->setResourceGroupDirectory("schemes",     folder + "schemes/");
+    rp->setResourceGroupDirectory("imagesets",   folder + "imagesets/");
+    rp->setResourceGroupDirectory("fonts",       folder + "fonts/");
+    rp->setResourceGroupDirectory("layouts",     folder + "layouts/");
+    rp->setResourceGroupDirectory("looknfeels",  folder + "looknfeel/");
+    rp->setResourceGroupDirectory("lua_scripts", folder + "lua_scripts/");
+
+    // Set the default resource groups to be used
+    CEGUI::Imageset::setDefaultResourceGroup("imagesets");
+    CEGUI::Font::setDefaultResourceGroup("fonts");
+    CEGUI::Scheme::setDefaultResourceGroup("schemes");
+    CEGUI::WidgetLookManager::setDefaultResourceGroup("looknfeels");
+    CEGUI::WindowManager::setDefaultResourceGroup("layouts");
+    CEGUI::ScriptModule::setDefaultResourceGroup("lua_scripts");
+
+    // Load the scheme
+    CEGUI::SchemeManager::getSingleton().create("TaharezLook.scheme");
+    CEGUI::SchemeManager::getSingleton().create("VanillaSkin.scheme");
+
+    CEGUI::Window *consoleWindow
+        = CEGUI::WindowManager::getSingleton().loadWindowLayout("VanillaConsole.layout");
+
+    // Set the defaults
+    CEGUI::System::getSingleton().setDefaultFont("DejaVuSans-10");
+    CEGUI::System::getSingleton().setDefaultMouseCursor("Vanilla-Images", "MouseArrow");
+
+    CEGUI::Window* myRoot =
+        CEGUI::WindowManager::getSingleton().createWindow("DefaultWindow", "_MasterRoot");
+
+    CEGUI::System::getSingleton().setGUISheet(myRoot);
+
+    CEGUI::System::getSingleton().getGUISheet()->addChildWindow(consoleWindow);
+
+    std::cout << "GuiMgr created\n";
+}
+
+GuiMgr::~GuiMgr()
+{
+    std::cout << "GuiMgr destroyed\n";
 }
 
 //------------------------------------------------------------------------------

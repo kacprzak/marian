@@ -9,6 +9,7 @@ class GuiMgr : public Singleton<GuiMgr>
 {
  public:
     GuiMgr();
+    ~GuiMgr();
 
     bool processInput(const SDL_Event& event);
     void update(float elapsedTime);

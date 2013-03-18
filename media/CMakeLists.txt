@@ -4,6 +4,7 @@ set ( media_FILES
   minecraft_tiles_big.png
   TileKit.png
   MegaMan_001.png
+  cegui
 )
 
 file( COPY ${media_FILES}
