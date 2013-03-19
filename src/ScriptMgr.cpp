@@ -23,6 +23,7 @@ ScriptMgr::ScriptMgr()
 {
     L = luaL_newstate();
 
+    // Expose functions to lua code
     lua_register(L, "addBox", l_addBox);
 
     std::cout << "ScriptMgr created\n";
@@ -40,6 +41,18 @@ ScriptMgr::~ScriptMgr()
 void ScriptMgr::setDataFolder(const std::string& folder)
 {
     dataFolder = folder;
+}
+
+//------------------------------------------------------------------------------
+
+bool ScriptMgr::executeCode(const std::string& code)
+{
+    if (luaL_dostring(L, code.c_str())) {
+        throw ScriptMgrError(lua_tostring(L, -1));
+    }
+
+    std::cout << "Executed code: " << code << std::endl;
+    return true;
 }
 
 //------------------------------------------------------------------------------

@@ -13,6 +13,7 @@ Dependencies
 * OpenGL
 * Box2D
 * Lua
+* CEGUI
 
 
 Third-party code

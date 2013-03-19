@@ -1,6 +1,8 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "Console.h"
 #include <iostream>
+#include <limits>
+#include "ScriptMgr.h"
 
 Console::Console()
 {
@@ -17,6 +19,22 @@ Console::Console()
 Console::~Console()
 {
     std::clog << "Console destroyed\n";
+}
+
+//------------------------------------------------------------------------------
+
+void Console::handleKey(CEGUI::uint key)
+{
+    switch (key) {
+    case CEGUI::Key::F12 :
+        toggleVisible();
+        break;
+    case CEGUI::Key::ArrowUp :
+        revertPreviousCommand();
+        break;
+    default:
+        break;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -55,9 +73,9 @@ void Console::registerHandlers()
 
 //------------------------------------------------------------------------------
 
-bool Console::handle_TextSubmitted(const CEGUI::EventArgs& e)
+bool Console::handle_TextSubmitted(const CEGUI::EventArgs& /*e*/)
 {
-    const CEGUI::WindowEventArgs* args = static_cast<const CEGUI::WindowEventArgs*>(&e);
+    //const CEGUI::WindowEventArgs* args = static_cast<const CEGUI::WindowEventArgs*>(&e);
  
     CEGUI::String msg = m_consoleWindow->getChild("Vanilla/Console/Editbox")->getText();
  
@@ -83,15 +101,50 @@ bool Console::handle_SendButtonPressed(const CEGUI::EventArgs& /*e*/)
 
 void Console::parseText(CEGUI::String inMsg)
 {
-    outputText(inMsg);
+    // Remember command
+    m_previousCmd = inMsg;
+
+    if (inMsg.compare("clear") == 0) {
+        clearText();
+        return;
+    }
+
+    try {
+        ScriptMgr::singleton().executeCode(inMsg.c_str());
+        outputText(inMsg); // echo
+    } catch (const ScriptMgrError& ex) {
+        outputText(ex.what());
+    }
 }
 
 //------------------------------------------------------------------------------
 
 void Console::outputText(CEGUI::String inMsg, CEGUI::colour /*colour*/)
 {
-    CEGUI::MultiLineEditbox *outputWindow =
-        static_cast<CEGUI::MultiLineEditbox *>(m_consoleWindow->getChild("Vanilla/Console/History"));
-        
-    outputWindow->setText(inMsg);
+    CEGUI::MultiLineEditbox *outWin =
+        static_cast<CEGUI::MultiLineEditbox *>
+        (m_consoleWindow->getChild("Vanilla/Console/History"));
+
+    CEGUI::String text = outWin->getText();
+    text.append(inMsg);
+    outWin->setText(text);
+
+    // Push scrollbar to bottom
+    CEGUI::Scrollbar *sb = outWin->getVertScrollbar();
+    sb->setScrollPosition(std::numeric_limits<float>::max());
+}
+
+//------------------------------------------------------------------------------
+
+void Console::clearText()
+{
+    CEGUI::Window *outputWindow = m_consoleWindow->getChild("Vanilla/Console/History");
+    outputWindow->setText(CEGUI::String());
+}
+
+//------------------------------------------------------------------------------
+
+void Console::revertPreviousCommand()
+{
+    m_consoleWindow->getChild("Vanilla/Console/Editbox")->setText(m_previousCmd);
 }

@@ -40,6 +40,7 @@ class ScriptMgr : public Singleton<ScriptMgr>
     void setDataFolder(const std::string& folder);
 
     // Scripts management
+    bool executeCode(const std::string& code);
     bool executeScript(const std::string& filename);
 
     int  getGlobalInt(const std::string& varname);

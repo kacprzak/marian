@@ -13,6 +13,8 @@ class Console : public Singleton<Console>
 
     CEGUI::Window *getWindow() { return m_consoleWindow; }
 
+    void handleKey(CEGUI::uint key);
+
     // Hide or show the console
     void setVisible(bool visible);
     // return true if console is visible, false if is hidden
@@ -21,6 +23,8 @@ class Console : public Singleton<Console>
     {
         setVisible(!m_consoleVisible);
     }
+
+    void revertPreviousCommand();
 
  private:
     // Register our handler functions
@@ -36,9 +40,11 @@ class Console : public Singleton<Console>
     void outputText(CEGUI::String inMsg,
                     CEGUI::colour colour = CEGUI::colour(0xFFFFFFFF));
 
+    void clearText();
 
     CEGUI::Window *m_consoleWindow;
     bool m_consoleVisible;
+    CEGUI::String m_previousCmd;
 };
 
 #endif // CONSOLE_H

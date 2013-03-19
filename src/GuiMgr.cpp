@@ -8,6 +8,7 @@
 
 static CEGUI::uint SDLKeyToCEGUIKey(SDLKey key);
 
+//------------------------------------------------------------------------------
 
 GuiMgr::GuiMgr()
 {
@@ -55,6 +56,8 @@ GuiMgr::GuiMgr()
     c->setVisible(false);
 }
 
+//------------------------------------------------------------------------------
+
 GuiMgr::~GuiMgr()
 {
     delete Console::singletonPtr();
@@ -89,8 +92,8 @@ bool GuiMgr::processInput(const SDL_Event& e)
     case SDL_KEYDOWN:
         {
             CEGUI::uint kc = SDLKeyToCEGUIKey(e.key.keysym.sym);
-            if (kc == CEGUI::Key::F12) {
-                Console::singleton().toggleVisible();
+            if (Console::singletonPtr()) {
+                Console::singleton().handleKey(kc);
             }
 
             CEGUI::System::getSingleton().injectKeyDown(kc);
@@ -101,15 +104,16 @@ bool GuiMgr::processInput(const SDL_Event& e)
             if ((e.key.keysym.unicode & 0xFF80) == 0) {
                 CEGUI::System::getSingleton().injectChar(e.key.keysym.unicode & 0x7F);
             }
-            break;
         }
+        break;
+
         /* key up */
     case SDL_KEYUP:
         {
             CEGUI::uint kc = SDLKeyToCEGUIKey(e.key.keysym.sym);
             CEGUI::System::getSingleton().injectKeyUp(kc);
-            break;
         }
+        break;
     case SDL_VIDEORESIZE:
         CEGUI::System::getSingleton().notifyDisplaySizeChanged(CEGUI::Size(e.resize.w,
                                                                            e.resize.h));
