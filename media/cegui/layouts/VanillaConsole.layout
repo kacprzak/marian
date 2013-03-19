@@ -8,6 +8,7 @@
         <Property Name="UnifiedSize" Value="{{0.8,0},{0.3,0}}" />
         <Property Name="Text" Value="Console" />
         <Property Name="CloseButtonEnabled" Value="False" />
+        <Property Name="Alpha" Value="0.7" />
 
         <Window Type="Vanilla/Button" Name="Vanilla/Console/Submit">
             <Property Name="ID" Value="1" />
@@ -26,6 +27,7 @@
             <Property Name="UnifiedPosition" Value="{{0,7},{0,-7}}" />
             <Property Name="UnifiedSize" Value="{{0.75,-21},{0,30}}" />
             <Property Name="Text" Value="" />
+            <Property Name="BlinkCaret" Value="True" />
         </Window>
 
         <Window Type="Vanilla/MultiLineEditbox" Name="Vanilla/Console/History">

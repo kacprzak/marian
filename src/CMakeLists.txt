@@ -3,6 +3,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set( marian_HDRS
   Animation.h
   Box.h
+  Console.h
   Engine.h
   FpsCounter.h
   Game.h
@@ -28,6 +29,7 @@ set( marian_HDRS
 
 set( marian_SRCS
   Box.cpp
+  Console.cpp
   Engine.cpp
   FpsCounter.cpp
   Game.cpp

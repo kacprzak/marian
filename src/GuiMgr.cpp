@@ -4,13 +4,12 @@
 #include <CEGUI.h>
 #include <RendererModules/OpenGL/CEGUIOpenGLRenderer.h>
 #include <iostream>
+#include "Console.h"
 
 static CEGUI::uint SDLKeyToCEGUIKey(SDLKey key);
 
 
 GuiMgr::GuiMgr()
-    : m_consoleWindow(nullptr)
-    , m_consoleVisible(true)
 {
     CEGUI::OpenGLRenderer::bootstrapSystem();
 
@@ -38,8 +37,6 @@ GuiMgr::GuiMgr()
     CEGUI::SchemeManager::getSingleton().create("TaharezLook.scheme");
     CEGUI::SchemeManager::getSingleton().create("VanillaSkin.scheme");
 
-    m_consoleWindow = CEGUI::WindowManager::getSingleton().loadWindowLayout("VanillaConsole.layout");
-
     // Set the defaults
     CEGUI::System::getSingleton().setDefaultFont("DejaVuSans-10");
     //CEGUI::System::getSingleton().setDefaultMouseCursor("Vanilla-Images", "MouseArrow");
@@ -48,17 +45,20 @@ GuiMgr::GuiMgr()
         CEGUI::WindowManager::getSingleton().createWindow("DefaultWindow", "_MasterRoot");
 
     CEGUI::System::getSingleton().setGUISheet(myRoot);
-    CEGUI::System::getSingleton().getGUISheet()->addChildWindow(m_consoleWindow);
 
-    registerHandlers();
-    setConsoleVisible(false);
+    std::clog << "GuiMgr created\n";
 
-    std::cout << "GuiMgr created\n";
+    // Add Console window to gui
+    Console *c = new Console;
+    CEGUI::System::getSingleton().getGUISheet()->addChildWindow(c->getWindow());
+
+    c->setVisible(false);
 }
 
 GuiMgr::~GuiMgr()
 {
-    std::cout << "GuiMgr destroyed\n";
+    delete Console::singletonPtr();
+    std::clog << "GuiMgr destroyed\n";
 }
 
 //------------------------------------------------------------------------------
@@ -90,7 +90,7 @@ bool GuiMgr::processInput(const SDL_Event& e)
         {
             CEGUI::uint kc = SDLKeyToCEGUIKey(e.key.keysym.sym);
             if (kc == CEGUI::Key::F12) {
-                setConsoleVisible(!m_consoleVisible);
+                Console::singleton().toggleVisible();
             }
 
             CEGUI::System::getSingleton().injectKeyDown(kc);
@@ -172,83 +172,6 @@ void GuiMgr::handle_mouse_up(Uint8 button)
         CEGUI::System::getSingleton().injectMouseButtonUp(CEGUI::RightButton);
         break;
     }
-}
-
-//------------------------------------------------------------------------------
-
-void GuiMgr::setConsoleVisible(bool visible)
-{
-    m_consoleWindow->setVisible(visible);
-    m_consoleVisible = visible;
- 
-    CEGUI::Window *editBox = m_consoleWindow->getChild("Vanilla/Console/Editbox");
-    if(visible)
-        editBox->activate();
-    else
-        editBox->deactivate();
-}
-
-//------------------------------------------------------------------------------
-
-bool GuiMgr::isConsoleVisible()
-{
-    return m_consoleWindow->isVisible();
-}
-
-//------------------------------------------------------------------------------
-
-void GuiMgr::registerHandlers()
-{
-    m_consoleWindow->getChild("Vanilla/Console/Submit")->
-        subscribeEvent(CEGUI::PushButton::EventClicked,
-                       CEGUI::Event::Subscriber(&GuiMgr::handle_SendButtonPressed, this));
-
-    m_consoleWindow->getChild("Vanilla/Console/Editbox")->
-        subscribeEvent(CEGUI::Editbox::EventTextAccepted,
-                       CEGUI::Event::Subscriber(&GuiMgr::handle_TextSubmitted, this));
-}
-
-//------------------------------------------------------------------------------
-
-bool GuiMgr::handle_TextSubmitted(const CEGUI::EventArgs& e)
-{
-    const CEGUI::WindowEventArgs* args = static_cast<const CEGUI::WindowEventArgs*>(&e);
- 
-    CEGUI::String msg = m_consoleWindow->getChild("Vanilla/Console/Editbox")->getText();
- 
-    parseText(msg);
- 
-    m_consoleWindow->getChild("Vanilla/Console/Editbox")->setText("");
- 
-    return true;
-}
-
-//------------------------------------------------------------------------------
-
-bool GuiMgr::handle_SendButtonPressed(const CEGUI::EventArgs& /*e*/)
-{
-    CEGUI::String msg = m_consoleWindow->getChild("Vanilla/Console/Editbox")->getText();
-    parseText(msg);
-    m_consoleWindow->getChild("Vanilla/Console/Editbox")->setText("");
- 
-    return true;
-}
-
-//------------------------------------------------------------------------------
-
-void GuiMgr::parseText(CEGUI::String inMsg)
-{
-    outputText(inMsg);
-}
-
-//------------------------------------------------------------------------------
-
-void GuiMgr::outputText(CEGUI::String inMsg, CEGUI::colour /*colour*/)
-{
-    CEGUI::MultiLineEditbox *outputWindow =
-        static_cast<CEGUI::MultiLineEditbox *>(m_consoleWindow->getChild("Vanilla/Console/History"));
-        
-    outputWindow->setText(inMsg);
 }
 
 /************************************************************************
