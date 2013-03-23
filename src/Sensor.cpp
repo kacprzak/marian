@@ -4,8 +4,8 @@
 #include "Game.h"
 #include <Box2D/Box2D.h>
 
-Sensor::Sensor(Game *game, const MapObject& obj)
-    : Ground(game, obj)
+Sensor::Sensor(unsigned long id, Game *game, const MapObject& obj)
+    : Ground(id, game, obj)
 {
     // Ground has one fixture
     b2Fixture *fix = m_body->GetFixtureList();

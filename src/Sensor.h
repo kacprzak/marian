@@ -2,7 +2,7 @@
 #ifndef SENSOR_H
 #define SENSOR_H
 
-#include "GameObject.h"
+#include "Actor.h"
 
 #include "Map.h"
 #include "Ground.h"
@@ -10,9 +10,9 @@
 class Sensor : public Ground
 {
  public:
-    Sensor(Game *game, const MapObject& obj);
+    Sensor(unsigned long id, Game *game, const MapObject& obj);
 
-    GameObjectCategory category() override
+    ActorCategory category() override
     { return SENSOR; }
 };
 

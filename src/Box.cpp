@@ -6,8 +6,8 @@
 #include "ResourceMgr.h"
 #include <Box2D/Box2D.h>
 
-Box::Box(Game *game, float x, float y, float w, float h)
-    : GameObject(game)
+Box::Box(unsigned long id, Game *game, float x, float y, float w, float h)
+    : Actor(id, game)
 {
     // Image creation
     const Texture *tex = ResourceMgr::singleton().getTexture("minecraft_tiles_big.png");

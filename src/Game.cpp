@@ -3,8 +3,8 @@
 
 #include "ResourceMgr.h"
 #include "Engine.h"
-#include "GameObject.h"
-#include "GameObjectFactory.h"
+#include "Actor.h"
+#include "ActorFactory.h"
 #include "Util.h"
 #include "ScriptMgr.h"
 
@@ -37,7 +37,7 @@ Game::Game()
     std::cout << "INFO: " << mapObjects.size() << " objects loaded.\n";
 
     for (const MapObject& obj : mapObjects) {
-        m_gameObjects.push_back(GameObjectFactory::create(this, obj));
+        m_gameObjects.push_back(ActorFactory::create(this, obj));
         if (obj.name == "hero")
             Engine::singleton().centerViewOn(obj.x, obj.y);
     }
@@ -47,7 +47,7 @@ Game::Game()
 
 Game::~Game()
 {
-    for (GameObject *go : m_gameObjects) {
+    for (Actor *go : m_gameObjects) {
         delete go;
     }
 
@@ -93,7 +93,7 @@ void Game::update(Engine *e, float elapsedTime)
     int32 positionIterations = 2;
     m_world->Step(elapsedTime, velocityIterations, positionIterations);
 
-    for (GameObject *go : m_gameObjects) {
+    for (Actor *go : m_gameObjects) {
         go->update(e, elapsedTime);
     } 
 
@@ -102,7 +102,7 @@ void Game::update(Engine *e, float elapsedTime)
     // Remove dead GameObjects
     auto it = std::begin(m_gameObjects);
     while (it != std::end(m_gameObjects)) {
-        GameObject *go = *it;
+        Actor *go = *it;
         if (go->dead()) {
             delete go;
             it = m_gameObjects.erase(it);
@@ -127,7 +127,7 @@ void Game::draw(Engine *e)
     m_map.drawLayer(e, "back",   x1, x2, y1, y2);
     m_map.drawLayer(e, "ground", x1, x2, y1, y2);
  
-    for (GameObject* go : m_gameObjects) {
+    for (Actor* go : m_gameObjects) {
         go->draw(e);
     }
 
@@ -146,15 +146,15 @@ void Game::draw(Engine *e)
 
 //------------------------------------------------------------------------------
 
-void Game::addGameObject(GameObjectCategory type, const std::string& name,
+void Game::addGameObject(ActorCategory type, const std::string& name,
                          float x, float y)
 {
-    m_gameObjects.push_back(GameObjectFactory::create(this, type, name, x, y));        
+    m_gameObjects.push_back(ActorFactory::create(this, type, name, x, y));        
 }
 
 //------------------------------------------------------------------------------
 
-bool Game::isOnMap(GameObject *go)
+bool Game::isOnMap(Actor *go)
 {
     const b2Vec2& pos = go->body()->GetPosition();
     if (pos.x < 0.0f || pos.x > m_map.width())
@@ -189,8 +189,8 @@ void ContactListener::BeginContact(b2Contact *contact)
     void *bodyAUserData = contact->GetFixtureA()->GetBody()->GetUserData();
     void *bodyBUserData = contact->GetFixtureB()->GetBody()->GetUserData();
     if ( bodyAUserData && bodyBUserData ) {
-        GameObject *gameObjectA = static_cast<GameObject *>(bodyAUserData);
-        GameObject *gameObjectB = static_cast<GameObject *>(bodyBUserData);
+        Actor *gameObjectA = static_cast<Actor *>(bodyAUserData);
+        Actor *gameObjectB = static_cast<Actor *>(bodyBUserData);
         gameObjectA->handleBeginContact(gameObjectB, fixAUserData);
         gameObjectB->handleBeginContact(gameObjectA, fixBUserData);
     }
@@ -206,8 +206,8 @@ void ContactListener::EndContact(b2Contact *contact)
     void *bodyAUserData = contact->GetFixtureA()->GetBody()->GetUserData();
     void *bodyBUserData = contact->GetFixtureB()->GetBody()->GetUserData();
     if ( bodyAUserData && bodyBUserData ) {
-        GameObject *gameObjectA = static_cast<GameObject *>(bodyAUserData);
-        GameObject *gameObjectB = static_cast<GameObject *>(bodyBUserData);
+        Actor *gameObjectA = static_cast<Actor *>(bodyAUserData);
+        Actor *gameObjectB = static_cast<Actor *>(bodyBUserData);
         gameObjectA->handleEndContact(gameObjectB, fixAUserData);
         gameObjectB->handleEndContact(gameObjectA, fixBUserData);
     }

@@ -7,10 +7,10 @@ set( marian_HDRS
   Engine.h
   FpsCounter.h
   Game.h
-  GameObject.h
-  GameObjectCategory.h
-  GameObjectFactory.h
-  GameObjectState.h
+  Actor.h
+  ActorCategory.h
+  ActorFactory.h
+  ActorState.h
   Ground.h
   GuiMgr.h
   Hero.h

@@ -19,11 +19,11 @@ enum HeroStateId {
 
 //==============================================================================
 
-class StandHeroState : public GameObjectState
+class StandHeroState : public ActorState
 {
  public:
-    StandHeroState(GameObjectStateMachine& stateMachine)
-        : GameObjectState(stateMachine)
+    StandHeroState(ActorStateMachine& stateMachine)
+        : ActorState(stateMachine)
     {
         const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
@@ -40,7 +40,7 @@ class StandHeroState : public GameObjectState
         m_animation.addFrame(idleFrame2, 0.1f); // Blink
     }
 
-    void onEnter(GameObject * owner, int /*prevStateId*/) override
+    void onEnter(Actor * owner, int /*prevStateId*/) override
     {
         Hero *hero = static_cast<Hero *>(owner);
         setFacingRight(hero->isFacingRight());
@@ -84,11 +84,11 @@ class StandHeroState : public GameObjectState
 
 //==============================================================================
 
-class FallHeroState : public GameObjectState
+class FallHeroState : public ActorState
 {
  public:
-    FallHeroState(GameObjectStateMachine& stateMachine)
-        : GameObjectState(stateMachine)
+    FallHeroState(ActorStateMachine& stateMachine)
+        : ActorState(stateMachine)
     {
         const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
@@ -100,7 +100,7 @@ class FallHeroState : public GameObjectState
         m_image->scale(2.0f);
     }
 
-    void onEnter(GameObject * owner, int /*prevStateId*/) override
+    void onEnter(Actor * owner, int /*prevStateId*/) override
     {
         Hero *hero = static_cast<Hero *>(owner);
         setFacingRight(hero->isFacingRight());
@@ -143,11 +143,11 @@ class FallHeroState : public GameObjectState
 
 //==============================================================================
 
-class RunHeroState : public GameObjectState
+class RunHeroState : public ActorState
 {
  public:
-    RunHeroState(GameObjectStateMachine& stateMachine)
-        : GameObjectState(stateMachine)
+    RunHeroState(ActorStateMachine& stateMachine)
+        : ActorState(stateMachine)
     {
         const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
@@ -171,7 +171,7 @@ class RunHeroState : public GameObjectState
         }
     }
 
-    void onEnter(GameObject * owner, int /*prevStateId*/) override
+    void onEnter(Actor * owner, int /*prevStateId*/) override
     {
         Hero *hero = static_cast<Hero *>(owner);
         setFacingRight(hero->isFacingRight());
@@ -221,8 +221,8 @@ class RunHeroState : public GameObjectState
 
 //==============================================================================
 
-Hero::Hero(Game *game, float x, float y, float w, float h)
-    : GameObject(game)
+Hero::Hero(unsigned long id, Game *game, float x, float y, float w, float h)
+    : Actor(id, game)
     , m_jumpTimeout(0.0f)
     , m_facingRight(true)
     , m_feetContacts(0)
@@ -270,7 +270,7 @@ Hero::Hero(Game *game, float x, float y, float w, float h)
     m_body = body;
 
     // States
-    GameObjectState *state = new StandHeroState(m_stateMachine);
+    ActorState *state = new StandHeroState(m_stateMachine);
     m_states.push_back(state);
     m_stateMachine.registerState(STAND, state);
 
@@ -350,7 +350,7 @@ void Hero::draw(Engine *e)
 
 //------------------------------------------------------------------------------
 
-void Hero::handleBeginContact(GameObject *other, void *fixtureUD)
+void Hero::handleBeginContact(Actor *other, void *fixtureUD)
 {
     if (fixtureUD == (void*)FEET_SENSOR) {
         //std::cout << "on ground" << std::endl;
@@ -364,7 +364,7 @@ void Hero::handleBeginContact(GameObject *other, void *fixtureUD)
 
 //------------------------------------------------------------------------------
 
-void Hero::handleEndContact(GameObject *other, void *fixtureUD)
+void Hero::handleEndContact(Actor *other, void *fixtureUD)
 {
     if (fixtureUD == (void*)FEET_SENSOR) {
         //std::cout << "off ground" << std::endl;

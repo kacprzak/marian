@@ -5,7 +5,7 @@
 #include "Engine.h"
 #include "Game.h"
 
-int main(int argc, char *argv[])
+int main(int /*argc*/, char * /*argv*/[])
 {
     new ScriptMgr;
     ScriptMgr& sm = ScriptMgr::singleton();

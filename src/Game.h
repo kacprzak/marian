@@ -3,11 +3,11 @@
 #define GAME_H
 
 #include "Playable.h"
-#include <list>
-#include <string>
 #include "Map.h"
 #include "FpsCounter.h"
-#include "GameObject.h"
+#include "Actor.h"
+#include <list>
+#include <string>
 
 #include <Box2D/Box2D.h>
 #include "debugdraw/Render.h"
@@ -36,16 +36,16 @@ class Game : public Playable
     Map *map() { return &m_map; }
     b2World *world() { return m_world; }
 
-    void addGameObject(GameObjectCategory type,
+    void addGameObject(ActorCategory type,
                        const std::string& name,
                        float x, float y);
 
-    bool isOnMap(GameObject *go);
+    bool isOnMap(Actor *go);
 
  private:
     void toggleDrawDebug();
 
-    std::list<GameObject *> m_gameObjects;
+    std::list<Actor *> m_gameObjects;
     Map m_map;
 
     b2World   *m_world;

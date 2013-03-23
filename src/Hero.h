@@ -2,28 +2,28 @@
 #ifndef HERO_H
 #define HERO_H
 
-#include "GameObject.h"
-
+#include "Actor.h"
 #include "Map.h"
-#include "GameObjectState.h"
+#include "ActorState.h"
+
 #include <memory>
 
 class Engine;
 
-class Hero : public GameObject
+class Hero : public Actor
 {
  public:
-    Hero(Game *game, float x, float y, float w, float h);
+    Hero(unsigned long id, Game *game, float x, float y, float w, float h);
     ~Hero();
   
     void update(Engine *e, float elapsedTime) override;
     void draw(Engine *e) override;
 
-    GameObjectCategory category() override
+    ActorCategory category() override
     { return HERO; }
 
-    void handleBeginContact(GameObject *other, void *fixtureUD = nullptr) override;
-    void handleEndContact  (GameObject *other, void *fixtureUD = nullptr) override;
+    void handleBeginContact(Actor *other, void *fixtureUD = nullptr) override;
+    void handleEndContact  (Actor *other, void *fixtureUD = nullptr) override;
 
     bool isOnGround() const { return m_feetContacts > 0; }
     void setFacingRight(bool right) { m_facingRight = right; }
@@ -36,8 +36,8 @@ class Hero : public GameObject
     bool m_facingRight;
     int m_feetContacts;
 
-    GameObjectStateMachine m_stateMachine;
-    std::vector<GameObjectState *> m_states;
+    ActorStateMachine m_stateMachine;
+    std::vector<ActorState *> m_states;
 };
 
 #endif
