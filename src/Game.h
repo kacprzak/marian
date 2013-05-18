@@ -27,7 +27,7 @@ class Game : public Playable
     ~Game();
 
     // Playable interface
-    void initialize(Engine *e);
+    void initialize(Engine *e) override;
 
     bool processInput(const SDL_Event& event) override;
     void update(Engine *e, float elapsedTime) override;
@@ -40,12 +40,12 @@ class Game : public Playable
                        const std::string& name,
                        float x, float y);
 
-    bool isOnMap(Actor *go);
+    bool isOnMap(Actor *actor);
 
  private:
     void toggleDrawDebug();
 
-    std::list<Actor *> m_gameObjects;
+    std::list<Actor *> m_actors;
     Map m_map;
 
     b2World   *m_world;

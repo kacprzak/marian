@@ -9,6 +9,8 @@
 
 /**
  * An image. Represents whole or part of a texture.
+ *
+ * It's a light object. Can be passed to fuctions as copy. 
  */
 class Image {
  public:

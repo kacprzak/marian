@@ -37,7 +37,7 @@ Game::Game()
     std::cout << "INFO: " << mapObjects.size() << " objects loaded.\n";
 
     for (const MapObject& obj : mapObjects) {
-        m_gameObjects.push_back(ActorFactory::create(this, obj));
+        m_actors.push_back(ActorFactory::create(this, obj));
         if (obj.name == "hero")
             Engine::singleton().centerViewOn(obj.x, obj.y);
     }
@@ -47,8 +47,8 @@ Game::Game()
 
 Game::~Game()
 {
-    for (Actor *go : m_gameObjects) {
-        delete go;
+    for (Actor *actor : m_actors) {
+        delete actor;
     }
 
     delete m_world;
@@ -81,7 +81,7 @@ bool Game::processInput(const SDL_Event& event)
         if (event.key.keysym.sym == SDLK_g) toggleDrawDebug();
         break;
     }
-    return true; // keep going
+    return true; // keep actoring
 }
 
 //------------------------------------------------------------------------------
@@ -93,23 +93,23 @@ void Game::update(Engine *e, float elapsedTime)
     int32 positionIterations = 2;
     m_world->Step(elapsedTime, velocityIterations, positionIterations);
 
-    for (Actor *go : m_gameObjects) {
-        go->update(e, elapsedTime);
+    for (Actor *actor : m_actors) {
+        actor->update(e, elapsedTime);
     } 
 
     m_fpsCounter.update(elapsedTime);
 
     // Remove dead GameObjects
-    auto it = std::begin(m_gameObjects);
-    while (it != std::end(m_gameObjects)) {
-        Actor *go = *it;
-        if (go->dead()) {
-            delete go;
-            it = m_gameObjects.erase(it);
+    auto it = std::begin(m_actors);
+    while (it != std::end(m_actors)) {
+        Actor *actor = *it;
+        if (actor->dead()) {
+            delete actor;
+            it = m_actors.erase(it);
         } else {
             // Kill it if out of map
-            if (!isOnMap(go))
-                go->die();
+            if (!isOnMap(actor))
+                actor->die();
             ++it;
         }
     }
@@ -127,8 +127,8 @@ void Game::draw(Engine *e)
     m_map.drawLayer(e, "back",   x1, x2, y1, y2);
     m_map.drawLayer(e, "ground", x1, x2, y1, y2);
  
-    for (Actor* go : m_gameObjects) {
-        go->draw(e);
+    for (Actor* actor : m_actors) {
+        actor->draw(e);
     }
 
     m_map.drawLayer(e, "water", x1, x2, y1, y2);
@@ -149,14 +149,14 @@ void Game::draw(Engine *e)
 void Game::addGameObject(ActorCategory type, const std::string& name,
                          float x, float y)
 {
-    m_gameObjects.push_back(ActorFactory::create(this, type, name, x, y));        
+    m_actors.push_back(ActorFactory::create(this, type, name, x, y));        
 }
 
 //------------------------------------------------------------------------------
 
-bool Game::isOnMap(Actor *go)
+bool Game::isOnMap(Actor *actor)
 {
-    const b2Vec2& pos = go->body()->GetPosition();
+    const b2Vec2& pos = actor->body()->GetPosition();
     if (pos.x < 0.0f || pos.x > m_map.width())
         return false;
     else if (pos.y < 0.0f)
