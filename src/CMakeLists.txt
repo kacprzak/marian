@@ -8,9 +8,14 @@ set( marian_HDRS
   FpsCounter.h
   Game.h
   Actor.h
+  ActorComponent.h
+  ActorComponentId.h
   ActorCategory.h
   ActorFactory.h
   ActorState.h
+  PhysicsComponent.h
+  ControlComponent.h
+  RenderComponent.h
   Ground.h
   GuiMgr.h
   Hero.h

@@ -12,9 +12,9 @@ int main(int /*argc*/, char * /*argv*/[])
     sm.setDataFolder("scripts/");
     sm.executeScript("startup.lua");
 
-    int screenWidth = sm.getGlobalInt("screen_width");
+    int screenWidth  = sm.getGlobalInt("screen_width");
     int screenHeight = sm.getGlobalInt("screen_height");
-    bool fullScreen = sm.getGlobalBool("screen_full");
+    bool fullScreen  = sm.getGlobalBool("screen_full");
 
     Engine::init("Marian", screenWidth, screenHeight, fullScreen);
     Game *game = new Game;

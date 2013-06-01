@@ -7,13 +7,17 @@
 #include <Box2D/Box2D.h>
 #include <string>
 #include <iostream>
+#include "ActorFactory.h"
+#include "ActorComponent.h"
 
 class Game;
 
-class Actor : public Playable
+class Actor final : public Playable
 {
+    friend class ActorFactory;
+
  public:
-    Actor(unsigned long id, Game *game)
+    explicit Actor(ActorId id, Game *game)
         : m_id(id)
         , m_game(game)
         , m_body(nullptr)
@@ -63,7 +67,7 @@ class Actor : public Playable
     const std::string& name() const { return m_name; }
 
  protected:
-    unsigned long m_id;
+    ActorId     m_id;
     Game       *m_game;
     b2Body     *m_body;
     bool        m_dead;

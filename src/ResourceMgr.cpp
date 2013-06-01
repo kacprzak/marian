@@ -6,10 +6,14 @@ void ResourceMgr::setDataFolder(const std::string& folder)
     dataFolder = folder;
 }
 
+//------------------------------------------------------------------------------
+
 void ResourceMgr::release()
 {
     releaseTextures();
 }
+
+//------------------------------------------------------------------------------
 
 bool ResourceMgr::addTexture(const std::string& filename)
 {
@@ -25,6 +29,8 @@ bool ResourceMgr::addTexture(const std::string& filename)
     return true;
 }
 
+//------------------------------------------------------------------------------
+
 void ResourceMgr::releaseTextures()
 {
     // Delete textures
@@ -34,6 +40,7 @@ void ResourceMgr::releaseTextures()
     m_textures.clear();
 }
 
+//------------------------------------------------------------------------------
 
 const Texture* ResourceMgr::getTexture(const std::string& filename)
 {

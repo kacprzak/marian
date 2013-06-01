@@ -29,6 +29,8 @@ ScriptMgr::ScriptMgr()
     std::cout << "ScriptMgr created\n";
 }
 
+//------------------------------------------------------------------------------
+
 ScriptMgr::~ScriptMgr()
 {
     lua_close(L);

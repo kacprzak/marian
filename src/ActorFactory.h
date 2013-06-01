@@ -2,7 +2,8 @@
 #ifndef ACTORFACTORY_H
 #define ACTORFACTORY_H
 
-#include "Actor.h"
+//#include "Actor.h"
+//#include "ActorComponent.h"
 #include "Map.h"
 #include "Hero.h"
 #include "Ground.h"
@@ -10,6 +11,14 @@
 #include "Sensor.h"
 
 #include <cassert>
+#include <memory>
+
+class Actor;
+class ActorComponent;
+
+typedef unsigned long ActorId;
+typedef std::shared_ptr<Actor> ActorPtr;
+typedef std::shared_ptr<ActorComponent> ActorComponentPtr;
 
 class ActorFactory
 {
