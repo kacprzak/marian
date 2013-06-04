@@ -4,13 +4,13 @@
 #include "Game.h"
 #include <Box2D/Box2D.h>
 
-Ground::Ground(unsigned long id, Game *game, const MapObject& obj)
-    : Actor(id, game)
+GroundPhysicsComponent::GroundPhysicsComponent(Game *game, const MapObject& obj)
+    : PhysicsComponent()
 {
     b2BodyDef groundBodyDef;
     groundBodyDef.position.Set(obj.x, obj.y);
 
-    b2Body *groundBody = m_game->world()->CreateBody(&groundBodyDef);
+    b2Body *groundBody = game->world()->CreateBody(&groundBodyDef);
 
     const std::string& shape = obj.shape;
     if (shape == "polyline" || shape == "polygon") {
@@ -41,7 +41,7 @@ Ground::Ground(unsigned long id, Game *game, const MapObject& obj)
     }
 
     b2Filter filter;
-    filter.categoryBits = category();
+    filter.categoryBits = GROUND;
     groundBody->GetFixtureList()->SetFilterData(filter);
     groundBody->SetUserData(this);
     

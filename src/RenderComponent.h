@@ -6,12 +6,10 @@
 
 class RenderComponent : public ActorComponent
 {
-    friend class RenderFactory;
+    friend class ActorFactory;
 
  public:
-    virtual ~RenderComponent();
-
-    virtual void draw(Engine * /*e*/) {}
+    virtual void draw(Engine * /*e*/) = 0;
 
     ActorComponentId componentId() const { return RENDER; }
 };

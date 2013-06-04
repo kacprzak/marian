@@ -26,7 +26,7 @@ ScriptMgr::ScriptMgr()
     // Expose functions to lua code
     lua_register(L, "addBox", l_addBox);
 
-    std::cout << "ScriptMgr created\n";
+    std::clog << "ScriptMgr created\n";
 }
 
 //------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ ScriptMgr::~ScriptMgr()
 {
     lua_close(L);
 
-    std::cout << "ScriptMgr destroyed\n";
+    std::clog << "ScriptMgr destroyed\n";
 }
 
 //------------------------------------------------------------------------------
@@ -53,7 +53,7 @@ bool ScriptMgr::executeCode(const std::string& code)
         throw ScriptMgrError(lua_tostring(L, -1));
     }
 
-    std::cout << "Executed code: " << code << std::endl;
+    std::clog << "Executed code: " << code << std::endl;
     return true;
 }
 
@@ -66,7 +66,7 @@ bool ScriptMgr::executeScript(const std::string& filename)
         throw ScriptMgrError(lua_tostring(L, -1));
     }
 
-    std::cout << "Executed script from: " << fullpath << std::endl;
+    std::clog << "Executed script from: " << fullpath << std::endl;
     return true;
 }
 

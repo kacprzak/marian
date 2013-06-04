@@ -6,16 +6,14 @@
 #include "ActorComponent.h"
 #include "Map.h"
 //#include "Hero.h"
-//#include "Ground.h"
-//#include "Box.h"
+#include "Ground.h"
+#include "Box.h"
 //#include "Sensor.h"
 
 #include <cassert>
 #include <memory>
 
 class Game;
-//class Actor;
-//class ActorComponent;
 
 class ActorFactory
 {
@@ -28,14 +26,26 @@ class ActorFactory
             //actor = new Hero(getNextId(), game, obj.x, obj.y, obj.width, obj.height);
 
         } else if (obj.type == "Box") {
-            //actor = new Box(getNextId(), game, obj.x, obj.y, obj.width, obj.height);
-            
+            actor->setCategory(BOX);
+
+            ActorComponentPtr physics(
+                new BoxPhysicsComponent(game, obj.x, obj.y, obj.width, obj.height));
+            actor->addComponent(physics);
+            physics->setOwner(actor);
+
+            ActorComponentPtr render(new BoxRenderComponent());
+            actor->addComponent(render);
+            render->setOwner(actor);
+
         } else if (obj.type == "Sensor") {
             //actor = new Sensor(getNextId(), game, obj);
   
         } else {
             // Static collision shape
-            //actor = new Ground(getNextId(), game, obj);
+            ActorComponentPtr physics(
+                new GroundPhysicsComponent(game, obj));
+            actor->addComponent(physics);
+            physics->setOwner(actor);
         }
         //assert(actor);
         actor->setName(obj.name);

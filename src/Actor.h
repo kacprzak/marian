@@ -3,7 +3,6 @@
 #define ACTOR_H
 
 #include "ActorCategory.h"
-#include <Box2D/Box2D.h>
 #include <string>
 #include <iostream>
 //#include "ActorFactory.h"
@@ -28,18 +27,22 @@ class Actor final
     Actor(ActorId id, Game *game)
         : m_id(id)
         , m_game(game)
-        , m_body(nullptr)
         , m_dead(false)
-    {}
+    {
+#ifndef NDEBUG
+        std::clog << "Actor created: id = " << m_id << '\n';
+#endif 
+    }
 
     ~Actor() {
 #ifndef NDEBUG
-        std::clog << "Actor removed: id = " << m_id << " name = " << name() << '\n';
+        std::clog << "Actor removed: id = " << m_id
+                  << " name = " << name() << '\n';
 #endif 
-        if (m_body) {
-            m_body->SetUserData(nullptr); // To silence contact listener
-            m_body->GetWorld()->DestroyBody(m_body);
-        }
+    }
+
+    void destroy() {
+        m_components.clear();
     }
 
     ActorId id() const { return m_id; }
@@ -52,14 +55,13 @@ class Actor final
             pair.second->update(e, elapsedTime);
     }
 
-    b2Body *body() { return m_body; }
-    void setBody(b2Body *body)
-    {
-        assert(m_body == nullptr);
-        m_body = body;
+    void die() {
+#ifndef NDEBUG
+        std::clog << "Actor died: id = " << m_id
+                  << " name = " << name() << '\n';
+#endif 
+        m_dead = true;
     }
-
-    void die() { m_dead = true; }
     bool dead() const { return m_dead; }
 
     void setName(const std::string& name) { m_name = name; }
@@ -84,7 +86,6 @@ class Actor final
     Game       *m_game;
     ActorCategory m_category; 
     ComponentsMap m_components;
-    b2Body     *m_body;
     bool        m_dead;
     std::string m_name;
 

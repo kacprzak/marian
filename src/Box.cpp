@@ -6,13 +6,9 @@
 #include "ResourceMgr.h"
 #include <Box2D/Box2D.h>
 
-Box::Box(unsigned long id, Game *game, float x, float y, float w, float h)
-    : Actor(id, game)
+BoxPhysicsComponent::BoxPhysicsComponent(Game *game, float x, float y,
+                                         float w, float h)
 {
-    // Image creation
-    const Texture *tex = ResourceMgr::singleton().getTexture("minecraft_tiles_big.png");
-    m_image = std::unique_ptr<Image>(new Image(tex, 256, 480, 288, 512));
-
     // Physics
     float hw = w / 2;
     float hh = h / 2;
@@ -29,7 +25,7 @@ Box::Box(unsigned long id, Game *game, float x, float y, float w, float h)
     dynamicBox.SetAsBox(hw, hh);
     
     b2FixtureDef fixtureDef;
-    fixtureDef.filter.categoryBits = category();
+    fixtureDef.filter.categoryBits = BOX;
     fixtureDef.filter.maskBits = GROUND | BOX | HERO;
     fixtureDef.shape = &dynamicBox;
     fixtureDef.density = 0.8f;
@@ -43,8 +39,11 @@ Box::Box(unsigned long id, Game *game, float x, float y, float w, float h)
 
 //------------------------------------------------------------------------------
 
-void Box::draw(Engine *e)
+BoxRenderComponent::BoxRenderComponent()
+    : ImageRenderComponent()
 {
-    const b2Vec2& pos = m_body->GetPosition();
-    e->drawImage(*m_image, pos.x, pos.y, m_body->GetAngle());
+    // Image creation
+    const Texture *tex =
+        ResourceMgr::singleton().getTexture("minecraft_tiles_big.png");
+    m_image = std::unique_ptr<Image>(new Image(tex, 256, 480, 288, 512));
 }

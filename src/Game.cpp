@@ -8,6 +8,7 @@
 #include "Util.h"
 #include "ScriptMgr.h"
 #include "RenderComponent.h"
+#include "PhysicsComponent.h"
 
 #include <iostream>
 #include <memory>
@@ -50,6 +51,15 @@ Game::Game()
 
 Game::~Game()
 {
+    auto it = std::begin(m_actors);
+    while (it != std::end(m_actors)) {
+        ActorPtr actor = it->second;
+
+        it = m_actors.erase(it);
+        // Must be called to break cyclic references
+        actor->destroy();
+    }
+
     delete m_world;
     delete m_debugDraw;
 }
@@ -103,8 +113,9 @@ void Game::update(Engine *e, float elapsedTime)
     while (it != std::end(m_actors)) {
         ActorPtr actor = it->second;
         if (actor->dead()) {
-            //delete actor;
             it = m_actors.erase(it);
+            // Must be called to break cyclic references
+            actor->destroy();
         } else {
             // Kill it if out of map
             if (!isOnMap(actor))
@@ -161,17 +172,18 @@ void Game::addGameObject(ActorCategory type, const std::string& name,
 
 //------------------------------------------------------------------------------
 
-bool Game::isOnMap(ActorPtr actor)
+bool Game::isOnMap(ActorPtr a)
 {
-    const b2Body *body = actor->body();
-    if (!body)
-        return true;
-
-    const b2Vec2& pos = body->GetPosition();
-    if (pos.x < 0.0f || pos.x > m_map.width())
-        return false;
-    else if (pos.y < 0.0f)
-        return false;
+    auto pcwp = a->getComponent<PhysicsComponent>(PHYSICS);
+    // Try to get shared_ptr 
+    if (auto pcsp = pcwp.lock()) {
+        float x = pcsp->posX();
+        float y = pcsp->posY();
+        if (x < 0.0f || x > m_map.width())
+            return false;
+        else if (y < 0.0f)
+            return false;
+    }
 
     return true;
 }

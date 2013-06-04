@@ -2,8 +2,6 @@
 #ifndef ACTORCOMPONENT_H
 #define ACTORCOMPONENT_H
 
-//#include "Actor.h"
-//#include "ActorFactory.h"
 #include "ActorComponentId.h"
 #include <memory>
 
@@ -15,10 +13,10 @@ class ActorComponent
     friend class ActorFactory;
 
  public:
-    virtual ~ActorComponent();
+    virtual ~ActorComponent() {}
 
-    virtual bool init();
-    virtual void update(Engine *e, float elapsedTime);
+    //virtual bool init();
+    virtual void update(Engine * /*e*/, float /*elapsedTime*/) {}
   
     virtual ActorComponentId componentId() const = 0;
 

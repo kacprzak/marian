@@ -9,8 +9,6 @@ class ControlComponent : public ActorComponent
     friend class ControlFactory;
 
  public:
-    virtual ~ControlComponent();
-
     ActorComponentId componentId() const { return CONTROL; }
 };
 

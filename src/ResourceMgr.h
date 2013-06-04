@@ -13,13 +13,13 @@ class ResourceMgr : public Singleton<ResourceMgr>
  public:
     ResourceMgr()
     {
-        std::cout << "ResourceMgr created\n";
+        std::clog << "ResourceMgr created\n";
     }
 
     ~ResourceMgr()
     {
         release();
-        std::cout << "ResourceMgr destroyed\n";
+        std::clog << "ResourceMgr destroyed\n";
     }
 
     // Set data folder ex: "media/"

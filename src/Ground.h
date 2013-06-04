@@ -2,17 +2,15 @@
 #ifndef GROUND_H
 #define GROUND_H
 
-#include "Actor.h"
-
+#include "PhysicsComponent.h"
 #include "Map.h"
 
-class Ground : public Actor
+class Game;
+
+class GroundPhysicsComponent : public PhysicsComponent
 {
  public:
-    Ground(unsigned long id, Game *game, const MapObject& obj);
-
-    ActorCategory category() override
-    { return GROUND; }
+    GroundPhysicsComponent(Game *game, const MapObject& obj);
 };
 
 #endif
