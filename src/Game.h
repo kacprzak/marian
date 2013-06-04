@@ -6,11 +6,14 @@
 #include "Map.h"
 #include "FpsCounter.h"
 #include "Actor.h"
+#include "ActorCategory.h"
 #include <list>
 #include <string>
 
 #include <Box2D/Box2D.h>
 #include "debugdraw/Render.h"
+
+//class Actor;
 
 class ContactListener : public b2ContactListener
 {
@@ -40,12 +43,12 @@ class Game : public Playable
                        const std::string& name,
                        float x, float y);
 
-    bool isOnMap(Actor *actor);
+    bool isOnMap(ActorPtr actor);
 
  private:
     void toggleDrawDebug();
 
-    std::list<Actor *> m_actors;
+    std::map<ActorId, ActorPtr> m_actors;
     Map m_map;
 
     b2World   *m_world;

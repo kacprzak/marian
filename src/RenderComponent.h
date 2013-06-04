@@ -11,6 +11,8 @@ class RenderComponent : public ActorComponent
  public:
     virtual ~RenderComponent();
 
+    virtual void draw(Engine * /*e*/) {}
+
     ActorComponentId componentId() const { return RENDER; }
 };
 

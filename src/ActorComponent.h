@@ -2,9 +2,13 @@
 #ifndef ACTORCOMPONENT_H
 #define ACTORCOMPONENT_H
 
-#include "Actor.h"
-#include "ActorFactory.h"
+//#include "Actor.h"
+//#include "ActorFactory.h"
 #include "ActorComponentId.h"
+#include <memory>
+
+class Actor;
+class Engine;
 
 class ActorComponent
 {
@@ -14,18 +18,18 @@ class ActorComponent
     virtual ~ActorComponent();
 
     virtual bool init();
-    virtual void update();
+    virtual void update(Engine *e, float elapsedTime);
   
     virtual ActorComponentId componentId() const = 0;
 
  private:
     // Only ActroFactory should use this
-    void setOwner(ActorPtr actor) {
+    void setOwner(std::shared_ptr<Actor> actor) {
         m_owner = actor;
     }
 
  protected:
-    ActorPtr m_owner;
+    std::shared_ptr<Actor> m_owner;
 
 };
 

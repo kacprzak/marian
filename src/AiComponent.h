@@ -1,15 +1,15 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
-#ifndef PHYSICSCOMPONENT_H
-#define PHYSICSCOMPONENT_H
+#ifndef AICOMPONENT_H
+#define AICOMPONENT_H
 
 #include "ActorComponent.h"
 
-class PhysicsComponent : public ActorComponent
+class AiComponent : public ActorComponent
 {
-    friend class PhysicsFactory;
+    friend class ActorFactory;
 
  public:
-    virtual ~PhysicsComponent();
+    virtual ~AiComponent();
 
     /**
      * Handle contact with some other object.
@@ -23,7 +23,7 @@ class PhysicsComponent : public ActorComponent
                                     void * /*fixtureUD*/ = nullptr) {}
 
 
-    ActorComponentId componentId() const { return PHYSICS; }
+    ActorComponentId componentId() const { return AI; }
 };
 
-#endif // PHYSICSCOMPONENT_H
+#endif // AICOMPONENT_H

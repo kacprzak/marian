@@ -2,62 +2,59 @@
 #ifndef ACTORFACTORY_H
 #define ACTORFACTORY_H
 
-//#include "Actor.h"
-//#include "ActorComponent.h"
+#include "Actor.h"
+#include "ActorComponent.h"
 #include "Map.h"
-#include "Hero.h"
-#include "Ground.h"
-#include "Box.h"
-#include "Sensor.h"
+//#include "Hero.h"
+//#include "Ground.h"
+//#include "Box.h"
+//#include "Sensor.h"
 
 #include <cassert>
 #include <memory>
 
-class Actor;
-class ActorComponent;
-
-typedef unsigned long ActorId;
-typedef std::shared_ptr<Actor> ActorPtr;
-typedef std::shared_ptr<ActorComponent> ActorComponentPtr;
+class Game;
+//class Actor;
+//class ActorComponent;
 
 class ActorFactory
 {
  public:
-    static Actor *create(Game *game, const MapObject& obj)
+    static ActorPtr create(Game *game, const MapObject& obj)
     {
-        Actor *actor = nullptr;
+        ActorPtr actor(new Actor(getNextId(), game));
 
         if (obj.type == "Hero") {
-            actor = new Hero(getNextId(), game, obj.x, obj.y, obj.width, obj.height);
+            //actor = new Hero(getNextId(), game, obj.x, obj.y, obj.width, obj.height);
 
         } else if (obj.type == "Box") {
-            actor = new Box(getNextId(), game, obj.x, obj.y, obj.width, obj.height);
+            //actor = new Box(getNextId(), game, obj.x, obj.y, obj.width, obj.height);
             
         } else if (obj.type == "Sensor") {
-            actor = new Sensor(getNextId(), game, obj);
+            //actor = new Sensor(getNextId(), game, obj);
   
         } else {
             // Static collision shape
-            actor = new Ground(getNextId(), game, obj);
+            //actor = new Ground(getNextId(), game, obj);
         }
-        assert(actor);
+        //assert(actor);
         actor->setName(obj.name);
         return actor;
     }
 
     //--------------------------------------------------------------------------
 
-    static Actor *create(Game *game,
+    static ActorPtr create(Game *game,
                          ActorCategory type,
                          const std::string& name,
                          float x, float y)
     {
-        Actor *actor = nullptr;
+        ActorPtr actor(new Actor(getNextId(), game));
 
         if (type == BOX) {
-            actor = new Box(getNextId(), game, x, y);
+            //            actor = new Box(getNextId(), game, x, y);
         }
-        assert(actor);
+        //assert(actor);
         actor->setName(name);
         return actor;
     }

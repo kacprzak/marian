@@ -7,8 +7,10 @@
 #include "ActorFactory.h"
 #include "Util.h"
 #include "ScriptMgr.h"
+#include "RenderComponent.h"
 
 #include <iostream>
+#include <memory>
 
 Game::Game()
 {
@@ -37,7 +39,8 @@ Game::Game()
     std::cout << "INFO: " << mapObjects.size() << " objects loaded.\n";
 
     for (const MapObject& obj : mapObjects) {
-        m_actors.push_back(ActorFactory::create(this, obj));
+        ActorPtr a = ActorFactory::create(this, obj);
+        m_actors.insert(std::make_pair(a->id(), a));
         if (obj.name == "hero")
             Engine::singleton().centerViewOn(obj.x, obj.y);
     }
@@ -47,10 +50,6 @@ Game::Game()
 
 Game::~Game()
 {
-    for (Actor *actor : m_actors) {
-        delete actor;
-    }
-
     delete m_world;
     delete m_debugDraw;
 }
@@ -93,8 +92,8 @@ void Game::update(Engine *e, float elapsedTime)
     int32 positionIterations = 2;
     m_world->Step(elapsedTime, velocityIterations, positionIterations);
 
-    for (Actor *actor : m_actors) {
-        actor->update(e, elapsedTime);
+    for (const auto& pair : m_actors) {
+        pair.second->update(e, elapsedTime);
     } 
 
     m_fpsCounter.update(elapsedTime);
@@ -102,9 +101,9 @@ void Game::update(Engine *e, float elapsedTime)
     // Remove dead GameObjects
     auto it = std::begin(m_actors);
     while (it != std::end(m_actors)) {
-        Actor *actor = *it;
+        ActorPtr actor = it->second;
         if (actor->dead()) {
-            delete actor;
+            //delete actor;
             it = m_actors.erase(it);
         } else {
             // Kill it if out of map
@@ -127,8 +126,15 @@ void Game::draw(Engine *e)
     m_map.drawLayer(e, "back",   x1, x2, y1, y2);
     m_map.drawLayer(e, "ground", x1, x2, y1, y2);
  
-    for (Actor* actor : m_actors) {
-        actor->draw(e);
+    // Draw actors
+    for (const auto& pair : m_actors) {
+        ActorPtr a = pair.second;
+        // Get weak_ptr
+        auto rcwp = a->getComponent<RenderComponent>(RENDER);
+        // Try to get shared_ptr 
+        if (auto rcsp = rcwp.lock()) {
+            rcsp->draw(e);
+        }
     }
 
     m_map.drawLayer(e, "water", x1, x2, y1, y2);
@@ -149,14 +155,19 @@ void Game::draw(Engine *e)
 void Game::addGameObject(ActorCategory type, const std::string& name,
                          float x, float y)
 {
-    m_actors.push_back(ActorFactory::create(this, type, name, x, y));        
+    ActorPtr a = ActorFactory::create(this, type, name, x, y);
+    m_actors.insert(std::make_pair(a->id(), a));        
 }
 
 //------------------------------------------------------------------------------
 
-bool Game::isOnMap(Actor *actor)
+bool Game::isOnMap(ActorPtr actor)
 {
-    const b2Vec2& pos = actor->body()->GetPosition();
+    const b2Body *body = actor->body();
+    if (!body)
+        return true;
+
+    const b2Vec2& pos = body->GetPosition();
     if (pos.x < 0.0f || pos.x > m_map.width())
         return false;
     else if (pos.y < 0.0f)
@@ -191,8 +202,8 @@ void ContactListener::BeginContact(b2Contact *contact)
     if ( bodyAUserData && bodyBUserData ) {
         Actor *gameObjectA = static_cast<Actor *>(bodyAUserData);
         Actor *gameObjectB = static_cast<Actor *>(bodyBUserData);
-        gameObjectA->handleBeginContact(gameObjectB, fixAUserData);
-        gameObjectB->handleBeginContact(gameObjectA, fixBUserData);
+        //gameObjectA->handleBeginContact(gameObjectB, fixAUserData);
+        //gameObjectB->handleBeginContact(gameObjectA, fixBUserData);
     }
 }
 
@@ -208,7 +219,7 @@ void ContactListener::EndContact(b2Contact *contact)
     if ( bodyAUserData && bodyBUserData ) {
         Actor *gameObjectA = static_cast<Actor *>(bodyAUserData);
         Actor *gameObjectB = static_cast<Actor *>(bodyBUserData);
-        gameObjectA->handleEndContact(gameObjectB, fixAUserData);
-        gameObjectB->handleEndContact(gameObjectA, fixBUserData);
+        //gameObjectA->handleEndContact(gameObjectB, fixAUserData);
+        //gameObjectB->handleEndContact(gameObjectA, fixBUserData);
     }
 }
