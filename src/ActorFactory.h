@@ -55,14 +55,23 @@ class ActorFactory
     //--------------------------------------------------------------------------
 
     static ActorPtr create(Game *game,
-                         ActorCategory type,
-                         const std::string& name,
-                         float x, float y)
+                           ActorCategory type,
+                           const std::string& name,
+                           float x, float y)
     {
         ActorPtr actor(new Actor(getNextId(), game));
 
         if (type == BOX) {
-            //            actor = new Box(getNextId(), game, x, y);
+            actor->setCategory(BOX);
+
+            ActorComponentPtr physics(
+                new BoxPhysicsComponent(game, x, y));
+            actor->addComponent(physics);
+            physics->setOwner(actor);
+
+            ActorComponentPtr render(new BoxRenderComponent());
+            actor->addComponent(render);
+            render->setOwner(actor);
         }
         //assert(actor);
         actor->setName(name);

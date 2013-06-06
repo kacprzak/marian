@@ -75,7 +75,7 @@ void Game::initialize(Engine *e)
         e->setBackgroundColor(color[0], color[1], color[2]);
     }
 
-    ScriptMgr::singleton().executeScript("map2_init.lua");
+    ScriptMgr::singleton().executeFile("map2_init.lua");
 }
 
 //------------------------------------------------------------------------------

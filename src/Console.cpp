@@ -110,7 +110,7 @@ void Console::parseText(CEGUI::String inMsg)
     }
 
     try {
-        ScriptMgr::singleton().executeCode(inMsg.c_str());
+        ScriptMgr::singleton().executeString(inMsg.c_str());
         outputText(inMsg); // echo
     } catch (const ScriptMgrError& ex) {
         outputText(ex.what());

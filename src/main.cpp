@@ -10,7 +10,7 @@ int main(int /*argc*/, char * /*argv*/[])
     new ScriptMgr;
     ScriptMgr& sm = ScriptMgr::singleton();
     sm.setDataFolder("scripts/");
-    sm.executeScript("startup.lua");
+    sm.executeFile("startup.lua");
 
     int screenWidth  = sm.getGlobalInt("screen_width");
     int screenHeight = sm.getGlobalInt("screen_height");

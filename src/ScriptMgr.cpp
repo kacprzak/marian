@@ -47,7 +47,7 @@ void ScriptMgr::setDataFolder(const std::string& folder)
 
 //------------------------------------------------------------------------------
 
-bool ScriptMgr::executeCode(const std::string& code)
+bool ScriptMgr::executeString(const std::string& code)
 {
     if (luaL_dostring(L, code.c_str())) {
         throw ScriptMgrError(lua_tostring(L, -1));
@@ -59,7 +59,7 @@ bool ScriptMgr::executeCode(const std::string& code)
 
 //------------------------------------------------------------------------------
 
-bool ScriptMgr::executeScript(const std::string& filename)
+bool ScriptMgr::executeFile(const std::string& filename)
 {
     std::string fullpath = dataFolder + filename;
     if (luaL_dofile(L, fullpath.c_str())) {
