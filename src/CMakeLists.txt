@@ -6,6 +6,9 @@ set( marian_HDRS
   Box.h
   Console.h
   Engine.h
+  EventType.h
+  Event.h
+  EventManager.h
   FpsCounter.h
   Game.h
   Actor.h
@@ -38,6 +41,7 @@ set( marian_SRCS
   Box.cpp
   Console.cpp
   Engine.cpp
+  EventManager.cpp
   FpsCounter.cpp
   Game.cpp
   Ground.cpp
