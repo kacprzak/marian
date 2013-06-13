@@ -8,7 +8,9 @@
 
 void eventListener(EventPtr event)
 {
-    std::cout << "EVENT: " << event->eventName() << std::endl;
+    std::clog << "EVENT: " << event->eventName() << " {";
+    event->serialize(std::clog);
+    std::clog << " }"<< std::endl;
 }
 
 int main(int /*argc*/, char * /*argv*/[])
@@ -24,6 +26,8 @@ int main(int /*argc*/, char * /*argv*/[])
 
     EventManager *em = new EventManager;
     em->addListener(GAME_STARTED, eventListener);
+    em->addListener(ACTOR_COLLIDED, eventListener);
+    
     em->queueEvent(EventPtr(new BaseEvent(GAME_STARTED)));
 
     Engine::init("Marian", screenWidth, screenHeight, fullScreen);
@@ -31,7 +35,6 @@ int main(int /*argc*/, char * /*argv*/[])
 
     Engine::singleton().mainLoop(game);
 
-    em->update();
     delete EventManager::singletonPtr();
 
     delete game;

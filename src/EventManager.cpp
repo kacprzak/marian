@@ -42,8 +42,9 @@ void EventManager::update()
     for (EventPtr event : m_eventQueues[m_activeQueue]) {
         triggerEvent(event);
     }
+    m_eventQueues[m_activeQueue].clear();
 
-    m_activeQueue = ++m_activeQueue % NUM_OF_QUEUES;
+    m_activeQueue = (m_activeQueue + 1) % NUM_OF_QUEUES;
 }
 
 

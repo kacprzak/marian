@@ -9,21 +9,17 @@
 #include "ScriptMgr.h"
 #include "RenderComponent.h"
 #include "PhysicsComponent.h"
+#include "Box2dPhysicsEngine.h"
+#include "EventManager.h"
 
 #include <iostream>
 #include <memory>
 
 Game::Game()
 {
-    b2Vec2 gravity(0.0f, -9.8f);
-    m_world = new b2World(gravity);
-    m_world->SetAllowSleeping(true);
-    m_world->SetContactListener(&m_contactListener);
-    
-    // Debug drawing
-    m_debugDraw = new DebugDraw;
-    m_drawDebugData = false;
-    
+    m_physicsEngine = new Box2dPhysicsEngine;
+    m_physicsEngine->init();
+      
     // Read map from file
     ResourceMgr& resMgr = ResourceMgr::singleton();
     resMgr.setDataFolder("media/");
@@ -60,8 +56,8 @@ Game::~Game()
         actor->destroy();
     }
 
-    delete m_world;
-    delete m_debugDraw;
+    m_physicsEngine->shutdown();
+    delete m_physicsEngine;
 }
 
 //------------------------------------------------------------------------------
@@ -97,10 +93,7 @@ bool Game::processInput(const SDL_Event& event)
 
 void Game::update(Engine *e, float elapsedTime)
 {
-    // Update Physics
-    int32 velocityIterations = 6;
-    int32 positionIterations = 2;
-    m_world->Step(elapsedTime, velocityIterations, positionIterations);
+    m_physicsEngine->update(elapsedTime);
 
     for (const auto& pair : m_actors) {
         pair.second->update(e, elapsedTime);
@@ -123,6 +116,8 @@ void Game::update(Engine *e, float elapsedTime)
             ++it;
         }
     }
+
+    EventManager::singleton().update();
 }
 
 //------------------------------------------------------------------------------
@@ -151,14 +146,7 @@ void Game::draw(Engine *e)
     m_map.drawLayer(e, "water", x1, x2, y1, y2);
     m_map.drawLayer(e, "front", x1, x2, y1, y2);
 
-    if (m_drawDebugData) {
-        glPushAttrib(GL_COLOR_BUFFER_BIT | GL_CURRENT_BIT | GL_ENABLE_BIT);
-
-        glDisable(GL_TEXTURE_2D);
-        m_world->DrawDebugData();
-
-        glPopAttrib();
-    }
+    m_physicsEngine->drawDebugData();
 }
 
 //------------------------------------------------------------------------------
@@ -192,46 +180,6 @@ bool Game::isOnMap(ActorPtr a)
 
 void Game::toggleDrawDebug()
 {
-    if (m_drawDebugData == false) {
-        m_debugDraw->SetFlags(b2Draw::e_shapeBit | b2Draw::e_centerOfMassBit);
-        m_world->SetDebugDraw(m_debugDraw);    
-    } else {
-        m_world->SetDebugDraw(nullptr);
-    }
-
-    m_drawDebugData = !m_drawDebugData;
+    m_physicsEngine->toggleDrawDebug();
 }
 
-//------------------------------------------------------------------------------
-
-void ContactListener::BeginContact(b2Contact *contact)
-{
-    void *fixAUserData = contact->GetFixtureA()->GetUserData();
-    void *fixBUserData = contact->GetFixtureB()->GetUserData();
-
-    void *bodyAUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-    void *bodyBUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-    if ( bodyAUserData && bodyBUserData ) {
-        Actor *gameObjectA = static_cast<Actor *>(bodyAUserData);
-        Actor *gameObjectB = static_cast<Actor *>(bodyBUserData);
-        //gameObjectA->handleBeginContact(gameObjectB, fixAUserData);
-        //gameObjectB->handleBeginContact(gameObjectA, fixBUserData);
-    }
-}
-
-//------------------------------------------------------------------------------
-
-void ContactListener::EndContact(b2Contact *contact)
-{
-    void *fixAUserData = contact->GetFixtureA()->GetUserData();
-    void *fixBUserData = contact->GetFixtureB()->GetUserData();
-
-    void *bodyAUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-    void *bodyBUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-    if ( bodyAUserData && bodyBUserData ) {
-        Actor *gameObjectA = static_cast<Actor *>(bodyAUserData);
-        Actor *gameObjectB = static_cast<Actor *>(bodyBUserData);
-        //gameObjectA->handleEndContact(gameObjectB, fixAUserData);
-        //gameObjectB->handleEndContact(gameObjectA, fixBUserData);
-    }
-}

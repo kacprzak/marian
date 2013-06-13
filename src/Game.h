@@ -10,18 +10,7 @@
 #include <list>
 #include <string>
 
-#include <Box2D/Box2D.h>
-#include "debugdraw/Render.h"
-
-//class Actor;
-
-class ContactListener : public b2ContactListener
-{
-    void BeginContact(b2Contact *contact) override;
-    void EndContact(b2Contact *contact) override;
-};
-
-//------------------------------------------------------------------------------
+#include "PhysicsEngine.h"
 
 class Game : public Playable
 {
@@ -37,7 +26,7 @@ class Game : public Playable
     void draw(Engine *e) override;
 
     Map *map() { return &m_map; }
-    b2World *world() { return m_world; }
+    PhysicsEngine *physicsEngine() { return m_physicsEngine; }
 
     void addGameObject(ActorCategory type,
                        const std::string& name,
@@ -51,10 +40,7 @@ class Game : public Playable
     std::map<ActorId, ActorPtr> m_actors;
     Map m_map;
 
-    b2World   *m_world;
-    DebugDraw *m_debugDraw;
-    bool       m_drawDebugData;
-    ContactListener m_contactListener;
+    PhysicsEngine *m_physicsEngine;
 
     FpsCounter m_fpsCounter;
 };

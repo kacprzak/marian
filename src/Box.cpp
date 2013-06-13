@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "ResourceMgr.h"
 #include <Box2D/Box2D.h>
+#include "Box2dPhysicsEngine.h"
 
 BoxPhysicsComponent::BoxPhysicsComponent(Game *game, float x, float y,
                                          float w, float h)
@@ -18,8 +19,10 @@ BoxPhysicsComponent::BoxPhysicsComponent(Game *game, float x, float y,
     // Set origin in center
     bodyDef.position.Set(x + hw, y + hh);
     //bodyDef.fixedRotation = true;
-    bodyDef.userData = this;
-    b2Body* body = game->world()->CreateBody(&bodyDef);
+    //bodyDef.userData = this;
+
+    Box2dPhysicsEngine *pe = static_cast<Box2dPhysicsEngine *>(game->physicsEngine());
+    b2Body* body = pe->world()->CreateBody(&bodyDef);
     
     b2PolygonShape dynamicBox;
     dynamicBox.SetAsBox(hw, hh);

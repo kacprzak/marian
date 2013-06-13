@@ -3,6 +3,7 @@
 
 #include "Game.h"
 #include <Box2D/Box2D.h>
+#include "Box2dPhysicsEngine.h"
 
 GroundPhysicsComponent::GroundPhysicsComponent(Game *game, const MapObject& obj)
     : PhysicsComponent()
@@ -10,7 +11,8 @@ GroundPhysicsComponent::GroundPhysicsComponent(Game *game, const MapObject& obj)
     b2BodyDef groundBodyDef;
     groundBodyDef.position.Set(obj.x, obj.y);
 
-    b2Body *groundBody = game->world()->CreateBody(&groundBodyDef);
+    Box2dPhysicsEngine *pe = static_cast<Box2dPhysicsEngine *>(game->physicsEngine());
+    b2Body *groundBody = pe->world()->CreateBody(&groundBodyDef);
 
     const std::string& shape = obj.shape;
     if (shape == "polyline" || shape == "polygon") {

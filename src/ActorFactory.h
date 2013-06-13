@@ -32,10 +32,12 @@ class ActorFactory
                 new BoxPhysicsComponent(game, obj.x, obj.y, obj.width, obj.height));
             actor->addComponent(physics);
             physics->setOwner(actor);
+            physics->init();
 
             ActorComponentPtr render(new BoxRenderComponent());
             actor->addComponent(render);
             render->setOwner(actor);
+            render->init();
 
         } else if (obj.type == "Sensor") {
             //actor = new Sensor(getNextId(), game, obj);
@@ -46,6 +48,7 @@ class ActorFactory
                 new GroundPhysicsComponent(game, obj));
             actor->addComponent(physics);
             physics->setOwner(actor);
+            physics->init();
         }
         //assert(actor);
         actor->setName(obj.name);
@@ -68,10 +71,12 @@ class ActorFactory
                 new BoxPhysicsComponent(game, x, y));
             actor->addComponent(physics);
             physics->setOwner(actor);
+            physics->init();
 
             ActorComponentPtr render(new BoxRenderComponent());
             actor->addComponent(render);
             render->setOwner(actor);
+            render->init();
         }
         //assert(actor);
         actor->setName(name);

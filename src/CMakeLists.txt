@@ -17,6 +17,8 @@ set( marian_HDRS
   ActorCategory.h
   ActorFactory.h
   ActorState.h
+  PhysicsEngine.h
+  Box2dPhysicsEngine.h
   PhysicsComponent.h
   ControlComponent.h
   RenderComponent.h
@@ -39,6 +41,7 @@ set( marian_HDRS
 
 set( marian_SRCS
   Box.cpp
+  Box2dPhysicsEngine.cpp
   Console.cpp
   Engine.cpp
   EventManager.cpp

@@ -5,10 +5,11 @@
 #include "ActorComponent.h"
 #include <Box2D/Box2D.h>
 
+#include "Actor.h"
 
 class PhysicsComponent : public ActorComponent
 {
-    friend class PhysicsFactory;
+    friend class ActorFactory;
 
  public:
     PhysicsComponent()
@@ -22,6 +23,17 @@ class PhysicsComponent : public ActorComponent
             m_body->GetWorld()->DestroyBody(m_body);
         }
     }
+
+
+    bool init()
+    {
+        if (!m_owner || !m_body)
+            return false;
+
+        m_body->SetUserData(reinterpret_cast<void *>(m_owner->id()));
+        return true;
+    }
+
 
     b2Body *body() { return m_body; }
     void setBody(b2Body *body)
