@@ -25,11 +25,8 @@ int main(int /*argc*/, char * /*argv*/[])
     bool fullScreen  = sm.getGlobalBool("screen_full");
 
     EventManager *em = new EventManager;
-    em->addListener(GAME_STARTED, eventListener);
     em->addListener(ACTOR_COLLIDED, eventListener);
     
-    em->queueEvent(EventPtr(new BaseEvent(GAME_STARTED)));
-
     Engine::init("Marian", screenWidth, screenHeight, fullScreen);
     Game *game = new Game;
 
