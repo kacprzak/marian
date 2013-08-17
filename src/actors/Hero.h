@@ -3,27 +3,23 @@
 #define HERO_H
 
 #include "Actor.h"
-#include "Map.h"
-#include "ActorState.h"
-
-#include <memory>
+#include "PhysicsComponent.h"
 
 class Engine;
 
-class Hero : public Actor
+class Hero //: public Actor
 {
- public:
+/**
+public:
     Hero(unsigned long id, Game *game, float x, float y, float w, float h);
     ~Hero();
-  
+
+
     void update(Engine *e, float elapsedTime) override;
     void draw(Engine *e) override;
 
     ActorCategory category() override
     { return HERO; }
-
-    void handleBeginContact(Actor *other, void *fixtureUD = nullptr) override;
-    void handleEndContact  (Actor *other, void *fixtureUD = nullptr) override;
 
     bool isOnGround() const { return m_feetContacts > 0; }
     void setFacingRight(bool right) { m_facingRight = right; }
@@ -38,6 +34,17 @@ class Hero : public Actor
 
     ActorStateMachine m_stateMachine;
     std::vector<ActorState *> m_states;
+**/
+};
+
+class HeroPhysicsComponent : public PhysicsComponent
+{
+ public:
+    HeroPhysicsComponent(Game *game, float x, float y,
+                        float w = 1.0f, float h = 1.0f);
+
+    void handleBeginContact(Actor *other, void *fixtureUD = nullptr) override;
+    void handleEndContact  (Actor *other, void *fixtureUD = nullptr) override;
 };
 
 #endif

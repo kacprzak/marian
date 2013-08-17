@@ -6,8 +6,8 @@
 #include "ActorComponent.h"
 #include "Map.h"
 //#include "Hero.h"
-#include "Ground.h"
-#include "Box.h"
+#include "actors/Ground.h"
+#include "actors/Box.h"
 //#include "Sensor.h"
 
 #include <cassert>

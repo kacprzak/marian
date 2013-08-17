@@ -1,9 +1,12 @@
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 set( marian_HDRS
+  actors/Box.h
+  actors/Hero.h
+  actors/Ground.h
+
   Animation.h
   AiComponent.h
-  Box.h
   Console.h
   Engine.h
   EventType.h
@@ -23,9 +26,7 @@ set( marian_HDRS
   ControlComponent.h
   RenderComponent.h
   ImageRenderComponent.h
-  Ground.h
   GuiMgr.h
-#  Hero.h
   Image.h
   Map.h
   Playable.h
@@ -36,20 +37,22 @@ set( marian_HDRS
   StateMachine.h
   Texture.h
   Util.h
+
   debugdraw/Render.h
 )
 
 set( marian_SRCS
-  Box.cpp
+  actors/Box.cpp
+  actors/Ground.cpp
+  actors/Hero.cpp
+
   Box2dPhysicsEngine.cpp
   Console.cpp
   Engine.cpp
   EventManager.cpp
   FpsCounter.cpp
   Game.cpp
-  Ground.cpp
   GuiMgr.cpp
-#  Hero.cpp
   Map.cpp
   ResourceMgr.cpp
 #  Sensor.cpp
@@ -57,6 +60,7 @@ set( marian_SRCS
   Texture.cpp
   Util.cpp
   main.cpp
+
   debugdraw/Render.cpp
 )
 

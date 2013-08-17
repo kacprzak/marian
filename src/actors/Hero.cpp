@@ -7,6 +7,7 @@
 #include "Animation.h"
 #include <iostream>
 #include <Box2D/Box2D.h>
+#include "Box2dPhysicsEngine.h"
 
 #define JUMP_DELAY 0.5f
 #define FEET_SENSOR 1248
@@ -16,7 +17,7 @@ enum HeroStateId {
     RUN,
     FALL
 };
-
+#if 0
 //==============================================================================
 
 class StandHeroState : public ActorState
@@ -230,45 +231,6 @@ Hero::Hero(unsigned long id, Game *game, float x, float y, float w, float h)
 {
     m_stateMachine.setOwner(this);
 
-    // Physics
-    float hw = w / 2;
-    float hh = h / 2;
-
-    b2BodyDef bodyDef;
-    bodyDef.type = b2_dynamicBody;
-    // Set origin in center
-    bodyDef.position.Set(x + hw, y + hh);
-    bodyDef.fixedRotation = true;
-    bodyDef.userData = this;
-    b2Body* body = game->world()->CreateBody(&bodyDef);
-    
-    b2CircleShape circleShape;
-    circleShape.m_radius = hw;
-    
-    b2FixtureDef fixtureDef;
-    fixtureDef.filter.categoryBits = category();
-    fixtureDef.filter.maskBits = GROUND | BOX | SENSOR;
-    fixtureDef.shape = &circleShape;
-    fixtureDef.density = 0.8f;
-    fixtureDef.friction = 0.3f;
-    fixtureDef.restitution = 0.0f;
-
-    // Main fixture
-    body->CreateFixture(&fixtureDef);
-
-    // Add foot sensor fixture
-    b2PolygonShape polygonShape;
-    polygonShape.SetAsBox(hw, 0.3f, b2Vec2(0, -hh), 0);
-    fixtureDef.shape = &polygonShape;
-    fixtureDef.isSensor = true;
-    fixtureDef.filter.maskBits = GROUND | BOX;
-    fixtureDef.density = 0.0f;
-    fixtureDef.friction = 0.0f;
-    b2Fixture* footSensorFixture = body->CreateFixture(&fixtureDef);
-    footSensorFixture->SetUserData(reinterpret_cast<void *>(FEET_SENSOR));
-
-    m_body = body;
-
     // States
     ActorState *state = new StandHeroState(m_stateMachine);
     m_states.push_back(state);
@@ -348,13 +310,60 @@ void Hero::draw(Engine *e)
     m_stateMachine.currentState()->draw(e);
 }
 
+//==============================================================================
+#endif
+HeroPhysicsComponent::HeroPhysicsComponent(Game *game, float x, float y,
+                                           float w, float h)
+{
+    // Physics
+    float hw = w / 2;
+    float hh = h / 2;
+
+    b2BodyDef bodyDef;
+    bodyDef.type = b2_dynamicBody;
+    // Set origin in center
+    bodyDef.position.Set(x + hw, y + hh);
+    bodyDef.fixedRotation = true;
+    bodyDef.userData = this;
+
+    Box2dPhysicsEngine *pe = static_cast<Box2dPhysicsEngine *>(game->physicsEngine());
+    b2Body* body = pe->world()->CreateBody(&bodyDef);
+
+    b2CircleShape circleShape;
+    circleShape.m_radius = hw;
+
+    b2FixtureDef fixtureDef;
+    fixtureDef.filter.categoryBits = HERO;
+    fixtureDef.filter.maskBits = GROUND | BOX | SENSOR;
+    fixtureDef.shape = &circleShape;
+    fixtureDef.density = 0.8f;
+    fixtureDef.friction = 0.3f;
+    fixtureDef.restitution = 0.0f;
+
+    // Main fixture
+    body->CreateFixture(&fixtureDef);
+
+    // Add foot sensor fixture
+    b2PolygonShape polygonShape;
+    polygonShape.SetAsBox(hw, 0.3f, b2Vec2(0, -hh), 0);
+    fixtureDef.shape = &polygonShape;
+    fixtureDef.isSensor = true;
+    fixtureDef.filter.maskBits = GROUND | BOX;
+    fixtureDef.density = 0.0f;
+    fixtureDef.friction = 0.0f;
+    b2Fixture* footSensorFixture = body->CreateFixture(&fixtureDef);
+    footSensorFixture->SetUserData(reinterpret_cast<void *>(FEET_SENSOR));
+
+    m_body = body;
+}
+
 //------------------------------------------------------------------------------
 
-void Hero::handleBeginContact(Actor *other, void *fixtureUD)
+void HeroPhysicsComponent::handleBeginContact(Actor *other, void *fixtureUD)
 {
     if (fixtureUD == (void*)FEET_SENSOR) {
         //std::cout << "on ground" << std::endl;
-        ++m_feetContacts;
+        //++m_feetContacts;
     }
 
     if (other->category() != SENSOR) return;
@@ -364,11 +373,11 @@ void Hero::handleBeginContact(Actor *other, void *fixtureUD)
 
 //------------------------------------------------------------------------------
 
-void Hero::handleEndContact(Actor *other, void *fixtureUD)
+void HeroPhysicsComponent::handleEndContact(Actor *other, void *fixtureUD)
 {
     if (fixtureUD == (void*)FEET_SENSOR) {
         //std::cout << "off ground" << std::endl;
-        --m_feetContacts;
+        //--m_feetContacts;
     }
 
     if (other->category() != SENSOR) return;
