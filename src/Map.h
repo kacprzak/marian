@@ -33,8 +33,8 @@ class Tile;
 /** Interface to game map in game coords */
 class Map : boost::noncopyable
 {
-    friend Layer;
-    friend Tile;
+    friend class Layer;
+    friend class Tile;
 
  public:
     Map();

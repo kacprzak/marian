@@ -9,7 +9,7 @@
 class EventManager : public Singleton<EventManager> {
 
     typedef std::function<void (EventPtr)> EventListener;
-    typedef std::multimap<EventType, EventListener> EventListenerMap;;
+    typedef std::multimap<EventType, EventListener> EventListenerMap;
     typedef std::list<EventPtr> EventQueue;
 
  public:
