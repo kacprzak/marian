@@ -5,7 +5,7 @@
 #include "Actor.h"
 #include "ActorComponent.h"
 #include "Map.h"
-//#include "Hero.h"
+#include "actors/Hero.h"
 #include "actors/Ground.h"
 #include "actors/Box.h"
 //#include "Sensor.h"
@@ -23,7 +23,18 @@ class ActorFactory
         ActorPtr actor(new Actor(getNextId(), game));
 
         if (obj.type == "Hero") {
-            //actor = new Hero(getNextId(), game, obj.x, obj.y, obj.width, obj.height);
+            actor->setCategory(HERO);
+
+            ActorComponentPtr physics(
+                        new HeroPhysicsComponent(game, obj.x, obj.y, obj.width, obj.height));
+            actor->addComponent(physics);
+            physics->setOwner(actor);
+            physics->init();
+
+            ActorComponentPtr render(new HeroRenderComponent);
+            actor->addComponent(render);
+            render->setOwner(actor);
+            render->init();
 
         } else if (obj.type == "Box") {
             actor->setCategory(BOX);
@@ -34,7 +45,7 @@ class ActorFactory
             physics->setOwner(actor);
             physics->init();
 
-            ActorComponentPtr render(new BoxRenderComponent());
+            ActorComponentPtr render(new BoxRenderComponent);
             actor->addComponent(render);
             render->setOwner(actor);
             render->init();

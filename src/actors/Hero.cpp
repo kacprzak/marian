@@ -6,7 +6,6 @@
 #include "Game.h"
 #include "Animation.h"
 #include <iostream>
-#include <Box2D/Box2D.h>
 #include "Box2dPhysicsEngine.h"
 
 #define JUMP_DELAY 0.5f
@@ -17,7 +16,7 @@ enum HeroStateId {
     RUN,
     FALL
 };
-#if 0
+
 //==============================================================================
 
 class StandHeroState : public ActorState
@@ -43,32 +42,41 @@ class StandHeroState : public ActorState
 
     void onEnter(Actor * owner, int /*prevStateId*/) override
     {
-        Hero *hero = static_cast<Hero *>(owner);
-        setFacingRight(hero->isFacingRight());
+        auto warc = owner->getComponent<HeroRenderComponent>(RENDER);
+
+        if (auto sarc = warc.lock()) {
+            setFacingRight(sarc->isFacingRight());
+        }
     }
 
     void update(Engine * /*e*/, float elapsedTime) override
     {
         m_animation.update(elapsedTime);
 
-        Hero *hero = static_cast<Hero *>(m_stateMachine.owner());
-        const b2Vec2& vel = hero->body()->GetLinearVelocity();
+        auto wapc = m_stateMachine.owner()->getComponent<PhysicsComponent>(PHYSICS);
 
-        if (std::abs(vel.y) > 6.0f) {
-            m_stateMachine.changeState(FALL);
-            return;
-        }
+        if (auto sapc = wapc.lock()) {
 
-        if (std::abs(vel.x) > 0.6f) {
-            m_stateMachine.changeState(RUN);
-            return;
+            if (std::abs(sapc->velY()) > 6.0f) {
+                m_stateMachine.changeState(FALL);
+                return;
+            }
+
+            if (std::abs(sapc->velX()) > 0.6f) {
+                m_stateMachine.changeState(RUN);
+                return;
+            }
+
         }
     }
 
     void draw(Engine *e) override
     {
-        const b2Vec2& pos = m_stateMachine.owner()->body()->GetPosition();
-        e->drawImage(m_animation.currentFrame(), pos.x, pos.y + 0.5f);
+        auto wapc = m_stateMachine.owner()->getComponent<PhysicsComponent>(PHYSICS);
+
+        if (auto sapc = wapc.lock()) {
+            e->drawImage(m_animation.currentFrame(), sapc->posX(), sapc->posY() + 0.5f);
+        }
     }
 
     void setFacingRight(bool right) 
@@ -103,31 +111,39 @@ class FallHeroState : public ActorState
 
     void onEnter(Actor * owner, int /*prevStateId*/) override
     {
-        Hero *hero = static_cast<Hero *>(owner);
-        setFacingRight(hero->isFacingRight());
+        auto warc = owner->getComponent<HeroRenderComponent>(RENDER);
+
+        if (auto sarc = warc.lock()) {
+            setFacingRight(sarc->isFacingRight());
+        }
     }
 
     void update(Engine * /*e*/, float /*elapsedTime*/) override
     {
-        Hero *hero = static_cast<Hero *>(m_stateMachine.owner());
-        const b2Vec2& vel = hero->body()->GetLinearVelocity();
+        auto wapc = m_stateMachine.owner()->getComponent<HeroPhysicsComponent>(PHYSICS);
 
-        if (std::abs(vel.x) > 0.01f) {
-            bool fr = (vel.x >= 0.0f);
-            hero->setFacingRight(fr);
-            setFacingRight(fr);
-        }
+        if (auto sapc = wapc.lock()) {
 
-        if (hero->isOnGround() && std::abs(vel.y) < 0.1f) {
-            m_stateMachine.changeState(STAND);
-            return;
+            if (std::abs(sapc->velX()) > 0.01f) {
+                bool fr = (sapc->velX() >= 0.0f);
+                //hero->setFacingRight(fr);
+                setFacingRight(fr);
+            }
+
+            if (sapc->isOnGround() && std::abs(sapc->velY()) < 0.1f) {
+                m_stateMachine.changeState(STAND);
+                return;
+            }
         }
     }
 
     void draw(Engine *e) override
     {
-        const b2Vec2& pos = m_stateMachine.owner()->body()->GetPosition();
-        e->drawImage(*m_image, pos.x, pos.y + 0.5f);
+        auto wapc = m_stateMachine.owner()->getComponent<PhysicsComponent>(PHYSICS);
+
+        if (auto sapc = wapc.lock()) {
+            e->drawImage(*m_image, sapc->posX(), sapc->posY() + 0.5f);
+        }
     }
 
     void setFacingRight(bool right) 
@@ -174,38 +190,46 @@ class RunHeroState : public ActorState
 
     void onEnter(Actor * owner, int /*prevStateId*/) override
     {
-        Hero *hero = static_cast<Hero *>(owner);
-        setFacingRight(hero->isFacingRight());
+        auto warc = owner->getComponent<HeroRenderComponent>(RENDER);
+
+        if (auto sarc = warc.lock()) {
+            setFacingRight(sarc->isFacingRight());
+        }
     }
 
     void update(Engine * /*e*/, float elapsedTime) override
     {
         m_animation.update(elapsedTime);
         
-        Hero *hero = static_cast<Hero *>(m_stateMachine.owner());
-        const b2Vec2& vel = hero->body()->GetLinearVelocity();
+        auto wapc = m_stateMachine.owner()->getComponent<HeroPhysicsComponent>(PHYSICS);
 
-        if (std::abs(vel.x) > 0.01f) {
-            bool fr = (vel.x >= 0.0f);
-            hero->setFacingRight(fr);
-            setFacingRight(fr);
-        }
+        if (auto sapc = wapc.lock()) {
 
-        if (std::abs(vel.y) > 0.1f) {
-            m_stateMachine.changeState(FALL);
-            return;
-        }
+            if (std::abs(sapc->velX()) > 0.01f) {
+                bool fr = (sapc->velX() >= 0.0f);
+                //hero->setFacingRight(fr);
+                setFacingRight(fr);
+            }
 
-        if (std::abs(vel.x) < 0.5f) {
-            m_stateMachine.changeState(STAND);
-            return;
+            if (std::abs(sapc->velY()) > 0.1f) {
+                m_stateMachine.changeState(FALL);
+                return;
+            }
+
+            if (std::abs(sapc->velX()) < 0.5f) {
+                m_stateMachine.changeState(STAND);
+                return;
+            }
         }
     }
 
     void draw(Engine *e) override
     {
-        const b2Vec2& pos = m_stateMachine.owner()->body()->GetPosition();
-        e->drawImage(m_animation.currentFrame(), pos.x, pos.y + 0.5f);
+        auto wapc = m_stateMachine.owner()->getComponent<PhysicsComponent>(PHYSICS);
+
+        if (auto sapc = wapc.lock()) {
+            e->drawImage(m_animation.currentFrame(), sapc->posX(), sapc->posY() + 0.5f);
+        }
     }
 
     void setFacingRight(bool right) 
@@ -221,7 +245,7 @@ class RunHeroState : public ActorState
 };
 
 //==============================================================================
-
+#if 0
 Hero::Hero(unsigned long id, Game *game, float x, float y, float w, float h)
     : Actor(id, game)
     , m_jumpTimeout(0.0f)
@@ -229,62 +253,7 @@ Hero::Hero(unsigned long id, Game *game, float x, float y, float w, float h)
     , m_feetContacts(0)
     , m_stateMachine(nullptr, 0)
 {
-    m_stateMachine.setOwner(this);
 
-    // States
-    ActorState *state = new StandHeroState(m_stateMachine);
-    m_states.push_back(state);
-    m_stateMachine.registerState(STAND, state);
-
-    state = new RunHeroState(m_stateMachine);
-    m_states.push_back(state);
-    m_stateMachine.registerState(RUN, state);
-
-    state = new FallHeroState(m_stateMachine);
-    m_states.push_back(state);
-    m_stateMachine.registerState(FALL, state);
-
-    m_stateMachine.changeState(FALL);
-}
-
-//------------------------------------------------------------------------------
-
-Hero::~Hero()
-{
-    for (auto *state : m_states)
-        delete state;
-}
-
-//------------------------------------------------------------------------------
-
-void Hero::update(Engine *e, float elapsedTime)
-{
-    const b2Vec2& centerOfMass = m_body->GetWorldCenter(); 
-
-    if (e->isPressed(SDLK_RIGHT)) {
-        m_body->ApplyForceToCenter(b2Vec2(10.0f, 0.0f));
-    }
-
-    if (e->isPressed(SDLK_LEFT)) {
-        m_body->ApplyForceToCenter(b2Vec2(-10.0f, 0.0f));
-    }
-
-    if (e->isPressed(SDLK_UP)) {
-        if (isOnGround() && m_jumpTimeout <= 0.0f) {
-            m_body->ApplyLinearImpulse(b2Vec2(0.0f, 5.0f), centerOfMass);
-            m_jumpTimeout = JUMP_DELAY;
-        }
-    } 
-
-    // States
-    //const b2Vec2& vel = m_stateMachine.owner()->body()->GetLinearVelocity();
-    m_stateMachine.currentState()->update(e, elapsedTime);
-
-    // Center view on player
-    centerViewOn(e, centerOfMass.x, centerOfMass.y);
-
-    if (m_jumpTimeout > 0.0f)
-        m_jumpTimeout -= elapsedTime;
 }
 
 //------------------------------------------------------------------------------
@@ -303,18 +272,99 @@ void Hero::centerViewOn(Engine *e, float x, float y) const
     e->centerViewOn(x, y);
 }
 
+//==============================================================================
+#endif
+HeroRenderComponent::HeroRenderComponent()
+    : m_facingRight(true)
+    , m_stateMachine(nullptr, 0)
+    , m_jumpTimeout(0.0f)
+{
+}
+
 //------------------------------------------------------------------------------
 
-void Hero::draw(Engine *e)
+HeroRenderComponent::~HeroRenderComponent()
+{
+    for (auto *state : m_states)
+        delete state;
+}
+
+//------------------------------------------------------------------------------
+
+bool HeroRenderComponent::init()
+{
+    m_stateMachine.setOwner(m_owner.get());
+
+    // States
+    ActorState *state = new StandHeroState(m_stateMachine);
+    m_states.push_back(state);
+    m_stateMachine.registerState(STAND, state);
+
+    state = new RunHeroState(m_stateMachine);
+    m_states.push_back(state);
+    m_stateMachine.registerState(RUN, state);
+
+    state = new FallHeroState(m_stateMachine);
+    m_states.push_back(state);
+    m_stateMachine.registerState(FALL, state);
+
+    m_stateMachine.changeState(FALL);
+
+    return true;
+}
+
+//------------------------------------------------------------------------------
+
+void HeroRenderComponent::draw(Engine *e)
 {
     m_stateMachine.currentState()->draw(e);
 }
 
+//------------------------------------------------------------------------------
+
+void HeroRenderComponent::update(Engine *e, float elapsedTime)
+{
+    //const b2Vec2& centerOfMass = m_body->GetWorldCenter();
+
+    auto whpc = m_owner->getComponent<HeroPhysicsComponent>(PHYSICS);
+
+    if (auto shpc = whpc.lock()) {
+
+        if (e->isPressed(SDLK_RIGHT)) {
+            shpc->applyForceToCenter(10.0f, 0.0f);
+        }
+
+        if (e->isPressed(SDLK_LEFT)) {
+            shpc->applyForceToCenter(-10.0f, 0.0f);
+        }
+
+        if (e->isPressed(SDLK_UP)) {
+            if (/*shpc->isOnGround() &&*/ m_jumpTimeout <= 0.0f) {
+                shpc->applyLinearImpulse(0.0f, 5.0f);
+                m_jumpTimeout = JUMP_DELAY;
+            }
+        }
+
+    }
+
+    // States
+    //const b2Vec2& vel = m_stateMachine.owner()->body()->GetLinearVelocity();
+    m_stateMachine.currentState()->update(e, elapsedTime);
+
+    // Center view on player
+    //centerViewOn(e, centerOfMass.x, centerOfMass.y);
+
+    if (m_jumpTimeout > 0.0f)
+        m_jumpTimeout -= elapsedTime;
+}
+
 //==============================================================================
-#endif
+
 HeroPhysicsComponent::HeroPhysicsComponent(Game *game, float x, float y,
                                            float w, float h)
 {
+    m_feetContacts = 0;
+
     // Physics
     float hw = w / 2;
     float hh = h / 2;
@@ -362,8 +412,8 @@ HeroPhysicsComponent::HeroPhysicsComponent(Game *game, float x, float y,
 void HeroPhysicsComponent::handleBeginContact(Actor *other, void *fixtureUD)
 {
     if (fixtureUD == (void*)FEET_SENSOR) {
-        //std::cout << "on ground" << std::endl;
-        //++m_feetContacts;
+        std::cout << "on ground" << std::endl;
+        ++m_feetContacts;
     }
 
     if (other->category() != SENSOR) return;
@@ -376,11 +426,12 @@ void HeroPhysicsComponent::handleBeginContact(Actor *other, void *fixtureUD)
 void HeroPhysicsComponent::handleEndContact(Actor *other, void *fixtureUD)
 {
     if (fixtureUD == (void*)FEET_SENSOR) {
-        //std::cout << "off ground" << std::endl;
-        //--m_feetContacts;
+        std::cout << "off ground" << std::endl;
+        --m_feetContacts;
     }
 
     if (other->category() != SENSOR) return;
 
     std::cout << "is not touching " << other->name() << std::endl;
 }
+

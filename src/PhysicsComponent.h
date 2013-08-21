@@ -35,6 +35,7 @@ class PhysicsComponent : public ActorComponent
     }
 
 
+    // TODO: Make private
     b2Body *body() { return m_body; }
     void setBody(b2Body *body)
     {
@@ -52,6 +53,22 @@ class PhysicsComponent : public ActorComponent
 
     float angle() const {
         return m_body->GetAngle();
+    }
+
+    float velX() const {
+        return m_body->GetLinearVelocity().x;
+    }
+
+    float velY() const {
+        return m_body->GetLinearVelocity().y;
+    }
+
+    void applyForceToCenter(float x, float y) {
+        m_body->ApplyForceToCenter(b2Vec2(x, y));
+    }
+
+    void applyLinearImpulse(float x, float y) {
+        m_body->ApplyLinearImpulse(b2Vec2(0.0f, 5.0f), m_body->GetWorldCenter());
     }
 
     /**
