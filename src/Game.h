@@ -11,6 +11,7 @@
 #include <string>
 
 #include "PhysicsEngine.h"
+#include "EventManager.h"
 
 class Game : public Playable
 {
@@ -33,6 +34,8 @@ class Game : public Playable
                        float x, float y);
 
     bool isOnMap(ActorPtr actor);
+
+    void handleActorCollidedEvent(EventPtr event);
 
  private:
     void toggleDrawDebug();

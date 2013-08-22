@@ -44,7 +44,7 @@ class Animation
         }
     }
 
-    const Image& currentFrame()
+    const Image& currentFrame() const
     {
         return m_frames[m_currentFrameIndex];
     }

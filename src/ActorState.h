@@ -21,7 +21,6 @@ class ActorState : public State<Actor *>
     virtual void onExit(Actor * /*owner*/, int /*nextStateId*/) override {}
 
     virtual void update(Engine *e, float elapsedTime) = 0;
-    virtual void draw(Engine *e) = 0;
 
  protected:
     ActorStateMachine& m_stateMachine;

@@ -37,6 +37,7 @@ class StateMachine
 
     S *state(int stateId) { return m_states[stateId]; }
     S *currentState() { return m_currentState; }
+    const S *currentState() const { return m_currentState; }
 
     const int *stateId(S *state) const
     {

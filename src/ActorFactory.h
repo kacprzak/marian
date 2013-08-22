@@ -55,6 +55,8 @@ class ActorFactory
   
         } else {
             // Static collision shape
+            actor->setCategory(GROUND);
+
             ActorComponentPtr physics(
                 new GroundPhysicsComponent(game, obj));
             actor->addComponent(physics);

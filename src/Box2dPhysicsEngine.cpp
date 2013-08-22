@@ -97,6 +97,7 @@ void ContactListener::BeginContact(b2Contact *contact)
 
     void *bodyAUserData = contact->GetFixtureA()->GetBody()->GetUserData();
     void *bodyBUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+
     if ( bodyAUserData && bodyBUserData ) {
         ActorId actorA = reinterpret_cast<ActorId>(bodyAUserData);
         ActorId actorB = reinterpret_cast<ActorId>(bodyBUserData);
@@ -117,6 +118,7 @@ void ContactListener::EndContact(b2Contact *contact)
 
     void *bodyAUserData = contact->GetFixtureA()->GetBody()->GetUserData();
     void *bodyBUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+
     if ( bodyAUserData && bodyBUserData ) {
         ActorId actorA = reinterpret_cast<ActorId>(bodyAUserData);
         ActorId actorB = reinterpret_cast<ActorId>(bodyBUserData);

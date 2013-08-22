@@ -19,11 +19,35 @@ enum HeroStateId {
 
 //==============================================================================
 
-class StandHeroState : public ActorState
+class ActorRenderState : public ActorState
+{
+ public:
+    ActorRenderState(ActorStateMachine& StateMachine)
+        : ActorState(StateMachine)
+    {}
+
+    virtual const Image& currentImage() const = 0;
+
+    void onEnter(Actor * owner, int /*prevStateId*/) override
+    {
+        auto warc = owner->getComponent<HeroRenderComponent>(RENDER);
+
+        if (auto sarc = warc.lock()) {
+            setFacingRight(sarc->isFacingRight());
+        }
+    }
+
+ private:
+    virtual void setFacingRight(bool right) = 0;
+};
+
+//==============================================================================
+
+class StandHeroState : public ActorRenderState
 {
  public:
     StandHeroState(ActorStateMachine& stateMachine)
-        : ActorState(stateMachine)
+        : ActorRenderState(stateMachine)
     {
         const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
@@ -38,15 +62,6 @@ class StandHeroState : public ActorState
         Image idleFrame2(tex, ax + ax_off, ay, ax + ax_off + 32, ay + 32);
         idleFrame2.scale(2.0f);
         m_animation.addFrame(idleFrame2, 0.1f); // Blink
-    }
-
-    void onEnter(Actor * owner, int /*prevStateId*/) override
-    {
-        auto warc = owner->getComponent<HeroRenderComponent>(RENDER);
-
-        if (auto sarc = warc.lock()) {
-            setFacingRight(sarc->isFacingRight());
-        }
     }
 
     void update(Engine * /*e*/, float elapsedTime) override
@@ -70,13 +85,9 @@ class StandHeroState : public ActorState
         }
     }
 
-    void draw(Engine *e) override
+    const Image& currentImage() const override
     {
-        auto wapc = m_stateMachine.owner()->getComponent<PhysicsComponent>(PHYSICS);
-
-        if (auto sapc = wapc.lock()) {
-            e->drawImage(m_animation.currentFrame(), sapc->posX(), sapc->posY() + 0.5f);
-        }
+        return m_animation.currentFrame();
     }
 
     void setFacingRight(bool right) 
@@ -93,11 +104,11 @@ class StandHeroState : public ActorState
 
 //==============================================================================
 
-class FallHeroState : public ActorState
+class FallHeroState : public ActorRenderState
 {
  public:
     FallHeroState(ActorStateMachine& stateMachine)
-        : ActorState(stateMachine)
+        : ActorRenderState(stateMachine)
     {
         const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
@@ -107,15 +118,6 @@ class FallHeroState : public ActorState
 
         m_image = std::unique_ptr<Image>(new Image(tex, ax + ax_off, ay, ax + ax_off + 32, ay + 32));
         m_image->scale(2.0f);
-    }
-
-    void onEnter(Actor * owner, int /*prevStateId*/) override
-    {
-        auto warc = owner->getComponent<HeroRenderComponent>(RENDER);
-
-        if (auto sarc = warc.lock()) {
-            setFacingRight(sarc->isFacingRight());
-        }
     }
 
     void update(Engine * /*e*/, float /*elapsedTime*/) override
@@ -137,13 +139,9 @@ class FallHeroState : public ActorState
         }
     }
 
-    void draw(Engine *e) override
+    const Image& currentImage() const override
     {
-        auto wapc = m_stateMachine.owner()->getComponent<PhysicsComponent>(PHYSICS);
-
-        if (auto sapc = wapc.lock()) {
-            e->drawImage(*m_image, sapc->posX(), sapc->posY() + 0.5f);
-        }
+        return *m_image;
     }
 
     void setFacingRight(bool right) 
@@ -160,11 +158,11 @@ class FallHeroState : public ActorState
 
 //==============================================================================
 
-class RunHeroState : public ActorState
+class RunHeroState : public ActorRenderState
 {
  public:
     RunHeroState(ActorStateMachine& stateMachine)
-        : ActorState(stateMachine)
+        : ActorRenderState(stateMachine)
     {
         const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
@@ -185,15 +183,6 @@ class RunHeroState : public ActorState
             // Make last and first shorter
             if (x == 0 || x == 2) fs = frameSpeed / 2.0f;
             m_animation.addFrame(runFrame, fs);
-        }
-    }
-
-    void onEnter(Actor * owner, int /*prevStateId*/) override
-    {
-        auto warc = owner->getComponent<HeroRenderComponent>(RENDER);
-
-        if (auto sarc = warc.lock()) {
-            setFacingRight(sarc->isFacingRight());
         }
     }
 
@@ -223,13 +212,9 @@ class RunHeroState : public ActorState
         }
     }
 
-    void draw(Engine *e) override
+    const Image& currentImage() const override
     {
-        auto wapc = m_stateMachine.owner()->getComponent<PhysicsComponent>(PHYSICS);
-
-        if (auto sapc = wapc.lock()) {
-            e->drawImage(m_animation.currentFrame(), sapc->posX(), sapc->posY() + 0.5f);
-        }
+        return m_animation.currentFrame();
     }
 
     void setFacingRight(bool right) 
@@ -245,19 +230,8 @@ class RunHeroState : public ActorState
 };
 
 //==============================================================================
+
 #if 0
-Hero::Hero(unsigned long id, Game *game, float x, float y, float w, float h)
-    : Actor(id, game)
-    , m_jumpTimeout(0.0f)
-    , m_facingRight(true)
-    , m_feetContacts(0)
-    , m_stateMachine(nullptr, 0)
-{
-
-}
-
-//------------------------------------------------------------------------------
-
 void Hero::centerViewOn(Engine *e, float x, float y) const
 {
     // Respect map borders
@@ -271,9 +245,10 @@ void Hero::centerViewOn(Engine *e, float x, float y) const
 
     e->centerViewOn(x, y);
 }
+#endif
 
 //==============================================================================
-#endif
+
 HeroRenderComponent::HeroRenderComponent()
     : m_facingRight(true)
     , m_stateMachine(nullptr, 0)
@@ -315,9 +290,10 @@ bool HeroRenderComponent::init()
 
 //------------------------------------------------------------------------------
 
-void HeroRenderComponent::draw(Engine *e)
+const Image& HeroRenderComponent::currentImage() const
 {
-    m_stateMachine.currentState()->draw(e);
+    const ActorRenderState *renderState = static_cast<const ActorRenderState*>(m_stateMachine.currentState());
+    return renderState->currentImage();
 }
 
 //------------------------------------------------------------------------------

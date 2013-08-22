@@ -45,7 +45,7 @@ GroundPhysicsComponent::GroundPhysicsComponent(Game *game, const MapObject& obj)
     b2Filter filter;
     filter.categoryBits = GROUND;
     groundBody->GetFixtureList()->SetFilterData(filter);
-    groundBody->SetUserData(this);
+    //groundBody->SetUserData(this);
     
     m_body = groundBody;
 }

@@ -10,25 +10,6 @@
 
 class Engine;
 
-class Hero //: public Actor
-{
-/**
-public:
-    Hero(unsigned long id, Game *game, float x, float y, float w, float h);
-    ~Hero();
-
-
-    void update(Engine *e, float elapsedTime) override;
-    void draw(Engine *e) override;
-
-
- private:
-    void centerViewOn(Engine *e, float x, float y) const;
-
-
-**/
-};
-
 class HeroAiComponent : public AiComponent
 {
  public:
@@ -47,7 +28,9 @@ class HeroRenderComponent : public RenderComponent
 
     bool init() override;
 
-    void draw(Engine *e) override;
+    const Image& currentImage() const override;
+    float yOffset() const override { return 0.5f; }
+
     void update(Engine *e, float elapsedTime) override;
 
     bool isFacingRight() const { return m_facingRight; }

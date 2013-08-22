@@ -68,7 +68,7 @@ class PhysicsComponent : public ActorComponent
     }
 
     void applyLinearImpulse(float x, float y) {
-        m_body->ApplyLinearImpulse(b2Vec2(0.0f, 5.0f), m_body->GetWorldCenter());
+        m_body->ApplyLinearImpulse(b2Vec2(x, y), m_body->GetWorldCenter());
     }
 
     /**

@@ -10,7 +10,6 @@
 #include "RenderComponent.h"
 #include "PhysicsComponent.h"
 #include "Box2dPhysicsEngine.h"
-#include "EventManager.h"
 
 #include <iostream>
 #include <memory>
@@ -41,6 +40,9 @@ Game::Game()
         if (obj.name == "hero")
             Engine::singleton().centerViewOn(obj.x, obj.y);
     }
+
+    EventListener el = std::bind(&Game::handleActorCollidedEvent, this, std::placeholders::_1);
+    EventManager::singleton().addListener(ACTOR_COLLIDED, el);
 }
 
 //------------------------------------------------------------------------------
@@ -139,7 +141,13 @@ void Game::draw(Engine *e)
         auto rcwp = a->getComponent<RenderComponent>(RENDER);
         // Try to get shared_ptr 
         if (auto rcsp = rcwp.lock()) {
-            rcsp->draw(e);
+            auto pcwp = a->getComponent<PhysicsComponent>(PHYSICS);
+            if (auto pcsp = pcwp.lock()) {
+                e->drawImage(rcsp->currentImage(),
+                             pcsp->posX() + rcsp->xOffset(),
+                             pcsp->posY() + rcsp->yOffset(),
+                             pcsp->angle());
+            }
         }
     }
 
@@ -174,6 +182,33 @@ bool Game::isOnMap(ActorPtr a)
     }
 
     return true;
+}
+
+//------------------------------------------------------------------------------
+
+void Game::handleActorCollidedEvent(EventPtr event)
+{
+    std::shared_ptr<CollisionEvent> e = std::static_pointer_cast<CollisionEvent>(event);
+
+    ActorPtr a = m_actors[e->m_actorA];
+    ActorPtr b = m_actors[e->m_actorB];
+    CollisionEvent::Phase phase = e->m_phase;
+
+    auto pcqpA = a->getComponent<PhysicsComponent>(PHYSICS);
+    if (auto pcsp = pcqpA.lock()) {
+        if (phase == CollisionEvent::BEGIN)
+            pcsp->handleBeginContact(b.get(), e->m_actorALimbData);
+        else
+            pcsp->handleEndContact(b.get(), e->m_actorALimbData);
+    }
+
+    auto pcqpB = a->getComponent<PhysicsComponent>(PHYSICS);
+    if (auto pcsp = pcqpB.lock()) {
+        if (phase == CollisionEvent::BEGIN)
+            pcsp->handleBeginContact(a.get(), e->m_actorBLimbData);
+        else
+            pcsp->handleEndContact(a.get(), e->m_actorBLimbData);
+    }
 }
 
 //------------------------------------------------------------------------------

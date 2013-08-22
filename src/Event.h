@@ -60,10 +60,11 @@ class CollisionEvent : public BaseEvent
     void serialize(std::ostream& out) const override
     {
         const char *phase = (m_phase == BEGIN) ? "BEGIN" : "END  ";
-        out << phase << " A id: " << m_actorA << " B id: " << m_actorB;
+        out << phase << " A id: " << m_actorA << " B id: " << m_actorB
+            << " A limb: " << m_actorALimbData << " B limb: " << m_actorBLimbData;
     }
 
- private:
+ //private:
     Phase m_phase;
 
     ActorId m_actorA;
