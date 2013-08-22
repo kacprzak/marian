@@ -79,16 +79,17 @@ GLuint load_texture(const char *filename, int *w, int *h)
         mode = GL_RGBA;
     } else {
         // Convert to 32 bits.
-        SDL_PixelFormat fmt = {
-            NULL, 32, 4, 
-            0, 0, 0, 0,
-            0, 8, 16, 24,
-            0xff, 0xff00, 0xff0000, 0xff000000,
-            0,
-            0xff
-        };
+        SDL_PixelFormat fmt;
+        memset(&fmt, 0, sizeof(fmt));
+        fmt.format = SDL_PIXELFORMAT_RGBA8888;
+        fmt.BitsPerPixel = 32;
+        fmt.BytesPerPixel = 4;
+        fmt.Rmask = 0xff;
+        fmt.Gmask = 0xff00;
+        fmt.Bmask = 0xff0000;
+        fmt.Amask = 0xff000000;
 
-        SDL_Surface *nimg = SDL_ConvertSurface(surface, &fmt, SDL_SWSURFACE);
+        SDL_Surface *nimg = SDL_ConvertSurface(surface, &fmt, 0);
         SDL_FreeSurface(surface);
 
         if(!nimg) {

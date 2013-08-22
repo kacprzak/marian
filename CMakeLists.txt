@@ -11,7 +11,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
-find_package( SDL REQUIRED )
+find_package( SDL2 REQUIRED )
 find_package( SDL_image REQUIRED )
 find_package( OpenGL REQUIRED )
 find_package( Boost REQUIRED )
@@ -24,11 +24,14 @@ find_package( CEGUI REQUIRED COMPONENTS OPENGL )
 
 set( CMAKE_DEBUG_POSTFIX "_d" )
 
+set( SDL2IMAGE_INCLUDE_DIR "/usr/local/include/SDL2" )
+set( SDL2IMAGE_LIBRARY "/usr/local/lib/libSDL2_image.so")
+
 include_directories(
   src
   tmx
-  ${SDL_INCLUDE_DIR}
-  ${SDL_IMAGE_INCLUDE_DIR}
+  ${SDL2_INCLUDE_DIR}
+  ${SDL2IMAGE_INCLUDE_DIR}
   ${OPENGL_INCLUDE_DIR}
   ${Boost_INCLUDE_DIR}
   ${BOX2D_INCLUDE_DIR}

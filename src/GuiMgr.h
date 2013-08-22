@@ -19,6 +19,7 @@ class GuiMgr : public Singleton<GuiMgr>
  private:
     void handle_mouse_up(Uint8 button);
     void handle_mouse_down(Uint8 button);
+    void handle_mouse_wheel(const SDL_MouseWheelEvent& e);
 
 };
 

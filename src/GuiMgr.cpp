@@ -6,7 +6,7 @@
 #include <iostream>
 #include "Console.h"
 
-static CEGUI::uint SDLKeyToCEGUIKey(SDLKey key);
+static CEGUI::uint SDLKeyToCEGUIKey(SDL_Scancode key);
 
 //------------------------------------------------------------------------------
 
@@ -87,22 +87,27 @@ bool GuiMgr::processInput(const SDL_Event& e)
         /* let a special function handle the mouse button up event */
         handle_mouse_up(e.button.button);
         break;
+
+    case SDL_MOUSEWHEEL:
+        handle_mouse_wheel(e.wheel);
+        break;
  
         /* key down */
     case SDL_KEYDOWN:
         {
-            CEGUI::uint kc = SDLKeyToCEGUIKey(e.key.keysym.sym);
+            CEGUI::uint kc = SDLKeyToCEGUIKey(e.key.keysym.scancode);
             if (Console::singletonPtr()) {
                 Console::singleton().handleKey(kc);
             }
 
             CEGUI::System::getSingleton().injectKeyDown(kc);
+
             /* as for the character it's a litte more complicated.
              * we'll use for translated unicode value.
              * this is described in more detail below.
              */
-            if ((e.key.keysym.unicode & 0xFF80) == 0) {
-                CEGUI::System::getSingleton().injectChar(e.key.keysym.unicode & 0x7F);
+            if ((e.key.keysym.sym & 0xFF80) == 0) {
+                CEGUI::System::getSingleton().injectChar(e.key.keysym.sym);
             }
         }
         break;
@@ -110,14 +115,22 @@ bool GuiMgr::processInput(const SDL_Event& e)
         /* key up */
     case SDL_KEYUP:
         {
-            CEGUI::uint kc = SDLKeyToCEGUIKey(e.key.keysym.sym);
+            CEGUI::uint kc = SDLKeyToCEGUIKey(e.key.keysym.scancode);
             CEGUI::System::getSingleton().injectKeyUp(kc);
         }
         break;
-    case SDL_VIDEORESIZE:
-        CEGUI::System::getSingleton().notifyDisplaySizeChanged(CEGUI::Size(e.resize.w,
-                                                                           e.resize.h));
-        break;
+
+    case SDL_WINDOWEVENT:
+        {
+            switch (e.window.event) {
+            case SDL_WINDOWEVENT_RESIZED:
+                CEGUI::System::getSingleton().notifyDisplaySizeChanged(CEGUI::Size(e.window.data1,
+                                                                                   e.window.data2));
+                break;
+            }
+
+            break;
+        }
     }
 
     return true; // Keep running
@@ -151,14 +164,13 @@ void GuiMgr::handle_mouse_down(Uint8 button)
     case SDL_BUTTON_RIGHT:
         CEGUI::System::getSingleton().injectMouseButtonDown(CEGUI::RightButton);
         break;
- 
-    case SDL_BUTTON_WHEELDOWN:
-        CEGUI::System::getSingleton().injectMouseWheelChange( -1 );
-        break;
-    case SDL_BUTTON_WHEELUP:
-        CEGUI::System::getSingleton().injectMouseWheelChange( +1 );
-        break;
     }
+}
+//------------------------------------------------------------------------------
+
+void GuiMgr::handle_mouse_wheel(const SDL_MouseWheelEvent &e)
+{
+    CEGUI::System::getSingleton().injectMouseWheelChange( e.y );
 }
 
 //------------------------------------------------------------------------------
@@ -181,10 +193,10 @@ void GuiMgr::handle_mouse_up(Uint8 button)
 /************************************************************************
     Translate a SDLKey to the proper CEGUI::Key
 *************************************************************************/
-CEGUI::uint SDLKeyToCEGUIKey(SDLKey key)
+CEGUI::uint SDLKeyToCEGUIKey(SDL_Scancode key)
 {
     using namespace CEGUI;
-    switch (key) {
+    switch (SDL_SCANCODE_TO_KEYCODE(key)) {
     case SDLK_BACKSPACE:    return Key::Backspace;
     case SDLK_TAB:          return Key::Tab;
     case SDLK_RETURN:       return Key::Return;
@@ -238,6 +250,7 @@ CEGUI::uint SDLKeyToCEGUIKey(SDLKey key)
     case SDLK_y:            return Key::Y;
     case SDLK_z:            return Key::Z;
     case SDLK_DELETE:       return Key::Delete;
+#if 0
     case SDLK_KP0:          return Key::Numpad0;
     case SDLK_KP1:          return Key::Numpad1;
     case SDLK_KP2:          return Key::Numpad2;
@@ -248,6 +261,7 @@ CEGUI::uint SDLKeyToCEGUIKey(SDLKey key)
     case SDLK_KP7:          return Key::Numpad7;
     case SDLK_KP8:          return Key::Numpad8;
     case SDLK_KP9:          return Key::Numpad9;
+#endif
     case SDLK_KP_PERIOD:    return Key::Decimal;
     case SDLK_KP_DIVIDE:    return Key::Divide;
     case SDLK_KP_MULTIPLY:  return Key::Multiply;
@@ -279,16 +293,16 @@ CEGUI::uint SDLKeyToCEGUIKey(SDLKey key)
     case SDLK_F13:          return Key::F13;
     case SDLK_F14:          return Key::F14;
     case SDLK_F15:          return Key::F15;
-    case SDLK_NUMLOCK:      return Key::NumLock;
-    case SDLK_SCROLLOCK:    return Key::ScrollLock;
+//    case SDLK_NUMLOCK:      return Key::NumLock;
+//    case SDLK_SCROLLOCK:    return Key::ScrollLock;
     case SDLK_RSHIFT:       return Key::RightShift;
     case SDLK_LSHIFT:       return Key::LeftShift;
     case SDLK_RCTRL:        return Key::RightControl;
     case SDLK_LCTRL:        return Key::LeftControl;
     case SDLK_RALT:         return Key::RightAlt;
     case SDLK_LALT:         return Key::LeftAlt;
-    case SDLK_LSUPER:       return Key::LeftWindows;
-    case SDLK_RSUPER:       return Key::RightWindows;
+//    case SDLK_LSUPER:       return Key::LeftWindows;
+//    case SDLK_RSUPER:       return Key::RightWindows;
     case SDLK_SYSREQ:       return Key::SysRq;
     case SDLK_MENU:         return Key::AppMenu;
     case SDLK_POWER:        return Key::Power;

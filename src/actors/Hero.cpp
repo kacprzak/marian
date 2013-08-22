@@ -330,15 +330,15 @@ void HeroRenderComponent::update(Engine *e, float elapsedTime)
 
     if (auto shpc = whpc.lock()) {
 
-        if (e->isPressed(SDLK_RIGHT)) {
+        if (e->isPressed(SDL_SCANCODE_RIGHT)) {
             shpc->applyForceToCenter(10.0f, 0.0f);
         }
 
-        if (e->isPressed(SDLK_LEFT)) {
+        if (e->isPressed(SDL_SCANCODE_LEFT)) {
             shpc->applyForceToCenter(-10.0f, 0.0f);
         }
 
-        if (e->isPressed(SDLK_UP)) {
+        if (e->isPressed(SDL_SCANCODE_UP)) {
             if (/*shpc->isOnGround() &&*/ m_jumpTimeout <= 0.0f) {
                 shpc->applyLinearImpulse(0.0f, 5.0f);
                 m_jumpTimeout = JUMP_DELAY;

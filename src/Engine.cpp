@@ -51,6 +51,7 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight,
     , m_screenWidth(screenWidth)
     , m_screenHeight(screenHeight)
     , m_screenFull(screenFull)
+    , m_window(nullptr)
     , m_appActive(true)
     , m_mouseFocus(true)
     , m_inputFocus(true)
@@ -63,20 +64,21 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight,
     try {
         initializeSDL();
         initializeOpenGL();
-        SDL_WM_SetCaption(title.c_str(), title.c_str());
+        //SDL_WM_SetCaption(title.c_str(), title.c_str());
     } catch (EngineError e) {
         SDL_Quit();
         throw e;
     }
 
     // Mark all keys as not pressed
-    for (int i = 0; i < SDLK_LAST; ++i) {
+    for (int i = 0; i < SDL_NUM_SCANCODES; ++i) {
         m_keys[i] = false;
     }
 
     new ResourceMgr;
     // Required by GUI
-    SDL_EnableUNICODE(1);
+    //SDL_EnableUNICODE(1);
+
     new GuiMgr;
 }
 
@@ -89,6 +91,7 @@ Engine::~Engine()
     delete ResourceMgr::singletonPtr();
 
     std::clog << "Quitting SDL...\n";
+    SDL_DestroyWindow(m_window);
     SDL_Quit();
 }
 
@@ -161,27 +164,27 @@ bool Engine::processEvents()
 
         switch (event.type) {
         case SDL_KEYUP:
-            m_keys[event.key.keysym.sym] = false;
+            m_keys[event.key.keysym.scancode] = false;
             return m_game->processInput(event);
         case SDL_KEYDOWN:
-            m_keys[event.key.keysym.sym] = true;
+            m_keys[event.key.keysym.scancode] = true;
             return m_game->processInput(event);
-        case SDL_ACTIVEEVENT:
-            switch (event.active.state)    {
-            case SDL_APPACTIVE:
-                m_appActive = event.active.gain;
-                std::clog << "SDL_APPACTIVE.gain = " << m_appActive << '\n';
+
+        case SDL_WINDOWEVENT:
+        {
+            switch (event.window.event) {
+            case SDL_WINDOWEVENT_FOCUS_GAINED:
+                m_appActive = true;
                 break;
-            case SDL_APPMOUSEFOCUS:
-                m_mouseFocus = event.active.gain;
-                std::clog << "SDL_APPMOUSEFOCUS.gain = " << m_mouseFocus << '\n';
+            case SDL_WINDOWEVENT_FOCUS_LOST:
+                m_appActive = false;
                 break;
-            case SDL_APPINPUTFOCUS:
-                m_inputFocus = event.active.gain;
-                std::clog << "SDL_APPINPUTFOCUS.gain = " << m_inputFocus << '\n';
+            default:
                 break;
             }
             break;
+        }
+
         case SDL_QUIT:
             return false;
         }
@@ -219,7 +222,7 @@ void Engine::draw()
     // Draw gui
     GuiMgr::singleton().draw();
 
-    SDL_GL_SwapBuffers(); 
+    SDL_GL_SwapWindow(m_window);
 }
 
 //------------------------------------------------------------------------------
@@ -310,42 +313,49 @@ void Engine::initializeSDL()
     }
 
     /* Some video inforamtion */
-    const SDL_VideoInfo *info = SDL_GetVideoInfo();
+    //const SDL_VideoInfo *info = SDL_GetVideoInfo();
   
-    if (!info) {
-        throw EngineError("Video query failed", SDL_GetError());
-    }
+    //if (!info) {
+    //    throw EngineError("Video query failed", SDL_GetError());
+    //}
 
-    int screen_bpp = info->vfmt->BitsPerPixel;
+    //int screen_bpp = info->vfmt->BitsPerPixel;
 
-    SDL_GL_SetAttribute(SDL_GL_RED_SIZE,   8);
-    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,  8);
+    //SDL_GL_SetAttribute(SDL_GL_RED_SIZE,   8);
+    //SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+    //SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,  8);
     //SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
+    //SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    //SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
 
-    char env[] = "SDL_VIDEO_CENTERED=center";
-    SDL_putenv(env);
-
-    int screen_flags = SDL_OPENGL;
+    int screen_flags = SDL_WINDOW_OPENGL;
 
     if (m_screenFull)
-        screen_flags |= SDL_FULLSCREEN;
+        screen_flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 
-    std::clog << "Screen: " << m_screenWidth << "x" << m_screenHeight
-              << "x" << screen_bpp << "\n";
+    //std::clog << "Screen: " << m_screenWidth << "x" << m_screenHeight
+    //          << "x" << screen_bpp << "\n";
     // Screen surface
-    SDL_Surface *screen = SDL_SetVideoMode(m_screenWidth, m_screenHeight,
-                                           screen_bpp, screen_flags);
+    m_window = SDL_CreateWindow("Marian",
+                                SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                                m_screenWidth, m_screenHeight,
+                                screen_flags);
 
-    if (!screen) {
-        throw EngineError("Setting video mode failed", SDL_GetError());
+    if (!m_window) {
+        throw EngineError("Creating window failed", SDL_GetError());
     }
 
+    SDL_GL_CreateContext(m_window);
+
+    //SDL_Renderer *renderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+    //if (!renderer) {
+    //    throw EngineError("Creating renderer failed", SDL_GetError());
+    //}
+
     SDL_ShowCursor(SDL_DISABLE);
-    SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);  
+    //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 
     std::clog << "SDL initialized.\n";
 }

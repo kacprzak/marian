@@ -82,8 +82,8 @@ bool Game::processInput(const SDL_Event& event)
     case SDL_KEYUP:
         break;
     case SDL_KEYDOWN:
-        if (event.key.keysym.sym == SDLK_ESCAPE) return false;
-        if (event.key.keysym.sym == SDLK_g) toggleDrawDebug();
+        if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) return false;
+        if (event.key.keysym.scancode == SDL_SCANCODE_G) toggleDrawDebug();
         break;
     }
     return true; // keep actoring

@@ -73,8 +73,9 @@ set_target_properties( marian PROPERTIES DEBUG_POSTFIX _d)
 target_link_libraries( marian
   tmx
   ${BOX2D_LIBRARY}
-  ${SDL_LIBRARY}
-  ${SDLIMAGE_LIBRARY}
+  ${SDL2_LIBRARY}
+#  ${SDLIMAGE_LIBRARY}
+  ${SDL2IMAGE_LIBRARY}
   ${OPENGL_LIBRARIES}
   ${LUA_LIBRARIES}
 #  ${Boost_LIBRARIES}

@@ -17,7 +17,7 @@
 class EngineError : public std::exception
 {
  public:
-    EngineError(const std::string& msg, char *sdlError)
+    EngineError(const std::string& msg, const char *sdlError)
         : m_msg(msg)
         , m_sdlError(sdlError)
     {
@@ -38,7 +38,7 @@ class EngineError : public std::exception
 
  private:
     const std::string m_msg;
-    char *m_sdlError;
+    const char *m_sdlError;
 };
 
 //------------------------------------------------------------------------------
@@ -96,6 +96,8 @@ class Engine
     int m_screenHeight;
     bool m_screenFull;
 
+    SDL_Window *m_window;
+
     bool m_appActive;
     bool m_mouseFocus;
     bool m_inputFocus;
@@ -107,7 +109,7 @@ class Engine
 
     Playable *m_game;
 
-    bool m_keys[SDLK_LAST];
+    bool m_keys[SDL_NUM_SCANCODES];
     bool m_gui;
 };
 
