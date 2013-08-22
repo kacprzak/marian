@@ -19,35 +19,39 @@ enum HeroStateId {
 
 //==============================================================================
 
-class ActorRenderState : public ActorState
+class HeroRenderComponentState : public State<HeroRenderComponent *>
 {
  public:
-    ActorRenderState(ActorStateMachine& StateMachine)
-        : ActorState(StateMachine)
+    HeroRenderComponentState(HeroRenderComponentStateMachine& stateMachine)
+        : State<HeroRenderComponent *>()
+        , m_stateMachine(stateMachine)
     {}
+
+    void onEnter(HeroRenderComponent * owner, int /*prevStateId*/) override
+    {
+        setFacingRight(owner->isFacingRight());
+    }
+
+    virtual void onExit(HeroRenderComponent * /*owner*/, int /*nextStateId*/) override {}
+
+    virtual void update(Engine *e, float elapsedTime) = 0;
 
     virtual const Image& currentImage() const = 0;
 
-    void onEnter(Actor * owner, int /*prevStateId*/) override
-    {
-        auto warc = owner->getComponent<HeroRenderComponent>(RENDER);
-
-        if (auto sarc = warc.lock()) {
-            setFacingRight(sarc->isFacingRight());
-        }
-    }
-
  private:
     virtual void setFacingRight(bool right) = 0;
+
+ protected:
+    HeroRenderComponentStateMachine& m_stateMachine;
 };
 
 //==============================================================================
 
-class StandHeroState : public ActorRenderState
+class StandHeroState : public HeroRenderComponentState
 {
  public:
-    StandHeroState(ActorStateMachine& stateMachine)
-        : ActorRenderState(stateMachine)
+    StandHeroState(HeroRenderComponentStateMachine& stateMachine)
+        : HeroRenderComponentState(stateMachine)
     {
         const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
@@ -67,22 +71,6 @@ class StandHeroState : public ActorRenderState
     void update(Engine * /*e*/, float elapsedTime) override
     {
         m_animation.update(elapsedTime);
-
-        auto wapc = m_stateMachine.owner()->getComponent<PhysicsComponent>(PHYSICS);
-
-        if (auto sapc = wapc.lock()) {
-
-            if (std::abs(sapc->velY()) > 6.0f) {
-                m_stateMachine.changeState(FALL);
-                return;
-            }
-
-            if (std::abs(sapc->velX()) > 0.6f) {
-                m_stateMachine.changeState(RUN);
-                return;
-            }
-
-        }
     }
 
     const Image& currentImage() const override
@@ -104,11 +92,11 @@ class StandHeroState : public ActorRenderState
 
 //==============================================================================
 
-class FallHeroState : public ActorRenderState
+class FallHeroState : public HeroRenderComponentState
 {
  public:
-    FallHeroState(ActorStateMachine& stateMachine)
-        : ActorRenderState(stateMachine)
+    FallHeroState(HeroRenderComponentStateMachine& stateMachine)
+        : HeroRenderComponentState(stateMachine)
     {
         const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
@@ -122,21 +110,7 @@ class FallHeroState : public ActorRenderState
 
     void update(Engine * /*e*/, float /*elapsedTime*/) override
     {
-        auto wapc = m_stateMachine.owner()->getComponent<HeroPhysicsComponent>(PHYSICS);
-
-        if (auto sapc = wapc.lock()) {
-
-            if (std::abs(sapc->velX()) > 0.01f) {
-                bool fr = (sapc->velX() >= 0.0f);
-                //hero->setFacingRight(fr);
-                setFacingRight(fr);
-            }
-
-            if (sapc->isOnGround() && std::abs(sapc->velY()) < 0.1f) {
-                m_stateMachine.changeState(STAND);
-                return;
-            }
-        }
+        // Do nothing
     }
 
     const Image& currentImage() const override
@@ -158,11 +132,11 @@ class FallHeroState : public ActorRenderState
 
 //==============================================================================
 
-class RunHeroState : public ActorRenderState
+class RunHeroState : public HeroRenderComponentState
 {
  public:
-    RunHeroState(ActorStateMachine& stateMachine)
-        : ActorRenderState(stateMachine)
+    RunHeroState(HeroRenderComponentStateMachine& stateMachine)
+        : HeroRenderComponentState(stateMachine)
     {
         const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
@@ -189,27 +163,6 @@ class RunHeroState : public ActorRenderState
     void update(Engine * /*e*/, float elapsedTime) override
     {
         m_animation.update(elapsedTime);
-        
-        auto wapc = m_stateMachine.owner()->getComponent<HeroPhysicsComponent>(PHYSICS);
-
-        if (auto sapc = wapc.lock()) {
-
-            if (std::abs(sapc->velX()) > 0.01f) {
-                bool fr = (sapc->velX() >= 0.0f);
-                //hero->setFacingRight(fr);
-                setFacingRight(fr);
-            }
-
-            if (std::abs(sapc->velY()) > 0.1f) {
-                m_stateMachine.changeState(FALL);
-                return;
-            }
-
-            if (std::abs(sapc->velX()) < 0.5f) {
-                m_stateMachine.changeState(STAND);
-                return;
-            }
-        }
     }
 
     const Image& currentImage() const override
@@ -268,10 +221,10 @@ HeroRenderComponent::~HeroRenderComponent()
 
 bool HeroRenderComponent::init()
 {
-    m_stateMachine.setOwner(m_owner.get());
+    m_stateMachine.setOwner(this);
 
     // States
-    ActorState *state = new StandHeroState(m_stateMachine);
+    HeroRenderComponentState *state = new StandHeroState(m_stateMachine);
     m_states.push_back(state);
     m_stateMachine.registerState(STAND, state);
 
@@ -283,7 +236,7 @@ bool HeroRenderComponent::init()
     m_states.push_back(state);
     m_stateMachine.registerState(FALL, state);
 
-    m_stateMachine.changeState(FALL);
+    m_stateMachine.changeState(STAND);
 
     return true;
 }
@@ -292,7 +245,7 @@ bool HeroRenderComponent::init()
 
 const Image& HeroRenderComponent::currentImage() const
 {
-    const ActorRenderState *renderState = static_cast<const ActorRenderState*>(m_stateMachine.currentState());
+    const HeroRenderComponentState *renderState = static_cast<const HeroRenderComponentState*>(m_stateMachine.currentState());
     return renderState->currentImage();
 }
 
@@ -315,7 +268,7 @@ void HeroRenderComponent::update(Engine *e, float elapsedTime)
         }
 
         if (e->isPressed(SDL_SCANCODE_UP)) {
-            if (/*shpc->isOnGround() &&*/ m_jumpTimeout <= 0.0f) {
+            if (shpc->isOnGround() && m_jumpTimeout <= 0.0f) {
                 shpc->applyLinearImpulse(0.0f, 5.0f);
                 m_jumpTimeout = JUMP_DELAY;
             }
@@ -340,6 +293,7 @@ HeroPhysicsComponent::HeroPhysicsComponent(Game *game, float x, float y,
                                            float w, float h)
 {
     m_feetContacts = 0;
+    m_heroStateId = FALL;
 
     // Physics
     float hw = w / 2;
@@ -388,7 +342,7 @@ HeroPhysicsComponent::HeroPhysicsComponent(Game *game, float x, float y,
 void HeroPhysicsComponent::handleBeginContact(Actor *other, void *fixtureUD)
 {
     if (fixtureUD == (void*)FEET_SENSOR) {
-        std::cout << "on ground" << std::endl;
+        //std::cout << "on ground" << std::endl;
         ++m_feetContacts;
     }
 
@@ -402,12 +356,68 @@ void HeroPhysicsComponent::handleBeginContact(Actor *other, void *fixtureUD)
 void HeroPhysicsComponent::handleEndContact(Actor *other, void *fixtureUD)
 {
     if (fixtureUD == (void*)FEET_SENSOR) {
-        std::cout << "off ground" << std::endl;
+        //std::cout << "off ground" << std::endl;
         --m_feetContacts;
     }
 
     if (other->category() != SENSOR) return;
 
     std::cout << "is not touching " << other->name() << std::endl;
+}
+
+//------------------------------------------------------------------------------
+
+void HeroPhysicsComponent::update(Engine *e, float elapsedTime)
+{
+    switch(m_heroStateId) {
+    case FALL:
+    {
+        if (std::abs(velX()) > 0.01f) {
+            bool fr = (velX() >= 0.0f);
+            //hero->setFacingRight(fr);
+            //setFacingRight(fr);
+        }
+
+        if (isOnGround() && std::abs(velY()) < 0.1f) {
+            //m_stateMachine.changeState(STAND);
+            return;
+        }
+        break;
+    }
+
+    case RUN:
+    {
+        if (std::abs(velX()) > 0.01f) {
+            bool fr = (velX() >= 0.0f);
+            //hero->setFacingRight(fr);
+            //setFacingRight(fr);
+        }
+
+        if (std::abs(velY()) > 0.1f) {
+            //m_stateMachine.changeState(FALL);
+            return;
+        }
+
+        if (std::abs(velX()) < 0.5f) {
+            //m_stateMachine.changeState(STAND);
+            return;
+        }
+        break;
+    }
+
+    case STAND:
+    {
+        if (std::abs(velY()) > 6.0f) {
+            //m_stateMachine.changeState(FALL);
+            return;
+        }
+
+        if (std::abs(velX()) > 0.6f) {
+            //m_stateMachine.changeState(RUN);
+            return;
+        }
+        break;
+    }
+    }
 }
 

@@ -19,7 +19,6 @@ set( marian_HDRS
   ActorComponentId.h
   ActorCategory.h
   ActorFactory.h
-  ActorState.h
   PhysicsEngine.h
   Box2dPhysicsEngine.h
   PhysicsComponent.h

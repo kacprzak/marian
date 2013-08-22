@@ -202,7 +202,7 @@ void Game::handleActorCollidedEvent(EventPtr event)
             pcsp->handleEndContact(b.get(), e->m_actorALimbData);
     }
 
-    auto pcqpB = a->getComponent<PhysicsComponent>(PHYSICS);
+    auto pcqpB = b->getComponent<PhysicsComponent>(PHYSICS);
     if (auto pcsp = pcqpB.lock()) {
         if (phase == CollisionEvent::BEGIN)
             pcsp->handleBeginContact(a.get(), e->m_actorBLimbData);

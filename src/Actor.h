@@ -90,7 +90,7 @@ class Actor final
     std::string m_name;
 
  private:
-    // Sholud be called only by ActorFactory
+    // Should be called only by ActorFactory
     void addComponent(ActorComponentPtr c) {
         m_components.insert(std::make_pair(c->componentId(), c));
     }

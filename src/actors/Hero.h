@@ -6,7 +6,7 @@
 #include "PhysicsComponent.h"
 #include "RenderComponent.h"
 #include "AiComponent.h"
-#include "ActorState.h"
+#include "StateMachine.h"
 
 class Engine;
 
@@ -19,6 +19,10 @@ class HeroAiComponent : public AiComponent
     float m_jumpTimeout;
 };
 
+class HeroRenderComponent;
+class HeroRenderComponentState;
+
+typedef StateMachine<HeroRenderComponent *, HeroRenderComponentState> HeroRenderComponentStateMachine;
 
 class HeroRenderComponent : public RenderComponent
 {
@@ -41,8 +45,8 @@ class HeroRenderComponent : public RenderComponent
     bool m_facingRight;
     float m_jumpTimeout;
 
-    ActorStateMachine m_stateMachine;
-    std::vector<ActorState *> m_states;
+    HeroRenderComponentStateMachine m_stateMachine;
+    std::vector<HeroRenderComponentState *> m_states;
 };
 
 
@@ -55,10 +59,13 @@ class HeroPhysicsComponent : public PhysicsComponent
     void handleBeginContact(Actor *other, void *fixtureUD = nullptr) override;
     void handleEndContact  (Actor *other, void *fixtureUD = nullptr) override;
 
+    void update(Engine *e, float elapsedTime) override;
+
     bool isOnGround() const { return m_feetContacts > 0; }
 
  private:
     int m_feetContacts;
+    int m_heroStateId;
 };
 
 #endif
