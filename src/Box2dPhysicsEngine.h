@@ -28,7 +28,7 @@ class Box2dPhysicsEngine : public PhysicsEngine
     void toggleDrawDebug() override;
     void drawDebugData() override;
 
-    void applyForce(const Vec2& dir, float newtons, ActorId actorId) override;
+    //void applyForce(const Vec2& dir, float newtons, ActorId actorId) override;
 
     b2World *world() { return m_world; }
 

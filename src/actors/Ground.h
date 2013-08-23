@@ -2,7 +2,7 @@
 #ifndef GROUND_H
 #define GROUND_H
 
-#include "PhysicsComponent.h"
+#include "components/PhysicsComponent.h"
 #include "Map.h"
 
 class Game;

@@ -6,7 +6,7 @@
 #include <string>
 #include <iostream>
 //#include "ActorFactory.h"
-#include "ActorComponent.h"
+#include "components/ActorComponent.h"
 #include <map>
 #include <memory>
 

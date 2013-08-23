@@ -7,8 +7,8 @@
 #include "ActorFactory.h"
 #include "Util.h"
 #include "ScriptMgr.h"
-#include "RenderComponent.h"
-#include "PhysicsComponent.h"
+#include "components/RenderComponent.h"
+#include "components/PhysicsComponent.h"
 #include "Box2dPhysicsEngine.h"
 
 #include <iostream>
@@ -43,6 +43,12 @@ Game::Game()
 
     EventListener el = std::bind(&Game::handleActorCollidedEvent, this, std::placeholders::_1);
     EventManager::singleton().addListener(ACTOR_COLLIDED, el);
+
+    EventListener el2 = std::bind(&Game::handleActorPhysicsStateChanged, this, std::placeholders::_1);
+    EventManager::singleton().addListener(ACTOR_PHYSICS_STATE_CHANGED, el2);
+
+    EventListener el3 = std::bind(&Game::handleActorMoved, this, std::placeholders::_1);
+    EventManager::singleton().addListener(ACTOR_MOVED, el3);
 }
 
 //------------------------------------------------------------------------------
@@ -102,6 +108,7 @@ void Game::update(Engine *e, float elapsedTime)
     } 
 
     m_fpsCounter.update(elapsedTime);
+    EventManager::singleton().update();
 
     // Remove dead GameObjects
     auto it = std::begin(m_actors);
@@ -118,8 +125,6 @@ void Game::update(Engine *e, float elapsedTime)
             ++it;
         }
     }
-
-    EventManager::singleton().update();
 }
 
 //------------------------------------------------------------------------------
@@ -208,6 +213,49 @@ void Game::handleActorCollidedEvent(EventPtr event)
             pcsp->handleBeginContact(a.get(), e->m_actorBLimbData);
         else
             pcsp->handleEndContact(a.get(), e->m_actorBLimbData);
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void Game::handleActorPhysicsStateChanged(EventPtr event)
+{
+    std::shared_ptr<PhysicsStateChangeEvent> e = std::static_pointer_cast<PhysicsStateChangeEvent>(event);
+
+    ActorPtr actor = m_actors[e->m_actor];
+    ActorPhysicsStateId state = e->m_newState;
+
+    // RenderComponent weak ptr
+    auto rcwp = actor->getComponent<RenderComponent>(RENDER);
+
+    if (auto rcsp = rcwp.lock()) {
+        rcsp->changePhysicsState(state);
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void Game::handleActorMoved(EventPtr event)
+{
+    auto e = std::static_pointer_cast<MoveEvent>(event);
+
+    ActorPtr actor = m_actors[e->m_actor];
+
+    if (actor->name() == "hero") {
+        float x = e->m_x;
+        float y = e->m_y;
+
+        // Respect map borders
+        float bLeft, bRight, bTop, bBottom;
+        Engine::singleton().viewBounds(&bLeft, &bRight, &bBottom, &bTop);
+
+        float hw = (bRight - bLeft) / 2.0f;
+        float hh = (bTop - bBottom) / 2.0f;
+        if (x < hw) x = hw;
+        if (y < hh) y = hh;
+        if (x > map()->width() - hw) x = map()->width() - hw;
+
+        Engine::singleton().centerViewOn(x, y);
     }
 }
 

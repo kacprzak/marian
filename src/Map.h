@@ -44,7 +44,7 @@ class Map : boost::noncopyable
     int width() const { return m_width; }
     int height() const { return m_height; }
 
-    void draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const;
+    //void draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const;
     void drawLayer(Engine *e, const std::string& layer,
                    float xFrom, float xTo, float yFrom, float yTo) const;
 

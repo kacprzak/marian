@@ -3,21 +3,11 @@
 #define HERO_H
 
 #include "Actor.h"
-#include "PhysicsComponent.h"
-#include "RenderComponent.h"
-#include "AiComponent.h"
+#include "components/PhysicsComponent.h"
+#include "components/RenderComponent.h"
 #include "StateMachine.h"
 
 class Engine;
-
-class HeroAiComponent : public AiComponent
-{
- public:
-    void update(Engine *e, float elapsedTime) override;
-
- private:
-    float m_jumpTimeout;
-};
 
 class HeroRenderComponent;
 class HeroRenderComponentState;
@@ -35,12 +25,14 @@ class HeroRenderComponent : public RenderComponent
     const Image& currentImage() const override;
     float yOffset() const override { return 0.5f; }
 
+    void changePhysicsState(ActorPhysicsStateId newState);
+
     void update(Engine *e, float elapsedTime) override;
 
     bool isFacingRight() const { return m_facingRight; }
 
  private:
-    void setFacingRight(bool right) { m_facingRight = right; }
+    void setFacingRight(bool right);
 
     bool m_facingRight;
     float m_jumpTimeout;
@@ -63,9 +55,14 @@ class HeroPhysicsComponent : public PhysicsComponent
 
     bool isOnGround() const { return m_feetContacts > 0; }
 
+    void changeState(ActorPhysicsStateId state);
+
  private:
     int m_feetContacts;
     int m_heroStateId;
+
+    float m_lastX;
+    float m_lastY;
 };
 
 #endif

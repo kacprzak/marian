@@ -3,7 +3,7 @@
 #define ACTORFACTORY_H
 
 #include "Actor.h"
-#include "ActorComponent.h"
+#include "components/ActorComponent.h"
 #include "Map.h"
 #include "actors/Hero.h"
 #include "actors/Ground.h"

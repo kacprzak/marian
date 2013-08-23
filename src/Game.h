@@ -36,6 +36,8 @@ class Game : public Playable
     bool isOnMap(ActorPtr actor);
 
     void handleActorCollidedEvent(EventPtr event);
+    void handleActorPhysicsStateChanged(EventPtr event);
+    void handleActorMoved(EventPtr event);
 
  private:
     void toggleDrawDebug();

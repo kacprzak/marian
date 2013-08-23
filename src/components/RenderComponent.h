@@ -4,6 +4,7 @@
 
 #include "ActorComponent.h"
 #include "Image.h"
+#include "Event.h"
 
 class RenderComponent : public ActorComponent
 {
@@ -17,6 +18,8 @@ class RenderComponent : public ActorComponent
     // Difference to physical transformation
     virtual float xOffset() const { return 0.0f; }
     virtual float yOffset() const { return 0.0f; }
+
+    virtual void changePhysicsState(ActorPhysicsStateId /*newState*/) {}
 
     ActorComponentId componentId() const { return RENDER; }
 };

@@ -5,8 +5,15 @@ set( marian_HDRS
   actors/Hero.h
   actors/Ground.h
 
+  components/AiComponent.h
+  components/ActorComponent.h
+  components/ActorComponentId.h
+  components/PhysicsComponent.h
+  components/ControlComponent.h
+  components/RenderComponent.h
+  components/ImageRenderComponent.h
+
   Animation.h
-  AiComponent.h
   Console.h
   Engine.h
   EventType.h
@@ -15,16 +22,10 @@ set( marian_HDRS
   FpsCounter.h
   Game.h
   Actor.h
-  ActorComponent.h
-  ActorComponentId.h
   ActorCategory.h
   ActorFactory.h
   PhysicsEngine.h
   Box2dPhysicsEngine.h
-  PhysicsComponent.h
-  ControlComponent.h
-  RenderComponent.h
-  ImageRenderComponent.h
   GuiMgr.h
   Image.h
   Map.h

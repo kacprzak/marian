@@ -2,8 +2,8 @@
 #ifndef BOX_H
 #define BOX_H
 
-#include "PhysicsComponent.h"
-#include "ImageRenderComponent.h"
+#include "components/PhysicsComponent.h"
+#include "components/ImageRenderComponent.h"
 
 class Game;
 

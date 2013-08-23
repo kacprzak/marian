@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "Actor.h"
+#include "components/PhysicsComponent.h"
 
 class Event
 {
@@ -71,6 +72,42 @@ class CollisionEvent : public BaseEvent
     void *m_actorALimbData;
     ActorId m_actorB;
     void *m_actorBLimbData;
+};
+
+//------------------------------------------------------------------------------
+
+class MoveEvent : public BaseEvent
+{
+ public:
+    MoveEvent(ActorId actor, float x, float y)
+        : BaseEvent(ACTOR_MOVED)
+        , m_actor(actor)
+        , m_x(x)
+        , m_y(y)
+    {}
+
+    const char *eventName() const override { return "ActorMoved"; }
+
+    ActorId m_actor;
+    float m_x;
+    float m_y;
+};
+
+//------------------------------------------------------------------------------
+
+class PhysicsStateChangeEvent : public BaseEvent
+{
+ public:
+    PhysicsStateChangeEvent(ActorId actor, ActorPhysicsStateId newState)
+        : BaseEvent(ACTOR_PHYSICS_STATE_CHANGED)
+        , m_actor(actor)
+        , m_newState(newState)
+    {}
+
+    const char *eventName() const override { return "ActorPhysicsStateChanged"; }
+
+    ActorId m_actor;
+    ActorPhysicsStateId m_newState;
 };
 
 #endif // EVENT_H

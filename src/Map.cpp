@@ -192,14 +192,16 @@ void Map::getObjects(std::vector<MapObject>& v)
 
 //------------------------------------------------------------------------------
 
+#if 0
 void Map::draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const
 {
     // No bounds checking // Fix me
 
-    //for (const Layer* layer : m_layers) {
-    //    layer->draw(e, xFrom, xTo, yFrom, yTo);
-    //}
+    for (const Layer* layer : m_layers) {
+        layer->draw(e, xFrom, xTo, yFrom, yTo);
+    }
 }
+#endif
 
 //------------------------------------------------------------------------------
 

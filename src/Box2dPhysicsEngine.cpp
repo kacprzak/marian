@@ -85,8 +85,8 @@ void Box2dPhysicsEngine::drawDebugData()
 
 //------------------------------------------------------------------------------
 
-void Box2dPhysicsEngine::applyForce(const Vec2& dir, float newtons, ActorId actorId)
-{}
+//void Box2dPhysicsEngine::applyForce(const Vec2& dir, float newtons, ActorId actorId)
+//{}
 
 //------------------------------------------------------------------------------
 

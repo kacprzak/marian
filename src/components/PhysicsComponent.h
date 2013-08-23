@@ -7,6 +7,14 @@
 
 #include "Actor.h"
 
+enum ActorPhysicsStateId {
+    STAND = 1,
+    RUN,
+    FALL
+};
+
+//==============================================================================
+
 class PhysicsComponent : public ActorComponent
 {
     friend class ActorFactory;

@@ -64,7 +64,6 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight,
     try {
         initializeSDL();
         initializeOpenGL();
-        //SDL_WM_SetCaption(title.c_str(), title.c_str());
     } catch (EngineError e) {
         SDL_Quit();
         throw e;
@@ -110,7 +109,7 @@ void Engine::mainLoop(Playable *game)
         if (!processEvents())
             break;
         if (m_appActive) {
-            if (/*m_inputFocus &&*/ delta > 0.0f) {
+            if (m_inputFocus && delta > 0.0f) {
                 while (delta > DELTA_MAX) {
                     update(DELTA_MAX);
                     delta -= DELTA_MAX;
@@ -174,10 +173,10 @@ bool Engine::processEvents()
         {
             switch (event.window.event) {
             case SDL_WINDOWEVENT_FOCUS_GAINED:
-                m_appActive = true;
+                m_inputFocus = true;
                 break;
             case SDL_WINDOWEVENT_FOCUS_LOST:
-                m_appActive = false;
+                m_inputFocus = false;
                 break;
             default:
                 break;
@@ -337,7 +336,7 @@ void Engine::initializeSDL()
     //std::clog << "Screen: " << m_screenWidth << "x" << m_screenHeight
     //          << "x" << screen_bpp << "\n";
     // Screen surface
-    m_window = SDL_CreateWindow("Marian",
+    m_window = SDL_CreateWindow(m_titile.c_str(),
                                 SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                 m_screenWidth, m_screenHeight,
                                 screen_flags);
@@ -354,7 +353,7 @@ void Engine::initializeSDL()
     //    throw EngineError("Creating renderer failed", SDL_GetError());
     //}
 
-    SDL_ShowCursor(SDL_DISABLE);
+    //SDL_ShowCursor(SDL_DISABLE);
     //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 
     std::clog << "SDL initialized.\n";

@@ -7,15 +7,11 @@
 #include "Animation.h"
 #include <iostream>
 #include "Box2dPhysicsEngine.h"
+#include "EventManager.h"
+#include "Event.h"
 
 #define JUMP_DELAY 0.5f
 #define FEET_SENSOR 1248
-
-enum HeroStateId {
-    STAND = 1,
-    RUN,
-    FALL
-};
 
 //==============================================================================
 
@@ -38,7 +34,6 @@ class HeroRenderComponentState : public State<HeroRenderComponent *>
 
     virtual const Image& currentImage() const = 0;
 
- private:
     virtual void setFacingRight(bool right) = 0;
 
  protected:
@@ -184,28 +179,10 @@ class RunHeroState : public HeroRenderComponentState
 
 //==============================================================================
 
-#if 0
-void Hero::centerViewOn(Engine *e, float x, float y) const
-{
-    // Respect map borders
-    float bLeft, bRight, bTop, bBottom;
-    e->viewBounds(&bLeft, &bRight, &bBottom, &bTop);
-    float hw = (bRight - bLeft) / 2.0f;
-    float hh = (bTop - bBottom) / 2.0f;
-    if (x < hw) x = hw;
-    if (y < hh) y = hh;
-    if (x > m_game->map()->width() - hw) x = m_game->map()->width() - hw;
-
-    e->centerViewOn(x, y);
-}
-#endif
-
-//==============================================================================
-
 HeroRenderComponent::HeroRenderComponent()
     : m_facingRight(true)
-    , m_stateMachine(nullptr, 0)
     , m_jumpTimeout(0.0f)
+    , m_stateMachine(nullptr, 0)
 {
 }
 
@@ -251,20 +228,27 @@ const Image& HeroRenderComponent::currentImage() const
 
 //------------------------------------------------------------------------------
 
+void HeroRenderComponent::changePhysicsState(ActorPhysicsStateId newState)
+{
+    m_stateMachine.changeState(newState);
+}
+
+//------------------------------------------------------------------------------
+
 void HeroRenderComponent::update(Engine *e, float elapsedTime)
 {
-    //const b2Vec2& centerOfMass = m_body->GetWorldCenter();
-
     auto whpc = m_owner->getComponent<HeroPhysicsComponent>(PHYSICS);
 
     if (auto shpc = whpc.lock()) {
 
         if (e->isPressed(SDL_SCANCODE_RIGHT)) {
             shpc->applyForceToCenter(10.0f, 0.0f);
+            setFacingRight(true);
         }
 
         if (e->isPressed(SDL_SCANCODE_LEFT)) {
             shpc->applyForceToCenter(-10.0f, 0.0f);
+            setFacingRight(false);
         }
 
         if (e->isPressed(SDL_SCANCODE_UP)) {
@@ -277,14 +261,18 @@ void HeroRenderComponent::update(Engine *e, float elapsedTime)
     }
 
     // States
-    //const b2Vec2& vel = m_stateMachine.owner()->body()->GetLinearVelocity();
     m_stateMachine.currentState()->update(e, elapsedTime);
-
-    // Center view on player
-    //centerViewOn(e, centerOfMass.x, centerOfMass.y);
 
     if (m_jumpTimeout > 0.0f)
         m_jumpTimeout -= elapsedTime;
+}
+
+//------------------------------------------------------------------------------
+
+void HeroRenderComponent::setFacingRight(bool right)
+{
+    m_facingRight = right;
+    m_stateMachine.currentState()->setFacingRight(right);
 }
 
 //==============================================================================
@@ -292,9 +280,6 @@ void HeroRenderComponent::update(Engine *e, float elapsedTime)
 HeroPhysicsComponent::HeroPhysicsComponent(Game *game, float x, float y,
                                            float w, float h)
 {
-    m_feetContacts = 0;
-    m_heroStateId = FALL;
-
     // Physics
     float hw = w / 2;
     float hh = h / 2;
@@ -335,6 +320,13 @@ HeroPhysicsComponent::HeroPhysicsComponent(Game *game, float x, float y,
     footSensorFixture->SetUserData(reinterpret_cast<void *>(FEET_SENSOR));
 
     m_body = body;
+
+    // Other stuff
+    m_feetContacts = 0;
+    m_heroStateId = FALL;
+
+    m_lastX = posX();
+    m_lastY = posY();
 }
 
 //------------------------------------------------------------------------------
@@ -342,7 +334,6 @@ HeroPhysicsComponent::HeroPhysicsComponent(Game *game, float x, float y,
 void HeroPhysicsComponent::handleBeginContact(Actor *other, void *fixtureUD)
 {
     if (fixtureUD == (void*)FEET_SENSOR) {
-        //std::cout << "on ground" << std::endl;
         ++m_feetContacts;
     }
 
@@ -356,7 +347,6 @@ void HeroPhysicsComponent::handleBeginContact(Actor *other, void *fixtureUD)
 void HeroPhysicsComponent::handleEndContact(Actor *other, void *fixtureUD)
 {
     if (fixtureUD == (void*)FEET_SENSOR) {
-        //std::cout << "off ground" << std::endl;
         --m_feetContacts;
     }
 
@@ -367,19 +357,13 @@ void HeroPhysicsComponent::handleEndContact(Actor *other, void *fixtureUD)
 
 //------------------------------------------------------------------------------
 
-void HeroPhysicsComponent::update(Engine *e, float elapsedTime)
+void HeroPhysicsComponent::update(Engine * /*e*/, float /*elapsedTime*/)
 {
     switch(m_heroStateId) {
     case FALL:
     {
-        if (std::abs(velX()) > 0.01f) {
-            bool fr = (velX() >= 0.0f);
-            //hero->setFacingRight(fr);
-            //setFacingRight(fr);
-        }
-
         if (isOnGround() && std::abs(velY()) < 0.1f) {
-            //m_stateMachine.changeState(STAND);
+            changeState(STAND);
             return;
         }
         break;
@@ -387,19 +371,13 @@ void HeroPhysicsComponent::update(Engine *e, float elapsedTime)
 
     case RUN:
     {
-        if (std::abs(velX()) > 0.01f) {
-            bool fr = (velX() >= 0.0f);
-            //hero->setFacingRight(fr);
-            //setFacingRight(fr);
-        }
-
         if (std::abs(velY()) > 0.1f) {
-            //m_stateMachine.changeState(FALL);
+            changeState(FALL);
             return;
         }
 
         if (std::abs(velX()) < 0.5f) {
-            //m_stateMachine.changeState(STAND);
+            changeState(STAND);
             return;
         }
         break;
@@ -408,16 +386,33 @@ void HeroPhysicsComponent::update(Engine *e, float elapsedTime)
     case STAND:
     {
         if (std::abs(velY()) > 6.0f) {
-            //m_stateMachine.changeState(FALL);
+            changeState(FALL);
             return;
         }
 
         if (std::abs(velX()) > 0.6f) {
-            //m_stateMachine.changeState(RUN);
+            changeState(RUN);
             return;
         }
         break;
     }
     }
+
+    // emit move event if position changed
+    if (m_lastX != posX() || m_lastY != posY()) {
+        EventManager::singleton().queueEvent(EventPtr(new MoveEvent(m_owner->id(), posX(), posY())));
+    }
+
+    m_lastX = posX();
+    m_lastY = posY();
+}
+
+//------------------------------------------------------------------------------
+
+void HeroPhysicsComponent::changeState(ActorPhysicsStateId state)
+{
+    m_heroStateId = state;
+    // emit event
+    EventManager::singleton().queueEvent(EventPtr(new PhysicsStateChangeEvent(m_owner->id(), state)));
 }
 

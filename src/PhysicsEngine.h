@@ -19,7 +19,7 @@ class PhysicsEngine
     virtual void toggleDrawDebug() = 0;
     virtual void drawDebugData() = 0;
     
-    virtual void applyForce(const Vec2& dir, float newtons, ActorId actorId) = 0;
+    //virtual void applyForce(const Vec2& dir, float newtons, ActorId actorId) = 0;
 };
 
 #endif // PHYSICSENGINE_H
