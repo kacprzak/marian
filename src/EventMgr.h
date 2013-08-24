@@ -7,24 +7,35 @@
 #include "Singleton.h"
 #include <map>
 #include <list>
+#include <memory>
 
 typedef std::function<void (EventPtr)> EventListener;
+typedef std::shared_ptr<EventListener> EventListenerPtr;
 
-class EventManager : public Singleton<EventManager> {
+class EventMgr : public Singleton<EventMgr> {
 
-    typedef std::multimap<EventType, EventListener> EventListenerMap;
+    typedef std::multimap<EventType, EventListenerPtr> EventListenerMap;
     typedef std::list<EventPtr> EventQueue;
 
  public:
-    EventManager();
+    EventMgr();
 
-    void addListener(EventType et, EventListener listener);
+    void addListener(EventType et, EventListenerPtr listener);
+    void removeListener(EventType et, EventListenerPtr listener);
 
     void triggerEvent(const EventPtr& event);
 
     void queueEvent(const EventPtr& event);
 
     void update();
+
+    // For testing
+    int listenersCount() const { return m_listeners.size(); }
+
+    static EventListenerPtr makeListener(EventListener el)
+    {
+        return EventListenerPtr(new EventListener(el));
+    }
 
  private:
     static const int NUM_OF_QUEUES = 2;

@@ -11,7 +11,7 @@
 #include <string>
 
 #include "PhysicsEngine.h"
-#include "EventManager.h"
+#include "EventMgr.h"
 
 class Game : public Playable
 {
@@ -48,6 +48,9 @@ class Game : public Playable
     PhysicsEngine *m_physicsEngine;
 
     FpsCounter m_fpsCounter;
+
+    // Keeps pointers to make unregistration possible
+    std::multimap<EventType, EventListenerPtr> m_listeners;
 };
 
 #endif

@@ -8,12 +8,13 @@ Dependencies
 ------------
 
 * boost
-* SDL
-* SDL_image
+* SDL2
+* SDL2_image
 * OpenGL
 * Box2D
 * Lua
 * CEGUI
+* zlib
 
 
 Third-party code

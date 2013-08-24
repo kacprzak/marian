@@ -8,7 +8,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#include "EventManager.h"
+#include "EventMgr.h"
 
 Box2dPhysicsEngine::Box2dPhysicsEngine()
 {
@@ -105,7 +105,7 @@ void ContactListener::BeginContact(b2Contact *contact)
         EventPtr e(new CollisionEvent(CollisionEvent::BEGIN,
                                       actorA, fixAUserData,
                                       actorB, fixBUserData));
-        EventManager::singleton().queueEvent(e);
+        EventMgr::singleton().queueEvent(e);
     }
 }
 
@@ -126,6 +126,6 @@ void ContactListener::EndContact(b2Contact *contact)
         EventPtr e(new CollisionEvent(CollisionEvent::END,
                                       actorA, fixAUserData,
                                       actorB, fixBUserData));
-        EventManager::singleton().queueEvent(e);
+        EventMgr::singleton().queueEvent(e);
     }
 }

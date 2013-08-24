@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "ScriptMgr.h"
-#include "EventManager.h"
+#include "EventMgr.h"
 #include "Engine.h"
 #include "Game.h"
 
@@ -24,7 +24,7 @@ int main(int /*argc*/, char * /*argv*/[])
     int screenHeight = sm.getGlobalInt("screen_height");
     bool fullScreen  = sm.getGlobalBool("screen_full");
 
-    /*EventManager *em =*/ new EventManager;
+    /*EventManager *em =*/ new EventMgr;
     //em->addListener(ACTOR_COLLIDED, eventListener);
     
     Engine::init("Marian", screenWidth, screenHeight, fullScreen);
@@ -32,11 +32,10 @@ int main(int /*argc*/, char * /*argv*/[])
 
     Engine::singleton().mainLoop(game);
 
-    delete EventManager::singletonPtr();
-
     delete game;
     Engine::shutdown();
 
+    delete EventMgr::singletonPtr();
     delete ScriptMgr::singletonPtr();
 
     return 0;

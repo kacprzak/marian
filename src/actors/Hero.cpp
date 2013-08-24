@@ -7,8 +7,7 @@
 #include "Animation.h"
 #include <iostream>
 #include "Box2dPhysicsEngine.h"
-#include "EventManager.h"
-#include "Event.h"
+#include "EventMgr.h"
 
 #define JUMP_DELAY 0.5f
 #define FEET_SENSOR 1248
@@ -400,7 +399,7 @@ void HeroPhysicsComponent::update(Engine * /*e*/, float /*elapsedTime*/)
 
     // emit move event if position changed
     if (m_lastX != posX() || m_lastY != posY()) {
-        EventManager::singleton().queueEvent(EventPtr(new MoveEvent(m_owner->id(), posX(), posY())));
+        EventMgr::singleton().queueEvent(EventPtr(new MoveEvent(m_owner->id(), posX(), posY())));
     }
 
     m_lastX = posX();
@@ -413,6 +412,6 @@ void HeroPhysicsComponent::changeState(ActorPhysicsStateId state)
 {
     m_heroStateId = state;
     // emit event
-    EventManager::singleton().queueEvent(EventPtr(new PhysicsStateChangeEvent(m_owner->id(), state)));
+    EventMgr::singleton().queueEvent(EventPtr(new PhysicsStateChangeEvent(m_owner->id(), state)));
 }
 

@@ -18,7 +18,7 @@ set( marian_HDRS
   Engine.h
   EventType.h
   Event.h
-  EventManager.h
+  EventMgr.h
   FpsCounter.h
   Game.h
   Actor.h
@@ -49,7 +49,7 @@ set( marian_SRCS
   Box2dPhysicsEngine.cpp
   Console.cpp
   Engine.cpp
-  EventManager.cpp
+  EventMgr.cpp
   FpsCounter.cpp
   Game.cpp
   GuiMgr.cpp

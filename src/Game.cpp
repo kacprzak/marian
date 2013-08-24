@@ -13,6 +13,7 @@
 
 #include <iostream>
 #include <memory>
+#include <utility> // pair
 
 Game::Game()
 {
@@ -41,14 +42,18 @@ Game::Game()
             Engine::singleton().centerViewOn(obj.x, obj.y);
     }
 
-    EventListener el = std::bind(&Game::handleActorCollidedEvent, this, std::placeholders::_1);
-    EventManager::singleton().addListener(ACTOR_COLLIDED, el);
+    // Register event listeners
+    EventListenerPtr el = EventMgr::makeListener(std::bind(&Game::handleActorCollidedEvent, this, std::placeholders::_1));
+    EventMgr::singleton().addListener(ACTOR_COLLIDED, el);
+    m_listeners.insert(std::make_pair(ACTOR_COLLIDED, el));
 
-    EventListener el2 = std::bind(&Game::handleActorPhysicsStateChanged, this, std::placeholders::_1);
-    EventManager::singleton().addListener(ACTOR_PHYSICS_STATE_CHANGED, el2);
+    EventListenerPtr el2 = EventMgr::makeListener(std::bind(&Game::handleActorPhysicsStateChanged, this, std::placeholders::_1));
+    EventMgr::singleton().addListener(ACTOR_PHYSICS_STATE_CHANGED, el2);
+    m_listeners.insert(std::make_pair(ACTOR_PHYSICS_STATE_CHANGED, el2));
 
-    EventListener el3 = std::bind(&Game::handleActorMoved, this, std::placeholders::_1);
-    EventManager::singleton().addListener(ACTOR_MOVED, el3);
+    EventListenerPtr el3 = EventMgr::makeListener(std::bind(&Game::handleActorMoved, this, std::placeholders::_1));
+    EventMgr::singleton().addListener(ACTOR_MOVED, el3);
+    m_listeners.insert(std::make_pair(ACTOR_MOVED, el3));
 }
 
 //------------------------------------------------------------------------------
@@ -62,6 +67,11 @@ Game::~Game()
         it = m_actors.erase(it);
         // Must be called to break cyclic references
         actor->destroy();
+    }
+
+    // Unregister event listeners
+    for (auto pair : m_listeners) {
+        EventMgr::singleton().removeListener(pair.first, pair.second);
     }
 
     m_physicsEngine->shutdown();
@@ -108,7 +118,7 @@ void Game::update(Engine *e, float elapsedTime)
     } 
 
     m_fpsCounter.update(elapsedTime);
-    EventManager::singleton().update();
+    EventMgr::singleton().update();
 
     // Remove dead GameObjects
     auto it = std::begin(m_actors);
