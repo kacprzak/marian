@@ -19,6 +19,7 @@ class EventMgr : public Singleton<EventMgr> {
 
  public:
     EventMgr();
+    ~EventMgr();
 
     void addListener(EventType et, EventListenerPtr listener);
     void removeListener(EventType et, EventListenerPtr listener);

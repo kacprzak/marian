@@ -8,7 +8,7 @@
  </tileset>
  <layer name="back" width="70" height="36">
   <data encoding="base64" compression="zlib">
-   eJztl7lSwzAQhnfoeB0q6P5AyzHUvB1QcnWcFem5Sq5nYTWxJrKxZFkry05mv5l/XCS7Wv1ZaR0iRVEURVHWgRfWK+uN9c76mGDOIWrs4pP1xfpm/bB+A9+NrS82Z+58sTlTfT5lnbHOBfXFkDtfbM7Uda9Y16wbeZlrxQPrkfU0diETYSvw2U6xKhZcsC4LrxkCrBlr19FewfXn1fOOdV9w3S5AC1+shvTluXqG+tSwTeX7tQlo6YfUF99cM1gv3P2C6n1auldDgPznqO+Z7zvX9lkHnrXHxPQ1yN8vsWf+tnq2zbW2PnEBLT05ZB1FVT4ctl5Q9/3StqeuO8IX1wQ0rV6xgOq+NGU59sQ3z0Hf/SEybrNHzhyA/nth+vnEUai3pXcEaDpnyAVUv1tS+tnmSNmfjZ3SGTLkmAnIEDumL773C5BsJrjxq+iL7/0CJJsJNl7i6Zi++P43g/L4kho7S4yVshH4zMw/UP/f252bNn7VfOkCJOtlSbyJVV/aY9fZl9S9SWKHBqS+KIqiKHL+AD/RjXw=
+   eJztl7lSw0AMhjV0vA4VdAq0HEPN2wVKro6zIj0QSq5nQTuxJmtj7WmvHY++mX9cONJq/2gPAyiKoiiKMgVeSW+kd9KS9DHCnH3U6OOT9EX6Jv2Qfh2/Da0vNGfX+UJzpvo8J52TLjLqC6HrfKE5U8e9Jt2QbvPLnBSPpCfS89CFjIQdx7u9YlWsuCRdFR7TBZJmpH1LBwXHX1TPe9JDwXF9IKx8YfXpy0v1dPWpYRfK92sThLUfub5I55qBvbDni1Dv09K96gJBXkexaz72XDskHQljD4npawS5X0LX/F31bDvX2vrEBmHtyTHpJKjy/uB6Efz7S9ucfHuEFNcEYVy9wiDUfWmKORXim+sgdn4YGLcdkbMLEP57Yfr5zJKrt3P3CITxrCEbhPrektLPnCNlfhw7pjVk6OJMwA5ih/RFul8gyP+3607SFr+Jvkj3CwR5XiF3Eo5P2SM4dihfzF1F+m5GkH0J+dbm+JS5mdhZYmwuW4535vxDiP+/7XOT4zfNFx8Ieb2cE29i1Zf22Cn7kjq3nNi+QVBfFEVRlHz+AGoalGU=
   </data>
  </layer>
  <layer name="ground" width="70" height="36">
@@ -17,7 +17,7 @@
   </data>
  </layer>
  <objectgroup name="player" width="70" height="36">
-  <object name="hero" type="Hero" x="431" y="762" width="29" height="29">
+  <object name="hero" type="Hero" x="423" y="792" width="29" height="29">
    <properties>
     <property name="density" value="0.8"/>
     <property name="maxSpeed" value="2.0"/>
@@ -66,6 +66,6 @@
   <object name="box7" type="Box" x="448" y="544" width="32" height="32"/>
   <object name="box8" type="Box" x="864" y="800" width="32" height="32"/>
   <object name="box9" type="Box" x="640" y="672" width="32" height="32"/>
-  <object name="sensor1" type="Sensor" x="576" y="608" width="32" height="224"/>
+  <object name="sensor1" type="Sensor" x="800" y="608" width="32" height="224"/>
  </objectgroup>
 </map>

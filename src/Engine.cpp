@@ -320,21 +320,21 @@ void Engine::initializeSDL()
 
     //int screen_bpp = info->vfmt->BitsPerPixel;
 
-    //SDL_GL_SetAttribute(SDL_GL_RED_SIZE,   8);
-    //SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-    //SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,  8);
-    //SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
-
-    //SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    //SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
-
     int screen_flags = SDL_WINDOW_OPENGL;
 
     if (m_screenFull)
         screen_flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 
-    //std::clog << "Screen: " << m_screenWidth << "x" << m_screenHeight
-    //          << "x" << screen_bpp << "\n";
+#if 1
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE,   8);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,  8);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetSwapInterval(1);
+#endif
+
     // Screen surface
     m_window = SDL_CreateWindow(m_titile.c_str(),
                                 SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
@@ -345,7 +345,9 @@ void Engine::initializeSDL()
         throw EngineError("Creating window failed", SDL_GetError());
     }
 
-    SDL_GL_CreateContext(m_window);
+    if(!SDL_GL_CreateContext(m_window)) {
+        throw EngineError("Creating OpenGL context failed", SDL_GetError());
+    }
 
     //SDL_Renderer *renderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 

@@ -8,6 +8,8 @@
 /**
  * Singleton pattern implementation with controll over creation
  * and destruction times.
+ *
+ * Based on article form "Game Programming Gems vol.1"
  */
 template <typename T>
 class Singleton
@@ -28,7 +30,7 @@ class Singleton
     virtual ~Singleton()
     {
         assert(s_singleton);
-        s_singleton = 0;
+        s_singleton = nullptr;
     }
 
     static T& singleton()
