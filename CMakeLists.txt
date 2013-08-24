@@ -12,7 +12,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 find_package( SDL2 REQUIRED )
-find_package( SDL_image REQUIRED )
+#find_package( SDL_image REQUIRED )
 find_package( OpenGL REQUIRED )
 find_package( Boost REQUIRED )
 find_package( Boost COMPONENTS unit_test_framework )
