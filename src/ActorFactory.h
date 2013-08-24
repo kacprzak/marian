@@ -8,7 +8,7 @@
 #include "actors/Hero.h"
 #include "actors/Ground.h"
 #include "actors/Box.h"
-//#include "Sensor.h"
+#include "actors/Sensor.h"
 
 #include <cassert>
 #include <memory>
@@ -51,7 +51,13 @@ class ActorFactory
             render->init();
 
         } else if (obj.type == "Sensor") {
-            //actor = new Sensor(getNextId(), game, obj);
+            actor->setCategory(SENSOR);
+
+            ActorComponentPtr physics(
+                new SensorPhysicsComponent(game, obj));
+            actor->addComponent(physics);
+            physics->setOwner(actor);
+            physics->init();
   
         } else {
             // Static collision shape

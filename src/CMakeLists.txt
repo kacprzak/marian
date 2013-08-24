@@ -4,6 +4,7 @@ set( marian_HDRS
   actors/Box.h
   actors/Hero.h
   actors/Ground.h
+  actors/Sensor.h
 
   components/AiComponent.h
   components/ActorComponent.h
@@ -32,7 +33,6 @@ set( marian_HDRS
   Playable.h
   ResourceMgr.h
   ScriptMgr.h
-#  Sensor.h
   Singleton.h
   StateMachine.h
   Texture.h
@@ -45,6 +45,7 @@ set( marian_SRCS
   actors/Box.cpp
   actors/Ground.cpp
   actors/Hero.cpp
+  actors/Sensor.cpp
 
   Box2dPhysicsEngine.cpp
   Console.cpp
@@ -55,7 +56,6 @@ set( marian_SRCS
   GuiMgr.cpp
   Map.cpp
   ResourceMgr.cpp
-#  Sensor.cpp
   ScriptMgr.cpp
   Texture.cpp
   Util.cpp
