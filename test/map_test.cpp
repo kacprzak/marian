@@ -18,4 +18,6 @@ BOOST_AUTO_TEST_CASE(map_test)
 
   BOOST_REQUIRE( map.objectGroups.size() == 1 );
   BOOST_REQUIRE( map.objectGroups[0].objects.size() == 1 );
+
+  BOOST_REQUIRE( map.layers[0].data.size() > 1 );
 }

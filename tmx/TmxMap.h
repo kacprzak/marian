@@ -15,6 +15,8 @@ class Property
     std::string value;
 };
 
+//------------------------------------------------------------------------------
+
 class Tileset
 {
  public:
@@ -26,6 +28,8 @@ class Tileset
     int imageWidth;
     int imageHeight;
 };
+
+//------------------------------------------------------------------------------
 
 class Layer 
 {
@@ -40,6 +44,8 @@ class Layer
 
     std::vector<Property> properties;
 };
+
+//------------------------------------------------------------------------------
 
 class Object
 {
@@ -58,6 +64,8 @@ class Object
     std::vector<Property> properties;
 };
 
+//------------------------------------------------------------------------------
+
 // In fact it's ObjectLayer
 class ObjectGroup
 {
@@ -69,6 +77,8 @@ class ObjectGroup
 
     std::vector<Property> properties;
 };
+
+//------------------------------------------------------------------------------
 
 class Map : boost::noncopyable
 {

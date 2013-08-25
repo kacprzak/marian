@@ -48,6 +48,8 @@ Map::Map()
   //
 }
 
+//------------------------------------------------------------------------------
+
 bool Map::loadFromFile(const std::string& filename)
 {
     // File has to exist while working with XML
@@ -135,7 +137,15 @@ bool Map::loadFromFile(const std::string& filename)
                 std::string nodevalue = data_node->value();
                 boost::algorithm::trim(nodevalue);
 
-                std::vector<unsigned char> data = decompress(base64_decode(nodevalue));
+                std::vector<unsigned char> data;
+                if (layer.compression.empty()) {
+                    std::string decoded = base64_decode(nodevalue);
+                    for (size_t i = 0; i < decoded.size(); ++i) {
+                        data.push_back(decoded[i]);
+                    }
+                } else {
+                    data = decompress(base64_decode(nodevalue));
+                }
 
                 for (unsigned i = 0; i < data.size(); i += 4) {
                     unsigned global_tile_id = data[i]
@@ -259,6 +269,8 @@ const Tileset* Map::tilesetForTile(unsigned gid) const
 
 } // namespace tmx
 
+//==============================================================================
+
 #include <zlib.h>
 
 static void logZlibError(int error)
@@ -278,6 +290,8 @@ static void logZlibError(int error)
         std::cerr << "Unknown error while (de)compressing data!\n";
     }
 }
+
+//------------------------------------------------------------------------------
 
 // gzip or zlib
 static std::vector<unsigned char> decompress(std::string data, int expectedSize)
