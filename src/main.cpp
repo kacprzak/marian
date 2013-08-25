@@ -38,7 +38,7 @@ int main(int /*argc*/, char * /*argv*/[])
     Engine::singleton().mainLoop(game);
 
     delete game;
-    //view.reset(); // Check this!
+    view.reset(); // Check this!
     Engine::shutdown();
 
     delete ResourceMgr::singletonPtr();
