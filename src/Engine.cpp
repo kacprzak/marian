@@ -75,6 +75,7 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight,
     }
 
     new ResourceMgr;
+    ResourceMgr::singleton().setDataFolder("media/");
     // Required by GUI
     //SDL_EnableUNICODE(1);
 
@@ -96,10 +97,13 @@ Engine::~Engine()
 
 //------------------------------------------------------------------------------
 
-void Engine::mainLoop(Playable *game)
+void Engine::mainLoop(GameLogic *game)
 {
     m_game = game;
     m_game->initialize(this);
+    for (auto gv : m_game->gameViews()) {
+        gv->initialize(this);
+    }
  
     unsigned int curr_time = SDL_GetTicks();
     unsigned int last_time = curr_time;
@@ -124,6 +128,9 @@ void Engine::mainLoop(Playable *game)
         last_time = curr_time;
     }
 
+    for (auto gv : m_game->gameViews()) {
+        gv->cleanup(this);
+    }
     m_game->cleanup(this);
 }
 
@@ -161,14 +168,22 @@ bool Engine::processEvents()
         // Inject to gui
         GuiMgr::singleton().processInput(event);
 
+        bool keepRunning = true;
+
         switch (event.type) {
         case SDL_KEYUP:
             m_keys[event.key.keysym.scancode] = false;
-            return m_game->processInput(event);
+            for (auto gv : m_game->gameViews()) {
+                keepRunning = gv->processInput(event);
+            }
+            return keepRunning;
         case SDL_KEYDOWN:
             m_keys[event.key.keysym.scancode] = true;
-            return m_game->processInput(event);
-
+            if (event.key.keysym.scancode == SDL_SCANCODE_G) m_game->toggleDrawDebug();
+            for (auto gv : m_game->gameViews()) {
+                keepRunning = gv->processInput(event);
+            }
+            return keepRunning;
         case SDL_WINDOWEVENT:
         {
             switch (event.window.event) {
@@ -197,7 +212,10 @@ bool Engine::processEvents()
 void Engine::update(float elapsedTime)
 {
     // Update game
-    m_game->update(this, elapsedTime);
+    m_game->update(elapsedTime);
+    // Update views
+    for (auto gv : m_game->gameViews())
+        gv->update(elapsedTime);
     // Update gui
     GuiMgr::singleton().update(elapsedTime);
 }
@@ -216,10 +234,15 @@ void Engine::draw()
     glScalef(m_scale, m_scale, 1.0f);
 
     // Draw game
-    m_game->draw(this);
-    
+    for (auto gv : m_game->gameViews()) {
+        gv->draw(this);
+    }
+
     // Draw gui
     GuiMgr::singleton().draw();
+
+    // Draw debug information
+    m_game->drawDebugData();
 
     SDL_GL_SwapWindow(m_window);
 }

@@ -5,12 +5,12 @@
 #include "components/PhysicsComponent.h"
 #include "components/ImageRenderComponent.h"
 
-class Game;
+class GameLogic;
 
 class BoxPhysicsComponent : public PhysicsComponent
 {
  public:
-    BoxPhysicsComponent(Game *game, float x, float y,
+    BoxPhysicsComponent(GameLogic *game, float x, float y,
                         float w = 1.0f, float h = 1.0f);
 };
 

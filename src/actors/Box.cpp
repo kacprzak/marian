@@ -2,12 +2,12 @@
 #include "Box.h"
 
 #include "Engine.h"
-#include "Game.h"
+#include "GameLogic.h"
 #include "ResourceMgr.h"
 #include <Box2D/Box2D.h>
 #include "Box2dPhysicsEngine.h"
 
-BoxPhysicsComponent::BoxPhysicsComponent(Game *game, float x, float y,
+BoxPhysicsComponent::BoxPhysicsComponent(GameLogic *game, float x, float y,
                                          float w, float h)
 {
     // Physics

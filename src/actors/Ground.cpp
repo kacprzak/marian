@@ -1,11 +1,11 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "Ground.h"
 
-#include "Game.h"
+#include "GameLogic.h"
 #include <Box2D/Box2D.h>
 #include "Box2dPhysicsEngine.h"
 
-GroundPhysicsComponent::GroundPhysicsComponent(Game *game, const MapObject& obj)
+GroundPhysicsComponent::GroundPhysicsComponent(GameLogic *game, const MapObject& obj)
     : PhysicsComponent()
 {
     b2BodyDef groundBodyDef;

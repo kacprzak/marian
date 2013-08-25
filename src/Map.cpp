@@ -10,19 +10,25 @@
 class Tile
 {
 public:
-    Tile(const Map *map, unsigned agid, const Texture *tex)
+    Tile(const Map *map, unsigned agid)
         : gid(agid)
-        , texture(tex)
     {
+        // Coords for tile on image in map coord system
         int tileCoords[4];
         map->rectForTile(tileCoords, gid);
-        Texture::calculateTextureCoords(texCoords, tex->w(), tex->h(),
+        // Texture source
+        textureSource = map->m_tmxMap.tilesetForTile(gid)->imageSource;
+        int w = map->m_tmxMap.tilesetForTile(gid)->imageWidth;
+        int h = map->m_tmxMap.tilesetForTile(gid)->imageHeight;
+
+        // Calculate coords for OpenGL
+        Texture::calculateTextureCoords(texCoords, w, h,
                                         tileCoords[0], tileCoords[1],
                                         tileCoords[2], tileCoords[3]);
     }
   
     unsigned       gid;
-    const Texture *texture;
+    std::string    textureSource;
     GLfloat        texCoords[8];
 };
 
@@ -65,9 +71,6 @@ Layer::Layer(const Map *parent, const tmx::Layer& tmxLayer)
             unsigned global_tile_id = tmxLayer.data[y * tmxLayer.width + x];
       
             if (global_tile_id != 0) {
-                std::string imageSource = map->imageNameForTile(global_tile_id);
-                const Texture *tex = ResourceMgr::singleton().getTexture(imageSource);
-
                 // Read out the flags
                 //bool flipped_horizontally = (global_tile_id & FLIPPED_HORIZONTALLY_FLAG);
                 //bool flipped_vertically   = (global_tile_id & FLIPPED_VERTICALLY_FLAG);
@@ -78,7 +81,7 @@ Layer::Layer(const Map *parent, const tmx::Layer& tmxLayer)
                                     | FLIPPED_VERTICALLY_FLAG
                                     | FLIPPED_DIAGONALLY_FLAG);
         
-                Tile *tile = new Tile(map, global_tile_id, tex);
+                Tile *tile = new Tile(map, global_tile_id);
                 tiles[y * width + x] = tile;
             }
         }
@@ -101,12 +104,14 @@ void Layer::draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const
     for (int y = yFrom; y < yTo; ++y) {
         for (int x = xFrom; x < xTo; ++x) {
             const Tile *tile = tiles[y * width + x];
+
             if (tile) {
+                GLuint textureId = ResourceMgr::singleton().getTexture(tile->textureSource)->textureId();
                 e->drawQuad(static_cast<float>(x),
                             static_cast<float>(map->m_height - y - 1),
                             1.0f,
                             1.0f,
-                            tile->texture->textureId(), tile->texCoords);
+                            textureId, tile->texCoords);
             }
         }
     }
@@ -143,13 +148,6 @@ bool Map::loadFromFile(const std::string& filename)
 
     m_tileWidth = m_tmxMap.tileWidth;
     m_tileHeight = m_tmxMap.tileHeight;
-
-    auto images = externalImages();
-    for (const std::string& image : images) {
-        if (!ResourceMgr::singleton().addTexture(image)) {
-            std::cerr << "Unable to load texture.\n";
-        }     
-    }
 
     for (const tmx::Layer& layer : m_tmxMap.layers) {
         m_layers.push_back(new Layer(this, layer));
@@ -258,13 +256,6 @@ std::vector<std::string> Map::externalImages() const
 std::string Map::backgroundColor() const
 {
     return m_tmxMap.backgroundColor;
-}
-
-//------------------------------------------------------------------------------
-
-std::string Map::imageNameForTile(unsigned global_tile_id) const
-{
-    return m_tmxMap.tilesetForTile(global_tile_id)->imageSource;
 }
 
 //------------------------------------------------------------------------------

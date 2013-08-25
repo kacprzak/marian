@@ -2,7 +2,7 @@
 #include "ScriptMgr.h"
 #include <iostream>
 
-#include "Game.h"
+#include "BaseGameLogic.h"
 #include "Engine.h"
 
 static int l_addBox(lua_State *L)
@@ -11,7 +11,7 @@ static int l_addBox(lua_State *L)
     float x = luaL_checknumber(L, -2);
     float y = luaL_checknumber(L, -1);
 
-    Game *currGame = static_cast<Game *>(Engine::singleton().game());
+    BaseGameLogic *currGame = static_cast<BaseGameLogic *>(Engine::singleton().game());
     currGame->addGameObject(BOX, "box", x, y);
 
     return 0;

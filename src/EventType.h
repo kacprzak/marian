@@ -11,7 +11,17 @@ enum EventType {
     ACTOR_PHYSICS_STATE_CHANGED,
 
     GAME_STARTED,
-    GAME_FINISHED
+    GAME_FINISHED,
+
+    INPUT_COMMAND
+};
+
+enum InputCommand {
+    MOVE_RIGHT,
+    MOVE_LEFT,
+    MOVE_UP,
+    MOVE_DOWN,
+    FIRE
 };
 
 #endif // EVENTTYPE

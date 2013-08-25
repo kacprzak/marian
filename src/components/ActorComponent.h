@@ -16,7 +16,7 @@ class ActorComponent
     virtual ~ActorComponent() {}
 
     virtual bool init() { return true; }
-    virtual void update(Engine * /*e*/, float /*elapsedTime*/) {}
+    virtual void update(float /*elapsedTime*/) {}
   
     virtual ActorComponentId componentId() const = 0;
 

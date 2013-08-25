@@ -10,7 +10,7 @@
 #include <map>
 #include <memory>
 
-class Game;
+class GameLogic;
 //class ActorComponent;
 
 typedef unsigned long ActorId;
@@ -24,19 +24,19 @@ class Actor final
     typedef std::map<ActorComponentId, ActorComponentPtr> ComponentsMap;
 
  public:
-    Actor(ActorId id, Game *game)
+    Actor(ActorId id, GameLogic *game)
         : m_id(id)
         , m_game(game)
         , m_dead(false)
     {
 #ifndef NDEBUG
-        std::clog << "Actor created: id = " << m_id << '\n';
+        std::clog << "new Actor: id = " << m_id << '\n';
 #endif 
     }
 
     ~Actor() {
 #ifndef NDEBUG
-        std::clog << "Actor removed: id = " << m_id
+        std::clog << "delete Actor: id = " << m_id
                   << " name = " << name() << '\n';
 #endif 
     }
@@ -50,9 +50,9 @@ class Actor final
     ActorCategory category() const { return m_category; }
     void setCategory(ActorCategory c) { m_category = c; }
 
-    void update(Engine *e, float elapsedTime) {
+    void update(float elapsedTime) {
         for (const auto &pair : m_components)
-            pair.second->update(e, elapsedTime);
+            pair.second->update(elapsedTime);
     }
 
     void die() {
@@ -82,12 +82,12 @@ class Actor final
     }
 
  protected:
-    ActorId     m_id;
-    Game       *m_game;
+    ActorId       m_id;
+    GameLogic    *m_game;
     ActorCategory m_category; 
     ComponentsMap m_components;
-    bool        m_dead;
-    std::string m_name;
+    bool          m_dead;
+    std::string   m_name;
 
  private:
     // Should be called only by ActorFactory

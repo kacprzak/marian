@@ -13,12 +13,12 @@
 #include <cassert>
 #include <memory>
 
-class Game;
+class GameLogic;
 
 class ActorFactory
 {
  public:
-    static ActorPtr create(Game *game, const MapObject& obj)
+    static ActorPtr create(GameLogic *game, const MapObject& obj)
     {
         ActorPtr actor(new Actor(getNextId(), game));
 
@@ -76,7 +76,7 @@ class ActorFactory
 
     //--------------------------------------------------------------------------
 
-    static ActorPtr create(Game *game,
+    static ActorPtr create(GameLogic *game,
                            ActorCategory type,
                            const std::string& name,
                            float x, float y)

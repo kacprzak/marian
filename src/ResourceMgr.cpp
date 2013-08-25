@@ -17,13 +17,21 @@ void ResourceMgr::release()
 
 bool ResourceMgr::addTexture(const std::string& filename)
 {
+    if (m_textures.find(filename) != m_textures.end()) {
+        std::cerr << "Warning: Trying to double load " << filename << " texture!" << std::endl;
+        return false;
+    }
+
     Texture *tex = new Texture;
     std::string fullpath = dataFolder + filename;
 
-    if(!tex->loadFromFile(fullpath))
+    if(!tex->loadFromFile(fullpath)) {
+        std::cerr << "Error: Unable to load " << filename << " texture!" << std::endl;
+        delete tex;
         return false;
+    }
 
-    m_textures.push_back(std::make_pair(filename, tex));
+    m_textures.insert(std::make_pair(filename, tex));
     std::cout << "Loaded texture from: " << fullpath << std::endl;
 
     return true;
@@ -48,5 +56,8 @@ const Texture* ResourceMgr::getTexture(const std::string& filename)
         if (item.first == filename)
             return item.second;
     }
+
+    std::cerr << "Error: Texture " << filename << " was not loaded!" << std::endl;
+
     return 0;
 }

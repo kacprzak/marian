@@ -27,7 +27,7 @@ class HeroRenderComponent : public RenderComponent
 
     void changePhysicsState(ActorPhysicsStateId newState);
 
-    void update(Engine *e, float elapsedTime) override;
+    void update(float elapsedTime) override;
 
     bool isFacingRight() const { return m_facingRight; }
 
@@ -45,13 +45,13 @@ class HeroRenderComponent : public RenderComponent
 class HeroPhysicsComponent : public PhysicsComponent
 {
  public:
-    HeroPhysicsComponent(Game *game, float x, float y,
-                        float w = 1.0f, float h = 1.0f);
+    HeroPhysicsComponent(GameLogic *game, float x, float y,
+                         float w = 1.0f, float h = 1.0f);
 
     void handleBeginContact(Actor *other, void *fixtureUD = nullptr) override;
     void handleEndContact  (Actor *other, void *fixtureUD = nullptr) override;
 
-    void update(Engine *e, float elapsedTime) override;
+    void update(float elapsedTime) override;
 
     bool isOnGround() const { return m_feetContacts > 0; }
 

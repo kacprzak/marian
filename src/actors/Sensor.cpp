@@ -1,10 +1,10 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "Sensor.h"
 
-#include "Game.h"
+#include "GameLogic.h"
 #include <Box2D/Box2D.h>
 
-SensorPhysicsComponent::SensorPhysicsComponent(Game *game, const MapObject &obj)
+SensorPhysicsComponent::SensorPhysicsComponent(GameLogic *game, const MapObject &obj)
     : GroundPhysicsComponent(game, obj)
 {
     b2Filter filter;

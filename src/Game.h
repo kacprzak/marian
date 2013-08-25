@@ -2,55 +2,29 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "Playable.h"
-#include "Map.h"
+#include "BaseGameLogic.h"
+#include <SDL.h>
 #include "FpsCounter.h"
-#include "Actor.h"
-#include "ActorCategory.h"
-#include <list>
-#include <string>
 
-#include "PhysicsEngine.h"
-#include "EventMgr.h"
-
-class Game : public Playable
+class Game : public BaseGameLogic
 {
  public:
     Game();
-    ~Game();
 
-    // Playable interface
-    void initialize(Engine *e) override;
+    void initialize(Engine *e);
 
-    bool processInput(const SDL_Event& event) override;
-    void update(Engine *e, float elapsedTime) override;
-    void draw(Engine *e) override;
+    void update(float elapsedTime) override;
 
-    Map *map() { return &m_map; }
-    PhysicsEngine *physicsEngine() { return m_physicsEngine; }
-
-    void addGameObject(ActorCategory type,
-                       const std::string& name,
-                       float x, float y);
-
-    bool isOnMap(ActorPtr actor);
-
-    void handleActorCollidedEvent(EventPtr event);
-    void handleActorPhysicsStateChanged(EventPtr event);
-    void handleActorMoved(EventPtr event);
+    // HACK
+    std::map<ActorId, ActorPtr>& actors() { return m_actors; }
 
  private:
-    void toggleDrawDebug();
 
-    std::map<ActorId, ActorPtr> m_actors;
-    Map m_map;
+    void handleActorCollided(EventPtr event);
+    void handleActorPhysicsStateChanged(EventPtr event);
 
-    PhysicsEngine *m_physicsEngine;
-
+    EventListenerHelper elh;
     FpsCounter m_fpsCounter;
-
-    // Keeps pointers to make unregistration possible
-    std::multimap<EventType, EventListenerPtr> m_listeners;
 };
 
 #endif

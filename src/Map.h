@@ -55,7 +55,6 @@ class Map : boost::noncopyable
     std::string backgroundColor() const;
 
  private:
-    std::string imageNameForTile(unsigned globalId) const;
     void rectForTile(int tileCoords[4], unsigned globalId) const;
 
     Layer *findLayer(const std::string& layerName) const;

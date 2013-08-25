@@ -22,6 +22,10 @@ set( marian_HDRS
   EventMgr.h
   FpsCounter.h
   Game.h
+  GameLogic.h
+  BaseGameLogic.h
+  GameView.h
+  HumanView.h
   Actor.h
   ActorCategory.h
   ActorFactory.h
@@ -30,7 +34,7 @@ set( marian_HDRS
   GuiMgr.h
   Image.h
   Map.h
-  Playable.h
+#  Playable.h
   ResourceMgr.h
   ScriptMgr.h
   Singleton.h
@@ -53,6 +57,8 @@ set( marian_SRCS
   EventMgr.cpp
   FpsCounter.cpp
   Game.cpp
+  HumanView.cpp
+  BaseGameLogic.cpp
   GuiMgr.cpp
   Map.cpp
   ResourceMgr.cpp

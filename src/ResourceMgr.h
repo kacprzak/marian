@@ -3,7 +3,7 @@
 #define RESOURCE_MGR_H
 
 #include "Singleton.h"
-#include <vector>
+#include <map>
 #include <utility>
 #include <iostream>
 #include "Texture.h"
@@ -35,7 +35,7 @@ class ResourceMgr : public Singleton<ResourceMgr>
 
  private:
     std::string dataFolder;
-    std::vector<std::pair<std::string, Texture*> > m_textures;
+    std::map<std::string, Texture*> m_textures;
 };
 
 #endif

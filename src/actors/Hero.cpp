@@ -234,33 +234,33 @@ void HeroRenderComponent::changePhysicsState(ActorPhysicsStateId newState)
 
 //------------------------------------------------------------------------------
 
-void HeroRenderComponent::update(Engine *e, float elapsedTime)
+void HeroRenderComponent::update(float elapsedTime)
 {
     auto whpc = m_owner->getComponent<HeroPhysicsComponent>(PHYSICS);
+    Engine& e = Engine::singleton();
 
     if (auto shpc = whpc.lock()) {
 
-        if (e->isPressed(SDL_SCANCODE_RIGHT)) {
+        if (e.isPressed(SDL_SCANCODE_RIGHT)) {
             shpc->applyForceToCenter(10.0f, 0.0f);
             setFacingRight(true);
         }
 
-        if (e->isPressed(SDL_SCANCODE_LEFT)) {
+        if (e.isPressed(SDL_SCANCODE_LEFT)) {
             shpc->applyForceToCenter(-10.0f, 0.0f);
             setFacingRight(false);
         }
 
-        if (e->isPressed(SDL_SCANCODE_UP)) {
+        if (e.isPressed(SDL_SCANCODE_UP)) {
             if (shpc->isOnGround() && m_jumpTimeout <= 0.0f) {
                 shpc->applyLinearImpulse(0.0f, 5.0f);
                 m_jumpTimeout = JUMP_DELAY;
             }
         }
-
     }
 
     // States
-    m_stateMachine.currentState()->update(e, elapsedTime);
+    m_stateMachine.currentState()->update(&e, elapsedTime);
 
     if (m_jumpTimeout > 0.0f)
         m_jumpTimeout -= elapsedTime;
@@ -276,7 +276,7 @@ void HeroRenderComponent::setFacingRight(bool right)
 
 //==============================================================================
 
-HeroPhysicsComponent::HeroPhysicsComponent(Game *game, float x, float y,
+HeroPhysicsComponent::HeroPhysicsComponent(GameLogic *game, float x, float y,
                                            float w, float h)
 {
     // Physics
@@ -356,7 +356,7 @@ void HeroPhysicsComponent::handleEndContact(Actor *other, void *fixtureUD)
 
 //------------------------------------------------------------------------------
 
-void HeroPhysicsComponent::update(Engine * /*e*/, float /*elapsedTime*/)
+void HeroPhysicsComponent::update(float /*elapsedTime*/)
 {
     switch(m_heroStateId) {
     case FALL:

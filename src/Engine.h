@@ -9,9 +9,11 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+#include <SDL.h>
+
 #include <string>
 #include <exception>
-#include "Playable.h"
+#include "GameLogic.h"
 #include "Image.h"
 
 class EngineError : public std::exception
@@ -55,8 +57,8 @@ class Engine
                      bool screenFull = false);
     static void shutdown();
 
-    void mainLoop(Playable *game);
-    Playable *game() { return m_game; } 
+    void mainLoop(GameLogic *game);
+    GameLogic *game() { return m_game; }
 
     void drawImage(const Image& image, float x, float y, float rotation = 0.0f) const;
     void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
@@ -107,7 +109,7 @@ class Engine
     float m_translate_z;
     float m_scale;
 
-    Playable *m_game;
+    GameLogic *m_game;
 
     bool m_keys[SDL_NUM_SCANCODES];
     bool m_gui;

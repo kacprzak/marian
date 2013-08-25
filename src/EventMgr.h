@@ -2,7 +2,7 @@
 #ifndef EVENTMANAGER_H
 #define EVENTMANAGER_H
 
-#include <EventType.h>
+#include "EventType.h"
 #include "Event.h"
 #include "Singleton.h"
 #include <map>
@@ -12,8 +12,8 @@
 typedef std::function<void (EventPtr)> EventListener;
 typedef std::shared_ptr<EventListener> EventListenerPtr;
 
-class EventMgr : public Singleton<EventMgr> {
-
+class EventMgr : public Singleton<EventMgr>
+{
     typedef std::multimap<EventType, EventListenerPtr> EventListenerMap;
     typedef std::list<EventPtr> EventQueue;
 
@@ -43,6 +43,38 @@ class EventMgr : public Singleton<EventMgr> {
     EventListenerMap m_listeners;
     EventQueue m_eventQueues[NUM_OF_QUEUES];
     int m_activeQueue;
+};
+
+//==============================================================================
+
+class EventListenerHelper final
+{
+public:
+
+    ~EventListenerHelper()
+    {
+        unregisterAll();
+    }
+
+    bool registerListener(EventType type, EventListener listener)
+    {
+        EventListenerPtr el(new EventListener(listener));
+        EventMgr::singleton().addListener(type, el);
+        m_listeners.insert(std::make_pair(type, el));
+
+        return true;
+    }
+
+    void unregisterAll()
+    {
+        for (auto pair : m_listeners) {
+            EventMgr::singleton().removeListener(pair.first, pair.second);
+        }
+    }
+
+ private:
+    // Keeps pointers to make unregistration possible
+    std::multimap<EventType, EventListenerPtr> m_listeners;
 };
 
 #endif // EVENTMANAGER_H

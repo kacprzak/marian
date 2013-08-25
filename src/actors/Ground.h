@@ -5,12 +5,12 @@
 #include "components/PhysicsComponent.h"
 #include "Map.h"
 
-class Game;
+class GameLogic;
 
 class GroundPhysicsComponent : public PhysicsComponent
 {
  public:
-    GroundPhysicsComponent(Game *game, const MapObject& obj);
+    GroundPhysicsComponent(GameLogic *game, const MapObject& obj);
 };
 
 #endif
