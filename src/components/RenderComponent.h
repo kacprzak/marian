@@ -3,7 +3,7 @@
 #define RENDERCOMPONENT_H
 
 #include "ActorComponent.h"
-#include "Image.h"
+#include "graphics/Image.h"
 #include "Event.h"
 
 class RenderComponent : public ActorComponent

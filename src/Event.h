@@ -79,11 +79,12 @@ class CollisionEvent : public BaseEvent
 class MoveEvent : public BaseEvent
 {
  public:
-    MoveEvent(ActorId actor, float x, float y)
+    MoveEvent(ActorId actor, float x, float y, float angle = 0.0f)
         : BaseEvent(ACTOR_MOVED)
         , m_actor(actor)
         , m_x(x)
         , m_y(y)
+        , m_angle(angle)
     {}
 
     const char *eventName() const override { return "ActorMoved"; }
@@ -91,6 +92,7 @@ class MoveEvent : public BaseEvent
     ActorId m_actor;
     float m_x;
     float m_y;
+    float m_angle;
 };
 
 //------------------------------------------------------------------------------

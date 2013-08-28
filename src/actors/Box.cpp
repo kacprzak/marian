@@ -6,6 +6,7 @@
 #include "ResourceMgr.h"
 #include <Box2D/Box2D.h>
 #include "Box2dPhysicsEngine.h"
+#include "EventMgr.h"
 
 BoxPhysicsComponent::BoxPhysicsComponent(GameLogic *game, float x, float y,
                                          float w, float h)
@@ -38,6 +39,24 @@ BoxPhysicsComponent::BoxPhysicsComponent(GameLogic *game, float x, float y,
     body->CreateFixture(&fixtureDef);
 
     m_body = body;
+
+    m_lastX = posX();
+    m_lastY = posY();
+    m_lastAngle = angle();
+}
+
+//------------------------------------------------------------------------------
+
+void BoxPhysicsComponent::update(float)
+{
+    // emit move event if position changed
+    if (m_lastX != posX() || m_lastY != posY() || m_lastAngle != angle()) {
+        EventMgr::singleton().queueEvent(EventPtr(new MoveEvent(m_owner->id(), posX(), posY(), angle())));
+    }
+
+    m_lastX = posX();
+    m_lastY = posY();
+    m_lastAngle = angle();
 }
 
 //------------------------------------------------------------------------------

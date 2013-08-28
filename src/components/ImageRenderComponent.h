@@ -3,7 +3,7 @@
 #define IMAGERENDERCOMPONENT_H
 
 #include "RenderComponent.h"
-#include "Image.h"
+#include "graphics/Image.h"
 #include <memory>
 #include "Actor.h"
 #include "Engine.h"

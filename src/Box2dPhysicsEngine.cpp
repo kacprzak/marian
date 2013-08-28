@@ -10,7 +10,10 @@
 
 #include "EventMgr.h"
 
+#include <cassert>
+
 Box2dPhysicsEngine::Box2dPhysicsEngine()
+    : m_world(nullptr)
 {
     std::clog << "Box2dPhysicsEngine created\n";
 
@@ -23,6 +26,8 @@ Box2dPhysicsEngine::Box2dPhysicsEngine()
 
 Box2dPhysicsEngine::~Box2dPhysicsEngine()
 {
+    assert(m_world == nullptr);
+
     delete m_debugDraw;
 
     std::clog << "Box2dPhysicsEngine destroyed\n";
@@ -43,7 +48,10 @@ bool Box2dPhysicsEngine::init()
 //------------------------------------------------------------------------------
 
 void Box2dPhysicsEngine::shutdown()
-{}
+{
+    delete m_world;
+    m_world = nullptr;
+}
 
 //------------------------------------------------------------------------------
 

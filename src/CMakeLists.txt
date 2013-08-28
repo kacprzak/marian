@@ -14,7 +14,11 @@ set( marian_HDRS
   components/RenderComponent.h
   components/ImageRenderComponent.h
 
-  Animation.h
+  graphics/Animation.h
+  graphics/Image.h
+  graphics/Texture.h
+  graphics/SpriteNode.h
+
   Console.h
   Engine.h
   EventType.h
@@ -32,14 +36,12 @@ set( marian_HDRS
   PhysicsEngine.h
   Box2dPhysicsEngine.h
   GuiMgr.h
-  Image.h
   Map.h
 #  Playable.h
   ResourceMgr.h
   ScriptMgr.h
   Singleton.h
   StateMachine.h
-  Texture.h
   Util.h
 
   debugdraw/Render.h
@@ -50,6 +52,9 @@ set( marian_SRCS
   actors/Ground.cpp
   actors/Hero.cpp
   actors/Sensor.cpp
+
+  graphics/Texture.cpp
+  graphics/SpriteNode.cpp
 
   Box2dPhysicsEngine.cpp
   Console.cpp
@@ -63,7 +68,6 @@ set( marian_SRCS
   Map.cpp
   ResourceMgr.cpp
   ScriptMgr.cpp
-  Texture.cpp
   Util.cpp
   main.cpp
 

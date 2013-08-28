@@ -4,7 +4,7 @@
 #include "Engine.h"
 #include "ResourceMgr.h"
 #include "Game.h"
-#include "Animation.h"
+#include "graphics/Animation.h"
 #include <iostream>
 #include "Box2dPhysicsEngine.h"
 #include "EventMgr.h"

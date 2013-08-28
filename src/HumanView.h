@@ -5,10 +5,15 @@
 #include "Map.h"
 #include "EventMgr.h"
 
+#include <map>
+
+class SpriteNode;
+
 class HumanView : public GameView
 {
  public:
     HumanView();
+    ~HumanView();
 
     void initialize(Engine *e) override;
 
@@ -19,8 +24,12 @@ class HumanView : public GameView
  private:
     void handleActorMoved(EventPtr event);
 
+    ActorId m_heroId;
+
     EventListenerHelper elh;
     Map m_map;
+
+    std::map<ActorId, SpriteNode*> m_nodes;
 };
 
 #endif // HUMANVIEW_H

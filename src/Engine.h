@@ -14,7 +14,7 @@
 #include <string>
 #include <exception>
 #include "GameLogic.h"
-#include "Image.h"
+#include "graphics/Image.h"
 
 class EngineError : public std::exception
 {

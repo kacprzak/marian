@@ -6,7 +6,7 @@
 #include <cmath> // floor
 #include <SDL.h>
 
-#include "Texture.h"
+#include "graphics/Texture.h"
 #include <vector>
 #include "ResourceMgr.h"
 #include "GuiMgr.h"

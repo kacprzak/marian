@@ -6,7 +6,7 @@
 #include <map>
 #include <utility>
 #include <iostream>
-#include "Texture.h"
+#include "graphics/Texture.h"
 
 class ResourceMgr : public Singleton<ResourceMgr>
 {
