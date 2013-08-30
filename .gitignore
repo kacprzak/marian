@@ -10,3 +10,4 @@ marian
 
 *.user
 callgrind.out.*
+CMakeLists.txt.user*
