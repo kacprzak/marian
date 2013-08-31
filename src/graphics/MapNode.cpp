@@ -7,6 +7,19 @@ MapNode::MapNode()
 {
 }
 
+void MapNode::drawBackground(Engine *e, const ViewRect& r) const
+{
+    // TODO: read order from map
+    drawLayer(e, "back",   r);
+    drawLayer(e, "ground", r);
+}
+
+void MapNode::drawForeground(Engine *e, const ViewRect& r) const
+{
+    drawLayer(e, "water", r);
+    drawLayer(e, "front", r);
+}
+
 //------------------------------------------------------------------------------
 
 #if 0
@@ -23,15 +36,20 @@ void Map::draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const
 //------------------------------------------------------------------------------
 
 void MapNode::drawLayer(Engine *e, const std::string& layerName,
-                        float xFrom, float xTo, float yFrom, float yTo) const
+                        const ViewRect& rect) const
 {
     const Layer *layer = m_map->findLayer(layerName);
 
     if (layer && layer->visible) {
-        int x1 = static_cast<int>(std::floor(xFrom));
-        int x2 = static_cast<int>(std::ceil(xTo));
-        int y1 = static_cast<int>(std::floor(m_map->height() - yTo));
-        int y2 = static_cast<int>(std::ceil(m_map->width() - yFrom));
+        int x1 = static_cast<int>(std::floor(rect.left));
+        int x2 = static_cast<int>(std::ceil(rect.right));
+        int y1 = static_cast<int>(std::floor(m_map->height() - rect.top));
+        int y2 = static_cast<int>(std::ceil(m_map->height() - rect.bottom));
+
+#if 0
+        // For testing
+        ++x1; --x2; ++y1; --y2;
+#endif
 
         // Clamp coords
         if (x1 < 0)               x1 = 0;

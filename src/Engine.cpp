@@ -149,12 +149,12 @@ void Engine::centerViewOn(float x, float y)
 
 //------------------------------------------------------------------------------
 
-void Engine::viewBounds(float *left, float *right, float *bottom, float *top)
+void Engine::viewBounds(ViewRect *rect)
 {
-    *left    = (-m_translate_x - m_screenWidth  / 2) / m_scale;
-    *right   = (-m_translate_x + m_screenWidth  / 2) / m_scale;
-    *bottom  = (-m_translate_y - m_screenHeight / 2) / m_scale;
-    *top     = (-m_translate_y + m_screenHeight / 2) / m_scale;
+    rect->left    = (-m_translate_x - m_screenWidth  / 2) / m_scale;
+    rect->right   = (-m_translate_x + m_screenWidth  / 2) / m_scale;
+    rect->bottom  = (-m_translate_y - m_screenHeight / 2) / m_scale;
+    rect->top     = (-m_translate_y + m_screenHeight / 2) / m_scale;
 }
 
 //------------------------------------------------------------------------------

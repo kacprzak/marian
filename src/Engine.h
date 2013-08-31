@@ -45,6 +45,13 @@ class EngineError : public std::exception
 
 //------------------------------------------------------------------------------
 
+struct ViewRect
+{
+    float left, right, top, bottom;
+};
+
+//------------------------------------------------------------------------------
+
 class Engine
 {
  public:
@@ -65,7 +72,7 @@ class Engine
                   GLuint textureId, const GLfloat *texCoords) const;
 
     void centerViewOn(float x, float y);
-    void viewBounds(float *left, float *right, float *bottom, float *top);
+    void viewBounds(ViewRect *rect);
 
     void setBackgroundColor(int r, int g, int b);
 

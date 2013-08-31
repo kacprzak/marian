@@ -17,11 +17,14 @@ public:
 
     std::string backgroundColor() const { return m_map->backgroundColor(); }
 
-    //void draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const;
-    void drawLayer(Engine *e, const std::string& layer, float xFrom, float xTo, float yFrom, float yTo) const;
-    void drawLayer(Engine *e, const Layer *layer, int xFrom, int xTo, int yFrom, int yTo) const;
+    void drawBackground(Engine *e, const ViewRect& rect) const;
+    void drawForeground(Engine *e, const ViewRect& rect) const;
 
 private:
+    //void draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const;
+    void drawLayer(Engine *e, const std::string& layer, const ViewRect& rect) const;
+    void drawLayer(Engine *e, const Layer *layer, int xFrom, int xTo, int yFrom, int yTo) const;
+
     std::shared_ptr<Map> m_map;
 };
 

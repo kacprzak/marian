@@ -116,12 +116,10 @@ void HumanView::update(float elapsedTime)
 void HumanView::draw(Engine *e)
 {
     // Draw only visible part of the map
-    float x1, x2, y1, y2;
-    e->viewBounds(&x1, &x2, &y1, &y2);
+    ViewRect r;
+    e->viewBounds(&r);
 
-    // TODO: read order from map
-    m_mapNode.drawLayer(e, "back",   x1, x2, y1, y2);
-    m_mapNode.drawLayer(e, "ground", x1, x2, y1, y2);
+    m_mapNode.drawBackground(e, r);
 
     // Draw actors
     for (auto& pair : m_nodes) {
@@ -132,8 +130,7 @@ void HumanView::draw(Engine *e)
         }
     }
 
-    m_mapNode.drawLayer(e, "water", x1, x2, y1, y2);
-    m_mapNode.drawLayer(e, "front", x1, x2, y1, y2);
+    m_mapNode.drawForeground(e, r);
 }
 
 //------------------------------------------------------------------------------
@@ -149,11 +146,11 @@ void HumanView::handleActorMoved(EventPtr event)
         float y = e->m_y;
 
         // Respect map borders
-        float bLeft, bRight, bTop, bBottom;
-        Engine::singleton().viewBounds(&bLeft, &bRight, &bBottom, &bTop);
+        ViewRect r;
+        Engine::singleton().viewBounds(&r);
 
-        float hw = (bRight - bLeft) / 2.0f;
-        float hh = (bTop - bBottom) / 2.0f;
+        float hw = (r.right - r.left) / 2.0f;
+        float hh = (r.top - r.bottom) / 2.0f;
         if (x < hw) x = hw;
         if (y < hh) y = hh;
         if (x > m_mapNode.width() - hw) x = m_mapNode.width() - hw;
