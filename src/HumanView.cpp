@@ -6,6 +6,7 @@
 #include "components/RenderComponent.h"
 #include "graphics/SpriteNode.h"
 #include "graphics/HeroNode.h"
+#include "graphics/MapNode.h"
 
 #define DIRTY_HACK 1
 #if DIRTY_HACK
@@ -15,21 +16,24 @@
 HumanView::HumanView()
     : m_heroId(0)
 {
+    std::shared_ptr<Map> map(new Map);
     // Read map from file
-    m_map.loadFromFile("media/map2.tmx");
+    map->loadFromFile("media/map2.tmx");
 
     // Load map images
-    auto images = m_map.externalImages();
+    auto images = map->externalImages();
     for (const std::string& image : images)
         ResourceMgr::singleton().addTexture(image);
 
     // Build objects
     std::vector<MapObject> mapObjects;
-    m_map.getObjects(mapObjects);
+    map->getObjects(mapObjects);
 
     //std::cout << "INFO: " << mapObjects.size() << " MapObjects loaded.\n";
     // Hero texture
     ResourceMgr::singleton().addTexture("MegaMan_001.png");
+
+    m_mapNode.setMap(map);
 
     unsigned long actorId = 0;
 
@@ -75,7 +79,7 @@ HumanView::~HumanView()
 void HumanView::initialize(Engine *e)
 {
     // Set background color
-    std::string bgColor = m_map.backgroundColor();
+    std::string bgColor = m_mapNode.backgroundColor();
     if (!bgColor.empty()) {
         std::vector<int> color = hexColorToRgb(bgColor);
         e->setBackgroundColor(color[0], color[1], color[2]);
@@ -116,8 +120,8 @@ void HumanView::draw(Engine *e)
     e->viewBounds(&x1, &x2, &y1, &y2);
 
     // TODO: read order from map
-    m_map.drawLayer(e, "back",   x1, x2, y1, y2);
-    m_map.drawLayer(e, "ground", x1, x2, y1, y2);
+    m_mapNode.drawLayer(e, "back",   x1, x2, y1, y2);
+    m_mapNode.drawLayer(e, "ground", x1, x2, y1, y2);
 
     // Draw actors
     for (auto& pair : m_nodes) {
@@ -128,8 +132,8 @@ void HumanView::draw(Engine *e)
         }
     }
 
-    m_map.drawLayer(e, "water", x1, x2, y1, y2);
-    m_map.drawLayer(e, "front", x1, x2, y1, y2);
+    m_mapNode.drawLayer(e, "water", x1, x2, y1, y2);
+    m_mapNode.drawLayer(e, "front", x1, x2, y1, y2);
 }
 
 //------------------------------------------------------------------------------
@@ -152,7 +156,7 @@ void HumanView::handleActorMoved(EventPtr event)
         float hh = (bTop - bBottom) / 2.0f;
         if (x < hw) x = hw;
         if (y < hh) y = hh;
-        if (x > m_map.width() - hw) x = m_map.width() - hw;
+        if (x > m_mapNode.width() - hw) x = m_mapNode.width() - hw;
 
         Engine::singleton().centerViewOn(x, y);
     }

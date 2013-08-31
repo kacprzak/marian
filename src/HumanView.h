@@ -4,10 +4,12 @@
 #include "GameView.h"
 #include "Map.h"
 #include "EventMgr.h"
+#include "graphics/MapNode.h"
 
 #include <map>
 
 class SpriteNode;
+class MapNode;
 
 class HumanView : public GameView
 {
@@ -28,7 +30,7 @@ class HumanView : public GameView
     ActorId m_heroId;
 
     EventListenerHelper elh;
-    Map m_map;
+    MapNode m_mapNode;
 
     std::map<ActorId, SpriteNode*> m_nodes;
 };

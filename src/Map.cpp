@@ -1,56 +1,25 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "Map.h"
-#include "Engine.h"
-#include "ResourceMgr.h"
+#include "graphics/Texture.h"
 
-#include <cstring>
-#include <iostream>
-#include <cmath>
-
-class Tile
+Tile::Tile(const Map *map, unsigned agid)
+    : gid(agid)
 {
-public:
-    Tile(const Map *map, unsigned agid)
-        : gid(agid)
-    {
-        // Coords for tile on image in map coord system
-        int tileCoords[4];
-        map->rectForTile(tileCoords, gid);
-        // Texture source
-        textureSource = map->m_tmxMap.tilesetForTile(gid)->imageSource;
-        int w = map->m_tmxMap.tilesetForTile(gid)->imageWidth;
-        int h = map->m_tmxMap.tilesetForTile(gid)->imageHeight;
+    // Coords for tile on image in map coord system
+    int tileCoords[4];
+    map->rectForTile(tileCoords, gid);
+    // Texture source
+    textureSource = map->m_tmxMap.tilesetForTile(gid)->imageSource;
+    int w = map->m_tmxMap.tilesetForTile(gid)->imageWidth;
+    int h = map->m_tmxMap.tilesetForTile(gid)->imageHeight;
 
-        // Calculate coords for OpenGL
-        Texture::calculateTextureCoords(texCoords, w, h,
-                                        tileCoords[0], tileCoords[1],
-                                        tileCoords[2], tileCoords[3]);
-    }
-  
-    unsigned       gid;
-    std::string    textureSource;
-    GLfloat        texCoords[8];
-};
+    // Calculate coords for OpenGL
+    Texture::calculateTextureCoords(texCoords, w, h,
+                                    tileCoords[0], tileCoords[1],
+                                    tileCoords[2], tileCoords[3]);
+}
 
 //==============================================================================
-
-class Layer : boost::noncopyable
-{
-public:
-    Layer(const Map *map, const tmx::Layer& layer);
-    ~Layer();
-
-    void draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const;  
-
-    const Map *map; //< parent object
-    std::string name;
-    int width;
-    int height;
-    bool visible;
-    std::vector<Tile *> tiles;
-};
-
-//------------------------------------------------------------------------------
 
 // Bits on the far end of the 32-bit global tile ID are used for tile flags
 const unsigned FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
@@ -94,26 +63,6 @@ Layer::~Layer()
 {
     for (const Tile* tile : tiles) {
         delete tile;
-    }
-}
-
-//------------------------------------------------------------------------------
-
-void Layer::draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const
-{
-    for (int y = yFrom; y < yTo; ++y) {
-        for (int x = xFrom; x < xTo; ++x) {
-            const Tile *tile = tiles[y * width + x];
-
-            if (tile) {
-                GLuint textureId = ResourceMgr::singleton().getTexture(tile->textureSource)->textureId();
-                e->drawQuad(static_cast<float>(x),
-                            static_cast<float>(map->m_height - y - 1),
-                            1.0f,
-                            1.0f,
-                            textureId, tile->texCoords);
-            }
-        }
     }
 }
 
@@ -185,42 +134,6 @@ void Map::getObjects(std::vector<MapObject>& v)
 
             v.push_back(mapObject);
         }
-    }
-}
-
-//------------------------------------------------------------------------------
-
-#if 0
-void Map::draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const
-{
-    // No bounds checking // Fix me
-
-    for (const Layer* layer : m_layers) {
-        layer->draw(e, xFrom, xTo, yFrom, yTo);
-    }
-}
-#endif
-
-//------------------------------------------------------------------------------
-
-void Map::drawLayer(Engine *e, const std::string& layerName,
-                    float xFrom, float xTo, float yFrom, float yTo) const
-{
-    const Layer *layer = findLayer(layerName);
-
-    if (layer && layer->visible) {
-        int x1 = static_cast<int>(std::floor(xFrom));
-        int x2 = static_cast<int>(std::ceil(xTo));
-        int y1 = static_cast<int>(std::floor(m_height - yTo));
-        int y2 = static_cast<int>(std::ceil(m_height - yFrom));
-        
-        // Clamp coords
-        if (x1 < 0)        x1 = 0;
-        if (x2 > m_width)  x2 = m_width;
-        if (y1 < 0)        y1 = 0;
-        if (y2 > m_height) y2 = m_height;
-        
-        layer->draw(e, x1, x2, y1, y2);
     }
 }
 

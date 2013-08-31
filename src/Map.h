@@ -7,8 +7,10 @@
 #include <boost/utility.hpp>
 #include "TmxMap.h"
 
-class Engine;
+class Tile;
 class Layer;
+
+//------------------------------------------------------------------------------
 
 /** Map object but in game coords */
 class MapObject
@@ -28,8 +30,6 @@ class MapObject
 
 //------------------------------------------------------------------------------
 
-class Tile;
-
 /** Interface to game map in game coords */
 class Map : boost::noncopyable
 {
@@ -44,20 +44,16 @@ class Map : boost::noncopyable
     int width() const { return m_width; }
     int height() const { return m_height; }
 
-    //void draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const;
-    void drawLayer(Engine *e, const std::string& layer,
-                   float xFrom, float xTo, float yFrom, float yTo) const;
-
     /** Get map objects */
     void getObjects(std::vector<MapObject>& v);
 
     std::vector<std::string> externalImages() const;
     std::string backgroundColor() const;
 
+    Layer *findLayer(const std::string& layerName) const;
+
  private:
     void rectForTile(int tileCoords[4], unsigned globalId) const;
-
-    Layer *findLayer(const std::string& layerName) const;
 
     /** Size in game (tile) coords */
     int m_width;
@@ -69,6 +65,36 @@ class Map : boost::noncopyable
 
     std::vector<Layer *> m_layers;
     tmx::Map m_tmxMap;
+};
+
+//------------------------------------------------------------------------------
+
+class Layer : boost::noncopyable
+{
+public:
+    Layer(const Map *map, const tmx::Layer& layer);
+    ~Layer();
+
+    //void draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const;
+
+    const Map *map; //< parent object
+    std::string name;
+    int width;
+    int height;
+    bool visible;
+    std::vector<Tile *> tiles;
+};
+
+//------------------------------------------------------------------------------
+
+class Tile
+{
+public:
+    Tile(const Map *map, unsigned agid);
+
+    unsigned       gid;
+    std::string    textureSource;
+    float          texCoords[8];
 };
 
 #endif

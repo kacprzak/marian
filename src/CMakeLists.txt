@@ -18,6 +18,7 @@ set( marian_HDRS
   graphics/Texture.h
   graphics/SpriteNode.h
   graphics/HeroNode.h
+  graphics/MapNode.h
 
   Console.h
   Engine.h
@@ -56,6 +57,7 @@ set( marian_SRCS
   graphics/Texture.cpp
   graphics/SpriteNode.cpp
   graphics/HeroNode.cpp
+  graphics/MapNode.cpp
 
   Box2dPhysicsEngine.cpp
   Console.cpp

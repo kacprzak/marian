@@ -20,13 +20,6 @@ Game::Game()
 
     m_mapWidth = map.width();
 
-#if 1 // This should be in View!!!
-    // Load map images
-    auto images = map.externalImages();
-    for (const std::string& image : images)
-        ResourceMgr::singleton().addTexture(image);
-#endif
-
     // Build objects
     std::vector<MapObject> mapObjects;
     map.getObjects(mapObjects);
