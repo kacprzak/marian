@@ -21,9 +21,6 @@ Game::Game()
     m_mapWidth = map.width();
 
 #if 1 // This should be in View!!!
-    // Hero texture
-    ResourceMgr::singleton().addTexture("MegaMan_001.png");
-
     // Load map images
     auto images = map.externalImages();
     for (const std::string& image : images)
@@ -43,7 +40,7 @@ Game::Game()
 
     // Register event listeners
     elh.registerListener(ACTOR_COLLIDED, std::bind(&Game::handleActorCollided, this, std::placeholders::_1));
-    elh.registerListener(ACTOR_PHYSICS_STATE_CHANGED, std::bind(&Game::handleActorPhysicsStateChanged, this, std::placeholders::_1));
+    //elh.registerListener(ACTOR_PHYSICS_STATE_CHANGED, std::bind(&Game::handleActorPhysicsStateChanged, this, std::placeholders::_1));
 }
 
 //------------------------------------------------------------------------------
@@ -90,18 +87,3 @@ void Game::handleActorCollided(EventPtr event)
 }
 
 //------------------------------------------------------------------------------
-
-void Game::handleActorPhysicsStateChanged(EventPtr event)
-{
-    std::shared_ptr<PhysicsStateChangeEvent> e = std::static_pointer_cast<PhysicsStateChangeEvent>(event);
-
-    ActorPtr actor = m_actors[e->m_actor];
-    ActorPhysicsStateId state = e->m_newState;
-
-    // RenderComponent weak ptr
-    auto rcwp = actor->getComponent<RenderComponent>(RENDER);
-
-    if (auto rcsp = rcwp.lock()) {
-        rcsp->changePhysicsState(state);
-    }
-}

@@ -3,7 +3,7 @@
 #define BOX_H
 
 #include "components/PhysicsComponent.h"
-#include "components/ImageRenderComponent.h"
+#include "components/RenderComponent.h"
 
 class GameLogic;
 
@@ -19,12 +19,6 @@ private:
    float m_lastX;
    float m_lastY;
    float m_lastAngle;
-};
-
-class BoxRenderComponent : public ImageRenderComponent
-{
- public:
-    BoxRenderComponent();
 };
 
 #endif

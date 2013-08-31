@@ -45,7 +45,7 @@ class ActorFactory
             physics->setOwner(actor);
             physics->init();
 
-            ActorComponentPtr render(new BoxRenderComponent);
+            ActorComponentPtr render(new RenderComponent);
             actor->addComponent(render);
             render->setOwner(actor);
             render->init();
@@ -92,7 +92,7 @@ class ActorFactory
             physics->setOwner(actor);
             physics->init();
 
-            ActorComponentPtr render(new BoxRenderComponent());
+            ActorComponentPtr render(new RenderComponent());
             actor->addComponent(render);
             render->setOwner(actor);
             render->init();

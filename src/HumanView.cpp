@@ -5,6 +5,7 @@
 
 #include "components/RenderComponent.h"
 #include "graphics/SpriteNode.h"
+#include "graphics/HeroNode.h"
 
 #define DIRTY_HACK 1
 #if DIRTY_HACK
@@ -27,6 +28,8 @@ HumanView::HumanView()
     m_map.getObjects(mapObjects);
 
     //std::cout << "INFO: " << mapObjects.size() << " MapObjects loaded.\n";
+    // Hero texture
+    ResourceMgr::singleton().addTexture("MegaMan_001.png");
 
     unsigned long actorId = 0;
 
@@ -37,20 +40,25 @@ HumanView::HumanView()
         if (obj.type == "Box") {
             SpriteNode *sprite = new SpriteNode();
 
-            const Texture *tex =
-                ResourceMgr::singleton().getTexture("minecraft_tiles_big.png");
+            const Texture *tex = ResourceMgr::singleton().getTexture("minecraft_tiles_big.png");
             Image img(tex, 256, 480, 288, 512);
 
-            sprite->m_actorId = actorId;
+            sprite->setActorId(actorId);
             sprite->setImage(img);
 
             m_nodes.insert(std::make_pair(actorId, sprite));
         } else if (obj.type == "Hero") {
             m_heroId = actorId;
+
+            SpriteNode *sprite = new HeroNode();
+
+            sprite->setActorId(actorId);
+            m_nodes.insert(std::make_pair(actorId, sprite));
         }
     }
 
     elh.registerListener(ACTOR_MOVED, std::bind(&HumanView::handleActorMoved, this, std::placeholders::_1));
+    elh.registerListener(ACTOR_PHYSICS_STATE_CHANGED, std::bind(&HumanView::handleActorPhysicsStateChanged, this, std::placeholders::_1));
 }
 
 //------------------------------------------------------------------------------
@@ -90,8 +98,13 @@ bool HumanView::processInput(const SDL_Event &event)
 
 //------------------------------------------------------------------------------
 
-void HumanView::update(float /*elapsedTime*/)
+void HumanView::update(float elapsedTime)
 {
+    for (auto& pair : m_nodes) {
+        SpriteNode *s = pair.second;
+        if (s)
+            s->update(elapsedTime);
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -106,36 +119,14 @@ void HumanView::draw(Engine *e)
     m_map.drawLayer(e, "back",   x1, x2, y1, y2);
     m_map.drawLayer(e, "ground", x1, x2, y1, y2);
 
-#if DIRTY_HACK
-    Game *game = static_cast<Game*>(e->game());
-
     // Draw actors
-    for (const auto& pair : game->actors()) {
-        ActorPtr a = pair.second;
-
-        if (a->category() == BOX) {
-            SpriteNode *sprite = m_nodes[a->id()];
-            if (sprite) {
-                auto img = sprite->m_image;
-                if (img)
-                    e->drawImage(*img, sprite->m_x, sprite->m_y, sprite->m_rot);
-            }
-        } else {
-            // Get weak_ptr
-            auto rcwp = a->getComponent<RenderComponent>(RENDER);
-            // Try to get shared_ptr
-            if (auto rcsp = rcwp.lock()) {
-                auto pcwp = a->getComponent<PhysicsComponent>(PHYSICS);
-                if (auto pcsp = pcwp.lock()) {
-                    e->drawImage(rcsp->currentImage(),
-                                 pcsp->posX() + rcsp->xOffset(),
-                                 pcsp->posY() + rcsp->yOffset(),
-                                 pcsp->angle());
-                }
-            }
+    for (auto& pair : m_nodes) {
+        SpriteNode *sprite = pair.second;
+        const Image *img = nullptr;
+        if (sprite && (img = sprite->image())) {
+            e->drawImage(*img, sprite->x(), sprite->y(), sprite->angle());
         }
     }
-#endif
 
     m_map.drawLayer(e, "water", x1, x2, y1, y2);
     m_map.drawLayer(e, "front", x1, x2, y1, y2);
@@ -164,12 +155,22 @@ void HumanView::handleActorMoved(EventPtr event)
         if (x > m_map.width() - hw) x = m_map.width() - hw;
 
         Engine::singleton().centerViewOn(x, y);
-    } else {
-        SpriteNode *sprite = m_nodes[e->m_actor];
-        if (sprite) {
-            sprite->m_x = e->m_x;
-            sprite->m_y = e->m_y;
-            sprite->m_rot = e->m_angle;
-        }
+    }
+
+    SpriteNode *sprite = m_nodes[e->m_actor];
+    if (sprite) {
+        sprite->moveTo(e->m_x, e->m_y, e->m_angle);
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void HumanView::handleActorPhysicsStateChanged(EventPtr event)
+{
+    auto e = std::static_pointer_cast<PhysicsStateChangeEvent>(event);
+
+    SpriteNode *sprite = m_nodes[e->m_actor];
+    if (sprite) {
+        sprite->changePhysicsState(e->m_newState);
     }
 }

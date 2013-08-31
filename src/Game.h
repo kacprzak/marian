@@ -15,13 +15,10 @@ class Game : public BaseGameLogic
 
     void update(float elapsedTime) override;
 
-    // HACK
-    std::map<ActorId, ActorPtr>& actors() { return m_actors; }
-
  private:
 
     void handleActorCollided(EventPtr event);
-    void handleActorPhysicsStateChanged(EventPtr event);
+    //void handleActorPhysicsStateChanged(EventPtr event);
 
     EventListenerHelper elh;
     FpsCounter m_fpsCounter;

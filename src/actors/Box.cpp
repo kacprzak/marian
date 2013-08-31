@@ -59,13 +59,3 @@ void BoxPhysicsComponent::update(float)
     m_lastAngle = angle();
 }
 
-//------------------------------------------------------------------------------
-
-BoxRenderComponent::BoxRenderComponent()
-    : ImageRenderComponent()
-{
-    // Image creation
-    const Texture *tex =
-        ResourceMgr::singleton().getTexture("minecraft_tiles_big.png");
-    m_image = std::unique_ptr<Image>(new Image(tex, 256, 480, 288, 512));
-}

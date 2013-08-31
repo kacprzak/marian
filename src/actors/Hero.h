@@ -9,36 +9,14 @@
 
 class Engine;
 
-class HeroRenderComponent;
-class HeroRenderComponentState;
-
-typedef StateMachine<HeroRenderComponent *, HeroRenderComponentState> HeroRenderComponentStateMachine;
-
 class HeroRenderComponent : public RenderComponent
 {
  public:
     HeroRenderComponent();
-    ~HeroRenderComponent();
-
-    bool init() override;
-
-    const Image& currentImage() const override;
-    float yOffset() const override { return 0.5f; }
-
-    void changePhysicsState(ActorPhysicsStateId newState);
 
     void update(float elapsedTime) override;
 
-    bool isFacingRight() const { return m_facingRight; }
-
- private:
-    void setFacingRight(bool right);
-
-    bool m_facingRight;
     float m_jumpTimeout;
-
-    HeroRenderComponentStateMachine m_stateMachine;
-    std::vector<HeroRenderComponentState *> m_states;
 };
 
 

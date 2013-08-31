@@ -23,6 +23,7 @@ class HumanView : public GameView
 
  private:
     void handleActorMoved(EventPtr event);
+    void handleActorPhysicsStateChanged(EventPtr event);
 
     ActorId m_heroId;
 

@@ -47,6 +47,9 @@ class EventMgr : public Singleton<EventMgr>
 
 //==============================================================================
 
+/**
+ * Useful for classes that want to register methods as event listeners.
+ */
 class EventListenerHelper final
 {
 public:

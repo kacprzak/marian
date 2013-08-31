@@ -12,12 +12,12 @@ set( marian_HDRS
   components/PhysicsComponent.h
   components/ControlComponent.h
   components/RenderComponent.h
-  components/ImageRenderComponent.h
 
   graphics/Animation.h
   graphics/Image.h
   graphics/Texture.h
   graphics/SpriteNode.h
+  graphics/HeroNode.h
 
   Console.h
   Engine.h
@@ -55,6 +55,7 @@ set( marian_SRCS
 
   graphics/Texture.cpp
   graphics/SpriteNode.cpp
+  graphics/HeroNode.cpp
 
   Box2dPhysicsEngine.cpp
   Console.cpp
