@@ -23,7 +23,7 @@ void Map::draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const
 //------------------------------------------------------------------------------
 
 void MapNode::drawLayer(Engine *e, const std::string& layerName,
-                    float xFrom, float xTo, float yFrom, float yTo) const
+                        float xFrom, float xTo, float yFrom, float yTo) const
 {
     const Layer *layer = m_map->findLayer(layerName);
 
@@ -34,9 +34,9 @@ void MapNode::drawLayer(Engine *e, const std::string& layerName,
         int y2 = static_cast<int>(std::ceil(m_map->width() - yFrom));
 
         // Clamp coords
-        if (x1 < 0)        x1 = 0;
+        if (x1 < 0)               x1 = 0;
         if (x2 > m_map->width())  x2 = m_map->width();
-        if (y1 < 0)        y1 = 0;
+        if (y1 < 0)               y1 = 0;
         if (y2 > m_map->height()) y2 = m_map->height();
 
         drawLayer(e, layer, x1, x2, y1, y2);

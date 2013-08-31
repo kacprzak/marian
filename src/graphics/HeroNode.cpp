@@ -20,7 +20,7 @@ class HeroNodeState : public State<HeroNode *>
 
     virtual void onExit(HeroNode * /*owner*/, int /*nextStateId*/) override {}
 
-    virtual void update(Engine *e, float elapsedTime) = 0;
+    virtual void update(float elapsedTime) = 0;
 
     virtual const Image& currentImage() const = 0;
 
@@ -53,7 +53,7 @@ class StandHeroState : public HeroNodeState
         m_animation.addFrame(idleFrame2, 0.1f); // Blink
     }
 
-    void update(Engine * /*e*/, float elapsedTime) override
+    void update(float elapsedTime) override
     {
         m_animation.update(elapsedTime);
     }
@@ -93,7 +93,7 @@ class FallHeroState : public HeroNodeState
         m_image->scale(2.0f);
     }
 
-    void update(Engine * /*e*/, float /*elapsedTime*/) override
+    void update(float /*elapsedTime*/) override
     {
         // Do nothing
     }
@@ -145,7 +145,7 @@ class RunHeroState : public HeroNodeState
         }
     }
 
-    void update(Engine * /*e*/, float elapsedTime) override
+    void update(float elapsedTime) override
     {
         m_animation.update(elapsedTime);
     }
@@ -205,7 +205,7 @@ HeroNode::~HeroNode()
 
 void HeroNode::update(float elapsedTime)
 {
-    m_stateMachine.currentState()->update(nullptr, elapsedTime);
+    m_stateMachine.currentState()->update(elapsedTime);
 
     const HeroNodeState *renderState = static_cast<const HeroNodeState*>(m_stateMachine.currentState());
     m_image = &(renderState->currentImage());
@@ -215,6 +215,7 @@ void HeroNode::update(float elapsedTime)
 
 void HeroNode::moveTo(float x, float y, float angle)
 {
+    // Display Node a bit higher than actor
     SpriteNode::moveTo(x, y + 0.5f, angle);
 }
 
