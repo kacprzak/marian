@@ -34,8 +34,15 @@ void Texture::calculateTextureCoords(GLfloat texCoords[8], int texWidth, int tex
 
     GLfloat s0 = x0 / (float)texWidth;
     GLfloat t0 = y0 / (float)texHeight;
+#if 1
     GLfloat s1 = x1 / (float)texWidth;
     GLfloat t1 = y1 / (float)texHeight;
+#else
+    // No nie działa ten patent
+    #define BIAS 8192.0f
+    GLfloat s1 = ((float)x1 / texWidth)  - (1.0f / BIAS);
+    GLfloat t1 = ((float)y1 / texHeight) - (1.0f / BIAS);
+#endif
 
     texCoords[0] = s0; texCoords[1] = t0;
     texCoords[2] = s1; texCoords[3] = t0;

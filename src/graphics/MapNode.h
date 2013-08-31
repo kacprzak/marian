@@ -23,6 +23,8 @@ public:
 private:
     //void draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const;
     void drawLayer(Engine *e, const std::string& layer, const ViewRect& rect) const;
+    void drawParallaxLayer(Engine *e, const std::string& layerName, const ViewRect& rect) const;
+
     void drawLayer(Engine *e, const Layer *layer, int xFrom, int xTo, int yFrom, int yTo) const;
 
     std::shared_ptr<Map> m_map;
