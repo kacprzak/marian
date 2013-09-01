@@ -39,9 +39,9 @@ end
 # Tiles will be an array of Image objects
 tiles = (TILE_COLS * TILE_ROWS).times.inject([]) do |arr, idx|
   arr << Magick::Image.constitute(TILE_WIDTH, TILE_HEIGHT, 'RGBA',
-                       		        img.dispatch(idx % TILE_COLS * TILE_WIDTH,
+                                  img.dispatch(idx % TILE_COLS * TILE_WIDTH,
                                                idx / TILE_COLS * TILE_HEIGHT,
-                                    	         TILE_WIDTH, TILE_HEIGHT, 'RGBA'))
+                                               TILE_WIDTH, TILE_HEIGHT, 'RGBA'))
 end
 
 tiles.each_with_index do |tile, idx|
