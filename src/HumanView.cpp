@@ -65,6 +65,7 @@ HumanView::HumanView()
     elh.registerListener(ACTOR_PHYSICS_STATE_CHANGED, std::bind(&HumanView::handleActorPhysicsStateChanged, this, std::placeholders::_1));
     elh.registerListener(ACTOR_CREATED, std::bind(&HumanView::handleActorCreated, this, std::placeholders::_1));
     elh.registerListener(ACTOR_DESTROYED, std::bind(&HumanView::handleActorDestroyed, this, std::placeholders::_1));
+    elh.registerListener(INPUT_COMMAND, std::bind(&HumanView::handleInputCommand, this, std::placeholders::_1));
 }
 
 //------------------------------------------------------------------------------
@@ -210,8 +211,25 @@ void HumanView::handleActorDestroyed(EventPtr event)
     auto e = std::static_pointer_cast<ActorDestroyedEvent>(event);
 
     SpriteNode *sprite = m_nodes[e->m_actorId];
+
     if (sprite) {
         m_nodes.erase(e->m_actorId);
         delete sprite;
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void HumanView::handleInputCommand(EventPtr event)
+{
+    auto e = std::static_pointer_cast<ActorInputEvent>(event);
+
+    SpriteNode *sprite = m_nodes[e->m_actorId];
+
+    if (sprite && (e->m_actorId == m_heroId)) {
+        if (e->m_command == MOVE_RIGHT_START)
+            sprite->flipHorizontally(false);
+        if (e->m_command == MOVE_LEFT_START)
+            sprite->flipHorizontally(true);
     }
 }

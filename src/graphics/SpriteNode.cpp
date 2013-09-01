@@ -11,14 +11,32 @@ SpriteNode::SpriteNode()
 {
 }
 
+//------------------------------------------------------------------------------
+
 void SpriteNode::setImage(const Image& image)
 {
     m_image = new Image(image);
 }
+
+//------------------------------------------------------------------------------
 
 void SpriteNode::moveTo(float x, float y, float angle)
 {
     m_x = x;
     m_y = y;
     m_rot = angle;
+}
+
+//------------------------------------------------------------------------------
+
+void SpriteNode::flipHorizontally(bool flip)
+{
+    m_flippedHori = flip;
+}
+
+//------------------------------------------------------------------------------
+
+void SpriteNode::flipVertically(bool flip)
+{
+    m_flippedVert = flip;
 }

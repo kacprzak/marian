@@ -28,6 +28,9 @@ public:
     virtual void moveTo(float x, float y, float angle = 0.0f);
     virtual void changePhysicsState(ActorPhysicsStateId /*newState*/) {}
 
+    virtual void flipHorizontally(bool flip);
+    virtual void flipVertically(bool flip);
+
 protected:
     ActorId m_actorId;
     const Image *m_image;

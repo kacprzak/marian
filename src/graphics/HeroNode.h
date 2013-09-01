@@ -22,6 +22,8 @@ public:
 
     void changePhysicsState(ActorPhysicsStateId newState) override;
 
+    void flipHorizontally(bool flip) { setFacingRight(!flip); }
+
     bool isFacingRight() const { return m_facingRight; }
 
  private:
