@@ -3,10 +3,10 @@
 #define ACTOR_H
 
 #include "ActorCategory.h"
+#include "components/ActorComponent.h"
+
 #include <string>
 #include <iostream>
-//#include "ActorFactory.h"
-#include "components/ActorComponent.h"
 #include <map>
 #include <memory>
 

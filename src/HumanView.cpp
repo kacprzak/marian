@@ -63,6 +63,8 @@ HumanView::HumanView()
 
     elh.registerListener(ACTOR_MOVED, std::bind(&HumanView::handleActorMoved, this, std::placeholders::_1));
     elh.registerListener(ACTOR_PHYSICS_STATE_CHANGED, std::bind(&HumanView::handleActorPhysicsStateChanged, this, std::placeholders::_1));
+    elh.registerListener(ACTOR_CREATED, std::bind(&HumanView::handleActorCreated, this, std::placeholders::_1));
+    elh.registerListener(ACTOR_DESTROYED, std::bind(&HumanView::handleActorDestroyed, this, std::placeholders::_1));
 }
 
 //------------------------------------------------------------------------------
@@ -175,5 +177,37 @@ void HumanView::handleActorPhysicsStateChanged(EventPtr event)
     SpriteNode *sprite = m_nodes[e->m_actor];
     if (sprite) {
         sprite->changePhysicsState(e->m_newState);
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void HumanView::handleActorCreated(EventPtr event)
+{
+    auto e = std::static_pointer_cast<ActorCreatedEvent>(event);
+
+    if (e->m_actorCategory == BOX) {
+        SpriteNode *sprite = new SpriteNode();
+
+        const Texture *tex = ResourceMgr::singleton().getTexture("minecraft_tiles_big.png");
+        Image img(tex, 256, 480, 288, 512);
+
+        sprite->setActorId(e->m_actor);
+        sprite->setImage(img);
+
+        m_nodes.insert(std::make_pair(e->m_actor, sprite));
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void HumanView::handleActorDestroyed(EventPtr event)
+{
+    auto e = std::static_pointer_cast<ActorDestroyedEvent>(event);
+
+    SpriteNode *sprite = m_nodes[e->m_actor];
+    if (sprite) {
+        m_nodes.erase(e->m_actor);
+        delete sprite;
     }
 }

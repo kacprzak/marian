@@ -112,4 +112,40 @@ class PhysicsStateChangeEvent : public BaseEvent
     ActorPhysicsStateId m_newState;
 };
 
+//------------------------------------------------------------------------------
+
+class ActorCreatedEvent : public BaseEvent
+{
+public:
+    ActorCreatedEvent(ActorId actor, ActorCategory actorCategory, float x = 0.0f, float y = 0.0f)
+        : BaseEvent(ACTOR_CREATED)
+        , m_actor(actor)
+        , m_actorCategory(actorCategory)
+        , m_x(x)
+        , m_y(y)
+    {}
+
+    const char *eventName() const override { return "ActorCreated"; }
+
+    ActorId m_actor;
+    ActorCategory m_actorCategory;
+    float m_x;
+    float m_y;
+};
+
+//------------------------------------------------------------------------------
+
+class ActorDestroyedEvent : public BaseEvent
+{
+public:
+    ActorDestroyedEvent(ActorId actor)
+        : BaseEvent(ACTOR_DESTROYED)
+        , m_actor(actor)
+    {}
+
+    const char *eventName() const override { return "ActorDestroyed"; }
+
+    ActorId m_actor;
+};
+
 #endif // EVENT_H

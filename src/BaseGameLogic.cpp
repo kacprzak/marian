@@ -48,6 +48,9 @@ void BaseGameLogic::update(float elapsedTime)
             it = m_actors.erase(it);
             // Must be called to break cyclic references
             actor->destroy();
+
+            // Emit event
+            EventMgr::singleton().queueEvent(EventPtr(new ActorDestroyedEvent(actor->id())));
         } else {
             // Kill it if out of map
             if (!isOnMap(actor))
@@ -64,6 +67,9 @@ void BaseGameLogic::addGameObject(ActorCategory type, const std::string& name,
 {
     ActorPtr a = ActorFactory::create(this, type, name, x, y);
     m_actors.insert(std::make_pair(a->id(), a));
+
+    // Emit event
+    EventMgr::singleton().queueEvent(EventPtr(new ActorCreatedEvent(a->id(), type, x, y)));
 }
 
 //------------------------------------------------------------------------------

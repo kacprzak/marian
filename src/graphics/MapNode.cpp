@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-//#define TEST 1
+#define TEST 0
 
 MapNode::MapNode()
 {
@@ -14,7 +14,7 @@ MapNode::MapNode()
 
 void MapNode::update(float elapsedTime)
 {
-    m_cloudsTransition += 0.2f * elapsedTime;
+    m_cloudsTransition += 0.25f * elapsedTime;
 
     if (m_cloudsTransition > width())
         m_cloudsTransition -= width();
@@ -63,7 +63,7 @@ void MapNode::drawLayer(Engine *e, const std::string& layerName, const ViewRect&
         int y1 = static_cast<int>(std::floor(m_map->height() - rect.top));
         int y2 = static_cast<int>(std::ceil(m_map->height() - rect.bottom));
 
-#if 0
+#if TEST
         // For testing
         ++x1; --x2; ++y1; --y2;
 #endif
@@ -94,7 +94,7 @@ void MapNode::drawParallaxLayer(Engine *e, const std::string& layerName, const V
         int y1 = static_cast<int>(std::floor(m_map->height() - r.top));
         int y2 = static_cast<int>(std::ceil(m_map->height() - r.bottom));
 
-#if 0
+#if TEST
         // For testing
         ++x1; --x2; ++y1; --y2;
 #endif
