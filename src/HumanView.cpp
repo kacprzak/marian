@@ -109,6 +109,8 @@ void HumanView::update(float elapsedTime)
         if (s)
             s->update(elapsedTime);
     }
+
+    m_mapNode.update(elapsedTime);
 }
 
 //------------------------------------------------------------------------------

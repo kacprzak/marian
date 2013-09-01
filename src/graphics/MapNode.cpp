@@ -7,18 +7,34 @@
 
 MapNode::MapNode()
 {
+    m_cloudsTransition = 0.0f;
 }
+
+//------------------------------------------------------------------------------
+
+void MapNode::update(float elapsedTime)
+{
+    m_cloudsTransition += 0.2f * elapsedTime;
+
+    if (m_cloudsTransition > width())
+        m_cloudsTransition -= width();
+}
+
+//------------------------------------------------------------------------------
 
 void MapNode::drawBackground(Engine *e, const ViewRect& r) const
 {
     // TODO: read order from map
+    drawParallaxLayer(e, "clouds", r, r.left * -0.3f + m_cloudsTransition);
     drawLayer(e, "back",   r);
     drawLayer(e, "ground", r);
 }
 
+//------------------------------------------------------------------------------
+
 void MapNode::drawForeground(Engine *e, const ViewRect& r) const
 {
-    drawParallaxLayer(e, "water", r);
+    drawParallaxLayer(e, "water", r, r.left * 0.1f);
     drawLayer(e, "front", r);
 }
 
@@ -64,21 +80,13 @@ void MapNode::drawLayer(Engine *e, const std::string& layerName, const ViewRect&
 
 //------------------------------------------------------------------------------
 
-void MapNode::drawParallaxLayer(Engine *e, const std::string& layerName, const ViewRect &rect) const
+void MapNode::drawParallaxLayer(Engine *e, const std::string& layerName, const ViewRect &rect, float transition) const
 {
     const Layer *layer = m_map->findLayer(layerName);
 
-    float parallax = 0.1;
-
-    float parallaxTransition = -rect.left * parallax;
-
-#if TEST
-    std::clog << rect.left << " | " << parallaxTransition;
-#endif
-
     ViewRect r = rect;
-    //r.left *= parallax;
-    //r.right *= parallax;
+    r.left  += transition;
+    r.right += transition;
 
     if (layer && layer->visible) {
         int x1 = static_cast<int>(std::floor(r.left));
@@ -90,19 +98,18 @@ void MapNode::drawParallaxLayer(Engine *e, const std::string& layerName, const V
         // For testing
         ++x1; --x2; ++y1; --y2;
 #endif
-        // Clamp coords
-        if (x1 < 0)               x1 = 0;
-        if (x2 > m_map->width())  x2 = m_map->width();
-        if (y1 < 0)               y1 = 0;
-        if (y2 > m_map->height()) y2 = m_map->height();
-
         for (int y = y1; y < y2; ++y) {
-            for (int x = x1; x < x2; ++x) {
-                const Tile *tile = layer->tiles[y * layer->width + x];
+            for (int x = x1; x < x2; ++x) {               
+                int tile_x = x % layer->width;
+                int tile_y = y % layer->height;
+                while (tile_x < 0) tile_x += layer->width;
+                while (tile_y < 0) tile_y += layer->height;
+
+                const Tile *tile = layer->tiles[tile_y * layer->width + tile_x];
 
                 if (tile) {
                     GLuint textureId = ResourceMgr::singleton().getTexture(tile->textureSource)->textureId();
-                    e->drawQuad(static_cast<float>(x) + parallaxTransition,
+                    e->drawQuad(static_cast<float>(x) - transition,
                                 static_cast<float>(m_map->height() - y - 1),
                                 1.0f,
                                 1.0f,

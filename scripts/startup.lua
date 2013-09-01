@@ -1,7 +1,7 @@
 -- configuration script
 ---[[
-screen_width = 800
-screen_height = 600
+screen_width = 1024
+screen_height = 768
 screen_full = false
 --]]
 

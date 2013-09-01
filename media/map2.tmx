@@ -6,9 +6,14 @@
  <tileset firstgid="229" name="minecraft_tiles_big" tilewidth="32" tileheight="32">
   <image source="minecraft_tiles_big.png" width="512" height="512"/>
  </tileset>
+ <layer name="clouds" width="70" height="36">
+  <data encoding="base64" compression="zlib">
+   eJzt1DkOgDAMRNHc/3BsJdtZcENFwWKSTKz/pCmRY+wkJQBKOktvGSyjZQpa863ZslhWy2bZX3z7tT9PTU/dUrz9laqr/h9ryT0/3h6/Wm+Puuj94Sr6Xf8q0l2IOmNvX7lmXPv/RtpdoAXqb2yt86m/RernO6nv11N/99HK/O4o9pFr51rf5VyzUtwBAAAAAGjVAWsth2U=
+  </data>
+ </layer>
  <layer name="back" width="70" height="36">
   <data encoding="base64" compression="zlib">
-   eJztl7lSw0AMhjV0vA4VdAq0HEPN2wVKro6zIj0QSq5nQTuxJmtj7WmvHY++mX9cONJq/2gPAyiKoiiKMgVeSW+kd9KS9DHCnH3U6OOT9EX6Jv2Qfh2/Da0vNGfX+UJzpvo8J52TLjLqC6HrfKE5U8e9Jt2QbvPLnBSPpCfS89CFjIQdx7u9YlWsuCRdFR7TBZJmpH1LBwXHX1TPe9JDwXF9IKx8YfXpy0v1dPWpYRfK92sThLUfub5I55qBvbDni1Dv09K96gJBXkexaz72XDskHQljD4npawS5X0LX/F31bDvX2vrEBmHtyTHpJKjy/uB6Efz7S9ucfHuEFNcEYVy9wiDUfWmKORXim+sgdn4YGLcdkbMLEP57Yfr5zJKrt3P3CITxrCEbhPrektLPnCNlfhw7pjVk6OJMwA5ih/RFul8gyP+3607SFr+Jvkj3CwR5XiF3Eo5P2SM4dihfzF1F+m5GkH0J+dbm+JS5mdhZYmwuW4535vxDiP+/7XOT4zfNFx8Ieb2cE29i1Zf22Cn7kjq3nNi+QVBfFEVRlHz+AGoalGU=
+   eJztl7lOxTAQRa/o+B0q6OZByyJq/g4o2TrWCn6MsV5GzwkZx7ET2w/Nka5SRDe2b8YbYBiGYRiGYRjALeuOdV+7I43xxHpmvdTuSGN8sD5ZX7U70ghHgXcnxXqx5YH1WLjNEMTasE49nRVs/6d7vrHeC7Y7BWGbi2jNXL67Z6hOHccoX69DCLs8cnMJ7WuShT9eQr9OS9dqCII+j+bO+bn72jnrQmm7Jq6uCXq9xM751+45tq+N1YkPYZfJJesqqufrIf0lTK8vY2OaWiM03xBCW7UiEPq5DCVcK/7hPJg7Por0Hc745hIQ/mbh6vnGU6i2c9cIQjtzyIfQX1tS6lm+kTI+8bY0hxxL7Am0gLdmLtr5gqD/75i7tu/fx1y08wVBH1fMmUT8KWuEeGvl4s4q2r2ZoOcSc9cWf8rYnHeT6M3lIPDO7X+E+f/b3zfFv2+5TEHIq+Ucv/NaLuPe/5xL6thyvGtDsFwMwzCMfH4Bri1Z4Q==
   </data>
  </layer>
  <layer name="ground" width="70" height="36">
