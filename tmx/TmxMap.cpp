@@ -88,6 +88,16 @@ bool Map::loadFromFile(const std::string& filename)
             tileset.tileHeight  = lexical_cast<int>(tileset_node->first_attribute("tileheight")->value());
             tileset.imageSource = tileset_node->first_node("image")->first_attribute("source")->value();
 
+            tileset.spacing = 0;
+            xml_attribute<> *spacing_attr = tileset_node->first_attribute("spacing");
+            if (spacing_attr)
+                tileset.spacing = lexical_cast<int>(spacing_attr->value());
+
+            tileset.margin = 0;
+            xml_attribute<> *margin_attr = tileset_node->first_attribute("margin");
+            if (margin_attr)
+                tileset.margin = lexical_cast<int>(margin_attr->value());
+
             xml_node<> *image_node = tileset_node->first_node("image");
             tileset.imageSource = image_node->first_attribute("source")->value();
             tileset.imageWidth  = lexical_cast<int>(image_node->first_attribute("width")->value());

@@ -27,6 +27,8 @@ class Tileset
     std::string imageSource;
     int imageWidth;
     int imageHeight;
+    int spacing;
+    int margin;
 };
 
 //------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="70" height="36" tilewidth="32" tileheight="32" backgroundcolor="#668cff">
- <tileset firstgid="1" name="TileKit" tilewidth="32" tileheight="32">
-  <image source="TileKit.png" width="384" height="608"/>
+ <tileset firstgid="1" name="TileKit-border" tilewidth="32" tileheight="32" spacing="2" margin="1">
+  <image source="TileKit-border.png" width="408" height="646"/>
  </tileset>
  <tileset firstgid="229" name="minecraft_tiles_big" tilewidth="32" tileheight="32">
   <image source="minecraft_tiles_big.png" width="512" height="512"/>

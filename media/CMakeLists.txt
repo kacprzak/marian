@@ -3,6 +3,7 @@ set ( media_FILES
   map2.tmx
   minecraft_tiles_big.png
   TileKit.png
+  TileKit-border.png
   MegaMan_001.png
   cegui
 )

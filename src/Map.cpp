@@ -188,9 +188,12 @@ void Map::rectForTile(int tileCoords[4], unsigned global_tile_id) const
     int local_x = local_id % width;
     int local_y = local_id / width;
   
+    int margin = tileset->margin;
+    int spacing = tileset->spacing;
+
     // Pixel coords (y pointing up)
-    int opengl_x = local_x * tileset->tileWidth;
-    int opengl_y = tileset->imageHeight - (local_y * tileset->tileHeight) - tileset->tileHeight;
+    int opengl_x = local_x * tileset->tileWidth + local_x * spacing + margin;
+    int opengl_y = tileset->imageHeight - (local_y * tileset->tileHeight) - tileset->tileHeight - local_y * spacing - margin;
   
     tileCoords[0] = opengl_x;
     tileCoords[1] = opengl_y;
