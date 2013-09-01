@@ -17,10 +17,13 @@ enum EventType {
 };
 
 enum InputCommand {
-    MOVE_RIGHT,
-    MOVE_LEFT,
-    MOVE_UP,
-    MOVE_DOWN,
+    MOVE_RIGHT_START,
+    MOVE_RIGHT_END,
+    MOVE_LEFT_START,
+    MOVE_LEFT_END,
+    MOVE_DOWN_START,
+    MOVE_DOWN_END,
+    JUMP,
     FIRE
 };
 

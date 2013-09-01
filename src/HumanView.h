@@ -2,9 +2,9 @@
 #define HUMANVIEW_H
 
 #include "GameView.h"
-#include "Map.h"
 #include "EventMgr.h"
 #include "graphics/MapNode.h"
+#include "input/KeyboardHandler.h"
 
 #include <map>
 
@@ -35,6 +35,8 @@ class HumanView : public GameView
     MapNode m_mapNode;
 
     std::map<ActorId, SpriteNode*> m_nodes;
+
+    KeyboardHandler *m_keyboardHandler;
 };
 
 #endif // HUMANVIEW_H

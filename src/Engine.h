@@ -16,6 +16,8 @@
 #include "GameLogic.h"
 #include "graphics/Image.h"
 
+//#define INPUT_INSPECTION_SUPPORT
+
 class EngineError : public std::exception
 {
  public:
@@ -76,7 +78,9 @@ class Engine
 
     void setBackgroundColor(int r, int g, int b);
 
+#ifdef INPUT_INSPECTION_SUPPORT
     bool isPressed(int keycode) const { return m_keys[keycode]; }
+#endif
 
     /** Screen size in pixels */
     int screenWidth() const  { return m_screenWidth; }
@@ -118,7 +122,9 @@ class Engine
 
     GameLogic *m_game;
 
+#ifdef INPUT_INSPECTION_SUPPORT
     bool m_keys[SDL_NUM_SCANCODES];
+#endif
     bool m_gui;
 };
 

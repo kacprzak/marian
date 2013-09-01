@@ -34,6 +34,7 @@ Game::Game()
     // Register event listeners
     elh.registerListener(ACTOR_COLLIDED, std::bind(&Game::handleActorCollided, this, std::placeholders::_1));
     //elh.registerListener(ACTOR_PHYSICS_STATE_CHANGED, std::bind(&Game::handleActorPhysicsStateChanged, this, std::placeholders::_1));
+    elh.registerListener(INPUT_COMMAND, std::bind(&Game::handleInputCommand, this, std::placeholders::_1));
 }
 
 //------------------------------------------------------------------------------
@@ -76,6 +77,22 @@ void Game::handleActorCollided(EventPtr event)
             pcsp->handleBeginContact(a.get(), e->m_actorBLimbData);
         else
             pcsp->handleEndContact(a.get(), e->m_actorBLimbData);
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void Game::handleInputCommand(EventPtr event)
+{
+    std::shared_ptr<ActorInputEvent> e = std::static_pointer_cast<ActorInputEvent>(event);
+
+    ActorPtr a = m_actors[e->m_actorId];
+
+    if (a && (a->category() == HERO)) {
+        auto hpcw = a->getComponent<PhysicsComponent>(PHYSICS);
+        if (auto hpcs = hpcw.lock()) {
+            hpcs->handleInputCommand(e->m_command);
+        }
     }
 }
 

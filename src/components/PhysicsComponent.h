@@ -6,6 +6,7 @@
 #include <Box2D/Box2D.h>
 
 #include "Actor.h"
+#include "EventType.h"
 
 enum ActorPhysicsStateId {
     STAND = 1,
@@ -90,6 +91,7 @@ class PhysicsComponent : public ActorComponent
     virtual void handleEndContact  (Actor * /*other*/,
                                     void * /*fixtureUD*/ = nullptr) {}
 
+    virtual void handleInputCommand(InputCommand /*command*/) {}
 
     ActorComponentId componentId() const { return PHYSICS; }
 

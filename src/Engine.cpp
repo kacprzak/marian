@@ -69,10 +69,12 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight,
         throw e;
     }
 
+#ifdef INPUT_INSPECTION_SUPPORT
     // Mark all keys as not pressed
     for (int i = 0; i < SDL_NUM_SCANCODES; ++i) {
         m_keys[i] = false;
     }
+#endif
 
     new ResourceMgr;
     ResourceMgr::singleton().setDataFolder("media/");
@@ -172,13 +174,17 @@ bool Engine::processEvents()
 
         switch (event.type) {
         case SDL_KEYUP:
+#ifdef INPUT_INSPECTION_SUPPORT
             m_keys[event.key.keysym.scancode] = false;
+#endif
             for (auto gv : m_game->gameViews()) {
                 keepRunning = gv->processInput(event);
             }
             return keepRunning;
         case SDL_KEYDOWN:
+#ifdef INPUT_INSPECTION_SUPPORT
             m_keys[event.key.keysym.scancode] = true;
+#endif
             if (event.key.keysym.scancode == SDL_SCANCODE_G) m_game->toggleDrawDebug();
             for (auto gv : m_game->gameViews()) {
                 keepRunning = gv->processInput(event);

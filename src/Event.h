@@ -81,7 +81,7 @@ class MoveEvent : public BaseEvent
  public:
     MoveEvent(ActorId actor, float x, float y, float angle = 0.0f)
         : BaseEvent(ACTOR_MOVED)
-        , m_actor(actor)
+        , m_actorId(actor)
         , m_x(x)
         , m_y(y)
         , m_angle(angle)
@@ -89,7 +89,7 @@ class MoveEvent : public BaseEvent
 
     const char *eventName() const override { return "ActorMoved"; }
 
-    ActorId m_actor;
+    ActorId m_actorId;
     float m_x;
     float m_y;
     float m_angle;
@@ -102,13 +102,13 @@ class PhysicsStateChangeEvent : public BaseEvent
  public:
     PhysicsStateChangeEvent(ActorId actor, ActorPhysicsStateId newState)
         : BaseEvent(ACTOR_PHYSICS_STATE_CHANGED)
-        , m_actor(actor)
+        , m_actorId(actor)
         , m_newState(newState)
     {}
 
     const char *eventName() const override { return "ActorPhysicsStateChanged"; }
 
-    ActorId m_actor;
+    ActorId m_actorId;
     ActorPhysicsStateId m_newState;
 };
 
@@ -119,7 +119,7 @@ class ActorCreatedEvent : public BaseEvent
 public:
     ActorCreatedEvent(ActorId actor, ActorCategory actorCategory, float x = 0.0f, float y = 0.0f)
         : BaseEvent(ACTOR_CREATED)
-        , m_actor(actor)
+        , m_actorId(actor)
         , m_actorCategory(actorCategory)
         , m_x(x)
         , m_y(y)
@@ -127,7 +127,7 @@ public:
 
     const char *eventName() const override { return "ActorCreated"; }
 
-    ActorId m_actor;
+    ActorId m_actorId;
     ActorCategory m_actorCategory;
     float m_x;
     float m_y;
@@ -140,12 +140,29 @@ class ActorDestroyedEvent : public BaseEvent
 public:
     ActorDestroyedEvent(ActorId actor)
         : BaseEvent(ACTOR_DESTROYED)
-        , m_actor(actor)
+        , m_actorId(actor)
     {}
 
     const char *eventName() const override { return "ActorDestroyed"; }
 
-    ActorId m_actor;
+    ActorId m_actorId;
+};
+
+//------------------------------------------------------------------------------
+
+class ActorInputEvent : public BaseEvent
+{
+public:
+    ActorInputEvent(ActorId actor, InputCommand command)
+        : BaseEvent(INPUT_COMMAND)
+        , m_actorId(actor)
+        , m_command(command)
+    {}
+
+    const char *eventName() const override { return "ActorInput"; }
+
+    ActorId m_actorId;
+    InputCommand m_command;
 };
 
 #endif // EVENT_H

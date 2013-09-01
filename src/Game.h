@@ -19,6 +19,7 @@ class Game : public BaseGameLogic
 
     void handleActorCollided(EventPtr event);
     //void handleActorPhysicsStateChanged(EventPtr event);
+    void handleInputCommand(EventPtr event);
 
     EventListenerHelper elh;
     FpsCounter m_fpsCounter;

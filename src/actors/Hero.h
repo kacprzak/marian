@@ -12,11 +12,8 @@ class Engine;
 class HeroRenderComponent : public RenderComponent
 {
  public:
-    HeroRenderComponent();
+    HeroRenderComponent() {}
 
-    void update(float elapsedTime) override;
-
-    float m_jumpTimeout;
 };
 
 
@@ -35,12 +32,20 @@ class HeroPhysicsComponent : public PhysicsComponent
 
     void changeState(ActorPhysicsStateId state);
 
+    void handleInputCommand(InputCommand command);
+
  private:
     int m_feetContacts;
     int m_heroStateId;
 
+    float m_jumpTimeout;
+
     float m_lastX;
     float m_lastY;
+
+    bool m_movingRight;
+    bool m_movingLeft;
+    bool m_jumping;
 };
 
 #endif

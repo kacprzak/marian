@@ -20,6 +20,9 @@ set( marian_HDRS
   graphics/HeroNode.h
   graphics/MapNode.h
 
+  input/KeyboardHandler.h
+  input/HeroController.h
+
   Console.h
   Engine.h
   EventType.h
@@ -38,7 +41,6 @@ set( marian_HDRS
   Box2dPhysicsEngine.h
   GuiMgr.h
   Map.h
-#  Playable.h
   ResourceMgr.h
   ScriptMgr.h
   Singleton.h
@@ -58,6 +60,8 @@ set( marian_SRCS
   graphics/SpriteNode.cpp
   graphics/HeroNode.cpp
   graphics/MapNode.cpp
+
+  input/HeroController.cpp
 
   Box2dPhysicsEngine.cpp
   Console.cpp

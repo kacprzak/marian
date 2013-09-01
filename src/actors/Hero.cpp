@@ -13,46 +13,6 @@
 #define FEET_SENSOR 1248
 
 
-//------------------------------------------------------------------------------
-
-HeroRenderComponent::HeroRenderComponent()
-{
-    m_jumpTimeout = JUMP_DELAY;
-}
-
-//------------------------------------------------------------------------------
-
-void HeroRenderComponent::update(float elapsedTime)
-{
-    auto whpc = m_owner->getComponent<HeroPhysicsComponent>(PHYSICS);
-    Engine& e = Engine::singleton();
-
-    if (auto shpc = whpc.lock()) {
-
-        if (e.isPressed(SDL_SCANCODE_RIGHT)) {
-            shpc->applyForceToCenter(10.0f, 0.0f);
-            //setFacingRight(true);
-        }
-
-        if (e.isPressed(SDL_SCANCODE_LEFT)) {
-            shpc->applyForceToCenter(-10.0f, 0.0f);
-            //setFacingRight(false);
-        }
-
-        if (e.isPressed(SDL_SCANCODE_UP)) {
-            if (shpc->isOnGround() && m_jumpTimeout <= 0.0f) {
-                shpc->applyLinearImpulse(0.0f, 5.0f);
-                m_jumpTimeout = JUMP_DELAY;
-            }
-        }
-    }
-
-    if (m_jumpTimeout > 0.0f)
-        m_jumpTimeout -= elapsedTime;
-}
-
-//==============================================================================
-
 HeroPhysicsComponent::HeroPhysicsComponent(GameLogic *game, float x, float y,
                                            float w, float h)
 {
@@ -100,9 +60,14 @@ HeroPhysicsComponent::HeroPhysicsComponent(GameLogic *game, float x, float y,
     // Other stuff
     m_feetContacts = 0;
     m_heroStateId = FALL;
+    m_jumpTimeout = JUMP_DELAY;
 
     m_lastX = posX();
     m_lastY = posY();
+
+    m_movingRight = false;
+    m_movingLeft = false;
+    m_jumping = false;
 }
 
 //------------------------------------------------------------------------------
@@ -133,8 +98,25 @@ void HeroPhysicsComponent::handleEndContact(Actor *other, void *fixtureUD)
 
 //------------------------------------------------------------------------------
 
-void HeroPhysicsComponent::update(float /*elapsedTime*/)
+void HeroPhysicsComponent::update(float elapsedTime)
 {
+    if (m_movingRight) {
+        applyForceToCenter(10.0f, 0.0f);
+    }
+
+    if (m_movingLeft) {
+        applyForceToCenter(-10.0f, 0.0f);
+    }
+
+    if (m_jumping) {
+        applyLinearImpulse(0.0f, 5.0f);
+        m_jumping = false;
+        m_jumpTimeout = JUMP_DELAY;
+    }
+
+
+    // Physical state management
+
     switch(m_heroStateId) {
     case FALL:
     {
@@ -176,6 +158,9 @@ void HeroPhysicsComponent::update(float /*elapsedTime*/)
         EventMgr::singleton().queueEvent(EventPtr(new MoveEvent(m_owner->id(), posX(), posY())));
     }
 
+    if (m_jumpTimeout > 0.0f)
+        m_jumpTimeout -= elapsedTime;
+
     m_lastX = posX();
     m_lastY = posY();
 }
@@ -187,5 +172,21 @@ void HeroPhysicsComponent::changeState(ActorPhysicsStateId state)
     m_heroStateId = state;
     // emit event
     EventMgr::singleton().queueEvent(EventPtr(new PhysicsStateChangeEvent(m_owner->id(), state)));
+}
+
+//------------------------------------------------------------------------------
+
+void HeroPhysicsComponent::handleInputCommand(InputCommand command)
+{
+    switch(command) {
+    case MOVE_RIGHT_START: m_movingRight = true;  break;
+    case MOVE_RIGHT_END:   m_movingRight = false; break;
+    case MOVE_LEFT_START:  m_movingLeft  = true;  break;
+    case MOVE_LEFT_END:    m_movingLeft  = false; break;
+    case MOVE_DOWN_START:  break;
+    case MOVE_DOWN_END:    break;
+    case JUMP:             if (isOnGround() && m_jumpTimeout <= 0.0f) m_jumping = true; break;
+    case FIRE:             break;
+    }
 }
 

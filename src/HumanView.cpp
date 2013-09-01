@@ -2,19 +2,17 @@
 #include "ResourceMgr.h"
 #include "Engine.h"
 #include "Util.h"
+#include "Map.h"
 
 #include "components/RenderComponent.h"
 #include "graphics/SpriteNode.h"
 #include "graphics/HeroNode.h"
 #include "graphics/MapNode.h"
-
-#define DIRTY_HACK 1
-#if DIRTY_HACK
-#include "Game.h"
-#endif
+#include "input/HeroController.h"
 
 HumanView::HumanView()
     : m_heroId(0)
+    , m_keyboardHandler(new HeroController)
 {
     std::shared_ptr<Map> map(new Map);
     // Read map from file
@@ -58,6 +56,8 @@ HumanView::HumanView()
 
             sprite->setActorId(actorId);
             m_nodes.insert(std::make_pair(actorId, sprite));
+
+            static_cast<HeroController *>(m_keyboardHandler)->setActor(actorId);
         }
     }
 
@@ -74,6 +74,8 @@ HumanView::~HumanView()
     for (const auto& pair : m_nodes) {
         delete pair.second;
     }
+
+    delete m_keyboardHandler;
 }
 
 //------------------------------------------------------------------------------
@@ -94,8 +96,10 @@ bool HumanView::processInput(const SDL_Event &event)
 {
     switch (event.type) {
     case SDL_KEYUP:
+        m_keyboardHandler->onKeyUp(event.key.keysym.scancode);
         break;
     case SDL_KEYDOWN:
+        m_keyboardHandler->onKeyDown(event.key.keysym.scancode);
         if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) return false;
         break;
     }
@@ -145,7 +149,7 @@ void HumanView::handleActorMoved(EventPtr event)
 
     //ActorPtr actor = m_actors[e->m_actor];
 
-    if (e->m_actor == m_heroId) {
+    if (e->m_actorId == m_heroId) {
         float x = e->m_x;
         float y = e->m_y;
 
@@ -162,7 +166,7 @@ void HumanView::handleActorMoved(EventPtr event)
         Engine::singleton().centerViewOn(x, y);
     }
 
-    SpriteNode *sprite = m_nodes[e->m_actor];
+    SpriteNode *sprite = m_nodes[e->m_actorId];
     if (sprite) {
         sprite->moveTo(e->m_x, e->m_y, e->m_angle);
     }
@@ -174,7 +178,7 @@ void HumanView::handleActorPhysicsStateChanged(EventPtr event)
 {
     auto e = std::static_pointer_cast<PhysicsStateChangeEvent>(event);
 
-    SpriteNode *sprite = m_nodes[e->m_actor];
+    SpriteNode *sprite = m_nodes[e->m_actorId];
     if (sprite) {
         sprite->changePhysicsState(e->m_newState);
     }
@@ -192,10 +196,10 @@ void HumanView::handleActorCreated(EventPtr event)
         const Texture *tex = ResourceMgr::singleton().getTexture("minecraft_tiles_big.png");
         Image img(tex, 256, 480, 288, 512);
 
-        sprite->setActorId(e->m_actor);
+        sprite->setActorId(e->m_actorId);
         sprite->setImage(img);
 
-        m_nodes.insert(std::make_pair(e->m_actor, sprite));
+        m_nodes.insert(std::make_pair(e->m_actorId, sprite));
     }
 }
 
@@ -205,9 +209,9 @@ void HumanView::handleActorDestroyed(EventPtr event)
 {
     auto e = std::static_pointer_cast<ActorDestroyedEvent>(event);
 
-    SpriteNode *sprite = m_nodes[e->m_actor];
+    SpriteNode *sprite = m_nodes[e->m_actorId];
     if (sprite) {
-        m_nodes.erase(e->m_actor);
+        m_nodes.erase(e->m_actorId);
         delete sprite;
     }
 }
