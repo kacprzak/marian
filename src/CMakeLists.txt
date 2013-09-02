@@ -23,6 +23,9 @@ set( marian_HDRS
   input/KeyboardHandler.h
   input/HeroController.h
 
+  network/Packet.h
+  network/NetSocket.h
+
   Console.h
   Engine.h
   EventType.h
@@ -62,6 +65,9 @@ set( marian_SRCS
   graphics/MapNode.cpp
 
   input/HeroController.cpp
+
+  network/Packet.cpp
+  network/NetSocket.cpp
 
   Box2dPhysicsEngine.cpp
   Console.cpp
