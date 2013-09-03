@@ -168,9 +168,8 @@ bool Engine::processEvents()
   
     while (SDL_PollEvent(&event)) {
         // Inject to gui
-        GuiMgr::singleton().processInput(event);
-
-        bool keepRunning = true;
+        bool intercepted = GuiMgr::singleton().processInput(event);
+        if (intercepted) continue;
 
         switch (event.type) {
         case SDL_KEYUP:
@@ -178,18 +177,21 @@ bool Engine::processEvents()
             m_keys[event.key.keysym.scancode] = false;
 #endif
             for (auto gv : m_game->gameViews()) {
-                keepRunning = gv->processInput(event);
+                gv->processInput(event);
             }
-            return keepRunning;
+            break;
+
         case SDL_KEYDOWN:
 #ifdef INPUT_INSPECTION_SUPPORT
             m_keys[event.key.keysym.scancode] = true;
 #endif
             if (event.key.keysym.scancode == SDL_SCANCODE_G) m_game->toggleDrawDebug();
+            if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) return false;
             for (auto gv : m_game->gameViews()) {
-                keepRunning = gv->processInput(event);
+                gv->processInput(event);
             }
-            return keepRunning;
+            break;
+
         case SDL_WINDOWEVENT:
         {
             switch (event.window.event) {
@@ -386,6 +388,7 @@ void Engine::initializeSDL()
 
     //SDL_ShowCursor(SDL_DISABLE);
     //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+    SDL_StopTextInput(); // Disable text input events when GUI is not visible
 
     std::clog << "SDL initialized.\n";
 }

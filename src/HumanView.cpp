@@ -101,7 +101,6 @@ bool HumanView::processInput(const SDL_Event &event)
         break;
     case SDL_KEYDOWN:
         m_keyboardHandler->onKeyDown(event.key.keysym.scancode);
-        if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) return false;
         break;
     }
     return true; // keep running

@@ -6,7 +6,7 @@
 #include <iostream>
 #include "Console.h"
 
-static CEGUI::uint SDLKeyToCEGUIKey(SDL_Scancode key);
+static CEGUI::uint SDLKeyToCEGUIKey(SDL_Keycode key);
 
 //------------------------------------------------------------------------------
 
@@ -68,6 +68,8 @@ GuiMgr::~GuiMgr()
 
 bool GuiMgr::processInput(const SDL_Event& e)
 {
+    bool interceptEvent = false;
+
     switch (e.type) {
         /* mouse motion handler */
     case SDL_MOUSEMOTION:
@@ -95,29 +97,44 @@ bool GuiMgr::processInput(const SDL_Event& e)
         /* key down */
     case SDL_KEYDOWN:
         {
-            CEGUI::uint kc = SDLKeyToCEGUIKey(e.key.keysym.scancode);
+            CEGUI::uint kc = SDLKeyToCEGUIKey(e.key.keysym.sym);
+
+            if (kc == CEGUI::Key::F12) {
+                static bool textInput = false;
+                textInput = !textInput;
+                if (textInput)
+                    SDL_StartTextInput();
+                else
+                    SDL_StopTextInput();
+            }
+
             if (Console::singletonPtr()) {
                 Console::singleton().handleKey(kc);
             }
 
             CEGUI::System::getSingleton().injectKeyDown(kc);
-
-            /* as for the character it's a litte more complicated.
-             * we'll use for translated unicode value.
-             * this is described in more detail below.
-             */
-            if ((e.key.keysym.sym & 0xFF80) == 0) {
-                CEGUI::System::getSingleton().injectChar(e.key.keysym.sym);
-            }
         }
         break;
 
         /* key up */
     case SDL_KEYUP:
         {
-            CEGUI::uint kc = SDLKeyToCEGUIKey(e.key.keysym.scancode);
+            CEGUI::uint kc = SDLKeyToCEGUIKey(e.key.keysym.sym);
             CEGUI::System::getSingleton().injectKeyUp(kc);
         }
+        break;
+
+    case SDL_TEXTINPUT:
+        {
+            const char *ch = e.text.text;
+            while (*ch != '\0') {
+                CEGUI::System::getSingleton().injectChar((unsigned int)*ch);
+                ch++;
+            }
+        }
+        break;
+
+    case SDL_TEXTEDITING:
         break;
 
     case SDL_WINDOWEVENT:
@@ -133,7 +150,10 @@ bool GuiMgr::processInput(const SDL_Event& e)
         }
     }
 
-    return true; // Keep running
+    if (Console::singleton().isVisible())
+        interceptEvent = true;
+
+    return interceptEvent; // was intercepted
 }
 
 //------------------------------------------------------------------------------
@@ -193,10 +213,10 @@ void GuiMgr::handle_mouse_up(Uint8 button)
 /************************************************************************
     Translate a SDLKey to the proper CEGUI::Key
 *************************************************************************/
-CEGUI::uint SDLKeyToCEGUIKey(SDL_Scancode key)
+CEGUI::uint SDLKeyToCEGUIKey(SDL_Keycode key)
 {
     using namespace CEGUI;
-    switch (SDL_SCANCODE_TO_KEYCODE(key)) {
+    switch (key) {
     case SDLK_BACKSPACE:    return Key::Backspace;
     case SDLK_TAB:          return Key::Tab;
     case SDLK_RETURN:       return Key::Return;
@@ -306,7 +326,7 @@ CEGUI::uint SDLKeyToCEGUIKey(SDL_Scancode key)
     case SDLK_SYSREQ:       return Key::SysRq;
     case SDLK_MENU:         return Key::AppMenu;
     case SDLK_POWER:        return Key::Power;
-    default:                return 0;
+    //default:                return 0;
     }
     return 0;
 }
