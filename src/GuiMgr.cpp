@@ -99,17 +99,19 @@ bool GuiMgr::processInput(const SDL_Event& e)
         {
             CEGUI::uint kc = SDLKeyToCEGUIKey(e.key.keysym.sym);
 
-            if (kc == CEGUI::Key::F12) {
-                static bool textInput = false;
-                textInput = !textInput;
-                if (textInput)
-                    SDL_StartTextInput();
-                else
-                    SDL_StopTextInput();
-            }
+            bool toogleConsole = (e.key.keysym.sym == SDLK_BACKQUOTE);
 
-            if (Console::singletonPtr()) {
-                Console::singleton().handleKey(kc);
+            Console *console = Console::singletonPtr();
+            if (console) {
+                if (toogleConsole && !console->isVisible()) {
+                    SDL_StartTextInput();
+                    console->setVisible(true);
+                } else if (toogleConsole && console->isVisible()) {
+                    console->setVisible(false);
+                    SDL_StopTextInput();
+                }
+
+                if (console->isVisible()) console->handleKey(kc);
             }
 
             CEGUI::System::getSingleton().injectKeyDown(kc);

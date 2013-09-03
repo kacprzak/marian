@@ -26,9 +26,6 @@ Console::~Console()
 void Console::handleKey(CEGUI::uint key)
 {
     switch (key) {
-    case CEGUI::Key::F12 :
-        toggleVisible();
-        break;
     case CEGUI::Key::ArrowUp :
         revertPreviousCommand();
         break;
@@ -101,6 +98,9 @@ bool Console::handle_SendButtonPressed(const CEGUI::EventArgs& /*e*/)
 
 void Console::parseText(CEGUI::String inMsg)
 {
+    if (inMsg.empty())
+        return;
+
     // Remember command
     m_previousCmd = inMsg;
 
