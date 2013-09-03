@@ -38,10 +38,10 @@ class NetSocket
     PacketList m_outList;   ///< packet to send
     PacketList m_inList;    ///< packets received
 
-    char m_recvBuff[RECV_BUFFER_SIZE];   ///< recieved data
-    unsigned int m_recvOfs, m_recvBegin; ///< tracking buffer
+    char m_recvBuff[RECV_BUFFER_SIZE];      ///< recieved data
+    unsigned int m_recvOffset, m_recvBegin; ///< tracking buffer
 
-    int m_sendOfs;          ///< tracking output buffer
+    int m_sendOffset;       ///< tracking output buffer
     unsigned int m_timeOut; ///< when will the socket timeout
     unsigned int m_ipaddr;  ///< IP of remote connection
 

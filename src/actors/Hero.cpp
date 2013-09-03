@@ -72,7 +72,7 @@ HeroPhysicsComponent::HeroPhysicsComponent(GameLogic *game, float x, float y,
 
 //------------------------------------------------------------------------------
 
-void HeroPhysicsComponent::handleBeginContact(Actor *other, void *fixtureUD)
+void HeroPhysicsComponent::handleBeginContact(ActorPtr other, void *fixtureUD)
 {
     if (fixtureUD == (void*)FEET_SENSOR) {
         ++m_feetContacts;
@@ -85,7 +85,7 @@ void HeroPhysicsComponent::handleBeginContact(Actor *other, void *fixtureUD)
 
 //------------------------------------------------------------------------------
 
-void HeroPhysicsComponent::handleEndContact(Actor *other, void *fixtureUD)
+void HeroPhysicsComponent::handleEndContact(ActorPtr other, void *fixtureUD)
 {
     if (fixtureUD == (void*)FEET_SENSOR) {
         --m_feetContacts;

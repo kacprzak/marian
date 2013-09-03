@@ -19,9 +19,9 @@ BaseGameLogic::~BaseGameLogic()
     while (it != std::end(m_actors)) {
         ActorPtr actor = it->second;
 
-        it = m_actors.erase(it);
         // Must be called to break cyclic references
         actor->destroy();
+        it = m_actors.erase(it);
     }
 
     m_physicsEngine->shutdown();
@@ -45,12 +45,12 @@ void BaseGameLogic::update(float elapsedTime)
     while (it != std::end(m_actors)) {
         ActorPtr actor = it->second;
         if (actor->dead()) {
-            it = m_actors.erase(it);
             // Must be called to break cyclic references
             actor->destroy();
 
             // Emit event
             EventMgr::singleton().queueEvent(EventPtr(new ActorDestroyedEvent(actor->id())));
+            it = m_actors.erase(it);
         } else {
             // Kill it if out of map
             if (!isOnMap(actor))

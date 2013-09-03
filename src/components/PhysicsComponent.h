@@ -86,9 +86,9 @@ class PhysicsComponent : public ActorComponent
      * @param other      object that contacts this object
      * @param fixtureUD  user data of fixture that collided with other
      */
-    virtual void handleBeginContact(Actor * /*other*/,
+    virtual void handleBeginContact(ActorPtr /*other*/,
                                     void * /*fixtureUD*/ = nullptr) {}
-    virtual void handleEndContact  (Actor * /*other*/,
+    virtual void handleEndContact  (ActorPtr /*other*/,
                                     void * /*fixtureUD*/ = nullptr) {}
 
     virtual void handleInputCommand(InputCommand /*command*/) {}

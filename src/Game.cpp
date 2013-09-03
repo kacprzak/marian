@@ -59,24 +59,24 @@ void Game::handleActorCollided(EventPtr event)
 {
     std::shared_ptr<CollisionEvent> e = std::static_pointer_cast<CollisionEvent>(event);
 
-    ActorPtr a = m_actors[e->m_actorA];
-    ActorPtr b = m_actors[e->m_actorB];
+    ActorPtr a = m_actors.at(e->m_actorA);
+    ActorPtr b = m_actors.at(e->m_actorB);
     CollisionEvent::Phase phase = e->m_phase;
 
     auto pcqpA = a->getComponent<PhysicsComponent>(PHYSICS);
     if (auto pcsp = pcqpA.lock()) {
         if (phase == CollisionEvent::BEGIN)
-            pcsp->handleBeginContact(b.get(), e->m_actorALimbData);
+            pcsp->handleBeginContact(b, e->m_actorALimbData);
         else
-            pcsp->handleEndContact(b.get(), e->m_actorALimbData);
+            pcsp->handleEndContact(b, e->m_actorALimbData);
     }
 
     auto pcqpB = b->getComponent<PhysicsComponent>(PHYSICS);
     if (auto pcsp = pcqpB.lock()) {
         if (phase == CollisionEvent::BEGIN)
-            pcsp->handleBeginContact(a.get(), e->m_actorBLimbData);
+            pcsp->handleBeginContact(a, e->m_actorBLimbData);
         else
-            pcsp->handleEndContact(a.get(), e->m_actorBLimbData);
+            pcsp->handleEndContact(a, e->m_actorBLimbData);
     }
 }
 
@@ -86,7 +86,12 @@ void Game::handleInputCommand(EventPtr event)
 {
     std::shared_ptr<ActorInputEvent> e = std::static_pointer_cast<ActorInputEvent>(event);
 
-    ActorPtr a = m_actors[e->m_actorId];
+    if(m_actors.find(e->m_actorId) == std::end(m_actors)) {
+        std::clog << "Game::handleInputCommand: There is no actor with id " << e->m_actorId;
+        return;
+    }
+
+    ActorPtr a = m_actors.at(e->m_actorId);
 
     if (a && (a->category() == HERO)) {
         auto hpcw = a->getComponent<PhysicsComponent>(PHYSICS);
