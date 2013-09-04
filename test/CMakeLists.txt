@@ -14,3 +14,9 @@ add_executable( eventmanager_test eventmanager_test.cpp ../src/EventMgr.cpp )
 target_link_libraries( eventmanager_test ${My_Boost_TEST_LIBS} )
 
 add_test(EventManager eventmanager_test)
+
+
+add_executable( logger_test logger_test.cpp )
+target_link_libraries( logger_test ${My_Boost_TEST_LIBS} )
+
+add_test(Logger logger_test)

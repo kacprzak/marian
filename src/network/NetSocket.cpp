@@ -33,7 +33,7 @@ bool NetSocket::connect(unsigned int ip, unsigned int port, bool forceCoalesce)
     // Create socket handle
     m_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (m_socket == -1) {
-        perror("socket");
+        PLOG << "socket";
         return false;
     }
 
@@ -48,6 +48,7 @@ bool NetSocket::connect(unsigned int ip, unsigned int port, bool forceCoalesce)
 
     // Connect!
     if (::connect(m_socket, (struct sockaddr *)&sa, sizeof(sa)) == -1) {
+        PLOG << "connect";
         close(m_socket);
         m_socket = -1;
         return false;

@@ -9,19 +9,17 @@ Actor::Actor(ActorId id, GameLogic *game)
     , m_game(game)
     , m_dead(false)
 {
-    DOUT( LOG << "new Actor: id = " << m_id << '\n' );
+    DBG( "new Actor: id = " << m_id  );
 }
 
 //------------------------------------------------------------------------------
 
 Actor::~Actor() {
-    DOUT( LOG << "delete Actor: id = " << m_id << " name = " << name() << '\n' );
+    DBG( "delete Actor: id = " << m_id << " name = " << name() );
 }
 
 //------------------------------------------------------------------------------
 
 void Actor::die() {
-    //DOUT( LOG << "Actor died: id = " << m_id << " name = " << name() << '\n' );
-
     m_dead = true;
 }
