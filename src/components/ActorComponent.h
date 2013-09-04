@@ -3,6 +3,7 @@
 #define ACTORCOMPONENT_H
 
 #include "ActorComponentId.h"
+
 #include <memory>
 
 class Actor;

@@ -5,6 +5,7 @@
 #include "EventType.h"
 #include "Event.h"
 #include "Singleton.h"
+
 #include <map>
 #include <list>
 #include <memory>

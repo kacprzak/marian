@@ -2,10 +2,11 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include "TmxMap.h"
+
+#include <boost/utility.hpp>
 #include <string>
 #include <vector>
-#include <boost/utility.hpp>
-#include "TmxMap.h"
 
 class Tile;
 class Layer;

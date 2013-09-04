@@ -4,7 +4,6 @@
 #include "Engine.h"
 #include "GameLogic.h"
 #include "ResourceMgr.h"
-#include <Box2D/Box2D.h>
 #include "Box2dPhysicsEngine.h"
 #include "EventMgr.h"
 

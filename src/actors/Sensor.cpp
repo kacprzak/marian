@@ -2,6 +2,7 @@
 #include "Sensor.h"
 
 #include "GameLogic.h"
+
 #include <Box2D/Box2D.h>
 
 SensorPhysicsComponent::SensorPhysicsComponent(GameLogic *game, const MapObject &obj)

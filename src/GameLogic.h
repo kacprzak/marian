@@ -1,12 +1,12 @@
 #ifndef GAMELOGIC_H
 #define GAMELOGIC_H
 
+#include "GameView.h"
+#include "PhysicsEngine.h"
+
 #include <boost/utility.hpp>
 #include <memory>
 #include <list>
-
-#include "GameView.h"
-#include "PhysicsEngine.h"
 
 class Engine;
 

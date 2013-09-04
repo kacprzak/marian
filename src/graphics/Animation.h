@@ -3,6 +3,7 @@
 #define ANIMATION_H
 
 #include "Image.h"
+
 #include <vector>
 
 class Animation

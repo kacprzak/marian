@@ -4,12 +4,13 @@
 #include "Actor.h"
 #include "ActorFactory.h"
 #include "ScriptMgr.h"
-#include "components/RenderComponent.h"
-#include "components/PhysicsComponent.h"
 #include "Box2dPhysicsEngine.h"
 #include "Map.h"
 #include "ResourceMgr.h"
 #include "Logger.h"
+
+#include "components/RenderComponent.h"
+#include "components/PhysicsComponent.h"
 
 Game::Game()
 {

@@ -3,6 +3,7 @@
 #define IMAGE_H
 
 #include "Texture.h"
+
 #include <string>
 #include <sstream>
 #include <ostream>

@@ -2,8 +2,9 @@
 #ifndef GUIMGR_H
 #define GUIMGR_H
 
-#include <SDL.h>
 #include "Singleton.h"
+
+#include <SDL.h>
 #include <CEGUI.h>
 
 class GuiMgr : public Singleton<GuiMgr>

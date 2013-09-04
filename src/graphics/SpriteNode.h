@@ -3,9 +3,7 @@
 
 #include "Actor.h"
 #include "Image.h"
-
-#include <memory>
-#include <components/PhysicsComponent.h>
+#include "components/PhysicsComponent.h"
 
 class SpriteNode
 {

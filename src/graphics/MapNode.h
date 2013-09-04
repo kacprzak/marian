@@ -2,8 +2,9 @@
 #define MAPNODE_H
 
 #include "Map.h"
-#include <memory>
 #include "Engine.h"
+
+#include <memory>
 
 class MapNode
 {

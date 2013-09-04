@@ -6,15 +6,16 @@
   #include <windows.h>
 #endif
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "GameLogic.h"
+#include "graphics/Image.h"
 
 #include <SDL.h>
 
+#include <GL/gl.h>
+#include <GL/glu.h>
+
 #include <string>
 #include <exception>
-#include "GameLogic.h"
-#include "graphics/Image.h"
 
 class EngineError : public std::exception
 {

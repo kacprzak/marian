@@ -3,9 +3,11 @@
 #define SCRIPT_MGR_H
 
 #include "Singleton.h"
+
+#include <lua.hpp>
+
 #include <exception>
 #include <string>
-#include <lua.hpp>
 
 //------------------------------------------------------------------------------
 

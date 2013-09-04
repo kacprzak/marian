@@ -1,6 +1,7 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "FpsCounter.h"
-#include <iostream>
+
+#include "Logger.h"
 
 FpsCounter::FpsCounter(float printInterval)
     : m_fpsInterval(printInterval)
@@ -15,7 +16,7 @@ void FpsCounter::update(float delta)
     m_fpsTimePassed += delta;
 
     if (m_fpsTimePassed > m_fpsInterval) {
-        std::cout << "fps: " << m_framesPassed / m_fpsTimePassed << std::endl;
+        LOG << "fps: " << m_framesPassed / m_fpsTimePassed << std::endl;
         m_framesPassed = 0;
         m_fpsTimePassed -= m_fpsInterval;
     }

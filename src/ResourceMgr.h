@@ -3,10 +3,10 @@
 #define RESOURCE_MGR_H
 
 #include "Singleton.h"
+#include "graphics/Texture.h"
+
 #include <map>
 #include <utility>
-
-#include "graphics/Texture.h"
 
 class ResourceMgr final : public Singleton<ResourceMgr>
 {

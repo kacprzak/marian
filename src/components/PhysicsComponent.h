@@ -3,10 +3,10 @@
 #define PHYSICSCOMPONENT_H
 
 #include "ActorComponent.h"
-#include <Box2D/Box2D.h>
-
 #include "Actor.h"
 #include "EventType.h"
+
+#include <Box2D/Box2D.h>
 
 enum ActorPhysicsStateId {
     STAND = 1,

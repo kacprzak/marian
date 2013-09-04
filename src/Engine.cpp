@@ -9,7 +9,6 @@
 #include <vector>
 #include <cstdlib> // exit
 #include <cmath> // floor
-#include <SDL.h>
 
 const double PI   = 3.141592653589793238462;
 const float  PI_F = 3.14159265358979f;

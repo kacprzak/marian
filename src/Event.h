@@ -2,12 +2,12 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-#include <EventType.h>
-#include <iostream>
-#include <memory>
-
+#include "EventType.h"
 #include "Actor.h"
 #include "components/PhysicsComponent.h"
+
+#include <iostream>
+#include <memory>
 
 class Event
 {

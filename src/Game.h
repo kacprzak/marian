@@ -3,7 +3,6 @@
 #define GAME_H
 
 #include "BaseGameLogic.h"
-#include <SDL.h>
 #include "FpsCounter.h"
 
 //#define PRINT_FPS

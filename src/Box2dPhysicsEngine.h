@@ -3,8 +3,9 @@
 #define BOX2DPHYSICSENGINE_H
 
 #include "PhysicsEngine.h"
-#include <Box2D/Box2D.h>
 #include "debugdraw/Render.h"
+
+#include <Box2D/Box2D.h>
 
 class ContactListener : public b2ContactListener
 {
