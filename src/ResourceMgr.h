@@ -5,22 +5,15 @@
 #include "Singleton.h"
 #include <map>
 #include <utility>
-#include <iostream>
+
 #include "graphics/Texture.h"
 
-class ResourceMgr : public Singleton<ResourceMgr>
+class ResourceMgr final : public Singleton<ResourceMgr>
 {
  public:
-    ResourceMgr()
-    {
-        std::clog << "ResourceMgr created\n";
-    }
+    ResourceMgr();
 
-    ~ResourceMgr()
-    {
-        release();
-        std::clog << "ResourceMgr destroyed\n";
-    }
+    ~ResourceMgr();
 
     // Set data folder ex: "media/"
     void setDataFolder(const std::string& folder);

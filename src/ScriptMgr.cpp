@@ -1,9 +1,9 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "ScriptMgr.h"
-#include <iostream>
 
 #include "BaseGameLogic.h"
 #include "Engine.h"
+#include "Logger.h"
 
 static int l_addBox(lua_State *L)
 {
@@ -26,7 +26,7 @@ ScriptMgr::ScriptMgr()
     // Expose functions to lua code
     lua_register(L, "addBox", l_addBox);
 
-    std::clog << "ScriptMgr created\n";
+    LOG << "ScriptMgr created\n";
 }
 
 //------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ ScriptMgr::~ScriptMgr()
 {
     lua_close(L);
 
-    std::clog << "ScriptMgr destroyed\n";
+    LOG << "ScriptMgr destroyed\n";
 }
 
 //------------------------------------------------------------------------------
@@ -53,7 +53,7 @@ bool ScriptMgr::executeString(const std::string& code)
         throw ScriptMgrError(lua_tostring(L, -1));
     }
 
-    std::clog << "Executed code: " << code << std::endl;
+    LOG << "Executed code: " << code << std::endl;
     return true;
 }
 
@@ -66,7 +66,7 @@ bool ScriptMgr::executeFile(const std::string& filename)
         throw ScriptMgrError(lua_tostring(L, -1));
     }
 
-    std::clog << "Executed script from: " << fullpath << std::endl;
+    LOG << "Executed script from: " << fullpath << std::endl;
     return true;
 }
 

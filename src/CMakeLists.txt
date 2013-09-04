@@ -26,6 +26,7 @@ set( marian_HDRS
   network/Packet.h
   network/NetSocket.h
 
+  Logger.h
   Console.h
   Engine.h
   EventType.h
@@ -76,6 +77,7 @@ set( marian_SRCS
   FpsCounter.cpp
   Game.cpp
   HumanView.cpp
+  Actor.cpp
   BaseGameLogic.cpp
   GuiMgr.cpp
   Map.cpp

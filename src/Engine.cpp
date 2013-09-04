@@ -1,15 +1,15 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "Engine.h"
 
-#include <iostream>
+#include "graphics/Texture.h"
+#include "ResourceMgr.h"
+#include "GuiMgr.h"
+#include "Logger.h"
+
+#include <vector>
 #include <cstdlib> // exit
 #include <cmath> // floor
 #include <SDL.h>
-
-#include "graphics/Texture.h"
-#include <vector>
-#include "ResourceMgr.h"
-#include "GuiMgr.h"
 
 const double PI   = 3.141592653589793238462;
 const float  PI_F = 3.14159265358979f;
@@ -28,7 +28,7 @@ void Engine::init(const std::string& title, int screenWidth, int screenHeight,
                   bool screenFull)
 {
     if (s_singleton) {
-        std::cerr << "Engine is initialized!";
+        LOG << "Engine is already initialized!";
         return;
     }
 
@@ -69,17 +69,8 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight,
         throw e;
     }
 
-#ifdef INPUT_INSPECTION_SUPPORT
-    // Mark all keys as not pressed
-    for (int i = 0; i < SDL_NUM_SCANCODES; ++i) {
-        m_keys[i] = false;
-    }
-#endif
-
     new ResourceMgr;
     ResourceMgr::singleton().setDataFolder("media/");
-    // Required by GUI
-    //SDL_EnableUNICODE(1);
 
     new GuiMgr;
 }
@@ -92,7 +83,7 @@ Engine::~Engine()
     // Release all resources
     delete ResourceMgr::singletonPtr();
 
-    std::clog << "Quitting SDL...\n";
+    LOG << "Quitting SDL...\n";
     SDL_DestroyWindow(m_window);
     SDL_Quit();
 }
@@ -173,18 +164,12 @@ bool Engine::processEvents()
 
         switch (event.type) {
         case SDL_KEYUP:
-#ifdef INPUT_INSPECTION_SUPPORT
-            m_keys[event.key.keysym.scancode] = false;
-#endif
             for (auto gv : m_game->gameViews()) {
                 gv->processInput(event);
             }
             break;
 
         case SDL_KEYDOWN:
-#ifdef INPUT_INSPECTION_SUPPORT
-            m_keys[event.key.keysym.scancode] = true;
-#endif
             if (event.key.keysym.scancode == SDL_SCANCODE_G) m_game->toggleDrawDebug();
             if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) return false;
             for (auto gv : m_game->gameViews()) {
@@ -336,7 +321,7 @@ void Engine::drawImage(const Image& image, float x, float y, float rotation) con
 
 void Engine::initializeSDL()
 {
-    std::clog << "Initializing SDL...\n";
+    LOG << "Initializing SDL...\n";
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         throw EngineError("Could not initialize SDL", SDL_GetError());  
@@ -390,14 +375,14 @@ void Engine::initializeSDL()
     //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
     SDL_StopTextInput(); // Disable text input events when GUI is not visible
 
-    std::clog << "SDL initialized.\n";
+    LOG << "SDL initialized.\n";
 }
 
 //------------------------------------------------------------------------------
 
 void Engine::initializeOpenGL()
 {
-    std::clog << "Initializing OpenGl...\n";
+    LOG << "Initializing OpenGl...\n";
     //float ratio = float(m_screenWidth) / float(m_screenHeight);
 
     glClearColor(0.0f, 0.0f, 0.0f, 0); // black

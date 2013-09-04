@@ -16,8 +16,6 @@
 #include "GameLogic.h"
 #include "graphics/Image.h"
 
-//#define INPUT_INSPECTION_SUPPORT
-
 class EngineError : public std::exception
 {
  public:
@@ -122,9 +120,6 @@ class Engine
 
     GameLogic *m_game;
 
-#ifdef INPUT_INSPECTION_SUPPORT
-    bool m_keys[SDL_NUM_SCANCODES];
-#endif
     bool m_gui;
 };
 

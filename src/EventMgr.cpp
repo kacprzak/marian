@@ -2,17 +2,19 @@
 
 #include "EventMgr.h"
 
+#include "Logger.h"
+
 EventMgr::EventMgr()
     : m_activeQueue(0)
 {
-    std::clog << "EventMgr created\n";
+    LOG << "EventMgr created\n";
 }
 
 //------------------------------------------------------------------------------
 
 EventMgr::~EventMgr()
 {
-    std::clog << "EventMgr destroyed\n";
+    LOG << "EventMgr destroyed\n";
 }
 
 //------------------------------------------------------------------------------

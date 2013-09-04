@@ -7,9 +7,9 @@
 #include "components/RenderComponent.h"
 #include "components/PhysicsComponent.h"
 #include "Box2dPhysicsEngine.h"
-
 #include "Map.h"
 #include "ResourceMgr.h"
+#include "Logger.h"
 
 Game::Game()
 {
@@ -49,8 +49,9 @@ void Game::initialize(Engine * /*e*/)
 void Game::update(float elapsedTime)
 {
     BaseGameLogic::update(elapsedTime);
-
+#ifdef PRINT_FPS
     m_fpsCounter.update(elapsedTime);
+#endif
 }
 
 //------------------------------------------------------------------------------
@@ -86,12 +87,14 @@ void Game::handleInputCommand(EventPtr event)
 {
     std::shared_ptr<ActorInputEvent> e = std::static_pointer_cast<ActorInputEvent>(event);
 
-    if(m_actors.find(e->m_actorId) == std::end(m_actors)) {
-        std::clog << "Game::handleInputCommand: There is no actor with id " << e->m_actorId;
+    auto it = m_actors.find(e->m_actorId);
+
+    if(it == std::end(m_actors)) {
+        LOG << "There is no actor with id " << e->m_actorId << '\n';
         return;
     }
 
-    ActorPtr a = m_actors.at(e->m_actorId);
+    ActorPtr a = it->second;
 
     if (a && (a->category() == HERO)) {
         auto hpcw = a->getComponent<PhysicsComponent>(PHYSICS);

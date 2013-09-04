@@ -1,11 +1,11 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "NetSocket.h"
 
+#include "Logger.h"
+
 #include <unistd.h> // close()
 #include <cstdio>
 #include <sys/ioctl.h>
-
-#include <iostream>
 
 NetSocket::NetSocket()
 {
@@ -140,7 +140,7 @@ void NetSocket::handleInput()
             break;
 
         if (packetSize > MAX_PACKET_SIZE) {
-            std::clog << "Buffer overruns!";
+            LOG << "Buffer overruns!";
             break;
         }
 

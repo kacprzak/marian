@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
-#include <iostream>
 
+#include "Logger.h"
 #include "ScriptMgr.h"
 #include "EventMgr.h"
 #include "Engine.h"
@@ -10,9 +10,9 @@
 
 void eventListener(EventPtr event)
 {
-    std::clog << "EVENT: " << event->eventName() << " {";
-    event->serialize(std::clog);
-    std::clog << " }"<< std::endl;
+    LOG << "EVENT: " << event->eventName() << " {";
+    event->serialize(LOG);
+    LOG << " }"<< std::endl;
 }
 
 int main(int /*argc*/, char * /*argv*/[])

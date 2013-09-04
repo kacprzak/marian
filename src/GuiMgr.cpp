@@ -1,10 +1,12 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "GuiMgr.h"
 
+#include "Console.h"
+#include "Logger.h"
+
 #include <CEGUI.h>
 #include <RendererModules/OpenGL/CEGUIOpenGLRenderer.h>
-#include <iostream>
-#include "Console.h"
+
 
 static CEGUI::uint SDLKeyToCEGUIKey(SDL_Keycode key);
 
@@ -47,7 +49,7 @@ GuiMgr::GuiMgr()
 
     CEGUI::System::getSingleton().setGUISheet(myRoot);
 
-    std::clog << "GuiMgr created\n";
+    LOG << "GuiMgr created\n";
 
     // Add Console window to gui
     Console *c = new Console;
@@ -61,7 +63,7 @@ GuiMgr::GuiMgr()
 GuiMgr::~GuiMgr()
 {
     delete Console::singletonPtr();
-    std::clog << "GuiMgr destroyed\n";
+    LOG << "GuiMgr destroyed\n";
 }
 
 //------------------------------------------------------------------------------

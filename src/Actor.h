@@ -6,7 +6,6 @@
 #include "components/ActorComponent.h"
 
 #include <string>
-#include <iostream>
 #include <map>
 #include <memory>
 
@@ -24,22 +23,9 @@ class Actor final
     typedef std::map<ActorComponentId, ActorComponentPtr> ComponentsMap;
 
  public:
-    Actor(ActorId id, GameLogic *game)
-        : m_id(id)
-        , m_game(game)
-        , m_dead(false)
-    {
-#ifndef NDEBUG
-        std::clog << "new Actor: id = " << m_id << '\n';
-#endif 
-    }
+    Actor(ActorId id, GameLogic *game);
 
-    ~Actor() {
-#ifndef NDEBUG
-        std::clog << "delete Actor: id = " << m_id
-                  << " name = " << name() << '\n';
-#endif 
-    }
+    ~Actor();
 
     void destroy() {
         m_components.clear();
@@ -55,13 +41,7 @@ class Actor final
             pair.second->update(elapsedTime);
     }
 
-    void die() {
-#ifndef NDEBUG
-        std::clog << "Actor died: id = " << m_id
-                  << " name = " << name() << '\n';
-#endif 
-        m_dead = true;
-    }
+    void die();
     bool dead() const { return m_dead; }
 
     void setName(const std::string& name) { m_name = name; }

@@ -1,8 +1,10 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "Console.h"
-#include <iostream>
-#include <limits>
+
 #include "ScriptMgr.h"
+#include "Logger.h"
+
+#include <limits>
 
 Console::Console()
 {
@@ -11,14 +13,14 @@ Console::Console()
     m_consoleVisible = true;
 
     registerHandlers();
-    std::clog << "Console created\n";
+    LOG << "Console created\n";
 }
 
 //------------------------------------------------------------------------------
 
 Console::~Console()
 {
-    std::clog << "Console destroyed\n";
+    LOG << "Console destroyed\n";
 }
 
 //------------------------------------------------------------------------------

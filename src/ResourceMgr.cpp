@@ -1,6 +1,23 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "ResourceMgr.h"
 
+#include "Logger.h"
+
+ResourceMgr::ResourceMgr()
+{
+    LOG << "ResourceMgr created\n";
+}
+
+//------------------------------------------------------------------------------
+
+ResourceMgr::~ResourceMgr()
+{
+    release();
+    LOG << "ResourceMgr destroyed\n";
+}
+
+//------------------------------------------------------------------------------
+
 void ResourceMgr::setDataFolder(const std::string& folder)
 {
     dataFolder = folder;
@@ -18,7 +35,7 @@ void ResourceMgr::release()
 bool ResourceMgr::addTexture(const std::string& filename)
 {
     if (m_textures.find(filename) != m_textures.end()) {
-        std::cerr << "Warning: Trying to double load " << filename << " texture!" << std::endl;
+        LOG_WARNING << "Warning: Trying to double load " << filename << " texture!" << std::endl;
         return false;
     }
 
@@ -26,13 +43,13 @@ bool ResourceMgr::addTexture(const std::string& filename)
     std::string fullpath = dataFolder + filename;
 
     if(!tex->loadFromFile(fullpath)) {
-        std::cerr << "Error: Unable to load " << filename << " texture!" << std::endl;
+        LOG_ERROR << "Error: Unable to load " << filename << " texture!" << std::endl;
         delete tex;
         return false;
     }
 
     m_textures.insert(std::make_pair(filename, tex));
-    std::cout << "Loaded texture from: " << fullpath << std::endl;
+    LOG << "Loaded texture from: " << fullpath << std::endl;
 
     return true;
 }

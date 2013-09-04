@@ -5,17 +5,18 @@
   #include <windows.h>
 #endif
 
+#include "EventMgr.h"
+#include "Logger.h"
+
 #include <GL/gl.h>
 #include <GL/glu.h>
-
-#include "EventMgr.h"
 
 #include <cassert>
 
 Box2dPhysicsEngine::Box2dPhysicsEngine()
     : m_world(nullptr)
 {
-    std::clog << "Box2dPhysicsEngine created\n";
+    LOG << "Box2dPhysicsEngine created\n";
 
     // Debug drawing
     m_debugDraw = new DebugDraw;
@@ -30,7 +31,7 @@ Box2dPhysicsEngine::~Box2dPhysicsEngine()
 
     delete m_debugDraw;
 
-    std::clog << "Box2dPhysicsEngine destroyed\n";
+    LOG << "Box2dPhysicsEngine destroyed\n";
 }
 
 //------------------------------------------------------------------------------
