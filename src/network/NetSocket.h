@@ -12,6 +12,8 @@
 
 class NetSocket
 {
+    friend class BaseSocketManager;
+
     typedef std::list<std::shared_ptr<Packet> > PacketList;
 
  public:
@@ -25,12 +27,13 @@ class NetSocket
     virtual int hasOutput() { return m_outList.empty(); }
     virtual void handleOutput();
     virtual void handleInput();
+    virtual void handleException() {}
     virtual void timeOut() { m_timeOut = 0; }
 
     int ipAdress() { return m_ipaddr; }
 
  protected:
-    int m_socket;
+    int m_socket;           ///< Socker file descriptor
     int m_id;               ///< Id given by manager
 
     int m_deleteFlag;

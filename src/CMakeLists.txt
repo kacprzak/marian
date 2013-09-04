@@ -25,6 +25,8 @@ set( marian_HDRS
 
   network/Packet.h
   network/NetSocket.h
+  network/ListenNetSocket.h
+  network/BaseSocketManager.h
 
   Logger.h
   Console.h
@@ -69,6 +71,8 @@ set( marian_SRCS
 
   network/Packet.cpp
   network/NetSocket.cpp
+  network/ListenNetSocket.cpp
+  network/BaseSocketManager.cpp
 
   Box2dPhysicsEngine.cpp
   Console.cpp

@@ -3,7 +3,7 @@
 
 #include "Logger.h"
 
-#include <unistd.h> // close()
+#include <unistd.h> // close
 #include <cstdio>
 #include <sys/ioctl.h>
 
