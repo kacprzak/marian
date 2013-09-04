@@ -11,8 +11,16 @@
 
 static std::clock_t startTime = std::clock();
 
+static const char *severMsg[] = {
+    "[DEBUG] ",
+    "[INFO]  ",
+    "[WARN]  ",
+    "[ERROR] ",
+    "[FATAL] "
+};
+
 // This will show CPU time! It is different from the actual time.
-#define _LOG_CLOCK  << std::setw(4) << (float(std::clock() - startTime) / CLOCKS_PER_SEC) << " "
+#define _LOG_CLOCK  << std::setw(4) << std::setprecision(2) << std::fixed << (float(std::clock() - startTime) / CLOCKS_PER_SEC) << " "
 
 #ifndef NDEBUG
 #define _LOG_EXTRA(f)  << "{" << std::setw(19) << f << "} "
@@ -20,23 +28,23 @@ static std::clock_t startTime = std::clock();
 #define _LOG_EXTRA(f)
 #endif
 
-#define LOG         std::clog << "[INFO]  "  _LOG_CLOCK _LOG_EXTRA(__func__)
+#define _LOG_DEBUG  std::cerr << severMsg[0]  _LOG_CLOCK _LOG_EXTRA(__func__)
 
-#define LOG_WARNING std::cerr << "[WARN]  "  _LOG_CLOCK _LOG_EXTRA(__func__)
+#define LOG         std::clog << severMsg[1]  _LOG_CLOCK _LOG_EXTRA(__func__)
 
-#define LOG_ERROR   std::cerr << "[ERROR] "  _LOG_CLOCK _LOG_EXTRA(__func__)
+#define LOG_WARNING std::cerr << severMsg[2]  _LOG_CLOCK _LOG_EXTRA(__func__)
 
-#define LOG_FATAL   std::cerr << "[FATAL] "  _LOG_CLOCK _LOG_EXTRA(__func__)
+#define LOG_ERROR   std::cerr << severMsg[3]  _LOG_CLOCK _LOG_EXTRA(__func__)
 
-#define _LOG_DEBUG  std::cerr << "[DEBUG] "  _LOG_CLOCK _LOG_EXTRA(__func__)
+#define LOG_FATAL   std::cerr << severMsg[4]  _LOG_CLOCK _LOG_EXTRA(__func__)
 
 class PerrorLogger {
  public:
     PerrorLogger(const char *func) {
         if (func)
-            std::cerr << "[ERROR] " _LOG_CLOCK _LOG_EXTRA(func);
+            std::cerr << severMsg[3] _LOG_CLOCK _LOG_EXTRA(func);
         else
-            std::cerr << "[ERROR] " _LOG_CLOCK;
+            std::cerr << severMsg[3] _LOG_CLOCK;
     }
 
     void operator<<(const char *msg) {
