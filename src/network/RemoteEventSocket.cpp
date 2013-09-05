@@ -30,11 +30,11 @@ void RemoteEventSocket::handleInput()
         int size = packet->getSize();
 
         // TODO: Try to do it with no new and delete
-        char *str = new char[size + 1];
+        static char str[MAX_PACKET_SIZE + 1];
+
         memcpy(str, buf, size);
         str[size] = '\0';
         std::istringstream in(str + sizeof(uint32));
-        delete [] str;
 
         unsigned short eventTypeVal;
         in >> eventTypeVal;
