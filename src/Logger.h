@@ -38,7 +38,7 @@ static const char *severMsg[] = {
 
 #define LOG_FATAL   std::cerr << severMsg[4]  _LOG_CLOCK _LOG_EXTRA(__func__)
 
-#define LOG_PACKAGE std::clog << "[PKG] " _LOG_CLOCK
+#define LOG_PACKET  std::clog << "[PACKET] " _LOG_CLOCK
 
 class PerrorLogger {
  public:

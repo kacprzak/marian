@@ -229,6 +229,6 @@ void NetSocket::logHelper(const char *data, int size, const char *msg, bool show
     if (!showPktSize)
         buf_ptr += sizeof(uint32);
 
-    LOG_PACKAGE << "SockId=" << m_id << " " << msg << " " << std::setw(2) << size << " bytes: "
-                << "|" << buf_str << "||" << buf_ptr << "|" << std::endl;
+    LOG_PACKET << "SockId=" << m_id << " " << msg << " " << std::setw(2) << size << " bytes: "
+               << "|" << buf_str << "||" << buf_ptr << "|" << std::endl;
 }
