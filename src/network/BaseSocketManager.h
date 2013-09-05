@@ -6,11 +6,13 @@
 
 #include <map>
 
+#define GAME_PORT 3456
+
 class BaseSocketManager : public Singleton<BaseSocketManager>
 {
 public:
     BaseSocketManager();
-    virtual ~BaseSocketManager() { shutdown(); }
+    virtual ~BaseSocketManager();
 
     bool init();
     void shutdown();

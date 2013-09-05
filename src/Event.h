@@ -17,6 +17,7 @@ class Event
     virtual EventType eventType() const = 0;
     virtual const char *eventName() const = 0;
     virtual void serialize(std::ostream& out) const = 0;
+    virtual void deserialize(std::istream& in) = 0;
 };
 
 typedef std::shared_ptr<Event> EventPtr;
@@ -33,6 +34,7 @@ class BaseEvent : public Event
     EventType eventType() const override { return m_type; }
     const char *eventName() const override { return "BaseEvent"; }
     void serialize(std::ostream& /*out*/) const override {}
+    void deserialize(std::istream& /*in*/) override {}
 
  private:
     EventType m_type;
@@ -88,7 +90,29 @@ class MoveEvent : public BaseEvent
         , m_angle(angle)
     {}
 
+    MoveEvent(std::istream& in)
+        : BaseEvent(ACTOR_MOVED)
+    {
+        deserialize(in);
+    }
+
     const char *eventName() const override { return "ActorMoved"; }
+
+    void serialize(std::ostream& out) const
+    {
+        out << m_actorId << " "
+            << m_x << " "
+            << m_y << " "
+            << m_angle;
+    }
+
+    void deserialize(std::istream& in)
+    {
+        in >> m_actorId;
+        in >> m_x;
+        in >> m_y;
+        in >> m_angle;
+    }
 
     ActorId m_actorId;
     float m_x;
@@ -107,7 +131,29 @@ class PhysicsStateChangeEvent : public BaseEvent
         , m_newState(newState)
     {}
 
+    PhysicsStateChangeEvent(std::istream& in)
+        : BaseEvent(ACTOR_PHYSICS_STATE_CHANGED)
+    {
+        deserialize(in);
+    }
+
     const char *eventName() const override { return "ActorPhysicsStateChanged"; }
+
+    void serialize(std::ostream& out) const
+    {
+        out << m_actorId << " "
+            << static_cast<unsigned short>(m_newState);
+    }
+
+    void deserialize(std::istream& in)
+    {
+        unsigned short newStateVal;
+
+        in >> m_actorId;
+        in >> newStateVal;
+
+        m_newState = ActorPhysicsStateId(newStateVal);
+    }
 
     ActorId m_actorId;
     ActorPhysicsStateId m_newState;
@@ -160,7 +206,29 @@ public:
         , m_command(command)
     {}
 
+    ActorInputEvent(std::istream& in)
+        : BaseEvent(INPUT_COMMAND)
+    {
+        deserialize(in);
+    }
+
     const char *eventName() const override { return "ActorInput"; }
+
+    void serialize(std::ostream& out) const
+    {
+        out << m_actorId << " "
+            << static_cast<unsigned short>(m_command);
+    }
+
+    void deserialize(std::istream& in)
+    {
+        unsigned short newCommandVal;
+
+        in >> m_actorId;
+        in >> newCommandVal;
+
+        m_command = InputCommand(newCommandVal);
+    }
 
     ActorId m_actorId;
     InputCommand m_command;

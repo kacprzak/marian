@@ -30,6 +30,9 @@ set( marian_HDRS
   network/ClientSocketManager.h
   network/RemoteEventSocket.h
   network/GameServerListenNetSocket.h
+  network/NetworkEventForwarder.h
+  network/RemoteGameView.h
+  network/RemoteGameLogic.cpp
 
   Logger.h
   Console.h
@@ -79,6 +82,9 @@ set( marian_SRCS
   network/ClientSocketManager.cpp
   network/RemoteEventSocket.cpp
   network/GameServerListenNetSocket.cpp
+  network/NetworkEventForwarder.cpp
+  network/RemoteGameView.cpp
+  network/RemoteGameLogic.cpp
 
   Box2dPhysicsEngine.cpp
   Console.cpp
@@ -119,6 +125,9 @@ add_executable( mariansrv server.cpp ${marian_HDRS} ${marian_SRCS} )
 set_target_properties( mariansrv PROPERTIES DEBUG_POSTFIX _d)
 target_link_libraries( mariansrv ${LINK_LIBS} )
 
+add_executable( mariancli client.cpp ${marian_HDRS} ${marian_SRCS} )
+set_target_properties( mariancli PROPERTIES DEBUG_POSTFIX _d)
+target_link_libraries( mariancli ${LINK_LIBS} )
 
 add_custom_target(run
     COMMAND ${CMAKE_BINARY_DIR}/marian_d

@@ -17,6 +17,14 @@ BaseSocketManager::BaseSocketManager()
 
 //------------------------------------------------------------------------------
 
+BaseSocketManager::~BaseSocketManager()
+{
+    shutdown();
+    LOG << "Data sent: " << m_outbound << " bytes | Data recv: " << m_inbound << " bytes" << std::endl;
+}
+
+//------------------------------------------------------------------------------
+
 bool BaseSocketManager::init()
 {
     // On Windows it is not so easy

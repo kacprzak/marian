@@ -115,6 +115,11 @@ void NetSocket::handleOutput()
         int len = static_cast<int>(packet->getSize()); // cast from ulong!
 
         int rc = ::send(m_socket, data + m_sendOffset, len - m_sendOffset, 0);
+
+        // Log
+        logHelper(data + m_sendOffset, rc, "send", false);
+        BaseSocketManager::singleton().addToOutbound(rc);
+
         if (rc > 0) {
             m_sendOffset += rc; // number of bytes sent
             sent = true;
@@ -137,7 +142,7 @@ void NetSocket::handleOutput()
 void NetSocket::handleInput()
 {
     bool pktReceived = false;
-    u_long packetSize = 0;
+    uint32 packetSize = 0;
 
     int rc = recv(m_socket, m_recvBuff + m_recvBegin + m_recvOffset, RECV_BUFFER_SIZE - (m_recvBegin + m_recvOffset), 0);
 
@@ -150,16 +155,17 @@ void NetSocket::handleInput()
     }
 
     // Log
-    logHelper(m_recvBuff + m_recvBegin + m_recvOffset, rc);
+    logHelper(m_recvBuff + m_recvBegin + m_recvOffset, rc, "recv", false);
+    BaseSocketManager::singleton().addToInbound(rc);
 
-    const int hdrSize = sizeof(u_long);
+    const int hdrSize = sizeof(uint32);
     // Data that was not processed
     unsigned int newData = m_recvOffset + rc;
     int processedData = 0;
 
     while (newData > hdrSize) {
         // There is packet size on buffer begin position
-        packetSize = *(reinterpret_cast<u_long*>(m_recvBuff + m_recvBegin));
+        packetSize = *(reinterpret_cast<uint32*>(m_recvBuff + m_recvBegin));
         packetSize = ntohl(packetSize);
 
         // If so, we heed to wait for more data.
@@ -199,26 +205,30 @@ void NetSocket::handleInput()
 
 //------------------------------------------------------------------------------
 
-void NetSocket::logHelper(const char *data, int size)
+void NetSocket::logHelper(const char *data, int size, const char *msg, bool showPktSize)
 {
     // debug data
-    char buf[20];
+    char buf[60];
     int buf_size = sizeof(buf);
 
     memset(buf, '\0', buf_size);
-    memcpy(buf, data, std::min(size, buf_size));
+    memcpy(buf, data, std::min(size, buf_size - 1));
 
     char buf_str[buf_size * 3 + 1];
     memset(buf_str, '\0', sizeof(buf_str));
 
     char* buf_ptr = buf_str;
-    for (int i = 0; i < std::min(size, buf_size); ++i)
+    for (int i = 0; i < std::min(size, buf_size - 1); ++i)
     {
         buf_ptr += sprintf(buf_ptr, "%02X:", buf[i]);
     }
     if (buf_ptr > buf_str)
         *(buf_ptr-1) = '\0';
 
-    LOG << "Sock Id=" << m_id << " recived " << size << " bytes: "
-        << "|" << buf << "|" << buf_str << "|" << std::endl;
+    buf_ptr = buf;
+    if (!showPktSize)
+        buf_ptr += sizeof(uint32);
+
+    LOG_PACKAGE << "SockId=" << m_id << " " << msg << " " << std::setw(2) << size << " bytes: "
+                << "|" << buf_str << "||" << buf_ptr << "|" << std::endl;
 }

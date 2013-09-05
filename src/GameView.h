@@ -19,6 +19,9 @@ class GameView : boost::noncopyable
     /**  Use these if you need Engine to create or clean stuff */
     virtual void initialize(Engine * /*e*/) {}
     virtual void cleanup(Engine * /*e*/) {}
+
+    /** Callbacks */
+    virtual void onAttach(int /*gameViewId*/, unsigned long /*actorId*/) {}
 };
 
 #endif // GAMEVIEW_H

@@ -23,16 +23,18 @@ class GameLogic : boost::noncopyable
     virtual void initialize(Engine * /*e*/) {}
     virtual void cleanup(Engine * /*e*/) {}
 
-    virtual PhysicsEngine *physicsEngine() = 0;
+    virtual PhysicsEngine *physicsEngine() { return nullptr; }
 
     GameViewList& gameViews() { return m_gameViews; }
 
-    void drawDebugData() { physicsEngine()->drawDebugData(); }
-    void toggleDrawDebug() { physicsEngine()->toggleDrawDebug(); }
+    void drawDebugData()   { if (physicsEngine()) physicsEngine()->drawDebugData();   }
+    void toggleDrawDebug() { if (physicsEngine()) physicsEngine()->toggleDrawDebug(); }
 
-    void attachView(std::shared_ptr<GameView> gameView)
+    void attachView(std::shared_ptr<GameView> gameView, ActorId actorId = 0)
     {
+        int viewId = m_gameViews.size();
         m_gameViews.push_back(gameView);
+        gameView->onAttach(viewId, actorId);
     }
 
 private:

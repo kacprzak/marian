@@ -6,21 +6,15 @@
 #include "Game.h"
 #include "HumanView.h"
 #include "ResourceMgr.h"
-#include "network/BaseSocketManager.h"
+#include "network/ClientSocketManager.h"
 #include "network/GameServerListenNetSocket.h"
-#include "network/RemoteGameView.h"
+#include "network/RemoteGameLogic.h"
 
 void eventListener(EventPtr event)
 {
     LOG << "EVENT: " << event->eventName() << " {";
     event->serialize(std::clog);
     std::clog << " }"<< std::endl;
-
-    // New client
-    auto e = std::static_pointer_cast<RemoteClientEvent>(event);
-
-    std::shared_ptr<GameView> view(new RemoteGameView(e->m_socketId));
-    Engine::singleton().game()->attachView(view);
 }
 
 int main(int /*argc*/, char * /*argv*/[])
@@ -35,17 +29,20 @@ int main(int /*argc*/, char * /*argv*/[])
     bool fullScreen  = sm.getGlobalBool("screen_full");
 
     new EventMgr;
-    EventMgr::singleton().addListener(REMOTE_CLIENT, EventListenerPtr(new EventListener(eventListener)));
+    //EventMgr::singleton().addListener(REMOTE_CLIENT, EventListenerPtr(new EventListener(eventListener)));
 
-    BaseSocketManager *bsm = new BaseSocketManager;
+    const char *gameServer = "localhost";
+    ClientSocketManager *bsm = new ClientSocketManager(gameServer, GAME_PORT);
     bsm->init();
-    GameServerListenNetSocket *gslns = new GameServerListenNetSocket(GAME_PORT);
-    bsm->addSocket(gslns);
+    int socketId = bsm->connect();
+    if (socketId == -1) {
+        LOG << "Unable to connect to: " << gameServer << std::endl;
+    }
 
-    Engine::init("Marian Srv", screenWidth, screenHeight, fullScreen);
+    Engine::init("Marian Cli", screenWidth, screenHeight, fullScreen);
 
     std::shared_ptr<GameView> view(new HumanView);
-    Game *game = new Game;
+    GameLogic *game = new RemoteGameLogic(socketId);
     game->attachView(view);
 
     Engine::singleton().mainLoop(game);
@@ -54,7 +51,7 @@ int main(int /*argc*/, char * /*argv*/[])
     view.reset(); // Check this!
     Engine::shutdown();
 
-    delete BaseSocketManager::singletonPtr();
+    delete ClientSocketManager::singletonPtr();
     delete ResourceMgr::singletonPtr();
     delete EventMgr::singletonPtr();
     delete ScriptMgr::singletonPtr();
