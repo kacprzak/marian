@@ -29,7 +29,6 @@ void RemoteEventSocket::handleInput()
         const char *buf = packet->getData();
         int size = packet->getSize();
 
-        // TODO: Try to do it with no new and delete
         static char str[MAX_PACKET_SIZE + 1];
 
         memcpy(str, buf, size);
