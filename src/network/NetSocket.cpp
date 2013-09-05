@@ -2,6 +2,7 @@
 #include "NetSocket.h"
 
 #include "Logger.h"
+#include "BaseSocketManager.h"
 
 #include <unistd.h> // close
 #include <cstdio>
@@ -16,6 +17,28 @@ NetSocket::NetSocket()
     m_recvOffset = m_recvBegin = 0;
     m_internal = 0;
     //m_bBinaryProtocol = 1;
+}
+
+NetSocket::NetSocket(int new_sock, unsigned int hostIp)
+{
+    m_socket = new_sock;
+    m_deleteFlag = 0;
+    m_sendOffset = 0;
+    m_timeOut = 0;
+    m_recvOffset = m_recvBegin = 0;
+    m_internal = 0;
+
+    m_timeCreated = std::time(NULL);
+    m_ipaddr = hostIp;
+
+    m_internal = BaseSocketManager::singleton().isInternal(hostIp);
+
+    struct linger ling;
+    ling.l_onoff = 0;
+    ling.l_linger = 0;
+    if (setsockopt(new_sock, SOL_SOCKET, SO_LINGER, &ling, sizeof(ling)) == -1) {
+        PLOG << "setsockopt";
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -84,7 +107,7 @@ void NetSocket::handleOutput()
     bool sent = false;
     do {
         // There must be something to send
-        assert(!m_outList.empty());
+        //assert(!m_outList.empty());
 
         std::shared_ptr<Packet> packet = *(m_outList.begin());
 
@@ -126,6 +149,9 @@ void NetSocket::handleInput()
         return;
     }
 
+    // Log
+    logHelper(m_recvBuff + m_recvBegin + m_recvOffset, rc);
+
     const int hdrSize = sizeof(u_long);
     // Data that was not processed
     unsigned int newData = m_recvOffset + rc;
@@ -141,7 +167,7 @@ void NetSocket::handleInput()
             break;
 
         if (packetSize > MAX_PACKET_SIZE) {
-            LOG << "Buffer overruns!";
+            LOG_FATAL << "Buffer overruns!";
             break;
         }
 
@@ -169,4 +195,30 @@ void NetSocket::handleInput()
             }
         }
     }
+}
+
+//------------------------------------------------------------------------------
+
+void NetSocket::logHelper(const char *data, int size)
+{
+    // debug data
+    char buf[20];
+    int buf_size = sizeof(buf);
+
+    memset(buf, '\0', buf_size);
+    memcpy(buf, data, std::min(size, buf_size));
+
+    char buf_str[buf_size * 3 + 1];
+    memset(buf_str, '\0', sizeof(buf_str));
+
+    char* buf_ptr = buf_str;
+    for (int i = 0; i < std::min(size, buf_size); ++i)
+    {
+        buf_ptr += sprintf(buf_ptr, "%02X:", buf[i]);
+    }
+    if (buf_ptr > buf_str)
+        *(buf_ptr-1) = '\0';
+
+    LOG << "Sock Id=" << m_id << " recived " << size << " bytes: "
+        << "|" << buf << "|" << buf_str << "|" << std::endl;
 }

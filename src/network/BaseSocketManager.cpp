@@ -73,7 +73,7 @@ bool BaseSocketManager::send(int sockId, std::shared_ptr<Packet> packet)
 
 //------------------------------------------------------------------------------
 
-void BaseSocketManager::doSelect(int pauseMicroSecs, bool handleInput)
+void BaseSocketManager::select(int pauseMicroSecs, bool handleInput)
 {
     // How long to wait
     timeval tv;
@@ -198,7 +198,7 @@ const char *BaseSocketManager::getHostByAddr(unsigned int ip)
 
     struct hostent *hostEnt = ::gethostbyaddr((const char*)&netip, sizeof(netip), PF_INET);
 
-    if (!hostEnt) {
+    if (hostEnt == NULL) {
         PLOG << "gethostbyaddr";
         return nullptr;
     }

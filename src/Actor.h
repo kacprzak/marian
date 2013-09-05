@@ -10,12 +10,16 @@
 #include <memory>
 
 class GameLogic;
-//class ActorComponent;
 
 typedef unsigned long ActorId;
 typedef std::shared_ptr<Actor> ActorPtr;
 typedef std::shared_ptr<ActorComponent> ActorComponentPtr;
 
+/**
+ * @brief Game entity.
+ *
+ * Represents game objects like NPCs, powerups, bullets, static walls.
+ */
 class Actor final
 {
     friend class ActorFactory;
@@ -63,11 +67,11 @@ class Actor final
 
  protected:
     ActorId       m_id;
-    GameLogic    *m_game;
+    GameLogic    *m_game;           ///< Owner
     ActorCategory m_category; 
     ComponentsMap m_components;
-    bool          m_dead;
-    std::string   m_name;
+    bool          m_dead;           ///< Flag indicating that this actor should be deleted by GameLogic
+    std::string   m_name;           ///< Name used in debug
 
  private:
     // Should be called only by ActorFactory

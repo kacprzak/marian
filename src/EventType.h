@@ -13,7 +13,9 @@ enum EventType {
     GAME_STARTED,
     GAME_FINISHED,
 
-    INPUT_COMMAND
+    INPUT_COMMAND,
+
+    REMOTE_CLIENT
 };
 
 enum InputCommand {

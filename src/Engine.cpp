@@ -5,6 +5,7 @@
 #include "ResourceMgr.h"
 #include "GuiMgr.h"
 #include "Logger.h"
+#include "network/BaseSocketManager.h"
 
 #include <vector>
 #include <cstdlib> // exit
@@ -105,7 +106,7 @@ void Engine::mainLoop(GameLogic *game)
         if (!processEvents())
             break;
         if (m_appActive) {
-            if (m_inputFocus && delta > 0.0f) {
+            if (/*m_inputFocus &&*/ delta > 0.0f) {
                 while (delta > DELTA_MAX) {
                     update(DELTA_MAX);
                     delta -= DELTA_MAX;
@@ -210,6 +211,10 @@ void Engine::update(float elapsedTime)
         gv->update(elapsedTime);
     // Update gui
     GuiMgr::singleton().update(elapsedTime);
+
+    BaseSocketManager *sm = BaseSocketManager::singletonPtr();
+    if (sm)
+        sm->select(20);
 }
 
 //------------------------------------------------------------------------------

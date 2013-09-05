@@ -19,7 +19,7 @@ public:
     void removeSocket(NetSocket *socket);
 
     bool send(int sockId, std::shared_ptr<Packet> packet);
-    void doSelect(int pauseMicroSecs, bool handleInput = true);
+    void select(int pauseMicroSecs, bool handleInput = true);
 
     void setSubnet(unsigned int subnet, unsigned int subnetMask) {
         m_subnet = subnet;

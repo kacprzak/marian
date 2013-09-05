@@ -27,6 +27,9 @@ set( marian_HDRS
   network/NetSocket.h
   network/ListenNetSocket.h
   network/BaseSocketManager.h
+  network/ClientSocketManager.h
+  network/RemoteEventSocket.h
+  network/GameServerListenNetSocket.h
 
   Logger.h
   Console.h
@@ -73,6 +76,9 @@ set( marian_SRCS
   network/NetSocket.cpp
   network/ListenNetSocket.cpp
   network/BaseSocketManager.cpp
+  network/ClientSocketManager.cpp
+  network/RemoteEventSocket.cpp
+  network/GameServerListenNetSocket.cpp
 
   Box2dPhysicsEngine.cpp
   Console.cpp
@@ -88,18 +94,11 @@ set( marian_SRCS
   ResourceMgr.cpp
   ScriptMgr.cpp
   Util.cpp
-  main.cpp
 
   debugdraw/Render.cpp
 )
 
-add_executable( marian
-  ${marian_HDRS} ${marian_SRCS}
-)
-
-set_target_properties( marian PROPERTIES DEBUG_POSTFIX _d)
-
-target_link_libraries( marian
+set( LINK_LIBS
   tmx
   ${BOX2D_LIBRARY}
   ${SDL2_LIBRARY}
@@ -111,6 +110,15 @@ target_link_libraries( marian
 #  ${GLUT_LIBRARY}
   ${CEGUI_LIBRARY}
 )
+
+add_executable( marian main.cpp ${marian_HDRS} ${marian_SRCS} )
+set_target_properties( marian PROPERTIES DEBUG_POSTFIX _d)
+target_link_libraries( marian ${LINK_LIBS} )
+
+add_executable( mariansrv server.cpp ${marian_HDRS} ${marian_SRCS} )
+set_target_properties( mariansrv PROPERTIES DEBUG_POSTFIX _d)
+target_link_libraries( mariansrv ${LINK_LIBS} )
+
 
 add_custom_target(run
     COMMAND ${CMAKE_BINARY_DIR}/marian_d

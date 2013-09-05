@@ -5,6 +5,7 @@
 #include "EventType.h"
 #include "Actor.h"
 #include "components/PhysicsComponent.h"
+#include "network/BaseSocketManager.h"
 
 #include <iostream>
 #include <memory>
@@ -163,6 +164,28 @@ public:
 
     ActorId m_actorId;
     InputCommand m_command;
+};
+
+//------------------------------------------------------------------------------
+
+class RemoteClientEvent : public BaseEvent
+{
+public:
+    RemoteClientEvent(int socketId, int ip)
+        : BaseEvent(REMOTE_CLIENT)
+        , m_socketId(socketId)
+        , m_ip(ip)
+    {}
+
+    const char *eventName() const override { return "RemoteClient"; }
+
+    void serialize(std::ostream& out) const
+    {
+        out << "socketId: " << m_socketId << " ip: " << BaseSocketManager::singleton().getHostByAddr(m_ip);
+    }
+
+    int m_socketId;
+    int m_ip;
 };
 
 #endif // EVENT_H

@@ -18,13 +18,14 @@ class NetSocket
 
  public:
     NetSocket();
+    NetSocket(int newSock, unsigned int hostIp);
     virtual ~NetSocket();
 
     bool connect(unsigned int ip, unsigned int port, bool forceCoalesce = false);
     void setBlocking(bool blocking);
     void send(std::shared_ptr<Packet> packet, bool clearTimeout = true);
 
-    virtual int hasOutput() { return m_outList.empty(); }
+    virtual int hasOutput() { return !m_outList.empty(); }
     virtual void handleOutput();
     virtual void handleInput();
     virtual void handleException() {}
@@ -50,6 +51,9 @@ class NetSocket
 
     int m_internal;         ///< remote IP internal or external
     int m_timeCreated;      ///< socket creation time
+
+ private:
+    void logHelper(const char *data, int size);
 };
 
 #endif // NETSOCKET_H
