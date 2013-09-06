@@ -158,13 +158,13 @@ void NetSocket::handleInput()
     logHelper(m_recvBuff + m_recvBegin + m_recvOffset, rc, "recv", false);
     BaseSocketManager::singleton().addToInbound(rc);
 
-    const int hdrSize = sizeof(uint32);
+    const unsigned int hdrSize = sizeof(uint32);
     // Data that was not processed
     unsigned int newData = m_recvOffset + rc;
     int processedData = 0;
 
     while (newData > hdrSize) {
-        // There is packet size on buffer begin position
+        // There is packet size value on buffer begin position
         packetSize = *(reinterpret_cast<uint32*>(m_recvBuff + m_recvBegin));
         packetSize = ntohl(packetSize);
 

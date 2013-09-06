@@ -3,6 +3,8 @@
 
 #include "BaseSocketManager.h"
 
+#include <string>
+
 class ClientSocketManager : public BaseSocketManager
 {
     typedef BaseSocketManager super;
