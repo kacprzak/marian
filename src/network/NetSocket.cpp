@@ -5,7 +5,6 @@
 #include "BaseSocketManager.h"
 
 #include <unistd.h> // close
-#include <cstdio>
 #include <sys/ioctl.h>
 
 NetSocket::NetSocket()
@@ -117,7 +116,7 @@ void NetSocket::handleOutput()
         int rc = ::send(m_socket, data + m_sendOffset, len - m_sendOffset, 0);
 
         // Log
-        logHelper(data + m_sendOffset, rc, "send", false);
+        LOG_PACKET(m_id, data + m_sendOffset, rc, "send");
         BaseSocketManager::singleton().addToOutbound(rc);
 
         if (rc > 0) {
@@ -155,7 +154,7 @@ void NetSocket::handleInput()
     }
 
     // Log
-    logHelper(m_recvBuff + m_recvBegin + m_recvOffset, rc, "recv", false);
+    LOG_PACKET(m_id, m_recvBuff + m_recvBegin + m_recvOffset, rc, "recv");
     BaseSocketManager::singleton().addToInbound(rc);
 
     const unsigned int hdrSize = sizeof(uint32);
@@ -204,31 +203,3 @@ void NetSocket::handleInput()
 }
 
 //------------------------------------------------------------------------------
-
-void NetSocket::logHelper(const char *data, int size, const char *msg, bool showPktSize)
-{
-    // debug data
-    char buf[60];
-    int buf_size = sizeof(buf);
-
-    memset(buf, '\0', buf_size);
-    memcpy(buf, data, std::min(size, buf_size - 1));
-
-    char buf_str[buf_size * 3 + 1];
-    memset(buf_str, '\0', sizeof(buf_str));
-
-    char* buf_ptr = buf_str;
-    for (int i = 0; i < std::min(size, buf_size - 1); ++i)
-    {
-        buf_ptr += sprintf(buf_ptr, "%02X:", buf[i]);
-    }
-    if (buf_ptr > buf_str)
-        *(buf_ptr-1) = '\0';
-
-    buf_ptr = buf;
-    if (!showPktSize)
-        buf_ptr += sizeof(uint32);
-
-    LOG_PACKET << "SockId=" << m_id << " " << msg << " " << std::setw(2) << size << " bytes: "
-               << "|" << buf_str << "||" << buf_ptr << "|" << std::endl;
-}

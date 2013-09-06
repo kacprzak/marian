@@ -51,9 +51,6 @@ class NetSocket
 
     int m_internal;         ///< remote IP internal or external
     int m_timeCreated;      ///< socket creation time
-
- private:
-    void logHelper(const char *data, int size, const char *msg, bool showPktSize = true);
 };
 
 #endif // NETSOCKET_H

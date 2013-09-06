@@ -86,6 +86,7 @@ set( marian_SRCS
   network/RemoteGameView.cpp
   network/RemoteGameLogic.cpp
 
+  Logger.cpp
   Box2dPhysicsEngine.cpp
   Console.cpp
   Engine.cpp

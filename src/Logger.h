@@ -19,6 +19,9 @@ static const char *severMsg[] = {
     "[FATAL] "
 };
 
+void logHelper(int sockId, const char *data,
+               unsigned int size, const char *msg);
+
 // This will show CPU time! It is different from the actual time.
 #define _LOG_CLOCK  << std::setw(4) << std::setprecision(2) << std::fixed << (float(std::clock() - startTime) / CLOCKS_PER_SEC) << " "
 
@@ -38,7 +41,11 @@ static const char *severMsg[] = {
 
 #define LOG_FATAL   std::cerr << severMsg[4]  _LOG_CLOCK _LOG_EXTRA(__func__)
 
-#define LOG_PACKET  std::clog << "[PACKET] " _LOG_CLOCK
+#define LOG_PACKET(sockId, data, size, msg) \
+    do { \
+        std::clog << "[PACKET] " _LOG_CLOCK; \
+        logHelper(sockId, data, size, msg);\
+    } while (0)
 
 class PerrorLogger {
  public:
