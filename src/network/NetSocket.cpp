@@ -6,6 +6,7 @@
 
 #include <unistd.h> // close
 #include <sys/ioctl.h>
+#include <netinet/tcp.h> // TCP_NODELAY
 
 NetSocket::NetSocket()
 {
@@ -16,6 +17,8 @@ NetSocket::NetSocket()
     m_recvOffset = m_recvBegin = 0;
     m_internal = 0;
     //m_bBinaryProtocol = 1;
+
+    LOG << "new NetSocket sock_fd=" << m_socket << std::endl;
 }
 
 NetSocket::NetSocket(int new_sock, unsigned int hostIp)
@@ -38,12 +41,16 @@ NetSocket::NetSocket(int new_sock, unsigned int hostIp)
     if (setsockopt(new_sock, SOL_SOCKET, SO_LINGER, &ling, sizeof(ling)) == -1) {
         PLOG << "setsockopt";
     }
+
+    LOG << "new NetSocket sock_fd=" << m_socket << std::endl;
 }
 
 //------------------------------------------------------------------------------
 
 NetSocket::~NetSocket()
 {
+    LOG << "delete NetSocket sock_fd=" << m_socket << std::endl;
+
     if (m_socket != -1)
         close(m_socket);
 }
@@ -59,8 +66,12 @@ bool NetSocket::connect(unsigned int ip, unsigned int port, bool forceCoalesce)
         return false;
     }
 
-    if (forceCoalesce) {
-        // TODO
+    // In this case turn off Nagle algorithm if desired
+    if (!forceCoalesce) {
+        int x = 1;
+        if (setsockopt(m_socket, IPPROTO_TCP, TCP_NODELAY, (void *)&x, sizeof(x))) {
+            PLOG << "setsockopt";
+        }
     }
 
     struct sockaddr_in sa;
@@ -116,13 +127,14 @@ void NetSocket::handleOutput()
         int rc = ::send(m_socket, data + m_sendOffset, len - m_sendOffset, 0);
 
         // Log
-        LOG_PACKET(m_id, data + m_sendOffset, rc, "send");
+        //LOG_PACKET(m_id, data + m_sendOffset, rc, "send");
         BaseSocketManager::singleton().addToOutbound(rc);
 
         if (rc > 0) {
             m_sendOffset += rc; // number of bytes sent
             sent = true;
         } else {
+            LOG_WARNING << "::send returned: " << rc << std::endl;
             // TODO: Something went wrong!
             sent = false;
         }
@@ -154,7 +166,7 @@ void NetSocket::handleInput()
     }
 
     // Log
-    LOG_PACKET(m_id, m_recvBuff + m_recvBegin + m_recvOffset, rc, "recv");
+    //LOG_PACKET(m_id, m_recvBuff + m_recvBegin + m_recvOffset, rc, "recv");
     BaseSocketManager::singleton().addToInbound(rc);
 
     const unsigned int hdrSize = sizeof(uint32);

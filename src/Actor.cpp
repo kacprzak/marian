@@ -9,13 +9,13 @@ Actor::Actor(ActorId id, GameLogic *game)
     , m_game(game)
     , m_dead(false)
 {
-    DBG( "new Actor: id = " << m_id  );
+    //DBG( "new Actor: id = " << m_id  );
 }
 
 //------------------------------------------------------------------------------
 
 Actor::~Actor() {
-    DBG( "delete Actor: id = " << m_id << " name = " << name() );
+    //DBG( "delete Actor: id = " << m_id << " name = " << name() );
 }
 
 //------------------------------------------------------------------------------
