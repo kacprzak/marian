@@ -6,7 +6,11 @@
 
 #include <unistd.h> // close
 #include <sys/ioctl.h>
+//#include <sys/types.h>
+//#include <sys/socket.h>
 #include <netinet/tcp.h> // TCP_NODELAY
+//#include <netinet/in.h>
+//#include <signal.h>
 
 NetSocket::NetSocket()
 {
@@ -18,7 +22,7 @@ NetSocket::NetSocket()
     m_internal = 0;
     //m_bBinaryProtocol = 1;
 
-    LOG << "new NetSocket sock_fd=" << m_socket << std::endl;
+    LOG << "new NetSocket sock_fd=" << m_socket << " (" << this << ")" << std::endl;
 }
 
 NetSocket::NetSocket(int new_sock, unsigned int hostIp)
@@ -42,14 +46,14 @@ NetSocket::NetSocket(int new_sock, unsigned int hostIp)
         PLOG << "setsockopt";
     }
 
-    LOG << "new NetSocket sock_fd=" << m_socket << std::endl;
+    LOG << "new NetSocket sock_fd=" << m_socket << " (" << this << ")" << std::endl;
 }
 
 //------------------------------------------------------------------------------
 
 NetSocket::~NetSocket()
 {
-    LOG << "delete NetSocket sock_fd=" << m_socket << std::endl;
+    LOG << "delete NetSocket sock_fd=" << m_socket << " (" << this << ")" << std::endl;
 
     if (m_socket != -1)
         close(m_socket);
@@ -117,25 +121,27 @@ void NetSocket::handleOutput()
     bool sent = false;
     do {
         // There must be something to send
-        //assert(!m_outList.empty());
+        assert(!m_outList.empty());
 
         std::shared_ptr<Packet> packet = *(m_outList.begin());
 
         const char *data = packet->getData();
         int len = static_cast<int>(packet->getSize()); // cast from ulong!
 
-        int rc = ::send(m_socket, data + m_sendOffset, len - m_sendOffset, 0);
-
-        // Log
-        //LOG_PACKET(m_id, data + m_sendOffset, rc, "send");
-        BaseSocketManager::singleton().addToOutbound(rc);
+        int rc = ::send(m_socket, data + m_sendOffset, len - m_sendOffset, MSG_NOSIGNAL);
 
         if (rc > 0) {
+            // Log
+            //LOG_PACKET(m_id, data + m_sendOffset, rc, "send");
+            BaseSocketManager::singleton().addToOutbound(rc);
+
             m_sendOffset += rc; // number of bytes sent
             sent = true;
+        } else if (errno == EWOULDBLOCK) { 
+            sent = false;
         } else {
             LOG_WARNING << "::send returned: " << rc << std::endl;
-            // TODO: Something went wrong!
+            handleException();
             sent = false;
         }
 
@@ -215,3 +221,9 @@ void NetSocket::handleInput()
 }
 
 //------------------------------------------------------------------------------
+
+void NetSocket::handleException()
+{
+    LOG_WARNING << "Exception in sockFd=" << m_socket << std::endl;
+    m_deleteFlag |= 1;
+}

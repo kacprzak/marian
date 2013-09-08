@@ -28,7 +28,7 @@ class NetSocket
     virtual int hasOutput() { return !m_outList.empty(); }
     virtual void handleOutput();
     virtual void handleInput();
-    virtual void handleException() {}
+    virtual void handleException();
     virtual void timeOut() { m_timeOut = 0; }
 
     int ipAdress() { return m_ipaddr; }
@@ -37,6 +37,8 @@ class NetSocket
     int m_socket;           ///< Socker file descriptor
     int m_id;               ///< Id given by manager
 
+    // NOTE: if deleteFlag has bit 2 set, exceptions only close the
+    //   socket and set to INVALID_SOCKET, and do not delete the NetSocket
     int m_deleteFlag;
 
     PacketList m_outList;   ///< packet to send
