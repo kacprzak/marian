@@ -14,9 +14,6 @@
 const double PI   = 3.141592653589793238462;
 const float  PI_F = 3.14159265358979f;
 
-// Global pointer (for use in Lua exposed functions)
-Engine *Engine::s_singleton = nullptr;
-
 // Maximum delta value passed to update 1/25 [s]
 #define DELTA_MAX 0.04f
 // Scene scale
@@ -24,30 +21,10 @@ Engine *Engine::s_singleton = nullptr;
 // Retro style pixel perfect rendering
 #define ROUND 1
 
-void Engine::init(const std::string& title, int screenWidth, int screenHeight,
-                  bool screenFull)
-{
-    if (s_singleton) {
-        LOG << "Engine is already initialized!";
-        return;
-    }
-
-    s_singleton = new Engine(title, screenWidth, screenHeight, screenFull);
-}
-
-//------------------------------------------------------------------------------
-
-void Engine::shutdown()
-{
-    delete s_singleton;
-    s_singleton = nullptr;
-}
-
-//------------------------------------------------------------------------------
-
 Engine::Engine(const std::string& title, int screenWidth, int screenHeight,
                bool screenFull)
-    : m_titile(title)
+    : breakLoop(false)
+    , m_titile(title)
     , m_screenWidth(screenWidth)
     , m_screenHeight(screenHeight)
     , m_screenFull(screenFull)
@@ -63,7 +40,6 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight,
 {
     try {
         initializeSDL();
-        initializeOpenGL();
     } catch (EngineError e) {
         SDL_Quit();
         throw e;
@@ -72,7 +48,9 @@ Engine::Engine(const std::string& title, int screenWidth, int screenHeight,
     new ResourceMgr;
     ResourceMgr::singleton().setDataFolder("media/");
 
-    new GuiMgr;
+    // If video is initialized then init GUI system
+    if (m_window)
+        new GuiMgr;
 }
 
 //------------------------------------------------------------------------------
@@ -103,7 +81,7 @@ void Engine::mainLoop(GameLogic *game)
     float delta = 0.0f;
 
     for (;;) {
-        if (!processEvents())
+        if (breakLoop || !processEvents())
             break;
         if (m_appActive) {
             if (/*m_inputFocus &&*/ delta > 0.0f) {
@@ -210,7 +188,8 @@ void Engine::update(float elapsedTime)
     for (auto gv : m_game->gameViews())
         gv->update(elapsedTime);
     // Update gui
-    GuiMgr::singleton().update(elapsedTime);
+    if (GuiMgr::singletonPtr())
+        GuiMgr::singleton().update(elapsedTime);
 
     BaseSocketManager *sm = BaseSocketManager::singletonPtr();
     if (sm)
@@ -221,6 +200,9 @@ void Engine::update(float elapsedTime)
 
 void Engine::draw()
 {
+    if (!m_window)
+        return;
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -236,7 +218,8 @@ void Engine::draw()
     }
 
     // Draw gui
-    GuiMgr::singleton().draw();
+    if (GuiMgr::singletonPtr())
+        GuiMgr::singleton().draw();
 
     // Draw debug information
     m_game->drawDebugData();
@@ -327,57 +310,68 @@ void Engine::initializeSDL()
 {
     LOG << "Initializing SDL...\n";
 
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        throw EngineError("Could not initialize SDL", SDL_GetError());  
-    }
+    if (m_screenWidth > 0 && m_screenHeight > 0) {
 
-    /* Some video inforamtion */
-    //const SDL_VideoInfo *info = SDL_GetVideoInfo();
-  
-    //if (!info) {
-    //    throw EngineError("Video query failed", SDL_GetError());
-    //}
+        if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+            throw EngineError("Could not initialize SDL", SDL_GetError());
+        }
 
-    //int screen_bpp = info->vfmt->BitsPerPixel;
+        /* Some video inforamtion */
+        //const SDL_VideoInfo *info = SDL_GetVideoInfo();
 
-    int screen_flags = SDL_WINDOW_OPENGL;
+        //if (!info) {
+        //    throw EngineError("Video query failed", SDL_GetError());
+        //}
 
-    if (m_screenFull)
-        screen_flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+        //int screen_bpp = info->vfmt->BitsPerPixel;
+
+        int screen_flags = SDL_WINDOW_OPENGL;
+
+        if (m_screenFull)
+            screen_flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 
 #if 1
-    SDL_GL_SetAttribute(SDL_GL_RED_SIZE,   8);
-    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,  8);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+        SDL_GL_SetAttribute(SDL_GL_RED_SIZE,   8);
+        SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+        SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,  8);
+        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetSwapInterval(1);
+        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+        SDL_GL_SetSwapInterval(1);
 #endif
 
-    // Screen surface
-    m_window = SDL_CreateWindow(m_titile.c_str(),
-                                SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                m_screenWidth, m_screenHeight,
-                                screen_flags);
+        // Screen surface
+        m_window = SDL_CreateWindow(m_titile.c_str(),
+                                    SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                                    m_screenWidth, m_screenHeight,
+                                    screen_flags);
 
-    if (!m_window) {
-        throw EngineError("Creating window failed", SDL_GetError());
+        if (!m_window) {
+            throw EngineError("Creating window failed", SDL_GetError());
+        }
+
+        if(!SDL_GL_CreateContext(m_window)) {
+            throw EngineError("Creating OpenGL context failed", SDL_GetError());
+        }
+
+        //SDL_Renderer *renderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+        //if (!renderer) {
+        //    throw EngineError("Creating renderer failed", SDL_GetError());
+        //}
+
+        //SDL_ShowCursor(SDL_DISABLE);
+        //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+        SDL_StopTextInput(); // Disable text input events when GUI is not visible
+
+        // OpenGL setup
+        initializeOpenGL();
+
+    } else {
+        if (SDL_Init(0) < 0) {
+            throw EngineError("Could not initialize SDL", SDL_GetError());
+        }
     }
-
-    if(!SDL_GL_CreateContext(m_window)) {
-        throw EngineError("Creating OpenGL context failed", SDL_GetError());
-    }
-
-    //SDL_Renderer *renderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
-    //if (!renderer) {
-    //    throw EngineError("Creating renderer failed", SDL_GetError());
-    //}
-
-    //SDL_ShowCursor(SDL_DISABLE);
-    //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-    SDL_StopTextInput(); // Disable text input events when GUI is not visible
 
     LOG << "SDL initialized.\n";
 }

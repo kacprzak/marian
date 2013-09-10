@@ -39,17 +39,17 @@ int main(int /*argc*/, char * /*argv*/[])
         LOG << "Unable to connect to: " << gameServer << std::endl;
     }
 
-    Engine::init("Marian Cli", screenWidth, screenHeight, fullScreen);
+    new Engine("Marian Cli", screenWidth, screenHeight, fullScreen);
 
-    std::shared_ptr<GameView> view(new HumanView);
     GameLogic *game = new RemoteGameLogic(socketId);
-    game->attachView(view);
+
+    game->attachView(std::shared_ptr<GameView>(new HumanView));
 
     Engine::singleton().mainLoop(game);
 
     delete game;
-    view.reset(); // Check this!
-    Engine::shutdown();
+
+    delete Engine::singletonPtr();
 
     delete ClientSocketManager::singletonPtr();
     delete ResourceMgr::singletonPtr();

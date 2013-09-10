@@ -10,6 +10,8 @@
 #include "network/GameServerListenNetSocket.h"
 #include "network/RemoteGameView.h"
 
+#include <signal.h>
+
 void eventListener(EventPtr event)
 {
     LOG << "EVENT: " << event->eventName() << " {";
@@ -23,16 +25,52 @@ void eventListener(EventPtr event)
     Engine::singleton().game()->attachView(view);
 }
 
+//------------------------------------------------------------------------------
+
+void ctrl_c_handler(int s){
+    LOG << "Caught signal " << s << std::endl;
+    Engine *e = Engine::singletonPtr();
+    if (e)
+        e->breakLoop = true;
+    else
+        exit(-1);
+}
+
+//------------------------------------------------------------------------------
+
+void register_ctrl_c_handler() {
+    struct sigaction sigIntHandler;
+
+    sigIntHandler.sa_handler = ctrl_c_handler;
+    sigemptyset(&sigIntHandler.sa_mask);
+    sigIntHandler.sa_flags = 0;
+
+    sigaction(SIGINT, &sigIntHandler, NULL);
+}
+
+//------------------------------------------------------------------------------
+
+#define NO_VIDEO
+
 int main(int /*argc*/, char * /*argv*/[])
 {
     new ScriptMgr;
     ScriptMgr& sm = ScriptMgr::singleton();
     sm.setDataFolder("scripts/");
+
+#ifndef NO_VIDEO
     sm.executeFile("startup.lua");
 
     int screenWidth  = sm.getGlobalInt("screen_width");
     int screenHeight = sm.getGlobalInt("screen_height");
     bool fullScreen  = sm.getGlobalBool("screen_full");
+#else
+    register_ctrl_c_handler();
+
+    int screenWidth  = 0;
+    int screenHeight = 0;
+    bool fullScreen  = false;
+#endif
 
     new EventMgr;
     EventMgr::singleton().addListener(REMOTE_CLIENT, EventListenerPtr(new EventListener(eventListener)));
@@ -42,17 +80,19 @@ int main(int /*argc*/, char * /*argv*/[])
     GameServerListenNetSocket *gslns = new GameServerListenNetSocket(GAME_PORT);
     bsm->addSocket(gslns);
 
-    Engine::init("Marian Srv", screenWidth, screenHeight, fullScreen);
+    new Engine("Marian Srv", screenWidth, screenHeight, fullScreen);
 
-    std::shared_ptr<GameView> view(new HumanView);
     Game *game = new Game;
-    game->attachView(view);
+
+#ifndef NO_VIDEO
+    game->attachView(std::shared_ptr<GameView>(new HumanView));
+#endif
 
     Engine::singleton().mainLoop(game);
 
     delete game;
-    view.reset(); // Check this!
-    Engine::shutdown();
+
+    delete Engine::singletonPtr();
 
     delete BaseSocketManager::singletonPtr();
     delete ResourceMgr::singletonPtr();

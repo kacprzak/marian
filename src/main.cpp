@@ -29,17 +29,17 @@ int main(int /*argc*/, char * /*argv*/[])
     new EventMgr;
     //EventMgr::singleton().addListener(ACTOR_COLLIDED, eventListener);
 
-    Engine::init("Marian", screenWidth, screenHeight, fullScreen);
+    new Engine("Marian", screenWidth, screenHeight, fullScreen);
 
-    std::shared_ptr<GameView> view(new HumanView);
     Game *game = new Game;
-    game->attachView(view);
+
+    game->attachView(std::shared_ptr<GameView>(new HumanView));
 
     Engine::singleton().mainLoop(game);
 
     delete game;
-    view.reset(); // Check this!
-    Engine::shutdown();
+
+    delete Engine::singletonPtr();
 
     delete ResourceMgr::singletonPtr();
     delete EventMgr::singletonPtr();

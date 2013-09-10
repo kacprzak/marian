@@ -6,6 +6,7 @@
   #include <windows.h>
 #endif
 
+#include "Singleton.h"
 #include "GameLogic.h"
 #include "graphics/Image.h"
 
@@ -53,17 +54,12 @@ struct ViewRect
 
 //------------------------------------------------------------------------------
 
-class Engine
+class Engine : public Singleton<Engine>
 {
  public:
-    static Engine& singleton()
-    {
-        return *s_singleton;
-    }
-
-    static void init(const std::string& title, int screenWidth, int screenHeight,
-                     bool screenFull = false);
-    static void shutdown();
+    Engine(const std::string& title, int screenWidth, int screenHeight,
+           bool screenFull = false);
+    ~Engine();
 
     void mainLoop(GameLogic *game);
     GameLogic *game() { return m_game; }
@@ -77,19 +73,13 @@ class Engine
 
     void setBackgroundColor(int r, int g, int b);
 
-#ifdef INPUT_INSPECTION_SUPPORT
-    bool isPressed(int keycode) const { return m_keys[keycode]; }
-#endif
-
     /** Screen size in pixels */
     int screenWidth() const  { return m_screenWidth; }
     int screenHeight() const { return m_screenHeight; }
 
- private:
-    Engine(const std::string& title, int screenWidth, int screenHeight,
-           bool screenFull = false);
-    ~Engine();
+    bool breakLoop;
 
+ private:
     void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h) const;
     void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
                   const GLfloat *texCoords) const;
@@ -99,9 +89,6 @@ class Engine
     bool processEvents();
     void update(float elapsedTime);
     void draw();
-
-    // Singleton instance
-    static Engine *s_singleton;
 
     std::string m_titile;
     int m_screenWidth;
@@ -120,8 +107,6 @@ class Engine
     float m_scale;
 
     GameLogic *m_game;
-
-    bool m_gui;
 };
 
 #endif
