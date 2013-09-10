@@ -5,7 +5,7 @@
 #include "GameLogic.h"
 #include "ResourceMgr.h"
 #include "Box2dPhysicsEngine.h"
-#include "EventMgr.h"
+#include "events/EventMgr.h"
 
 BoxPhysicsComponent::BoxPhysicsComponent(GameLogic *game, float x, float y,
                                          float w, float h)

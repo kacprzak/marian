@@ -10,7 +10,7 @@ target_link_libraries( map_test tmx ${My_Boost_TEST_LIBS} )
 add_test(Map map_test)
 
 
-add_executable( eventmanager_test eventmanager_test.cpp ../src/EventMgr.cpp )
+add_executable( eventmanager_test eventmanager_test.cpp ../src/events/EventMgr.cpp )
 target_link_libraries( eventmanager_test ${My_Boost_TEST_LIBS} )
 
 add_test(EventManager eventmanager_test)

@@ -1,7 +1,7 @@
 #ifndef NETWORKEVENTFORWARDER_H
 #define NETWORKEVENTFORWARDER_H
 
-#include "Event.h"
+#include "events/Event.h"
 
 class NetworkEventForwarder
 {

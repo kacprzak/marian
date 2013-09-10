@@ -1,7 +1,7 @@
 #include "BaseGameLogic.h"
 
 #include "ActorFactory.h"
-#include "EventMgr.h"
+#include "events/EventMgr.h"
 #include "Box2dPhysicsEngine.h"
 
 BaseGameLogic::BaseGameLogic()

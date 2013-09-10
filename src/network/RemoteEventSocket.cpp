@@ -1,8 +1,8 @@
 #include "RemoteEventSocket.h"
 
-#include "EventMgr.h"
-#include "EventType.h"
-#include "Event.h"
+#include "events/EventMgr.h"
+#include "events/EventType.h"
+#include "events/Event.h"
 #include "Logger.h"
 
 #include <sstream>

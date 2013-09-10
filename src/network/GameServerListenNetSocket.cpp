@@ -2,8 +2,8 @@
 
 #include "RemoteEventSocket.h"
 #include "BaseSocketManager.h"
-#include "Event.h"
-#include "EventMgr.h"
+#include "events/Event.h"
+#include "events/EventMgr.h"
 #include "Logger.h"
 
 GameServerListenNetSocket::GameServerListenNetSocket(int portNum)

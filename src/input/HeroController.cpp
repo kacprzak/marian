@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "HeroController.h"
 
-#include "EventMgr.h"
+#include "events/EventMgr.h"
 #include <SDL.h>
 
 #define TEST 0

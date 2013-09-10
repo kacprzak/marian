@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "Logger.h"
 #include "ScriptMgr.h"
-#include "EventMgr.h"
+#include "events/EventMgr.h"
 #include "Engine.h"
 #include "Game.h"
 #include "HumanView.h"

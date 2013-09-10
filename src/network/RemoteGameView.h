@@ -2,7 +2,7 @@
 #define REMOTEGAMEVIEW_H
 
 #include "GameView.h"
-#include "EventMgr.h"
+#include "events/EventMgr.h"
 #include "NetworkEventForwarder.h"
 
 class RemoteGameView : public GameView

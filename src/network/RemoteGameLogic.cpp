@@ -1,6 +1,6 @@
 #include "RemoteGameLogic.h"
 
-#include "EventMgr.h"
+#include "events/EventMgr.h"
 
 RemoteGameLogic::RemoteGameLogic(int socketId)
     : m_nef(socketId)

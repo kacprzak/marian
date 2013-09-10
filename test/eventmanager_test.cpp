@@ -1,7 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE EventManagerTest
 #include <boost/test/unit_test.hpp>
-#include "EventMgr.h"
+#include "events/EventMgr.h"
 
 
 void eventListener(EventPtr event)

@@ -6,7 +6,7 @@
 #include "Game.h"
 #include "graphics/Animation.h"
 #include "Box2dPhysicsEngine.h"
-#include "EventMgr.h"
+#include "events/EventMgr.h"
 #include "Logger.h"
 
 #define JUMP_DELAY 0.5f

@@ -3,7 +3,7 @@
 
 #include "GameLogic.h"
 
-#include "EventMgr.h"
+#include "events/EventMgr.h"
 #include "NetworkEventForwarder.h"
 
 class RemoteGameLogic : public GameLogic

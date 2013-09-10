@@ -34,12 +34,13 @@ set( marian_HDRS
   network/RemoteGameView.h
   network/RemoteGameLogic.cpp
 
+  events/EventType.h
+  events/Event.h
+  events/EventMgr.h
+
   Logger.h
   Console.h
   Engine.h
-  EventType.h
-  Event.h
-  EventMgr.h
   FpsCounter.h
   Game.h
   GameLogic.h
@@ -86,11 +87,12 @@ set( marian_SRCS
   network/RemoteGameView.cpp
   network/RemoteGameLogic.cpp
 
+  events/EventMgr.cpp
+
   Logger.cpp
   Box2dPhysicsEngine.cpp
   Console.cpp
   Engine.cpp
-  EventMgr.cpp
   FpsCounter.cpp
   Game.cpp
   HumanView.cpp

@@ -2,7 +2,7 @@
 #define HUMANVIEW_H
 
 #include "GameView.h"
-#include "EventMgr.h"
+#include "events/EventMgr.h"
 #include "graphics/MapNode.h"
 #include "input/KeyboardHandler.h"
 

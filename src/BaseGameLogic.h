@@ -3,7 +3,7 @@
 
 #include "GameLogic.h"
 #include "PhysicsEngine.h"
-#include "EventMgr.h"
+#include "events/EventMgr.h"
 #include "Map.h"
 
 class BaseGameLogic : public GameLogic

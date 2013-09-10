@@ -4,7 +4,7 @@
 
 #include "ActorComponent.h"
 #include "Actor.h"
-#include "EventType.h"
+#include "events/EventType.h"
 
 #include <Box2D/Box2D.h>
 

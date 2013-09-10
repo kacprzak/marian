@@ -5,7 +5,7 @@
   #include <windows.h>
 #endif
 
-#include "EventMgr.h"
+#include "events/EventMgr.h"
 #include "Logger.h"
 
 #include <GL/gl.h>
