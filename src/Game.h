@@ -5,7 +5,7 @@
 #include "BaseGameLogic.h"
 #include "FpsCounter.h"
 
-//#define PRINT_FPS
+#define PRINT_FPS
 
 class Game : public BaseGameLogic
 {

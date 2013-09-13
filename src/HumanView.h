@@ -21,8 +21,8 @@ class HumanView : public GameView
     ~HumanView();
 
     // GameView interface
-    bool processInput(const SDL_Event &event);
-    void update(float elapsedTime);
+    bool processInput(const SDL_Event &event) override;
+    void update(float elapsedTime) override;
 
     void centerViewOn(float x, float y);
     void viewBounds(ViewRect *rect);

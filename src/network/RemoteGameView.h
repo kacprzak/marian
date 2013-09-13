@@ -14,8 +14,6 @@ class RemoteGameView : public GameView
     bool processInput(const SDL_Event &/*event*/) { return true; }
     void update(float /*elapsedTime*/) {}
     void draw(Engine *) {}
-    void initialize(Engine *) {}
-    void cleanup(Engine *) {}
     void onAttach(int gameViewId, unsigned long actorId)
     {
         m_viewId = gameViewId;

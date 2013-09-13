@@ -50,9 +50,6 @@ void Engine::mainLoop(GameLogic *game)
 {
     m_game = game;
     m_game->initialize(this);
-    for (auto gv : m_game->gameViews()) {
-        gv->initialize(this);
-    }
  
     unsigned int curr_time = SDL_GetTicks();
     unsigned int last_time = curr_time;
@@ -77,9 +74,6 @@ void Engine::mainLoop(GameLogic *game)
         last_time = curr_time;
     }
 
-    for (auto gv : m_game->gameViews()) {
-        gv->cleanup(this);
-    }
     m_game->cleanup(this);
 }
 

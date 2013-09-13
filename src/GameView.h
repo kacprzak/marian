@@ -16,10 +16,6 @@ class GameView : boost::noncopyable
     virtual void update(float elapsedTime) = 0;
     virtual void draw(Engine *e) = 0;
 
-    /**  Use these if you need Engine to create or clean stuff */
-    virtual void initialize(Engine * /*e*/) {}
-    virtual void cleanup(Engine * /*e*/) {}
-
     /** Callbacks */
     virtual void onAttach(int /*gameViewId*/, unsigned long /*actorId*/) {}
 };
