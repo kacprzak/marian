@@ -4,7 +4,7 @@
 #include "events/EventMgr.h"
 #include "Engine.h"
 #include "Game.h"
-#include "HumanView.h"
+#include "HeroHumanView.h"
 #include "ResourceMgr.h"
 #include "network/ClientSocketMgr.h"
 #include "network/GameServerListenNetSocket.h"

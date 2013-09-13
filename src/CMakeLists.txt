@@ -51,7 +51,7 @@ set( marian_HDRS
   GameLogic.h
   BaseGameLogic.h
   GameView.h
-  HumanView.h
+  HeroHumanView.h
   PhysicsEngine.h
   Box2dPhysicsEngine.h
   Map.h
@@ -99,7 +99,7 @@ set( marian_SRCS
   Engine.cpp
   FpsCounter.cpp
   Game.cpp
-  HumanView.cpp
+  HeroHumanView.cpp
   BaseGameLogic.cpp
   Map.cpp
   ResourceMgr.cpp

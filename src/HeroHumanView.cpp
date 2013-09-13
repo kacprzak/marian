@@ -1,4 +1,4 @@
-#include "HumanView.h"
+#include "HeroHumanView.h"
 #include "ResourceMgr.h"
 #include "Engine.h"
 #include "Util.h"

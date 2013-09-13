@@ -5,7 +5,7 @@
 #include "events/EventMgr.h"
 #include "Engine.h"
 #include "Game.h"
-#include "HumanView.h"
+#include "HeroHumanView.h"
 #include "ResourceMgr.h"
 
 void eventListener(EventPtr event)
