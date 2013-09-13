@@ -12,7 +12,7 @@
 
 class NetSocket
 {
-    friend class BaseSocketManager;
+    friend class BaseSocketMgr;
 
     typedef std::list<std::shared_ptr<Packet> > PacketList;
 

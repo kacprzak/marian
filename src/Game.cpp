@@ -1,8 +1,8 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "Game.h"
 
-#include "Actor.h"
-#include "ActorFactory.h"
+#include "actors/Actor.h"
+#include "actors/ActorFactory.h"
 #include "ScriptMgr.h"
 #include "Box2dPhysicsEngine.h"
 #include "Map.h"

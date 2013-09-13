@@ -1,7 +1,7 @@
 #include "GameServerListenNetSocket.h"
 
 #include "RemoteEventSocket.h"
-#include "BaseSocketManager.h"
+#include "BaseSocketMgr.h"
 #include "events/Event.h"
 #include "events/EventMgr.h"
 #include "Logger.h"
@@ -29,7 +29,7 @@ void GameServerListenNetSocket::handleInput()
 
     if (new_sock != -1) {
         RemoteEventSocket *sock = new RemoteEventSocket(new_sock, ipaddr);
-        int sockId = BaseSocketManager::singleton().addSocket(sock);
+        int sockId = BaseSocketMgr::singleton().addSocket(sock);
         int ipAddr = sock->ipAdress();
         EventPtr e(new RemoteClientEvent(sockId, ipAddr));
         EventMgr::singleton().queueEvent(e);

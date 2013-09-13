@@ -3,7 +3,7 @@
 #define PHYSICSCOMPONENT_H
 
 #include "ActorComponent.h"
-#include "Actor.h"
+#include "actors/Actor.h"
 #include "events/EventType.h"
 
 #include <Box2D/Box2D.h>

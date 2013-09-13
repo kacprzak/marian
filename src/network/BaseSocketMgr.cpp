@@ -1,11 +1,11 @@
-#include "BaseSocketManager.h"
+#include "BaseSocketMgr.h"
 
 #include "Logger.h"
 
 #include <unistd.h> // close
 #include <netdb.h>  // hostent
 
-BaseSocketManager::BaseSocketManager()
+BaseSocketMgr::BaseSocketMgr()
     : m_nextSocketId(1)
     , m_inbound(0)
     , m_outbound(0)
@@ -17,7 +17,7 @@ BaseSocketManager::BaseSocketManager()
 
 //------------------------------------------------------------------------------
 
-BaseSocketManager::~BaseSocketManager()
+BaseSocketMgr::~BaseSocketMgr()
 {
     shutdown();
     LOG << "Data sent: " << m_outbound << " bytes | Data recv: " << m_inbound << " bytes" << std::endl;
@@ -25,7 +25,7 @@ BaseSocketManager::~BaseSocketManager()
 
 //------------------------------------------------------------------------------
 
-bool BaseSocketManager::init()
+bool BaseSocketMgr::init()
 {
     // On Windows it is not so easy
     return true;
@@ -33,7 +33,7 @@ bool BaseSocketManager::init()
 
 //------------------------------------------------------------------------------
 
-void BaseSocketManager::shutdown()
+void BaseSocketMgr::shutdown()
 {
     for(NetSocket *sock : m_sockList) {
         delete sock;
@@ -43,7 +43,7 @@ void BaseSocketManager::shutdown()
 
 //------------------------------------------------------------------------------
 
-int BaseSocketManager::addSocket(NetSocket *socket)
+int BaseSocketMgr::addSocket(NetSocket *socket)
 {
     socket->m_id = m_nextSocketId;
     m_sockMap[m_nextSocketId++] = socket;
@@ -58,7 +58,7 @@ int BaseSocketManager::addSocket(NetSocket *socket)
 
 //------------------------------------------------------------------------------
 
-void BaseSocketManager::removeSocket(NetSocket *socket)
+void BaseSocketMgr::removeSocket(NetSocket *socket)
 {
     m_sockMap.erase(socket->m_id);
     m_sockList.remove(socket);
@@ -68,7 +68,7 @@ void BaseSocketManager::removeSocket(NetSocket *socket)
 
 //------------------------------------------------------------------------------
 
-bool BaseSocketManager::send(int sockId, std::shared_ptr<Packet> packet)
+bool BaseSocketMgr::send(int sockId, std::shared_ptr<Packet> packet)
 {
     NetSocket *sock = findSocket(sockId);
 
@@ -81,7 +81,7 @@ bool BaseSocketManager::send(int sockId, std::shared_ptr<Packet> packet)
 
 //------------------------------------------------------------------------------
 
-void BaseSocketManager::select(int pauseMicroSecs, bool handleInput)
+void BaseSocketMgr::select(int pauseMicroSecs, bool handleInput)
 {
     // How long to wait
     timeval tv;
@@ -168,7 +168,7 @@ void BaseSocketManager::select(int pauseMicroSecs, bool handleInput)
 
 //------------------------------------------------------------------------------
 
-bool BaseSocketManager::isInternal(unsigned int ip)
+bool BaseSocketMgr::isInternal(unsigned int ip)
 {
     if (!m_subnetMask)
         return false;
@@ -181,7 +181,7 @@ bool BaseSocketManager::isInternal(unsigned int ip)
 
 //------------------------------------------------------------------------------
 
-unsigned int BaseSocketManager::getHostByName(const std::string& hostName)
+unsigned int BaseSocketMgr::getHostByName(const std::string& hostName)
 {
     struct hostent *hostEnt = ::gethostbyname(hostName.c_str());
 
@@ -198,7 +198,7 @@ unsigned int BaseSocketManager::getHostByName(const std::string& hostName)
 
 //------------------------------------------------------------------------------
 
-const char *BaseSocketManager::getHostByAddr(unsigned int ip)
+const char *BaseSocketMgr::getHostByAddr(unsigned int ip)
 {
     static char host[32];
 
@@ -217,7 +217,7 @@ const char *BaseSocketManager::getHostByAddr(unsigned int ip)
 
 //------------------------------------------------------------------------------
 
-NetSocket *BaseSocketManager::findSocket(int sockId)
+NetSocket *BaseSocketMgr::findSocket(int sockId)
 {
     SocketIdMap::iterator it = m_sockMap.find(sockId);
     if (it == std::end(m_sockMap))

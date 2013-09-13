@@ -2,7 +2,7 @@
 #include "NetSocket.h"
 
 #include "Logger.h"
-#include "BaseSocketManager.h"
+#include "BaseSocketMgr.h"
 
 #include <unistd.h> // close
 #include <sys/ioctl.h>
@@ -37,7 +37,7 @@ NetSocket::NetSocket(int new_sock, unsigned int hostIp)
     m_timeCreated = std::time(NULL);
     m_ipaddr = hostIp;
 
-    m_internal = BaseSocketManager::singleton().isInternal(hostIp);
+    m_internal = BaseSocketMgr::singleton().isInternal(hostIp);
 
     struct linger ling;
     ling.l_onoff = 0;
@@ -133,7 +133,7 @@ void NetSocket::handleOutput()
         if (rc > 0) {
             // Log
             //LOG_PACKET(m_id, data + m_sendOffset, rc, "send");
-            BaseSocketManager::singleton().addToOutbound(rc);
+            BaseSocketMgr::singleton().addToOutbound(rc);
 
             m_sendOffset += rc; // number of bytes sent
             sent = true;
@@ -173,7 +173,7 @@ void NetSocket::handleInput()
 
     // Log
     //LOG_PACKET(m_id, m_recvBuff + m_recvBegin + m_recvOffset, rc, "recv");
-    BaseSocketManager::singleton().addToInbound(rc);
+    BaseSocketMgr::singleton().addToInbound(rc);
 
     const unsigned int hdrSize = sizeof(uint32);
     // Data that was not processed

@@ -1,6 +1,9 @@
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 set( marian_HDRS
+  actors/Actor.h
+  actors/ActorCategory.h
+  actors/ActorFactory.h
   actors/Box.h
   actors/Hero.h
   actors/Ground.h
@@ -26,8 +29,8 @@ set( marian_HDRS
   network/Packet.h
   network/NetSocket.h
   network/ListenNetSocket.h
-  network/BaseSocketManager.h
-  network/ClientSocketManager.h
+  network/BaseSocketMgr.h
+  network/ClientSocketMgr.h
   network/RemoteEventSocket.h
   network/GameServerListenNetSocket.h
   network/NetworkEventForwarder.h
@@ -38,8 +41,10 @@ set( marian_HDRS
   events/Event.h
   events/EventMgr.h
 
+  gui/Console.h
+  gui/GuiMgr.h
+
   Logger.h
-  Console.h
   Engine.h
   FpsCounter.h
   Game.h
@@ -47,12 +52,8 @@ set( marian_HDRS
   BaseGameLogic.h
   GameView.h
   HumanView.h
-  Actor.h
-  ActorCategory.h
-  ActorFactory.h
   PhysicsEngine.h
   Box2dPhysicsEngine.h
-  GuiMgr.h
   Map.h
   ResourceMgr.h
   ScriptMgr.h
@@ -64,6 +65,7 @@ set( marian_HDRS
 )
 
 set( marian_SRCS
+  actors/Actor.cpp
   actors/Box.cpp
   actors/Ground.cpp
   actors/Hero.cpp
@@ -79,8 +81,8 @@ set( marian_SRCS
   network/Packet.cpp
   network/NetSocket.cpp
   network/ListenNetSocket.cpp
-  network/BaseSocketManager.cpp
-  network/ClientSocketManager.cpp
+  network/BaseSocketMgr.cpp
+  network/ClientSocketMgr.cpp
   network/RemoteEventSocket.cpp
   network/GameServerListenNetSocket.cpp
   network/NetworkEventForwarder.cpp
@@ -89,16 +91,16 @@ set( marian_SRCS
 
   events/EventMgr.cpp
 
+  gui/Console.cpp
+  gui/GuiMgr.cpp
+
   Logger.cpp
   Box2dPhysicsEngine.cpp
-  Console.cpp
   Engine.cpp
   FpsCounter.cpp
   Game.cpp
   HumanView.cpp
-  Actor.cpp
   BaseGameLogic.cpp
-  GuiMgr.cpp
   Map.cpp
   ResourceMgr.cpp
   ScriptMgr.cpp

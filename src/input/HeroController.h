@@ -3,7 +3,7 @@
 #define HEROCONTROLLER_H
 
 #include "KeyboardHandler.h"
-#include "Actor.h"
+#include "actors/Actor.h"
 
 class HeroController : public KeyboardHandler
 {

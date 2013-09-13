@@ -24,5 +24,5 @@ void NetworkEventForwarder::forwardEvent(EventPtr e)
 
     std::shared_ptr<Packet> packet(new Packet(data.c_str(), data.length()));
 
-    BaseSocketManager::singleton().send(m_socketId, packet);
+    BaseSocketMgr::singleton().send(m_socketId, packet);
 }

@@ -6,7 +6,7 @@
 #include "Game.h"
 #include "HumanView.h"
 #include "ResourceMgr.h"
-#include "network/BaseSocketManager.h"
+#include "network/BaseSocketMgr.h"
 #include "network/GameServerListenNetSocket.h"
 #include "network/RemoteGameView.h"
 
@@ -75,7 +75,7 @@ int main(int /*argc*/, char * /*argv*/[])
     new EventMgr;
     EventMgr::singleton().addListener(REMOTE_CLIENT, EventListenerPtr(new EventListener(eventListener)));
 
-    BaseSocketManager *bsm = new BaseSocketManager;
+    BaseSocketMgr *bsm = new BaseSocketMgr;
     bsm->init();
     GameServerListenNetSocket *gslns = new GameServerListenNetSocket(GAME_PORT);
     bsm->addSocket(gslns);
@@ -94,7 +94,7 @@ int main(int /*argc*/, char * /*argv*/[])
 
     delete Engine::singletonPtr();
 
-    delete BaseSocketManager::singletonPtr();
+    delete BaseSocketMgr::singletonPtr();
     delete ResourceMgr::singletonPtr();
     delete EventMgr::singletonPtr();
     delete ScriptMgr::singletonPtr();

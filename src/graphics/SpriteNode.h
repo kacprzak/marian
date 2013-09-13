@@ -1,7 +1,7 @@
 #ifndef SPRITENODE_H
 #define SPRITENODE_H
 
-#include "Actor.h"
+#include "actors/Actor.h"
 #include "Image.h"
 #include "components/PhysicsComponent.h"
 

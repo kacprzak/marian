@@ -1,8 +1,8 @@
-#include "ClientSocketManager.h"
+#include "ClientSocketMgr.h"
 
 #include "RemoteEventSocket.h"
 
-ClientSocketManager::ClientSocketManager(const std::string &hostName, unsigned int port)
+ClientSocketMgr::ClientSocketMgr(const std::string &hostName, unsigned int port)
     : m_hostName(hostName)
     , m_port(port)
 {
@@ -10,7 +10,7 @@ ClientSocketManager::ClientSocketManager(const std::string &hostName, unsigned i
 
 //------------------------------------------------------------------------------
 
-bool ClientSocketManager::connect()
+bool ClientSocketMgr::connect()
 {
     if (!super::init())
         return false;

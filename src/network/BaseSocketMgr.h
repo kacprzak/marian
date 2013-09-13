@@ -1,5 +1,5 @@
-#ifndef BASESOCKETMANAGER_H
-#define BASESOCKETMANAGER_H
+#ifndef BASESOCKETMGR_H
+#define BASESOCKETMGR_H
 
 #include "Singleton.h"
 #include "NetSocket.h"
@@ -8,11 +8,11 @@
 
 #define GAME_PORT 3456
 
-class BaseSocketManager : public Singleton<BaseSocketManager>
+class BaseSocketMgr : public Singleton<BaseSocketMgr>
 {
 public:
-    BaseSocketManager();
-    virtual ~BaseSocketManager();
+    BaseSocketMgr();
+    virtual ~BaseSocketMgr();
 
     bool init();
     void shutdown();
@@ -55,4 +55,4 @@ protected:
     NetSocket *findSocket(int sockId);
 };
 
-#endif // BASESOCKETMANAGER_H
+#endif // BASESOCKETMGR_H

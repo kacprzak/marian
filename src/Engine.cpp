@@ -3,9 +3,9 @@
 
 #include "graphics/Texture.h"
 #include "ResourceMgr.h"
-#include "GuiMgr.h"
+#include "gui/GuiMgr.h"
 #include "Logger.h"
-#include "network/BaseSocketManager.h"
+#include "network/BaseSocketMgr.h"
 
 #include <vector>
 #include <cstdlib> // exit
@@ -191,7 +191,7 @@ void Engine::update(float elapsedTime)
     if (GuiMgr::singletonPtr())
         GuiMgr::singleton().update(elapsedTime);
 
-    BaseSocketManager *sm = BaseSocketManager::singletonPtr();
+    BaseSocketMgr *sm = BaseSocketMgr::singletonPtr();
     if (sm)
         sm->select(20);
 }

@@ -6,7 +6,7 @@
 #include "Game.h"
 #include "HumanView.h"
 #include "ResourceMgr.h"
-#include "network/ClientSocketManager.h"
+#include "network/ClientSocketMgr.h"
 #include "network/GameServerListenNetSocket.h"
 #include "network/RemoteGameLogic.h"
 
@@ -32,7 +32,7 @@ int main(int /*argc*/, char * /*argv*/[])
     //EventMgr::singleton().addListener(REMOTE_CLIENT, EventListenerPtr(new EventListener(eventListener)));
 
     const char *gameServer = "localhost";
-    ClientSocketManager *bsm = new ClientSocketManager(gameServer, GAME_PORT);
+    ClientSocketMgr *bsm = new ClientSocketMgr(gameServer, GAME_PORT);
     bsm->init();
     int socketId = bsm->connect();
     if (socketId == -1) {
@@ -51,7 +51,7 @@ int main(int /*argc*/, char * /*argv*/[])
 
     delete Engine::singletonPtr();
 
-    delete ClientSocketManager::singletonPtr();
+    delete ClientSocketMgr::singletonPtr();
     delete ResourceMgr::singletonPtr();
     delete EventMgr::singletonPtr();
     delete ScriptMgr::singletonPtr();

@@ -3,9 +3,9 @@
 #define EVENT_H
 
 #include "EventType.h"
-#include "Actor.h"
+#include "actors/Actor.h"
 #include "components/PhysicsComponent.h"
-#include "network/BaseSocketManager.h"
+#include "network/BaseSocketMgr.h"
 
 #include <iostream>
 #include <memory>
@@ -249,7 +249,7 @@ public:
 
     void serialize(std::ostream& out) const
     {
-        out << "socketId: " << m_socketId << " ip: " << BaseSocketManager::singleton().getHostByAddr(m_ip);
+        out << "socketId: " << m_socketId << " ip: " << BaseSocketMgr::singleton().getHostByAddr(m_ip);
     }
 
     int m_socketId;

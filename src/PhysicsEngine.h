@@ -2,7 +2,7 @@
 #ifndef PHYSICSENGINE_H
 #define PHYSICSENGINE_H
 
-#include "Actor.h"
+#include "actors/Actor.h"
 
 class Vec2;
 
