@@ -10,8 +10,9 @@
 #include "graphics/MapNode.h"
 #include "input/HeroController.h"
 
-HumanView::HumanView()
-    : m_heroId(0)
+HeroHumanView::HeroHumanView(const std::string &title, int screenWidth, int screenHeight, bool screenFull)
+    : HumanView(title, screenWidth, screenHeight, screenFull)
+    , m_heroId(0)
     , m_keyboardHandler(new HeroController)
 {
     std::shared_ptr<Map> map(new Map);
@@ -61,16 +62,19 @@ HumanView::HumanView()
         }
     }
 
-    elh.registerListener(ACTOR_MOVED, std::bind(&HumanView::handleActorMoved, this, std::placeholders::_1));
-    elh.registerListener(ACTOR_PHYSICS_STATE_CHANGED, std::bind(&HumanView::handleActorPhysicsStateChanged, this, std::placeholders::_1));
-    elh.registerListener(ACTOR_CREATED, std::bind(&HumanView::handleActorCreated, this, std::placeholders::_1));
-    elh.registerListener(ACTOR_DESTROYED, std::bind(&HumanView::handleActorDestroyed, this, std::placeholders::_1));
-    elh.registerListener(INPUT_COMMAND, std::bind(&HumanView::handleInputCommand, this, std::placeholders::_1));
+    // Set background color
+    setBackgroundColor(m_mapNode.backgroundColor());
+
+    elh.registerListener(ACTOR_MOVED, std::bind(&HeroHumanView::handleActorMoved, this, std::placeholders::_1));
+    elh.registerListener(ACTOR_PHYSICS_STATE_CHANGED, std::bind(&HeroHumanView::handleActorPhysicsStateChanged, this, std::placeholders::_1));
+    elh.registerListener(ACTOR_CREATED, std::bind(&HeroHumanView::handleActorCreated, this, std::placeholders::_1));
+    elh.registerListener(ACTOR_DESTROYED, std::bind(&HeroHumanView::handleActorDestroyed, this, std::placeholders::_1));
+    elh.registerListener(INPUT_COMMAND, std::bind(&HeroHumanView::handleInputCommand, this, std::placeholders::_1));
 }
 
 //------------------------------------------------------------------------------
 
-HumanView::~HumanView()
+HeroHumanView::~HeroHumanView()
 {
     for (const auto& pair : m_nodes) {
         delete pair.second;
@@ -81,20 +85,11 @@ HumanView::~HumanView()
 
 //------------------------------------------------------------------------------
 
-void HumanView::initialize(Engine *e)
+bool HeroHumanView::processInput(const SDL_Event &event)
 {
-    // Set background color
-    std::string bgColor = m_mapNode.backgroundColor();
-    if (!bgColor.empty()) {
-        std::vector<int> color = hexColorToRgb(bgColor);
-        e->setBackgroundColor(color[0], color[1], color[2]);
-    }
-}
+    if (super::processInput(event))
+        return false;
 
-//------------------------------------------------------------------------------
-
-bool HumanView::processInput(const SDL_Event &event)
-{
     switch (event.type) {
     case SDL_KEYUP:
         m_keyboardHandler->onKeyUp(event.key.keysym.scancode);
@@ -103,13 +98,15 @@ bool HumanView::processInput(const SDL_Event &event)
         m_keyboardHandler->onKeyDown(event.key.keysym.scancode);
         break;
     }
-    return true; // keep running
+    return false; // dont intercept event
 }
 
 //------------------------------------------------------------------------------
 
-void HumanView::update(float elapsedTime)
+void HeroHumanView::update(float elapsedTime)
 {
+    super::update(elapsedTime);
+
     for (auto& pair : m_nodes) {
         SpriteNode *s = pair.second;
         if (s)
@@ -121,11 +118,13 @@ void HumanView::update(float elapsedTime)
 
 //------------------------------------------------------------------------------
 
-void HumanView::draw(Engine *e)
+void HeroHumanView::draw(Engine *e)
 {
+    preDraw();
+
     // Draw only visible part of the map
     ViewRect r;
-    e->viewBounds(&r);
+    viewBounds(&r);
 
     m_mapNode.drawBackground(e, r);
 
@@ -139,11 +138,13 @@ void HumanView::draw(Engine *e)
     }
 
     m_mapNode.drawForeground(e, r);
+
+    postDraw();
 }
 
 //------------------------------------------------------------------------------
 
-void HumanView::handleActorMoved(EventPtr event)
+void HeroHumanView::handleActorMoved(EventPtr event)
 {
     auto e = std::static_pointer_cast<MoveEvent>(event);
 
@@ -155,7 +156,7 @@ void HumanView::handleActorMoved(EventPtr event)
 
         // Respect map borders
         ViewRect r;
-        Engine::singleton().viewBounds(&r);
+        viewBounds(&r);
 
         float hw = (r.right - r.left) / 2.0f;
         float hh = (r.top - r.bottom) / 2.0f;
@@ -163,7 +164,7 @@ void HumanView::handleActorMoved(EventPtr event)
         if (y < hh) y = hh;
         if (x > m_mapNode.width() - hw) x = m_mapNode.width() - hw;
 
-        Engine::singleton().centerViewOn(x, y);
+        centerViewOn(x, y);
     }
 
     SpriteNode *sprite = m_nodes[e->m_actorId];
@@ -174,7 +175,7 @@ void HumanView::handleActorMoved(EventPtr event)
 
 //------------------------------------------------------------------------------
 
-void HumanView::handleActorPhysicsStateChanged(EventPtr event)
+void HeroHumanView::handleActorPhysicsStateChanged(EventPtr event)
 {
     auto e = std::static_pointer_cast<PhysicsStateChangeEvent>(event);
 
@@ -186,7 +187,7 @@ void HumanView::handleActorPhysicsStateChanged(EventPtr event)
 
 //------------------------------------------------------------------------------
 
-void HumanView::handleActorCreated(EventPtr event)
+void HeroHumanView::handleActorCreated(EventPtr event)
 {
     auto e = std::static_pointer_cast<ActorCreatedEvent>(event);
 
@@ -205,7 +206,7 @@ void HumanView::handleActorCreated(EventPtr event)
 
 //------------------------------------------------------------------------------
 
-void HumanView::handleActorDestroyed(EventPtr event)
+void HeroHumanView::handleActorDestroyed(EventPtr event)
 {
     auto e = std::static_pointer_cast<ActorDestroyedEvent>(event);
 
@@ -219,7 +220,7 @@ void HumanView::handleActorDestroyed(EventPtr event)
 
 //------------------------------------------------------------------------------
 
-void HumanView::handleInputCommand(EventPtr event)
+void HeroHumanView::handleInputCommand(EventPtr event)
 {
     auto e = std::static_pointer_cast<ActorInputEvent>(event);
 

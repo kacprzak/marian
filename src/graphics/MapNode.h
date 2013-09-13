@@ -2,7 +2,7 @@
 #define MAPNODE_H
 
 #include "Map.h"
-#include "Engine.h"
+#include "HumanView.h"
 
 #include <memory>
 

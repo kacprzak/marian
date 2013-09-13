@@ -1,7 +1,7 @@
-#ifndef HUMANVIEW_H
-#define HUMANVIEW_H
+#ifndef HEROHUMANVIEW_H
+#define HEROHUMANVIEW_H
 
-#include "GameView.h"
+#include "HumanView.h"
 #include "events/EventMgr.h"
 #include "graphics/MapNode.h"
 #include "input/KeyboardHandler.h"
@@ -11,13 +11,14 @@
 class SpriteNode;
 class MapNode;
 
-class HumanView : public GameView
+class HeroHumanView : public HumanView
 {
- public:
-    HumanView();
-    ~HumanView();
+    typedef HumanView super;
 
-    void initialize(Engine *e) override;
+ public:
+    HeroHumanView(const std::string& title, int screenWidth, int screenHeight,
+                  bool screenFull = false);
+    ~HeroHumanView();
 
     bool processInput(const SDL_Event& event) override;
     void update(float elapsedTime) override;
@@ -40,4 +41,4 @@ class HumanView : public GameView
     KeyboardHandler *m_keyboardHandler;
 };
 
-#endif // HUMANVIEW_H
+#endif // HEROHUMANVIEW_H

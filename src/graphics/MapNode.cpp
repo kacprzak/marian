@@ -94,6 +94,10 @@ void MapNode::drawParallaxLayer(Engine *e, const std::string& layerName, const V
         int y1 = static_cast<int>(std::floor(m_map->height() - r.top));
         int y2 = static_cast<int>(std::ceil(m_map->height() - r.bottom));
 
+        // Clamp coords
+        if (y1 < 0)               y1 = 0;
+        if (y2 > m_map->height()) y2 = m_map->height();
+
 #if TEST
         // For testing
         ++x1; --x2; ++y1; --y2;

@@ -39,11 +39,11 @@ int main(int /*argc*/, char * /*argv*/[])
         LOG << "Unable to connect to: " << gameServer << std::endl;
     }
 
-    new Engine("Marian Cli", screenWidth, screenHeight, fullScreen);
+    new Engine;
 
     GameLogic *game = new RemoteGameLogic(socketId);
 
-    game->attachView(std::shared_ptr<GameView>(new HumanView));
+    game->attachView(std::shared_ptr<GameView>(new HeroHumanView("Marian Cli", screenWidth, screenHeight, fullScreen)));
 
     Engine::singleton().mainLoop(game);
 

@@ -29,11 +29,11 @@ int main(int /*argc*/, char * /*argv*/[])
     new EventMgr;
     //EventMgr::singleton().addListener(ACTOR_COLLIDED, eventListener);
 
-    new Engine("Marian", screenWidth, screenHeight, fullScreen);
+    new Engine;
 
     Game *game = new Game;
 
-    game->attachView(std::shared_ptr<GameView>(new HumanView));
+    game->attachView(std::shared_ptr<GameView>(new HeroHumanView("Marian", screenWidth, screenHeight, fullScreen)));
 
     Engine::singleton().mainLoop(game);
 

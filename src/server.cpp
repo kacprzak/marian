@@ -66,10 +66,6 @@ int main(int /*argc*/, char * /*argv*/[])
     bool fullScreen  = sm.getGlobalBool("screen_full");
 #else
     register_ctrl_c_handler();
-
-    int screenWidth  = 0;
-    int screenHeight = 0;
-    bool fullScreen  = false;
 #endif
 
     new EventMgr;
@@ -80,7 +76,7 @@ int main(int /*argc*/, char * /*argv*/[])
     GameServerListenNetSocket *gslns = new GameServerListenNetSocket(GAME_PORT);
     bsm->addSocket(gslns);
 
-    new Engine("Marian Srv", screenWidth, screenHeight, fullScreen);
+    new Engine(false);
 
     Game *game = new Game;
 
