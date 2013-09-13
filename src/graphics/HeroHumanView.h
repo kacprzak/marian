@@ -8,6 +8,7 @@
 
 #include <map>
 
+class Renderer;
 class SpriteNode;
 class MapNode;
 
@@ -22,7 +23,7 @@ class HeroHumanView : public HumanView
 
     bool processInput(const SDL_Event& event) override;
     void update(float elapsedTime) override;
-    void draw(Engine *e) override;
+    void draw() override;
 
  private:
     void handleActorMoved(EventPtr event);
@@ -31,6 +32,7 @@ class HeroHumanView : public HumanView
     void handleActorDestroyed(EventPtr event);
     void handleInputCommand(EventPtr event);
 
+    Renderer *m_renderer;
     ActorId m_heroId;
 
     EventListenerHelper elh;

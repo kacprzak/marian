@@ -3,7 +3,6 @@
 #define HUMANVIEW_H
 
 #include "GameView.h"
-#include "Engine.h"
 
 struct ViewRect
 {

@@ -22,20 +22,20 @@ void MapNode::update(float elapsedTime)
 
 //------------------------------------------------------------------------------
 
-void MapNode::drawBackground(Engine *e, const ViewRect& r) const
+void MapNode::drawBackground(Renderer *rndr, const ViewRect& r) const
 {
     // TODO: read order from map
-    drawParallaxLayer(e, "clouds", r, r.left * -0.3f + m_cloudsTransition);
-    drawLayer(e, "back",   r);
-    drawLayer(e, "ground", r);
+    drawParallaxLayer(rndr, "clouds", r, r.left * -0.3f + m_cloudsTransition);
+    drawLayer(rndr, "back",   r);
+    drawLayer(rndr, "ground", r);
 }
 
 //------------------------------------------------------------------------------
 
-void MapNode::drawForeground(Engine *e, const ViewRect& r) const
+void MapNode::drawForeground(Renderer *rndr, const ViewRect& r) const
 {
-    drawParallaxLayer(e, "water", r, r.left * 0.1f);
-    drawLayer(e, "front", r);
+    drawParallaxLayer(rndr, "water", r, r.left * 0.1f);
+    drawLayer(rndr, "front", r);
 }
 
 //------------------------------------------------------------------------------
@@ -53,7 +53,7 @@ void Map::draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const
 
 //------------------------------------------------------------------------------
 
-void MapNode::drawLayer(Engine *e, const std::string& layerName, const ViewRect& rect) const
+void MapNode::drawLayer(Renderer *rndr, const std::string& layerName, const ViewRect& rect) const
 {
     const Layer *layer = m_map->findLayer(layerName);
 
@@ -74,13 +74,13 @@ void MapNode::drawLayer(Engine *e, const std::string& layerName, const ViewRect&
         if (y1 < 0)               y1 = 0;
         if (y2 > m_map->height()) y2 = m_map->height();
 
-        drawLayer(e, layer, x1, x2, y1, y2);
+        drawLayer(rndr, layer, x1, x2, y1, y2);
     }
 }
 
 //------------------------------------------------------------------------------
 
-void MapNode::drawParallaxLayer(Engine *e, const std::string& layerName, const ViewRect &rect, float transition) const
+void MapNode::drawParallaxLayer(Renderer *rndr, const std::string& layerName, const ViewRect &rect, float transition) const
 {
     const Layer *layer = m_map->findLayer(layerName);
 
@@ -113,7 +113,7 @@ void MapNode::drawParallaxLayer(Engine *e, const std::string& layerName, const V
 
                 if (tile) {
                     GLuint textureId = ResourceMgr::singleton().getTexture(tile->textureSource)->textureId();
-                    e->drawQuad(static_cast<float>(x) - transition,
+                    rndr->drawQuad(static_cast<float>(x) - transition,
                                 static_cast<float>(m_map->height() - y - 1),
                                 1.0f,
                                 1.0f,
@@ -126,7 +126,7 @@ void MapNode::drawParallaxLayer(Engine *e, const std::string& layerName, const V
 
 //------------------------------------------------------------------------------
 
-void MapNode::drawLayer(Engine *e, const Layer *layer, int xFrom, int xTo, int yFrom, int yTo) const
+void MapNode::drawLayer(Renderer *rndr, const Layer *layer, int xFrom, int xTo, int yFrom, int yTo) const
 {
     for (int y = yFrom; y < yTo; ++y) {
         for (int x = xFrom; x < xTo; ++x) {
@@ -134,7 +134,7 @@ void MapNode::drawLayer(Engine *e, const Layer *layer, int xFrom, int xTo, int y
 
             if (tile) {
                 GLuint textureId = ResourceMgr::singleton().getTexture(tile->textureSource)->textureId();
-                e->drawQuad(static_cast<float>(x),
+                rndr->drawQuad(static_cast<float>(x),
                             static_cast<float>(m_map->height() - y - 1),
                             1.0f,
                             1.0f,

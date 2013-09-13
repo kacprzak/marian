@@ -4,8 +4,6 @@
 #include <boost/utility.hpp>
 #include <SDL.h>
 
-class Engine;
-
 class GameView : boost::noncopyable
 {
  public:
@@ -14,7 +12,7 @@ class GameView : boost::noncopyable
 
     virtual bool processInput(const SDL_Event& event) = 0;
     virtual void update(float elapsedTime) = 0;
-    virtual void draw(Engine *e) = 0;
+    virtual void draw() = 0;
 
     /** Callbacks */
     virtual void onAttach(int /*gameViewId*/, unsigned long /*actorId*/) {}

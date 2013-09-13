@@ -3,6 +3,7 @@
 
 #include "Map.h"
 #include "HumanView.h"
+#include "Renderer.h"
 
 #include <memory>
 
@@ -20,15 +21,15 @@ public:
 
     std::string backgroundColor() const { return m_map->backgroundColor(); }
 
-    void drawBackground(Engine *e, const ViewRect& rect) const;
-    void drawForeground(Engine *e, const ViewRect& rect) const;
+    void drawBackground(Renderer *rndr, const ViewRect& rect) const;
+    void drawForeground(Renderer *rndr, const ViewRect& rect) const;
 
 private:
     //void draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const;
-    void drawLayer(Engine *e, const std::string& layer, const ViewRect& rect) const;
-    void drawParallaxLayer(Engine *e, const std::string& layerName, const ViewRect& rect, float transition) const;
+    void drawLayer(Renderer *rndr, const std::string& layer, const ViewRect& rect) const;
+    void drawParallaxLayer(Renderer *rndr, const std::string& layerName, const ViewRect& rect, float transition) const;
 
-    void drawLayer(Engine *e, const Layer *layer, int xFrom, int xTo, int yFrom, int yTo) const;
+    void drawLayer(Renderer *rndr, const Layer *layer, int xFrom, int xTo, int yFrom, int yTo) const;
 
     std::shared_ptr<Map> m_map;
 

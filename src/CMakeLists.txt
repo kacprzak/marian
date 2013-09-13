@@ -22,6 +22,10 @@ set( marian_HDRS
   graphics/SpriteNode.h
   graphics/HeroNode.h
   graphics/MapNode.h
+  graphics/Renderer.h
+  graphics/GLRenderer.h
+  graphics/HumanView.h
+  graphics/HeroHumanView.h
 
   input/KeyboardHandler.h
   input/HeroController.h
@@ -51,8 +55,6 @@ set( marian_HDRS
   GameLogic.h
   BaseGameLogic.h
   GameView.h
-  HumanView.h
-  HeroHumanView.h
   PhysicsEngine.h
   Box2dPhysicsEngine.h
   Map.h
@@ -76,6 +78,9 @@ set( marian_SRCS
   graphics/SpriteNode.cpp
   graphics/HeroNode.cpp
   graphics/MapNode.cpp
+  graphics/GLRenderer.cpp
+  graphics/HumanView.cpp
+  graphics/HeroHumanView.cpp
 
   input/HeroController.cpp
 
@@ -100,8 +105,6 @@ set( marian_SRCS
   Engine.cpp
   FpsCounter.cpp
   Game.cpp
-  HumanView.cpp
-  HeroHumanView.cpp
   BaseGameLogic.cpp
   Map.cpp
   ResourceMgr.cpp

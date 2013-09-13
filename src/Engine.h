@@ -8,12 +8,8 @@
 
 #include "Singleton.h"
 #include "GameLogic.h"
-#include "graphics/Image.h"
 
 #include <SDL.h>
-
-#include <GL/gl.h>
-#include <GL/glu.h>
 
 #include <string>
 #include <exception>
@@ -56,16 +52,9 @@ class Engine : public Singleton<Engine>
     void mainLoop(GameLogic *game);
     GameLogic *game() { return m_game; }
 
-    void drawImage(const Image& image, float x, float y, float rotation = 0.0f) const;
-    void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
-                  GLuint textureId, const GLfloat *texCoords) const;
-
     bool breakLoop;
 
  private:
-    void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h) const;
-    void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
-                  const GLfloat *texCoords) const;
     void initializeSDL();
 
     bool processEvents();

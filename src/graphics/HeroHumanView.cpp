@@ -1,8 +1,10 @@
 #include "HeroHumanView.h"
+
 #include "ResourceMgr.h"
 #include "Engine.h"
 #include "Util.h"
 #include "Map.h"
+#include "GLRenderer.h"
 
 #include "components/RenderComponent.h"
 #include "graphics/SpriteNode.h"
@@ -12,6 +14,7 @@
 
 HeroHumanView::HeroHumanView(const std::string &title, int screenWidth, int screenHeight, bool screenFull)
     : HumanView(title, screenWidth, screenHeight, screenFull)
+    , m_renderer(new GLRenderer)
     , m_heroId(0)
     , m_keyboardHandler(new HeroController)
 {
@@ -81,6 +84,7 @@ HeroHumanView::~HeroHumanView()
     }
 
     delete m_keyboardHandler;
+    delete m_renderer;
 }
 
 //------------------------------------------------------------------------------
@@ -118,7 +122,7 @@ void HeroHumanView::update(float elapsedTime)
 
 //------------------------------------------------------------------------------
 
-void HeroHumanView::draw(Engine *e)
+void HeroHumanView::draw()
 {
     preDraw();
 
@@ -126,18 +130,18 @@ void HeroHumanView::draw(Engine *e)
     ViewRect r;
     viewBounds(&r);
 
-    m_mapNode.drawBackground(e, r);
+    m_mapNode.drawBackground(m_renderer, r);
 
     // Draw actors
     for (auto& pair : m_nodes) {
         SpriteNode *sprite = pair.second;
         const Image *img = nullptr;
         if (sprite && (img = sprite->image())) {
-            e->drawImage(*img, sprite->x(), sprite->y(), sprite->angle());
+            m_renderer->drawImage(*img, sprite->x(), sprite->y(), sprite->angle());
         }
     }
 
-    m_mapNode.drawForeground(e, r);
+    m_mapNode.drawForeground(m_renderer, r);
 
     postDraw();
 }
