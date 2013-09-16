@@ -1,7 +1,7 @@
 Marian
 ======
 
-2d platformer game. Another Super Mario clone. Just for fun.
+2d platformer game. Another Super Mario clone, but with multiplayer. Just for fun.
 
 
 Dependencies
