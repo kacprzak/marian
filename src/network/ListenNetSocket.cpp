@@ -2,7 +2,7 @@
 
 #if PLATFORM == PLATFORM_WINDOWS
   #include <winsock2.h>
-#elif
+#else
   #include <unistd.h> // close
 #endif
 
@@ -37,7 +37,7 @@ void ListenNetSocket::init(int portNum)
         PLOG << "bind";
 #if PLATFORM == PLATFORM_WINDOWS
         closesocket(m_socket);
-#elif
+#else
         close(m_socket);
 #endif
         m_socket = -1;
@@ -49,7 +49,7 @@ void ListenNetSocket::init(int portNum)
         PLOG << "listen";
 #if PLATFORM == PLATFORM_WINDOWS
         closesocket(m_socket);
-#elif
+#else
         close(m_socket);
 #endif
         m_socket = -1;
@@ -80,7 +80,7 @@ int ListenNetSocket::acceptConnection(unsigned int *addr)
         PLOG << "getpeername";
 #if PLATFORM == PLATFORM_WINDOWS
         closesocket(m_socket);
-#elif
+#else
         close(m_socket);
 #endif
         return -1;

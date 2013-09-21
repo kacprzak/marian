@@ -60,7 +60,7 @@ NetSocket::~NetSocket()
     if (m_socket != -1) {
 #if PLATFORM == PLATFORM_WINDOWS
         closesocket(m_socket);
-#elif
+#else
         close(m_socket);
 #endif
     }
@@ -95,7 +95,7 @@ bool NetSocket::connect(unsigned int ip, unsigned int port, bool forceCoalesce)
         PLOG << "connect";
 #if PLATFORM == PLATFORM_WINDOWS
         closesocket(m_socket);
-#elif
+#else
         close(m_socket);
 #endif
         m_socket = -1;
@@ -109,16 +109,16 @@ bool NetSocket::connect(unsigned int ip, unsigned int port, bool forceCoalesce)
 
 void NetSocket::setBlocking(bool blocking)
 {
-    //unsigned long val = (blocking) ? 0 : 1;
-    //ioctl(m_socket, FIONBIO, &val);
-
 #if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
 
-    int nonBlocking = (blocking) ? 0 : 1;
-    if ( fcntl(m_socket, F_SETFL, O_NONBLOCK, nonBlocking) == -1 )
-    {
-        LOG_ERROR << "failed to set non-blocking socket\n";
-    }
+    unsigned long val = (blocking) ? 0 : 1;
+    ioctl(m_socket, FIONBIO, &val);
+
+    //int nonBlocking = (blocking) ? 0 : 1;
+    //if ( fcntl(m_socket, F_SETFL, O_NONBLOCK, nonBlocking) == -1 )
+    //{
+    //    LOG_ERROR << "failed to set non-blocking socket\n";
+    //}
 
 #elif PLATFORM == PLATFORM_WINDOWS
 

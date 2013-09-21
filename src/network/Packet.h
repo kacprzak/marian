@@ -9,7 +9,7 @@
   #include <ws2tcpip.h>
 
   typedef unsigned __int32 uint32; 
-#elif
+#else
   #include <arpa/inet.h> // ntohl
   
   typedef u_int32_t uint32;

@@ -4,7 +4,7 @@
 
 #if PLATFORM == PLATFORM_WINDOWS
   #include <winsock2.h>
-#elif
+#else
   #include <unistd.h> // close
   #include <netdb.h>  // hostent
 #endif
@@ -171,7 +171,7 @@ void BaseSocketMgr::select(int pauseMicroSecs, bool handleInput)
                 if (sock->m_socket != -1) {
 #if PLATFORM == PLATFORM_WINDOWS
                     closesocket(sock->m_socket);
-#elif
+#else
                     close(sock->m_socket);
 #endif
                     sock->m_socket = -1;

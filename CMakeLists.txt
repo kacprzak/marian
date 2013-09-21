@@ -5,7 +5,7 @@ project( marian )
 set( MARIAN_VERSION_MAJOR 0 )
 set( MARIAN_VERSION_MINOR 2 )
 
-option( USE_CEGUI "Use CEGIU for game GUI" ON )
+option( USE_CEGUI "Use CEGUI for game GUI" ON )
 
 if( MSVC )
   #
