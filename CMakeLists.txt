@@ -1,6 +1,12 @@
 cmake_minimum_required( VERSION 2.8 )
 project( marian )
 
+# The version number.
+set( MARIAN_VERSION_MAJOR 0 )
+set( MARIAN_VERSION_MINOR 2 )
+
+option( USE_CEGUI "Use CEGIU for game GUI" ON )
+
 if( MSVC )
   #
 else()
@@ -20,11 +26,22 @@ find_package( Box2D REQUIRED )
 #find_package( GLUT REQUIRED )
 find_package( ZLIB REQUIRED )
 find_package( Lua51 REQUIRED )
-find_package( CEGUI REQUIRED COMPONENTS OPENGL )
 
+if ( USE_CEGUI )
+	find_package( CEGUI REQUIRED COMPONENTS OPENGL )
+	include_directories( ${CEGUI_INCLUDE_DIR} )
+	set( EXTRA_LIBS ${EXTRA_LIBS} ${CEGUI_LIBRARY} )
+endif( USE_CEGUI )
+	
 set( CMAKE_DEBUG_POSTFIX "_d" )
 
+configure_file(
+  ${PROJECT_SOURCE_DIR}/config.h.in
+  ${PROJECT_BINARY_DIR}/config.h
+)
+
 include_directories(
+  ${PROJECT_BINARY_DIR}
   src
   tmx
   ${SDL2_INCLUDE_DIR}
@@ -35,7 +52,6 @@ include_directories(
 #  ${GLUT_INCLUDE_DIRS}
   ${ZLIB_INCLUDE_DIR}
   ${LUA_INCLUDE_DIR}
-  ${CEGUI_INCLUDE_DIR}
 )
 
 add_subdirectory( tmx )

@@ -1,19 +1,24 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "GuiMgr.h"
 
-#include "Console.h"
 #include "Logger.h"
+
+#include "config.h"
+
+#ifdef USE_CEGUI
+#include "Console.h"
 
 #include <CEGUI.h>
 #include <RendererModules/OpenGL/CEGUIOpenGLRenderer.h>
 
-
 static CEGUI::uint SDLKeyToCEGUIKey(SDL_Keycode key);
+#endif
 
 //------------------------------------------------------------------------------
 
 GuiMgr::GuiMgr()
 {
+#ifdef USE_CEGUI
     CEGUI::OpenGLRenderer::bootstrapSystem();
 
     std::string folder = "media/cegui/";
@@ -56,14 +61,17 @@ GuiMgr::GuiMgr()
     CEGUI::System::getSingleton().getGUISheet()->addChildWindow(c->getWindow());
 
     c->setVisible(false);
+#endif
 }
 
 //------------------------------------------------------------------------------
 
 GuiMgr::~GuiMgr()
 {
+#ifdef USE_CEGUI
     delete Console::singletonPtr();
-    LOG << "GuiMgr destroyed\n";
+#endif
+	LOG << "GuiMgr destroyed\n";
 }
 
 //------------------------------------------------------------------------------
@@ -72,6 +80,7 @@ bool GuiMgr::processInput(const SDL_Event& e)
 {
     bool interceptEvent = false;
 
+#ifdef USE_CEGUI
     switch (e.type) {
         /* mouse motion handler */
     case SDL_MOUSEMOTION:
@@ -156,6 +165,7 @@ bool GuiMgr::processInput(const SDL_Event& e)
 
     if (Console::singleton().isVisible())
         interceptEvent = true;
+#endif
 
     return interceptEvent; // was intercepted
 }
@@ -164,20 +174,25 @@ bool GuiMgr::processInput(const SDL_Event& e)
 
 void GuiMgr::update(float elapsedTime)
 {
+#ifdef USE_CEGUI
     CEGUI::System::getSingleton().injectTimePulse(elapsedTime);
+#endif
 }
 
 //------------------------------------------------------------------------------
 
 void GuiMgr::draw()
 {
+#ifdef USE_CEGUI
     CEGUI::System::getSingleton().renderGUI();
+#endif
 }
 
 //------------------------------------------------------------------------------
 
 void GuiMgr::handle_mouse_down(Uint8 button)
 {
+#ifdef USE_CEGUI
     switch (button) {
     case SDL_BUTTON_LEFT:
         CEGUI::System::getSingleton().injectMouseButtonDown(CEGUI::LeftButton);
@@ -189,18 +204,22 @@ void GuiMgr::handle_mouse_down(Uint8 button)
         CEGUI::System::getSingleton().injectMouseButtonDown(CEGUI::RightButton);
         break;
     }
+#endif
 }
 //------------------------------------------------------------------------------
 
 void GuiMgr::handle_mouse_wheel(const SDL_MouseWheelEvent &e)
 {
+#ifdef USE_CEGUI
     CEGUI::System::getSingleton().injectMouseWheelChange( e.y );
+#endif
 }
 
 //------------------------------------------------------------------------------
  
 void GuiMgr::handle_mouse_up(Uint8 button)
 {
+#ifdef USE_CEGUI
     switch (button) {
     case SDL_BUTTON_LEFT:
         CEGUI::System::getSingleton().injectMouseButtonUp(CEGUI::LeftButton);
@@ -212,8 +231,10 @@ void GuiMgr::handle_mouse_up(Uint8 button)
         CEGUI::System::getSingleton().injectMouseButtonUp(CEGUI::RightButton);
         break;
     }
+#endif
 }
 
+#ifdef USE_CEGUI
 /************************************************************************
     Translate a SDLKey to the proper CEGUI::Key
 *************************************************************************/
@@ -334,3 +355,4 @@ CEGUI::uint SDLKeyToCEGUIKey(SDL_Keycode key)
     }
     return 0;
 }
+#endif

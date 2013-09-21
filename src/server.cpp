@@ -1,4 +1,6 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+
+#include "config.h"
 #include "Logger.h"
 #include "ScriptMgr.h"
 #include "events/EventMgr.h"
@@ -10,22 +12,8 @@
 #include "network/GameServerListenNetSocket.h"
 #include "network/RemoteGameView.h"
 
-#include <signal.h>
-
-void eventListener(EventPtr event)
-{
-    LOG << "EVENT: " << event->eventName() << " {";
-    event->serialize(std::clog);
-    std::clog << " }"<< std::endl;
-
-    // New client
-    auto e = std::static_pointer_cast<RemoteClientEvent>(event);
-
-    std::shared_ptr<GameView> view(new RemoteGameView(e->m_socketId));
-    Engine::singleton().game()->attachView(view);
-}
-
-//------------------------------------------------------------------------------
+#if PLATFORM == PLATFORM_UNIX
+  #include <signal.h>
 
 void ctrl_c_handler(int s){
     LOG << "Caught signal " << s << std::endl;
@@ -47,6 +35,21 @@ void register_ctrl_c_handler() {
 
     sigaction(SIGINT, &sigIntHandler, NULL);
 }
+#endif
+//------------------------------------------------------------------------------
+
+void eventListener(EventPtr event)
+{
+    LOG << "EVENT: " << event->eventName() << " {";
+    event->serialize(std::clog);
+    std::clog << " }"<< std::endl;
+
+    // New client
+    auto e = std::static_pointer_cast<RemoteClientEvent>(event);
+
+    std::shared_ptr<GameView> view(new RemoteGameView(e->m_socketId));
+    Engine::singleton().game()->attachView(view);
+}
 
 //------------------------------------------------------------------------------
 
@@ -65,7 +68,9 @@ int main(int /*argc*/, char * /*argv*/[])
     int screenHeight = sm.getGlobalInt("screen_height");
     bool fullScreen  = sm.getGlobalBool("screen_full");
 #else
+#if PLATFORM == PLATFORM_UNIX
     register_ctrl_c_handler();
+#endif
 #endif
 
     new EventMgr;

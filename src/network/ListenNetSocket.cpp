@@ -1,8 +1,12 @@
 #include "ListenNetSocket.h"
 
-#include "Logger.h"
+#if PLATFORM == PLATFORM_WINDOWS
+  #include <winsock2.h>
+#elif
+  #include <unistd.h> // close
+#endif
 
-#include <unistd.h> // close
+#include "Logger.h"
 
 ListenNetSocket::ListenNetSocket()
 {
@@ -19,7 +23,7 @@ void ListenNetSocket::init(int portNum)
     }
 
     int value = 1;
-    if (setsockopt(m_socket, SOL_SOCKET, SO_REUSEADDR, &value, sizeof(value)) == -1) {
+    if (setsockopt(m_socket, SOL_SOCKET, SO_REUSEADDR, (const char *)&value, sizeof(value)) == -1) {
         PLOG << "setsockopt";
     }
 
@@ -31,7 +35,11 @@ void ListenNetSocket::init(int portNum)
 
     if (bind(m_socket, (struct sockaddr*)&sa, sizeof(sa)) == -1) {
         PLOG << "bind";
+#if PLATFORM == PLATFORM_WINDOWS
+        closesocket(m_socket);
+#elif
         close(m_socket);
+#endif
         m_socket = -1;
     }
 
@@ -39,7 +47,11 @@ void ListenNetSocket::init(int portNum)
 
     if (listen(m_socket, 256) == -1) {
         PLOG << "listen";
+#if PLATFORM == PLATFORM_WINDOWS
+        closesocket(m_socket);
+#elif
         close(m_socket);
+#endif
         m_socket = -1;
     }
 
@@ -50,6 +62,10 @@ void ListenNetSocket::init(int portNum)
 
 int ListenNetSocket::acceptConnection(unsigned int *addr)
 {
+#if PLATFORM == PLATFORM_WINDOWS
+    typedef int socklen_t;
+#endif
+
     int new_socket;
     struct sockaddr_in socka;
     socklen_t size = sizeof(socka);
@@ -62,7 +78,11 @@ int ListenNetSocket::acceptConnection(unsigned int *addr)
 
     if (getpeername(new_socket, (struct sockaddr*)&socka, &size) == -1) {
         PLOG << "getpeername";
+#if PLATFORM == PLATFORM_WINDOWS
+        closesocket(m_socket);
+#elif
         close(m_socket);
+#endif
         return -1;
     }
 

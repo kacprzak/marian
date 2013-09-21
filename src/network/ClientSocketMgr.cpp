@@ -19,8 +19,9 @@ bool ClientSocketMgr::connect()
 
     if (!socket->connect(getHostByName(m_hostName), m_port)) {
         delete socket;
-        return -1;
+        return false;
     }
 
-    return addSocket(socket);
+    addSocket(socket);
+    return true;
 }

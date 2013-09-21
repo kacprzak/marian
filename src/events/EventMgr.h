@@ -9,6 +9,7 @@
 #include <map>
 #include <list>
 #include <memory>
+#include <functional>
 
 typedef std::function<void (EventPtr)> EventListener;
 typedef std::shared_ptr<EventListener> EventListenerPtr;

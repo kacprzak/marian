@@ -23,7 +23,7 @@ void GameServerListenNetSocket::handleInput()
     struct linger ling;
     ling.l_onoff = 0;
     ling.l_linger = 0;
-    if (setsockopt(new_sock, SOL_SOCKET, SO_LINGER, &ling, sizeof(ling)) == -1) {
+    if (setsockopt(new_sock, SOL_SOCKET, SO_LINGER, (const char *)&ling, sizeof(ling)) == -1) {
         PLOG << "setsockopt";
     }
 

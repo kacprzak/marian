@@ -20,7 +20,9 @@
 
 #include "Render.h"
 
-#ifdef _MSC_VER
+#include "config.h"
+
+#if PLATFORM == PLATFORM_WINDOWS
   #include <windows.h>
 #endif
 

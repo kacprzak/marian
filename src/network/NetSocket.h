@@ -52,7 +52,7 @@ class NetSocket
     unsigned int m_ipaddr;  ///< IP of remote connection
 
     int m_internal;         ///< remote IP internal or external
-    int m_timeCreated;      ///< socket creation time
+    time_t m_timeCreated;      ///< socket creation time
 };
 
 #endif // NETSOCKET_H

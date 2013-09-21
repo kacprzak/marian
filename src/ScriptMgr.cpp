@@ -94,8 +94,8 @@ bool ScriptMgr::getGlobalBool(const std::string& varname)
         throw ScriptMgrError(varname + " should be a boolean.");
     }
 
-    bool retVal = lua_toboolean(L, -1);
+    int retVal = lua_toboolean(L, -1);
     lua_pop(L, 1);
 
-    return retVal;
+    return ((retVal) ? true : false);
 }

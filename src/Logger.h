@@ -25,7 +25,7 @@ void logHelper(int sockId, const char *data,
 // This will show CPU time! It is different from the actual time.
 #define _LOG_CLOCK  << std::setw(4) << std::setprecision(2) << std::fixed << (float(std::clock() - startTime) / CLOCKS_PER_SEC) << " "
 
-#ifndef NDEBUG
+#if !(defined NDEBUG) && !(defined _MSC_VER)
 #define _LOG_EXTRA(f)  << "{" << std::setw(19) << f << "} "
 #else
 #define _LOG_EXTRA(f)
@@ -61,7 +61,7 @@ class PerrorLogger {
     }
 };
 
-#ifndef NDEBUG
+#if !(defined NDEBUG) && !(defined _MSC_VER)
 #define PLOG        PerrorLogger(__func__)
 #else
 #define PLOG        PerrorLogger(nullptr)

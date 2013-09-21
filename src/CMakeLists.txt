@@ -45,7 +45,6 @@ set( marian_HDRS
   events/Event.h
   events/EventMgr.h
 
-  gui/Console.h
   gui/GuiMgr.h
 
   Logger.h
@@ -66,6 +65,10 @@ set( marian_HDRS
 
   debugdraw/Render.h
 )
+
+if ( USE_CEGUI )
+  set( marian_HDRS ${marian_HDRS} gui/Console.h )
+endif ( USE_CEGUI )
 
 set( marian_SRCS
   actors/Actor.cpp
@@ -97,7 +100,6 @@ set( marian_SRCS
 
   events/EventMgr.cpp
 
-  gui/Console.cpp
   gui/GuiMgr.cpp
 
   Logger.cpp
@@ -114,18 +116,26 @@ set( marian_SRCS
   debugdraw/Render.cpp
 )
 
+if ( USE_CEGUI )
+  set( marian_SRCS ${marian_SRCS} gui/Console.cpp )
+endif ( USE_CEGUI )
+
 set( LINK_LIBS
   tmx
   ${BOX2D_LIBRARY}
   ${SDL2_LIBRARY}
-#  ${SDLIMAGE_LIBRARY}
   ${SDL2IMAGE_LIBRARY}
   ${OPENGL_LIBRARIES}
   ${LUA_LIBRARIES}
 #  ${Boost_LIBRARIES}
 #  ${GLUT_LIBRARY}
-  ${CEGUI_LIBRARY}
+  ${EXTRA_LIBS}
 )
+
+# Add winsock lib
+if( WIN32 )
+  set( LINK_LIBS ${LINK_LIBS} wsock32 ws2_32 )
+endif( WIN32 )
 
 add_executable( marian main.cpp ${marian_HDRS} ${marian_SRCS} )
 set_target_properties( marian PROPERTIES DEBUG_POSTFIX _d)

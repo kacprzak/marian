@@ -4,13 +4,15 @@
 #include "Logger.h"
 #include "BaseSocketMgr.h"
 
-#include <unistd.h> // close
-#include <sys/ioctl.h>
-//#include <sys/types.h>
-//#include <sys/socket.h>
-#include <netinet/tcp.h> // TCP_NODELAY
-//#include <netinet/in.h>
-//#include <signal.h>
+#if PLATFORM == PLATFORM_UNIX
+  #include <unistd.h> // close
+  #include <sys/ioctl.h>
+  //#include <sys/types.h>
+  //#include <sys/socket.h>
+  #include <netinet/tcp.h> // TCP_NODELAY
+  //#include <netinet/in.h>
+  //#include <signal.h>
+#endif
 
 NetSocket::NetSocket()
 {
@@ -42,7 +44,7 @@ NetSocket::NetSocket(int new_sock, unsigned int hostIp)
     struct linger ling;
     ling.l_onoff = 0;
     ling.l_linger = 0;
-    if (setsockopt(new_sock, SOL_SOCKET, SO_LINGER, &ling, sizeof(ling)) == -1) {
+    if (setsockopt(new_sock, SOL_SOCKET, SO_LINGER, (const char *)&ling, sizeof(ling)) == -1) {
         PLOG << "setsockopt";
     }
 
@@ -55,8 +57,13 @@ NetSocket::~NetSocket()
 {
     LOG << "delete NetSocket sock_fd=" << m_socket << " (" << this << ")" << std::endl;
 
-    if (m_socket != -1)
+    if (m_socket != -1) {
+#if PLATFORM == PLATFORM_WINDOWS
+        closesocket(m_socket);
+#elif
         close(m_socket);
+#endif
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -73,7 +80,7 @@ bool NetSocket::connect(unsigned int ip, unsigned int port, bool forceCoalesce)
     // In this case turn off Nagle algorithm if desired
     if (!forceCoalesce) {
         int x = 1;
-        if (setsockopt(m_socket, IPPROTO_TCP, TCP_NODELAY, (void *)&x, sizeof(x))) {
+        if (setsockopt(m_socket, IPPROTO_TCP, TCP_NODELAY, (const char *)&x, sizeof(x))) {
             PLOG << "setsockopt";
         }
     }
@@ -86,7 +93,11 @@ bool NetSocket::connect(unsigned int ip, unsigned int port, bool forceCoalesce)
     // Connect!
     if (::connect(m_socket, (struct sockaddr *)&sa, sizeof(sa)) == -1) {
         PLOG << "connect";
+#if PLATFORM == PLATFORM_WINDOWS
+        closesocket(m_socket);
+#elif
         close(m_socket);
+#endif
         m_socket = -1;
         return false;
     }
@@ -98,8 +109,26 @@ bool NetSocket::connect(unsigned int ip, unsigned int port, bool forceCoalesce)
 
 void NetSocket::setBlocking(bool blocking)
 {
-    unsigned long val = (blocking) ? 0 : 1;
-    ioctl(m_socket, FIONBIO, &val);
+    //unsigned long val = (blocking) ? 0 : 1;
+    //ioctl(m_socket, FIONBIO, &val);
+
+#if PLATFORM == PLATFORM_MAC || PLATFORM == PLATFORM_UNIX
+
+    int nonBlocking = (blocking) ? 0 : 1;
+    if ( fcntl(m_socket, F_SETFL, O_NONBLOCK, nonBlocking) == -1 )
+    {
+        LOG_ERROR << "failed to set non-blocking socket\n";
+    }
+
+#elif PLATFORM == PLATFORM_WINDOWS
+
+    DWORD nonBlocking = (blocking) ? 0 : 1;
+    if ( ioctlsocket(m_socket, FIONBIO, &nonBlocking) != 0 )
+    {
+         LOG_ERROR << "failed to set non-blocking socket\n";
+    }
+
+#endif
 }
 
 //------------------------------------------------------------------------------
@@ -128,7 +157,11 @@ void NetSocket::handleOutput()
         const char *data = packet->getData();
         int len = static_cast<int>(packet->getSize()); // cast from ulong!
 
-        int rc = ::send(m_socket, data + m_sendOffset, len - m_sendOffset, MSG_NOSIGNAL);
+        int flags = 0;
+#if PLATFORM == PLATFORM_UNIX
+        flags |= MSG_NOSIGNAL;
+#endif
+        int rc = ::send(m_socket, data + m_sendOffset, len - m_sendOffset, flags);
 
         if (rc > 0) {
             // Log

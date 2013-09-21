@@ -1,9 +1,15 @@
 #include "BaseSocketMgr.h"
 
-#include "Logger.h"
+#include "config.h"
 
-#include <unistd.h> // close
-#include <netdb.h>  // hostent
+#if PLATFORM == PLATFORM_WINDOWS
+  #include <winsock2.h>
+#elif
+  #include <unistd.h> // close
+  #include <netdb.h>  // hostent
+#endif
+
+#include "Logger.h"
 
 BaseSocketMgr::BaseSocketMgr()
     : m_nextSocketId(1)
@@ -20,6 +26,11 @@ BaseSocketMgr::BaseSocketMgr()
 BaseSocketMgr::~BaseSocketMgr()
 {
     shutdown();
+
+#if PLATFORM == PLATFORM_WINDOWS
+    WSACleanup();
+#endif
+
     LOG << "Data sent: " << m_outbound << " bytes | Data recv: " << m_inbound << " bytes" << std::endl;
 }
 
@@ -27,8 +38,12 @@ BaseSocketMgr::~BaseSocketMgr()
 
 bool BaseSocketMgr::init()
 {
-    // On Windows it is not so easy
+#if PLATFORM == PLATFORM_WINDOWS
+    WSADATA WsaData;
+    return WSAStartup(MAKEWORD(2,2), &WsaData) == NO_ERROR;
+#else
     return true;
+#endif
 }
 
 //------------------------------------------------------------------------------
@@ -136,7 +151,7 @@ void BaseSocketMgr::select(int pauseMicroSecs, bool handleInput)
         }
     }
 
-    unsigned int timeNow = ::time(NULL);
+    time_t timeNow = ::time(NULL);
 
     auto it = std::begin(m_sockList);
     while (it != std::end(m_sockList)) {
@@ -154,7 +169,11 @@ void BaseSocketMgr::select(int pauseMicroSecs, bool handleInput)
             case 3:
                 sock->m_deleteFlag = 2;
                 if (sock->m_socket != -1) {
+#if PLATFORM == PLATFORM_WINDOWS
+                    closesocket(sock->m_socket);
+#elif
                     close(sock->m_socket);
+#endif
                     sock->m_socket = -1;
                 }
                 break;

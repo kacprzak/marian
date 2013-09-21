@@ -10,7 +10,7 @@ void logHelper(int sockId, const char *data,
 {
     // debug data
     char buf[60];
-    unsigned int buf_size = sizeof(buf);
+    const unsigned int buf_size = sizeof(buf);
 
     memset(buf, '\0', buf_size);
     memcpy(buf, data, std::min(size, buf_size - 1));
@@ -30,9 +30,10 @@ void logHelper(int sockId, const char *data,
 
     buf_hex_ptr = buf_hex;
     char *buf_ptr = buf;
-    if (!SHOW_PKT_SIZE && (size > sizeof(u_int32_t))) {
-        buf_hex_ptr += sizeof(u_int32_t) * 2 + 4; // plus 4 ':' chars
-        buf_ptr += sizeof(u_int32_t);
+    const size_t sizeof_uint32 = 4; // sizeof(u_int32_t);
+    if (!SHOW_PKT_SIZE && (size > sizeof_uint32)) {
+        buf_hex_ptr += sizeof_uint32 * 2 + 4; // plus 4 ':' chars
+        buf_ptr += sizeof_uint32;
     }
 
     std::clog << "SockId=" << sockId << " " << msg << " " << std::setw(2) << size << " B: "

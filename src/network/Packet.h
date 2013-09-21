@@ -2,11 +2,21 @@
 #ifndef PACKET_H
 #define PACKET_H
 
+#include "config.h" 
+
+#if PLATFORM == PLATFORM_WINDOWS
+  #include <winsock2.h>  // ntohl
+  #include <ws2tcpip.h>
+
+  typedef unsigned __int32 uint32; 
+#elif
+  #include <arpa/inet.h> // ntohl
+  
+  typedef u_int32_t uint32;
+#endif
+
 #include <cassert>
 #include <cstring>     // memcpy
-#include <arpa/inet.h> // ntohl
-
-typedef u_int32_t uint32;
 
 class Packet
 {

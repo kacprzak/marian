@@ -5,7 +5,6 @@
 #include "Singleton.h"
 
 #include <SDL.h>
-#include <CEGUI.h>
 
 class GuiMgr : public Singleton<GuiMgr>
 {
