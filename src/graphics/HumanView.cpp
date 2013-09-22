@@ -27,7 +27,7 @@ HumanView::HumanView(const std::string &title, int screenWidth, int screenHeight
     , m_scale(SCALE)
 {
     try {
-        initializeSDL();
+        createSDLWindow();
     } catch (EngineError e) {
         SDL_Quit();
         throw e;
@@ -64,7 +64,7 @@ void HumanView::update(float elapsedTime)
 
 //------------------------------------------------------------------------------
 
-void HumanView::initializeSDL()
+void HumanView::createSDLWindow()
 {
     int screen_flags = SDL_WINDOW_OPENGL;
 

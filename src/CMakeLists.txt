@@ -141,14 +141,6 @@ add_executable( marian main.cpp ${marian_HDRS} ${marian_SRCS} )
 set_target_properties( marian PROPERTIES DEBUG_POSTFIX _d)
 target_link_libraries( marian ${LINK_LIBS} )
 
-add_executable( mariansrv server.cpp ${marian_HDRS} ${marian_SRCS} )
-set_target_properties( mariansrv PROPERTIES DEBUG_POSTFIX _d)
-target_link_libraries( mariansrv ${LINK_LIBS} )
-
-add_executable( mariancli client.cpp ${marian_HDRS} ${marian_SRCS} )
-set_target_properties( mariancli PROPERTIES DEBUG_POSTFIX _d)
-target_link_libraries( mariancli ${LINK_LIBS} )
-
 add_custom_target(run
     COMMAND ${CMAKE_BINARY_DIR}/marian_d
     DEPENDS marian

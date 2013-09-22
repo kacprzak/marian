@@ -38,7 +38,7 @@ class HumanView : public GameView
     void postDraw();
 
  private:
-    void initializeSDL();
+    void createSDLWindow();
     void initializeOpenGL();
 
     std::string m_titile;

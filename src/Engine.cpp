@@ -24,17 +24,13 @@ Engine::Engine(bool initVideo)
         SDL_Quit();
         throw e;
     }
-
-    new ResourceMgr;
-    ResourceMgr::singleton().setDataFolder("media/");
 }
 
 //------------------------------------------------------------------------------
 
 Engine::~Engine()
 {
-    // Release all resources
-    delete ResourceMgr::singletonPtr();
+    ResourceMgr::singleton().releaseTextures(); // Before SDL is closed
 
     LOG << "Quitting SDL...\n";
     SDL_Quit();
