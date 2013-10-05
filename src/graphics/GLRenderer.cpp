@@ -55,14 +55,16 @@ void GLRenderer::drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h) const
     if(texturing_enabled)
         glDisable(GL_TEXTURE_2D);
 
-    glBegin(GL_QUADS);
-    {
-        glTexCoord2f(0.0f, 0.0f); glVertex2f(x, y);
-        glTexCoord2f(1.0f, 0.0f); glVertex2f(x + w, y);
-        glTexCoord2f(1.0f, 1.0f); glVertex2f(x + w, y + h);
-        glTexCoord2f(0.0f, 1.0f); glVertex2f(x, y + h);
-    }
-    glEnd();
+    GLfloat vertices[8] = {x, y,
+                           x + w, y,
+                           x + w, y + h,
+                           x, y + h};
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+
+    glVertexPointer(2, GL_FLOAT, 0, vertices);
+
+    glDrawArrays(GL_QUADS, 0, 4);
 
     if(texturing_enabled)
         glEnable(GL_TEXTURE_2D);
@@ -71,16 +73,28 @@ void GLRenderer::drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h) const
 //------------------------------------------------------------------------------
 
 void GLRenderer::drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
-                      const GLfloat *texCoords) const
+                          const GLfloat *texCoords) const
 {
-    glBegin(GL_QUADS);
-    {
-        glTexCoord2f(texCoords[0], texCoords[1]); glVertex2f(x, y);
-        glTexCoord2f(texCoords[2], texCoords[3]); glVertex2f(x + w, y);
-        glTexCoord2f(texCoords[4], texCoords[5]); glVertex2f(x + w, y + h);
-        glTexCoord2f(texCoords[6], texCoords[7]); glVertex2f(x, y + h);
-    }
-    glEnd();
+    static GLfloat s_texCoords[8] = {0.0f, 0.0f,
+                                     1.0f, 0.0f,
+                                     1.0f, 1.0f,
+                                     0.0f, 1.0f};
+
+    if (texCoords == nullptr)
+        texCoords = s_texCoords;
+
+    GLfloat vertices[8] = {x, y,
+                           x + w, y,
+                           x + w, y + h,
+                           x, y + h};
+
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_VERTEX_ARRAY);
+
+    glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+    glVertexPointer(2, GL_FLOAT, 0, vertices);
+
+    glDrawArrays(GL_QUADS, 0, 4);
 }
 
 
