@@ -114,10 +114,10 @@ void MapNode::drawParallaxLayer(Renderer *rndr, const std::string& layerName, co
                 if (tile) {
                     GLuint textureId = ResourceMgr::singleton().getTexture(tile->textureSource)->textureId();
                     rndr->drawQuad(static_cast<float>(x) - transition,
-                                static_cast<float>(m_map->height() - y - 1),
-                                1.0f,
-                                1.0f,
-                                textureId, tile->texCoords);
+                                   static_cast<float>(m_map->height() - y - 1),
+                                   1.0f,
+                                   1.0f,
+                                   textureId, tile->texCoords);
                 }
             }
         }
@@ -135,10 +135,10 @@ void MapNode::drawLayer(Renderer *rndr, const Layer *layer, int xFrom, int xTo, 
             if (tile) {
                 GLuint textureId = ResourceMgr::singleton().getTexture(tile->textureSource)->textureId();
                 rndr->drawQuad(static_cast<float>(x),
-                            static_cast<float>(m_map->height() - y - 1),
-                            1.0f,
-                            1.0f,
-                            textureId, tile->texCoords);
+                               static_cast<float>(m_map->height() - y - 1),
+                               1.0f,
+                               1.0f,
+                               textureId, tile->texCoords);
             }
         }
     }

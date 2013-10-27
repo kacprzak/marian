@@ -69,12 +69,12 @@ void ResourceMgr::releaseTextures()
 
 const Texture* ResourceMgr::getTexture(const std::string& filename)
 {
-    for (auto item : m_textures) {
-        if (item.first == filename)
-            return item.second;
+    auto it = m_textures.find(filename);
+    
+    if (it != std::end(m_textures)) {
+        return it->second;
+    } else {
+        std::cerr << "Error: Texture " << filename << " was not loaded!" << std::endl;
+        return 0;
     }
-
-    std::cerr << "Error: Texture " << filename << " was not loaded!" << std::endl;
-
-    return 0;
 }

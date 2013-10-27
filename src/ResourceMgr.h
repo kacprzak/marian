@@ -5,7 +5,7 @@
 #include "Singleton.h"
 #include "graphics/Texture.h"
 
-#include <map>
+#include <unordered_map>
 #include <utility>
 
 class ResourceMgr final : public Singleton<ResourceMgr>
@@ -28,7 +28,7 @@ class ResourceMgr final : public Singleton<ResourceMgr>
 
  private:
     std::string dataFolder;
-    std::map<std::string, Texture*> m_textures;
+    std::unordered_map<std::string, Texture*> m_textures;
 };
 
 #endif
