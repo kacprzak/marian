@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <boost/utility.hpp> // noncopyable
+#include "rapidxml/rapidxml.hpp"
 
 namespace tmx {
 
@@ -102,6 +103,13 @@ class Map : boost::noncopyable
     std::vector<ObjectGroup> objectGroups;
 
     std::vector<Property> properties;
+
+ private:
+    void loadTilesets(rapidxml::xml_node<> *tileset_node);
+    void loadLayers(rapidxml::xml_node<> *layer_node);
+    void loadObjectGroups(rapidxml::xml_node<> *objectGroup_node);
+
+    std::vector<Property> loadProperties(rapidxml::xml_node<> *node) const;
 };
 
 } // namespace tmx
