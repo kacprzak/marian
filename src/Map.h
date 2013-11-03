@@ -53,8 +53,10 @@ class Map : boost::noncopyable
 
     Layer *findLayer(const std::string& layerName) const;
 
+    std::vector<Layer *> m_layers;
+
  private:
-    void rectForTile(int tileCoords[4], unsigned globalId) const;
+    void rectOnTextureForTile(int tileCoords[4], unsigned globalId) const;
 
     /** Size in game (tile) coords */
     int m_width;
@@ -64,7 +66,6 @@ class Map : boost::noncopyable
     int m_tileWidth;
     int m_tileHeight;
 
-    std::vector<Layer *> m_layers;
     tmx::Map m_tmxMap;
 };
 
@@ -93,9 +94,13 @@ class Tile
 public:
     Tile(const Map *map, unsigned agid);
 
+    const Map     *map; //< parent object
     unsigned       gid;
-    std::string    textureSource;
+    unsigned       texId;
     float          texCoords[8];
+
+    std::string textureSource() const;
+    std::vector<int> tileCoords() const;
 };
 
 #endif

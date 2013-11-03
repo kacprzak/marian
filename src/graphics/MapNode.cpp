@@ -40,6 +40,28 @@ void MapNode::drawForeground(Renderer *rndr, const ViewRect& r) const
 
 //------------------------------------------------------------------------------
 
+void MapNode::calculateTilesTextureData()
+{
+    for (Layer *layer : m_map->m_layers) {
+        for (Tile *tile : layer->tiles) {
+            if (tile) {
+                const Texture *texture = ResourceMgr::singleton().getTexture(tile->textureSource());
+
+                std::vector<int> tileCoords = tile->tileCoords();
+
+                // Calculate coords for OpenGL
+                Texture::calculateTextureCoords(tile->texCoords, texture->w(), texture->h(),
+                                                tileCoords[0], tileCoords[1],
+                                                tileCoords[2], tileCoords[3]);
+
+                tile->texId = texture->textureId();
+            }
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+
 #if 0
 void Map::draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const
 {
@@ -112,12 +134,11 @@ void MapNode::drawParallaxLayer(Renderer *rndr, const std::string& layerName, co
                 const Tile *tile = layer->tiles[tile_y * layer->width + tile_x];
 
                 if (tile) {
-                    GLuint textureId = ResourceMgr::singleton().getTexture(tile->textureSource)->textureId();
                     rndr->drawQuad(static_cast<float>(x) - transition,
                                    static_cast<float>(m_map->height() - y - 1),
                                    1.0f,
                                    1.0f,
-                                   textureId, tile->texCoords);
+                                   tile->texId, tile->texCoords);
                 }
             }
         }
@@ -133,12 +154,11 @@ void MapNode::drawLayer(Renderer *rndr, const Layer *layer, int xFrom, int xTo, 
             const Tile *tile = layer->tiles[y * layer->width + x];
 
             if (tile) {
-                GLuint textureId = ResourceMgr::singleton().getTexture(tile->textureSource)->textureId();
                 rndr->drawQuad(static_cast<float>(x),
                                static_cast<float>(m_map->height() - y - 1),
                                1.0f,
                                1.0f,
-                               textureId, tile->texCoords);
+                               tile->texId, tile->texCoords);
             }
         }
     }

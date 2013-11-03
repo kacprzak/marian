@@ -1,72 +1,5 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "Map.h"
-#include "graphics/Texture.h"
-
-Tile::Tile(const Map *map, unsigned agid)
-    : gid(agid)
-{
-    // Coords for tile on image in map coord system
-    int tileCoords[4];
-    map->rectForTile(tileCoords, gid);
-    // Texture source
-    textureSource = map->m_tmxMap.tilesetForTile(gid)->imageSource;
-    int w = map->m_tmxMap.tilesetForTile(gid)->imageWidth;
-    int h = map->m_tmxMap.tilesetForTile(gid)->imageHeight;
-
-    // Calculate coords for OpenGL
-    Texture::calculateTextureCoords(texCoords, w, h,
-                                    tileCoords[0], tileCoords[1],
-                                    tileCoords[2], tileCoords[3]);
-}
-
-//==============================================================================
-
-// Bits on the far end of the 32-bit global tile ID are used for tile flags
-const unsigned FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
-const unsigned FLIPPED_VERTICALLY_FLAG   = 0x40000000;
-const unsigned FLIPPED_DIAGONALLY_FLAG   = 0x20000000;
-
-Layer::Layer(const Map *parent, const tmx::Layer& tmxLayer)
-    : map(parent)
-    , name(tmxLayer.name)
-    , width(tmxLayer.width)
-    , height(tmxLayer.height)
-    , visible((tmxLayer.visible == "1"))
-    , tiles(width * height, nullptr)
-{
-    for (int y = 0; y < height; ++y) {
-        for (int x = 0; x < width; ++x) {
-      
-            unsigned global_tile_id = tmxLayer.data[y * tmxLayer.width + x];
-      
-            if (global_tile_id != 0) {
-                // Read out the flags
-                //bool flipped_horizontally = (global_tile_id & FLIPPED_HORIZONTALLY_FLAG);
-                //bool flipped_vertically   = (global_tile_id & FLIPPED_VERTICALLY_FLAG);
-                //bool flipped_diagonally   = (global_tile_id & FLIPPED_DIAGONALLY_FLAG);
-        
-                // Clear the flags
-                global_tile_id &= ~(FLIPPED_HORIZONTALLY_FLAG
-                                    | FLIPPED_VERTICALLY_FLAG
-                                    | FLIPPED_DIAGONALLY_FLAG);
-        
-                Tile *tile = new Tile(map, global_tile_id);
-                tiles[y * width + x] = tile;
-            }
-        }
-    }
-}
-
-//------------------------------------------------------------------------------
-
-Layer::~Layer()
-{
-    for (const Tile* tile : tiles) {
-        delete tile;
-    }
-}
-
-//==============================================================================
 
 Map::Map()
     : m_width(0)
@@ -174,8 +107,10 @@ std::string Map::backgroundColor() const
 //------------------------------------------------------------------------------
 /**
  * Pixel coords rectangle that bounds image on it's texture.
+ *
+ * @param tileCoords    output argument
  */
-void Map::rectForTile(int tileCoords[4], unsigned global_tile_id) const
+void Map::rectOnTextureForTile(int tileCoords[4], unsigned global_tile_id) const
 {
     const tmx::Tileset *tileset = m_tmxMap.tilesetForTile(global_tile_id);
   
@@ -201,5 +136,79 @@ void Map::rectForTile(int tileCoords[4], unsigned global_tile_id) const
     tileCoords[3] = opengl_y + tileset->tileHeight;
 }
 
+//==============================================================================
+
+// Bits on the far end of the 32-bit global tile ID are used for tile flags
+const unsigned FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
+const unsigned FLIPPED_VERTICALLY_FLAG   = 0x40000000;
+const unsigned FLIPPED_DIAGONALLY_FLAG   = 0x20000000;
+
+Layer::Layer(const Map *aMap, const tmx::Layer& tmxLayer)
+    : map(aMap)
+    , name(tmxLayer.name)
+    , width(tmxLayer.width)
+    , height(tmxLayer.height)
+    , visible((tmxLayer.visible == "1"))
+    , tiles(width * height, nullptr)
+{
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+
+            unsigned global_tile_id = tmxLayer.data[y * tmxLayer.width + x];
+
+            if (global_tile_id != 0) {
+                // Read out the flags
+                //bool flipped_horizontally = (global_tile_id & FLIPPED_HORIZONTALLY_FLAG);
+                //bool flipped_vertically   = (global_tile_id & FLIPPED_VERTICALLY_FLAG);
+                //bool flipped_diagonally   = (global_tile_id & FLIPPED_DIAGONALLY_FLAG);
+
+                // Clear the flags
+                global_tile_id &= ~(FLIPPED_HORIZONTALLY_FLAG
+                                    | FLIPPED_VERTICALLY_FLAG
+                                    | FLIPPED_DIAGONALLY_FLAG);
+
+                Tile *tile = new Tile(map, global_tile_id);
+                tiles[y * width + x] = tile;
+            }
+        }
+    }
+}
+
 //------------------------------------------------------------------------------
+
+Layer::~Layer()
+{
+    for (const Tile* tile : tiles) {
+        delete tile;
+    }
+}
+
+//==============================================================================
+
+Tile::Tile(const Map *aMap, unsigned agid)
+    : map(aMap)
+    , gid(agid)
+    , texId(0)
+    , texCoords()
+{
+}
+
+//------------------------------------------------------------------------------
+
+std::string Tile::textureSource() const
+{
+    const tmx::Tileset *tileset = map->m_tmxMap.tilesetForTile(gid);
+    return tileset->imageSource;
+}
+
+//------------------------------------------------------------------------------
+
+std::vector<int> Tile::tileCoords() const
+{
+    std::vector<int> aTileCoords(4);
+    map->rectOnTextureForTile(aTileCoords.data(), gid);
+
+    return aTileCoords;
+}
+
 

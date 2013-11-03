@@ -12,7 +12,11 @@ class MapNode
 public:
     MapNode();
 
-    void setMap(std::shared_ptr<Map> map) { m_map = map; }
+    void setMap(std::shared_ptr<Map> map)
+    {
+        m_map = map;
+        calculateTilesTextureData();
+    }
 
     void update(float elapsedTime);
 
@@ -25,6 +29,8 @@ public:
     void drawForeground(Renderer *rndr, const ViewRect& rect) const;
 
 private:
+    void calculateTilesTextureData();
+
     //void draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const;
     void drawLayer(Renderer *rndr, const std::string& layer, const ViewRect& rect) const;
     void drawParallaxLayer(Renderer *rndr, const std::string& layerName, const ViewRect& rect, float transition) const;
