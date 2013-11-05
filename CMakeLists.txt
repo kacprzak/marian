@@ -56,10 +56,10 @@ include_directories(
 
 add_subdirectory( tmx )
 add_subdirectory( src )
-add_subdirectory( media )
+add_subdirectory( assets )
 add_subdirectory( scripts )
 
 if ( Boost_UNIT_TEST_FRAMEWORK_FOUND ) 
   enable_testing()
-  add_subdirectory( test )
+  add_subdirectory( tests )
 endif()

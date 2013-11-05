@@ -17,7 +17,7 @@ Game::Game()
     Map map;
 
     // Read map from file
-    map.loadFromFile("media/map2.tmx");
+    map.loadFromFile("assets/map2.tmx");
 
     m_mapWidth = map.width();
 

@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
     ScriptMgr::singleton().executeFile("startup.lua");
 
     new ResourceMgr;
-    ResourceMgr::singleton().setDataFolder("media/");
+    ResourceMgr::singleton().setDataFolder("assets/");
 
     if (argc >= 2 && strcmp(argv[1], "-s") == 0)
     {

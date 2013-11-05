@@ -21,7 +21,7 @@ GuiMgr::GuiMgr()
 #ifdef USE_CEGUI
     CEGUI::OpenGLRenderer::bootstrapSystem();
 
-    std::string folder = "media/cegui/";
+    std::string folder = "assets/cegui/";
     // Initialise the required dirs for the DefaultResourceProvider
     CEGUI::DefaultResourceProvider* rp = static_cast<CEGUI::DefaultResourceProvider*>
         (CEGUI::System::getSingleton().getResourceProvider());

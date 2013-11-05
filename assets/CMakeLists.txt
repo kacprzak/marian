@@ -1,4 +1,4 @@
-set ( media_FILES
+set ( assets_FILES
   map1.tmx
   map2.tmx
   minecraft_tiles_big.png
@@ -8,8 +8,8 @@ set ( media_FILES
   cegui
 )
 
-file( COPY ${media_FILES}
+file( COPY ${assets_FILES}
       DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
 
 # To list files in QtCreator
-add_custom_target(media SOURCES ${media_FILES})
+add_custom_target(assets SOURCES ${assets_FILES})
