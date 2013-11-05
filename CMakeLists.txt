@@ -58,6 +58,7 @@ add_subdirectory( tmx )
 add_subdirectory( src )
 add_subdirectory( assets )
 add_subdirectory( scripts )
+add_subdirectory( tools )
 
 if ( Boost_UNIT_TEST_FRAMEWORK_FOUND ) 
   enable_testing()
