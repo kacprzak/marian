@@ -1,22 +1,25 @@
-set( My_Boost_TEST_LIBS
-  ${Boost_FILESYSTEM_LIBRARY}
-  ${Boost_SYSTEM_LIBRARY}
-  ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
-)
+# add_test_exec
+macro( add_test_exec test_name files libs )
+    set( My_Boost_TEST_LIBS
+      ${Boost_FILESYSTEM_LIBRARY}
+      ${Boost_SYSTEM_LIBRARY}
+      ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+    )
 
-add_executable( map_test map_test.cpp )
-target_link_libraries( map_test tmx ${My_Boost_TEST_LIBS} )
+    string( TOLOWER ${test_name} test_lower_name )
 
-add_test(Map map_test)
+    add_executable( ${test_lower_name}_test ${files} )
+    target_link_libraries( ${test_lower_name}_test ${libs} ${My_Boost_TEST_LIBS} )
 
+    add_test( ${test_name} ${test_lower_name}_test )
+endmacro( add_test_exec )
 
-add_executable( eventmanager_test eventmanager_test.cpp ../src/events/EventMgr.cpp )
-target_link_libraries( eventmanager_test ${My_Boost_TEST_LIBS} )
+# Tests
 
-add_test(EventManager eventmanager_test)
+set( Map_SRCS map_test.cpp )
+add_test_exec( Map "${Map_SRCS}" tmx )
 
+set( EventManager_SRCS eventmanager_test.cpp ../src/events/EventMgr.cpp )
+add_test_exec( EventManager "${EventManager_SRCS}" "" )
 
-add_executable( logger_test logger_test.cpp )
-target_link_libraries( logger_test ${My_Boost_TEST_LIBS} )
-
-add_test(Logger logger_test)
+add_test_exec( Logger logger_test.cpp "" )
