@@ -72,6 +72,7 @@ endif ( USE_CEGUI )
 
 set( marian_SRCS
   actors/Actor.cpp
+  actors/ActorFactory.cpp
   actors/Box.cpp
   actors/Ground.cpp
   actors/Hero.cpp
@@ -138,7 +139,7 @@ if( WIN32 )
 endif( WIN32 )
 
 add_executable( marian main.cpp ${marian_HDRS} ${marian_SRCS} )
-set_target_properties( marian PROPERTIES DEBUG_POSTFIX _d)
+set_target_properties( marian PROPERTIES DEBUG_POSTFIX _d )
 target_link_libraries( marian ${LINK_LIBS} )
 
 add_custom_target(run
