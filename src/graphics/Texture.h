@@ -10,7 +10,8 @@
 #include <string>
 
 /** Class for holding an image in graphics card memory */
-class Texture {
+class Texture
+{
  public:
     Texture();
     ~Texture();
@@ -21,19 +22,30 @@ class Texture {
 
     bool loadFromFile(const std::string& filename);
 
-    // Static functions
-    static void calculateTextureCoords(GLfloat texCoords[8],
-                                       int texWidth, int texHeight,
-                                       int x0 = 0, int y0 = 0, int x1 = 0, int y1 = 0);
-
-    static void flipVerticallyTextureCoords(GLfloat texCoords[8]);
-
-    static void flipHorizontallyTextureCoords(GLfloat texCoords[8]);
-
  private:
     GLuint m_textureId;
     int m_w;
     int m_h;
 };
+
+/* Texture coords utils. */
+
+/** Single texture coord. S and T have bounds [0, 1] */
+struct TexCoord
+{
+    GLfloat s, t;
+};
+
+template <std::size_t size>
+struct TexCoords
+{
+    TexCoord coords[size];
+};
+
+// Static functions
+TexCoords<4> calculateTextureCoords(int texWidth, int texHeight,
+                                    int x0 = 0, int y0 = 0, int x1 = 0, int y1 = 0);
+TexCoords<4> flipVerticallyTextureCoords(const TexCoords<4>& texCoords);
+TexCoords<4> flipHorizontallyTextureCoords(const TexCoords<4>& texCoords);
 
 #endif

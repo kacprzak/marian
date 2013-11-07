@@ -2,6 +2,7 @@
 #include "ResourceMgr.h"
 
 #include <cmath>
+#include <cstring> // memcpy
 
 #define TEST 0
 
@@ -50,9 +51,11 @@ void MapNode::calculateTilesTextureData()
                 std::vector<int> tileCoords = tile->tileCoords();
 
                 // Calculate coords for OpenGL
-                Texture::calculateTextureCoords(tile->texCoords, texture->w(), texture->h(),
-                                                tileCoords[0], tileCoords[1],
-                                                tileCoords[2], tileCoords[3]);
+                TexCoords<4> coords = calculateTextureCoords(texture->w(), texture->h(),
+                                                             tileCoords[0], tileCoords[1],
+                                                             tileCoords[2], tileCoords[3]);
+
+                std::memcpy(tile->texCoords, &coords, sizeof(Tile::texCoords));
 
                 tile->texId = texture->textureId();
             }

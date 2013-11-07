@@ -22,7 +22,7 @@ class Image {
         , m_width(1.0f)
         , m_height(1.0f)
     {
-        Texture::calculateTextureCoords(m_texCoords, texture->w(), texture->h());
+        m_texCoords = calculateTextureCoords(texture->w(), texture->h());
     }
 
     Image(const Texture *texture, int x0, int y0, int x1, int y1)
@@ -32,8 +32,7 @@ class Image {
         , m_width(1.0f)
         , m_height(1.0f)
     {
-        Texture::calculateTextureCoords(m_texCoords, texture->w(), texture->h(),
-                                        x0, y0, x1, y1);
+        m_texCoords = calculateTextureCoords(texture->w(), texture->h(), x0, y0, x1, y1);
     }
 
     int pixelWidth() const  { return m_pixelWidth; }
@@ -52,16 +51,16 @@ class Image {
 
     void flipVertically()
     {
-        Texture::flipVerticallyTextureCoords(m_texCoords);
+        m_texCoords = flipVerticallyTextureCoords(m_texCoords);
     }
     
     void flipHorizontally()
     {
-        Texture::flipHorizontallyTextureCoords(m_texCoords);
+        m_texCoords = flipHorizontallyTextureCoords(m_texCoords);
     }
 
     const Texture *texture() const { return m_texture; }
-    const GLfloat *getTextureCoords() const { return m_texCoords; }
+    const GLfloat *getTextureCoords() const { return reinterpret_cast<const GLfloat *>(&m_texCoords); }
     
     std::string toString() const
     {
@@ -78,7 +77,7 @@ class Image {
     int            m_pixelHeight;
     float          m_width;
     float          m_height;
-    GLfloat        m_texCoords[8];
+    TexCoords<4>   m_texCoords;
 };
 
 

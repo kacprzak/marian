@@ -24,48 +24,59 @@ bool Texture::loadFromFile(const std::string& filename)
     return m_textureId == 0 ? false : true;
 }
 
-//------------------------------------------------------------------------------
+//==============================================================================
 
-void Texture::calculateTextureCoords(GLfloat texCoords[8], int texWidth, int texHeight,
-                                     int x0, int y0, int x1, int y1)
-{
+TexCoords<4> calculateTextureCoords(int texWidth, int texHeight,
+                                    int x0, int y0, int x1, int y1)
+{   
+    TexCoords<4> cs;
+
     if (x1 == 0) x1 = texWidth;
     if (y1 == 0) y1 = texHeight;
 
-    GLfloat s0 = x0 / (float)texWidth;
-    GLfloat t0 = y0 / (float)texHeight;
-#if 1
-    GLfloat s1 = x1 / (float)texWidth;
-    GLfloat t1 = y1 / (float)texHeight;
-#else
-    // No nie działa ten patent
-    #define BIAS 8192.0f
-    GLfloat s1 = ((float)x1 / texWidth)  - (1.0f / BIAS);
-    GLfloat t1 = ((float)y1 / texHeight) - (1.0f / BIAS);
-#endif
+    // Left bottom
+    cs.coords[0].s = x0 / (float)texWidth;
+    cs.coords[0].t = y0 / (float)texHeight;
 
-    texCoords[0] = s0; texCoords[1] = t0;
-    texCoords[2] = s1; texCoords[3] = t0;
-    texCoords[4] = s1; texCoords[5] = t1;
-    texCoords[6] = s0; texCoords[7] = t1;
+    // Top right
+    cs.coords[2].s = x1 / (float)texWidth;
+    cs.coords[2].t = y1 / (float)texHeight;
+
+    // Right bottom
+    cs.coords[1].s = cs.coords[2].s;
+    cs.coords[1].t = cs.coords[0].t;
+
+    // Left top
+    cs.coords[3].s = cs.coords[0].s;
+    cs.coords[3].t = cs.coords[2].t;
+
+    return cs;
 }
 
 //------------------------------------------------------------------------------
 
-void Texture::flipVerticallyTextureCoords(GLfloat texCoords[8])
-{
-    texCoords[0] = texCoords[2];
-    texCoords[2] = texCoords[6];
-    texCoords[4] = texCoords[2];
-    texCoords[6] = texCoords[0];
+TexCoords<4> flipVerticallyTextureCoords(const TexCoords<4>& texCoords)
+{   
+    TexCoords<4> cs;
+
+    cs.coords[0] = texCoords.coords[1];
+    cs.coords[1] = texCoords.coords[0];
+    cs.coords[2] = texCoords.coords[3];
+    cs.coords[3] = texCoords.coords[2];
+
+    return cs;
 }
 
 //------------------------------------------------------------------------------
 
-void Texture::flipHorizontallyTextureCoords(GLfloat texCoords[8])
+TexCoords<4> flipHorizontallyTextureCoords(const TexCoords<4>& texCoords)
 {
-    texCoords[1] = texCoords[5];
-    texCoords[5] = texCoords[3];
-    texCoords[7] = texCoords[3];
-    texCoords[3] = texCoords[1];
+    TexCoords<4> cs;
+
+    cs.coords[0] = texCoords.coords[3];
+    cs.coords[1] = texCoords.coords[2];
+    cs.coords[2] = texCoords.coords[1];
+    cs.coords[3] = texCoords.coords[0];
+
+    return cs;
 }
