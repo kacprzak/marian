@@ -2,15 +2,14 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-#ifdef _MSC_VER
-  #include <windows.h>
-#endif
-
-#include <GL/gl.h>
 #include <vector>
 #include <string>
 
-GLuint load_texture(const char *filename, int *w, int *h);
+template<typename T>
+struct Rect
+{
+    T left, right, top, bottom;
+};
 
 std::vector<int> hexColorToRgb(int hexValue);
 

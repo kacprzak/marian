@@ -4,10 +4,9 @@
 
 #include "GameView.h"
 
-struct ViewRect
-{
-    float left, right, top, bottom;
-};
+#include "Util.h"
+
+typedef Rect<float> ViewRect;
 
 //------------------------------------------------------------------------------
 

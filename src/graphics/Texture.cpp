@@ -1,7 +1,21 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "Texture.h"
 
-#include "Util.h"
+#ifdef _MSC_VER
+  #include <windows.h>
+#endif
+
+#include <GL/gl.h>
+
+#include <SDL.h>
+#include <SDL_image.h>
+
+#include <iostream>
+
+static GLuint load_texture(const char *filename, int *w, int *h);
+static int SDL_InvertSurface(SDL_Surface *image);
+
+//------------------------------------------------------------------------------
 
 Texture::Texture()
     : m_textureId(0)
@@ -26,57 +40,126 @@ bool Texture::loadFromFile(const std::string& filename)
 
 //==============================================================================
 
-TexCoords<4> calculateTextureCoords(int texWidth, int texHeight,
-                                    int x0, int y0, int x1, int y1)
-{   
-    TexCoords<4> cs;
-
-    if (x1 == 0) x1 = texWidth;
-    if (y1 == 0) y1 = texHeight;
-
-    // Left bottom
-    cs.coords[0].s = x0 / (float)texWidth;
-    cs.coords[0].t = y0 / (float)texHeight;
-
-    // Top right
-    cs.coords[2].s = x1 / (float)texWidth;
-    cs.coords[2].t = y1 / (float)texHeight;
-
-    // Right bottom
-    cs.coords[1].s = cs.coords[2].s;
-    cs.coords[1].t = cs.coords[0].t;
-
-    // Left top
-    cs.coords[3].s = cs.coords[0].s;
-    cs.coords[3].t = cs.coords[2].t;
-
-    return cs;
-}
-
-//------------------------------------------------------------------------------
-
-TexCoords<4> flipVerticallyTextureCoords(const TexCoords<4>& texCoords)
-{   
-    TexCoords<4> cs;
-
-    cs.coords[0] = texCoords.coords[1];
-    cs.coords[1] = texCoords.coords[0];
-    cs.coords[2] = texCoords.coords[3];
-    cs.coords[3] = texCoords.coords[2];
-
-    return cs;
-}
-
-//------------------------------------------------------------------------------
-
-TexCoords<4> flipHorizontallyTextureCoords(const TexCoords<4>& texCoords)
+static GLuint load_texture(const char *filename, int *w, int *h)
 {
-    TexCoords<4> cs;
+    SDL_Surface *surface;
+    GLuint textureid;
+    int mode;
 
-    cs.coords[0] = texCoords.coords[3];
-    cs.coords[1] = texCoords.coords[2];
-    cs.coords[2] = texCoords.coords[1];
-    cs.coords[3] = texCoords.coords[0];
+    surface = IMG_Load(filename);
 
-    return cs;
+    if (!surface) {
+        std::cerr << "Could not load " << filename << std::endl;
+        return 0;
+    }
+
+    // Top down inversion
+    SDL_InvertSurface(surface);
+
+    // work out what format to tell glTexImage2D to use...
+    if (surface->format->BytesPerPixel == 3) { // RGB 24bit
+        mode = GL_RGB;
+    } else if (surface->format->BytesPerPixel == 4) { // RGBA 32bit
+        mode = GL_RGBA;
+    } else {
+        // Convert to 32 bits.
+        SDL_PixelFormat fmt;
+        memset(&fmt, 0, sizeof(fmt));
+        fmt.format = SDL_PIXELFORMAT_RGBA8888;
+        fmt.BitsPerPixel = 32;
+        fmt.BytesPerPixel = 4;
+        fmt.Rmask = 0xff;
+        fmt.Gmask = 0xff00;
+        fmt.Bmask = 0xff0000;
+        fmt.Amask = 0xff000000;
+
+        SDL_Surface *nimg = SDL_ConvertSurface(surface, &fmt, 0);
+        SDL_FreeSurface(surface);
+
+        if(!nimg) {
+            std::cerr << "Could not convert image " << filename << " to 32-bit\n";
+            return 0;
+        }
+
+        // Done converting.
+        surface = nimg;
+        mode = GL_RGBA;
+    }
+
+    *w = surface->w;
+    *h = surface->h;
+
+    // Create one texture name
+    glGenTextures(1, &textureid);
+
+    // Tell opengl to use the generated texture name
+    glBindTexture(GL_TEXTURE_2D, textureid);
+
+    // This reads from the sdl surface and puts it into an opengl texture
+    glTexImage2D(GL_TEXTURE_2D, 0, mode, surface->w, surface->h, 0,
+                 mode, GL_UNSIGNED_BYTE, surface->pixels);
+
+    // These affect how this texture is drawn later on...
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // Clamping
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    // Clean up
+    SDL_FreeSurface(surface);
+
+    return textureid;
+}
+
+//------------------------------------------------------------------------------
+// Code from
+// http://www.gribblegames.com/articles/game_programming/sdlgl/invert_sdl_surfaces.html
+
+static int invert_image(int pitch, int height, void* image_pixels)
+{
+    int index;
+    void *temp_row;
+    int height_div_2;
+
+    temp_row = (void *)malloc(pitch);
+    if(NULL == temp_row) {
+        SDL_SetError("Not enough memory for image inversion");
+        return -1;
+    }
+    //if height is odd, don't need to swap middle row
+    height_div_2 = (int)(height * .5);
+    for (index = 0; index < height_div_2; ++index) {
+        //uses string.h
+        memcpy((Uint8 *)temp_row,
+               (Uint8 *)(image_pixels) + pitch * index,
+               pitch);
+
+        memcpy((Uint8 *)(image_pixels) + pitch * index,
+               (Uint8 *)(image_pixels) + pitch * (height - index-1),
+               pitch);
+
+        memcpy((Uint8 *)(image_pixels) + pitch * (height - index-1),
+               temp_row,
+               pitch);
+    }
+    free(temp_row);
+    return 0;
+}
+
+//------------------------------------------------------------------------------
+
+//This is the function you want to call!
+static int SDL_InvertSurface(SDL_Surface *image)
+{
+    if(NULL == image) {
+        SDL_SetError("Surface is NULL");
+        return -1;
+    }
+    return invert_image(image->pitch, image->h, image->pixels);
 }

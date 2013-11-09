@@ -21,16 +21,16 @@ BOOST_AUTO_TEST_CASE(eventmanager_test)
 
     BOOST_REQUIRE( em );
 
-    BOOST_CHECK( em->listenersCount() == 0 );
+    BOOST_CHECK_EQUAL( em->listenersCount(), 0 );
 
     EventListenerPtr el = EventMgr::makeListener(eventListener);
     em->addListener(ACTOR_COLLIDED, el);
 
-    BOOST_CHECK( em->listenersCount() == 1 );
+    BOOST_CHECK_EQUAL( em->listenersCount(), 1 );
 
     em->removeListener(ACTOR_COLLIDED, el);
 
-    BOOST_CHECK( em->listenersCount() == 0 );
+    BOOST_CHECK_EQUAL( em->listenersCount(), 0 );
 
     delete EventMgr::singletonPtr();
 }

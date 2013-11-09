@@ -28,24 +28,4 @@ class Texture
     int m_h;
 };
 
-/* Texture coords utils. */
-
-/** Single texture coord. S and T have bounds [0, 1] */
-struct TexCoord
-{
-    GLfloat s, t;
-};
-
-template <std::size_t size>
-struct TexCoords
-{
-    TexCoord coords[size];
-};
-
-// Static functions
-TexCoords<4> calculateTextureCoords(int texWidth, int texHeight,
-                                    int x0 = 0, int y0 = 0, int x1 = 0, int y1 = 0);
-TexCoords<4> flipVerticallyTextureCoords(const TexCoords<4>& texCoords);
-TexCoords<4> flipHorizontallyTextureCoords(const TexCoords<4>& texCoords);
-
 #endif

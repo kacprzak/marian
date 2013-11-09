@@ -3,6 +3,7 @@
 #define IMAGE_H
 
 #include "Texture.h"
+#include "TexCoords.h"
 
 #include <string>
 #include <sstream>
@@ -51,12 +52,12 @@ class Image {
 
     void flipVertically()
     {
-        m_texCoords = flipVerticallyTextureCoords(m_texCoords);
+        m_texCoords = flipVerticallyTexCoords(m_texCoords);
     }
     
     void flipHorizontally()
     {
-        m_texCoords = flipHorizontallyTextureCoords(m_texCoords);
+        m_texCoords = flipHorizontallyTexCoords(m_texCoords);
     }
 
     const Texture *texture() const { return m_texture; }

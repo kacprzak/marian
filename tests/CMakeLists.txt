@@ -23,3 +23,7 @@ set( EventManager_SRCS eventmanager_test.cpp ../src/events/EventMgr.cpp )
 add_test_exec( EventManager "${EventManager_SRCS}" "" )
 
 add_test_exec( Logger logger_test.cpp "" )
+
+add_test_exec( Texture texture_test.cpp "" )
+
+add_test_exec( TexCoords texcoords_test.cpp "" )

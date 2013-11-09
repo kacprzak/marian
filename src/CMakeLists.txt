@@ -19,6 +19,7 @@ set( marian_HDRS
   graphics/Animation.h
   graphics/Image.h
   graphics/Texture.h
+  graphics/TexCoords.h
   graphics/SpriteNode.h
   graphics/HeroNode.h
   graphics/MapNode.h
@@ -79,6 +80,7 @@ set( marian_SRCS
   actors/Sensor.cpp
 
   graphics/Texture.cpp
+  graphics/TexCoords.cpp
   graphics/SpriteNode.cpp
   graphics/HeroNode.cpp
   graphics/MapNode.cpp
