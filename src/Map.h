@@ -2,6 +2,8 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include "Util.h"
+
 #include "TmxMap.h"
 
 #include <boost/utility.hpp>
@@ -56,7 +58,7 @@ class Map : boost::noncopyable
     std::vector<Layer *> m_layers;
 
  private:
-    void rectOnTextureForTile(int tileCoords[4], unsigned globalId) const;
+    void rectOnTextureForTile(Rect<int> *tileCoords, unsigned globalId) const;
 
     /** Size in game (tile) coords */
     int m_width;
@@ -100,7 +102,7 @@ public:
     float          texCoords[8];
 
     std::string textureSource() const;
-    std::vector<int> tileCoords() const;
+    Rect<int> tileCoords() const;
 };
 
 #endif

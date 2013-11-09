@@ -10,6 +10,8 @@ FpsCounter::FpsCounter(float printInterval)
 {
 }
 
+//------------------------------------------------------------------------------
+
 void FpsCounter::update(float delta)
 {
     ++m_framesPassed;

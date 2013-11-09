@@ -23,7 +23,10 @@ class Image {
         , m_width(1.0f)
         , m_height(1.0f)
     {
-        m_texCoords = calculateTexCoords(texture->w(), texture->h());
+        m_texCoords.coords[0] = { 0.0f, 0.0f };
+        m_texCoords.coords[1] = { 1.0f, 0.0f };
+        m_texCoords.coords[2] = { 1.0f, 1.0f };
+        m_texCoords.coords[3] = { 0.0f, 1.0f };
     }
 
     Image(const Texture *texture, int x0, int y0, int x1, int y1)
@@ -33,7 +36,12 @@ class Image {
         , m_width(1.0f)
         , m_height(1.0f)
     {
-        m_texCoords = calculateTexCoords(texture->w(), texture->h(), x0, y0, x1, y1);
+        Rect<int> tileCoords;
+        tileCoords.left = x0;
+        tileCoords.bottom = y0;
+        tileCoords.right = x1;
+        tileCoords.top = y1;
+        m_texCoords = calculateTexCoords(texture->w(), texture->h(), tileCoords);
     }
 
     int pixelWidth() const  { return m_pixelWidth; }

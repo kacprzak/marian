@@ -110,7 +110,7 @@ std::string Map::backgroundColor() const
  *
  * @param tileCoords    output argument
  */
-void Map::rectOnTextureForTile(int tileCoords[4], unsigned global_tile_id) const
+void Map::rectOnTextureForTile(Rect<int> *tileCoords, unsigned global_tile_id) const
 {
     const tmx::Tileset *tileset = m_tmxMap.tilesetForTile(global_tile_id);
   
@@ -130,10 +130,10 @@ void Map::rectOnTextureForTile(int tileCoords[4], unsigned global_tile_id) const
     int opengl_x = local_x * tileset->tileWidth + local_x * spacing + margin;
     int opengl_y = tileset->imageHeight - (local_y * tileset->tileHeight) - tileset->tileHeight - local_y * spacing - margin;
   
-    tileCoords[0] = opengl_x;
-    tileCoords[1] = opengl_y;
-    tileCoords[2] = opengl_x + tileset->tileWidth;
-    tileCoords[3] = opengl_y + tileset->tileHeight;
+    tileCoords->left   = opengl_x;
+    tileCoords->bottom = opengl_y;
+    tileCoords->right  = opengl_x + tileset->tileWidth;
+    tileCoords->top    = opengl_y + tileset->tileHeight;
 }
 
 //==============================================================================
@@ -203,10 +203,10 @@ std::string Tile::textureSource() const
 
 //------------------------------------------------------------------------------
 
-std::vector<int> Tile::tileCoords() const
+Rect<int> Tile::tileCoords() const
 {
-    std::vector<int> aTileCoords(4);
-    map->rectOnTextureForTile(aTileCoords.data(), gid);
+    Rect<int> aTileCoords;
+    map->rectOnTextureForTile(&aTileCoords, gid);
 
     return aTileCoords;
 }

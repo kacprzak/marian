@@ -48,12 +48,10 @@ void MapNode::calculateTilesTextureData()
             if (tile) {
                 const Texture *texture = ResourceMgr::singleton().getTexture(tile->textureSource());
 
-                std::vector<int> tileCoords = tile->tileCoords();
+                Rect<int> tileCoords = tile->tileCoords();
 
                 // Calculate coords for OpenGL
-                TexCoords<4> coords = calculateTexCoords(texture->w(), texture->h(),
-                                                         tileCoords[0], tileCoords[1],
-                                                         tileCoords[2], tileCoords[3]);
+                TexCoords<4> coords = calculateTexCoords(texture->w(), texture->h(), tileCoords);
 
                 std::memcpy(tile->texCoords, &coords, sizeof(Tile::texCoords));
 
