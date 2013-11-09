@@ -26,4 +26,5 @@ add_test_exec( Logger logger_test.cpp "" )
 
 add_test_exec( Texture texture_test.cpp "" )
 
-add_test_exec( TexCoords texcoords_test.cpp "" )
+set( TexCoords_SRCS texcoords_test.cpp ../src/graphics/TexCoords.cpp )
+add_test_exec( TexCoords "${TexCoords_SRCS}" "" )

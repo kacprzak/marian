@@ -2,8 +2,8 @@
 #include "TexCoords.h"
 
 
-TexCoords<4> calculateTextureCoords(int texWidth, int texHeight,
-                                    int x0, int y0, int x1, int y1)
+TexCoords<4> calculateTexCoords(int texWidth, int texHeight,
+                                int x0, int y0, int x1, int y1)
 {
     TexCoords<4> cs;
 

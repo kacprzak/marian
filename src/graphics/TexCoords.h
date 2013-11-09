@@ -19,8 +19,8 @@ struct TexCoords
 };
 
 
-TexCoords<4> calculateTextureCoords(int texWidth, int texHeight,
-                                    int x0 = 0, int y0 = 0, int x1 = 0, int y1 = 0);
+TexCoords<4> calculateTexCoords(int texWidth, int texHeight,
+                                int x0 = 0, int y0 = 0, int x1 = 0, int y1 = 0);
 TexCoords<4> flipVerticallyTexCoords(const TexCoords<4>& texCoords);
 TexCoords<4> flipHorizontallyTexCoords(const TexCoords<4>& texCoords);
 

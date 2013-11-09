@@ -51,9 +51,9 @@ void MapNode::calculateTilesTextureData()
                 std::vector<int> tileCoords = tile->tileCoords();
 
                 // Calculate coords for OpenGL
-                TexCoords<4> coords = calculateTextureCoords(texture->w(), texture->h(),
-                                                             tileCoords[0], tileCoords[1],
-                                                             tileCoords[2], tileCoords[3]);
+                TexCoords<4> coords = calculateTexCoords(texture->w(), texture->h(),
+                                                         tileCoords[0], tileCoords[1],
+                                                         tileCoords[2], tileCoords[3]);
 
                 std::memcpy(tile->texCoords, &coords, sizeof(Tile::texCoords));
 
