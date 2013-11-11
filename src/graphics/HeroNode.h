@@ -19,11 +19,11 @@ public:
     ~HeroNode();
 
     void update(float elapsedTime) override;
-    void moveTo(float x, float y, float angle);
+    void moveTo(float x, float y, float angle) override;
 
     void changePhysicsState(ActorPhysicsStateId newState) override;
 
-    void flipHorizontally(bool flip) { setFacingRight(!flip); }
+    void flipHorizontally(bool flip) override { setFacingRight(!flip); }
 
     bool isFacingRight() const { return m_facingRight; }
 

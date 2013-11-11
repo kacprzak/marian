@@ -12,7 +12,7 @@ class Engine;
 
 typedef std::list<std::shared_ptr<GameView> > GameViewList;
 
-class GameLogic : boost::noncopyable
+class GameLogic : private boost::noncopyable
 {
  public:
     virtual ~GameLogic() {}

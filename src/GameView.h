@@ -4,7 +4,7 @@
 #include <boost/utility.hpp>
 #include <SDL.h>
 
-class GameView : boost::noncopyable
+class GameView : private boost::noncopyable
 {
  public:
 

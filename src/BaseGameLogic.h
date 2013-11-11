@@ -6,13 +6,15 @@
 #include "events/EventMgr.h"
 #include "Map.h"
 
+#include <memory>
+
 class BaseGameLogic : public GameLogic
 {
 public:
     BaseGameLogic();
     ~BaseGameLogic() override;
 
-    PhysicsEngine *physicsEngine() { return m_physicsEngine; }
+    PhysicsEngine *physicsEngine() { return m_physicsEngine.get(); }
 
     void addGameObject(ActorCategory type,
                        const std::string& name,
@@ -22,9 +24,8 @@ public:
 
 protected:
     std::map<ActorId, ActorPtr> m_actors;
-    PhysicsEngine *m_physicsEngine;
-
     float m_mapWidth;
+    std::unique_ptr<PhysicsEngine> m_physicsEngine;
 
 private:
     bool isOnMap(ActorPtr actor);

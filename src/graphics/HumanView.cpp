@@ -34,9 +34,9 @@ HumanView::HumanView(const std::string &title, int screenWidth, int screenHeight
 {
     try {
         createSDLWindow();
-    } catch (EngineError e) {
+    } catch (EngineError /*e*/) {
         SDL_Quit();
-        throw e;
+        throw;
     }
 
     new GuiMgr;
@@ -89,6 +89,7 @@ void HumanView::createSDLWindow()
 
     m_glContext = SDL_GL_CreateContext(m_window);
     if(!m_glContext) {
+        SDL_DestroyWindow(m_window);
         throw EngineError("Creating OpenGL context failed", SDL_GetError());
     }
 
@@ -174,9 +175,7 @@ void HumanView::preDraw()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glTranslatef(m_translate_x,
-                 m_translate_y,
-                 m_translate_z);
+    glTranslatef(m_translate_x, m_translate_y, m_translate_z);
     glScalef(m_scale, m_scale, 1.0f);
 }
 

@@ -26,7 +26,7 @@ ScriptMgr::ScriptMgr()
     // Expose functions to lua code
     lua_register(L, "addBox", l_addBox);
 
-    LOG << "ScriptMgr created\n";
+    LOG << "created ScriptMgr\n";
 }
 
 //------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ ScriptMgr::~ScriptMgr()
 {
     lua_close(L);
 
-    LOG << "ScriptMgr destroyed\n";
+    LOG << "destroyed ScriptMgr\n";
 }
 
 //------------------------------------------------------------------------------

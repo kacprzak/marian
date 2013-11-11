@@ -4,10 +4,11 @@
 #include "Logger.h"
 
 #include <memory>
+#include <stdexcept>
 
 ResourceMgr::ResourceMgr()
 {
-    LOG << "ResourceMgr created\n";
+    LOG << "created ResourceMgr\n";
 }
 
 //------------------------------------------------------------------------------
@@ -15,7 +16,7 @@ ResourceMgr::ResourceMgr()
 ResourceMgr::~ResourceMgr()
 {
     release();
-    LOG << "ResourceMgr destroyed\n";
+    LOG << "destroyed ResourceMgr\n";
 }
 
 //------------------------------------------------------------------------------
@@ -71,7 +72,6 @@ const Texture* ResourceMgr::getTexture(const std::string& filename)
     if (it != std::end(m_textures)) {
         return it->second;
     } else {
-        LOG_ERROR << "Texture " << filename << " was not loaded!\n";
-        return 0;
+        throw std::logic_error("Texture " + filename + " was not loaded!");
     }
 }

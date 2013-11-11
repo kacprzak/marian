@@ -7,6 +7,8 @@
 
 #include <Box2D/Box2D.h>
 
+#include <memory>
+
 class ContactListener : public b2ContactListener
 {
     void BeginContact(b2Contact *contact) override;
@@ -31,14 +33,14 @@ class Box2dPhysicsEngine : public PhysicsEngine
 
     //void applyForce(const Vec2& dir, float newtons, ActorId actorId) override;
 
-    b2World *world() { return m_world; }
+    b2World *world() { return m_world.get(); }
 
  private:
-    b2World   *m_world;
-    ContactListener m_contactListener;
+    std::unique_ptr<b2World> m_world;
+    ContactListener          m_contactListener;
 
-    DebugDraw *m_debugDraw;
-    bool       m_drawDebugData;
+    std::unique_ptr<DebugDraw> m_debugDraw;
+    bool                       m_drawDebugData;
 
 };
 

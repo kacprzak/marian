@@ -83,7 +83,7 @@ class ObjectGroup
 
 //------------------------------------------------------------------------------
 
-class Map : boost::noncopyable
+class Map : private boost::noncopyable
 {
  public:
     Map();

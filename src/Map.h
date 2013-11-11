@@ -34,7 +34,7 @@ class MapObject
 //------------------------------------------------------------------------------
 
 /** Interface to game map in game coords */
-class Map : boost::noncopyable
+class Map : private boost::noncopyable
 {
     friend class Layer;
     friend class Tile;
@@ -73,7 +73,7 @@ class Map : boost::noncopyable
 
 //------------------------------------------------------------------------------
 
-class Layer : boost::noncopyable
+class Layer : private boost::noncopyable
 {
 public:
     Layer(const Map *map, const tmx::Layer& layer);

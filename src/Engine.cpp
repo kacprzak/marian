@@ -170,6 +170,6 @@ void Engine::initializeSDL()
     //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
     SDL_StopTextInput(); // Disable text input events when GUI is not visible
 
-    LOG << "SDL initialized.\n";
+    LOG << "SDL initialized\n";
 }
 

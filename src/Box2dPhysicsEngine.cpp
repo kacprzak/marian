@@ -16,12 +16,12 @@
 #include <cassert>
 
 Box2dPhysicsEngine::Box2dPhysicsEngine()
-    : m_world(nullptr)
+    : m_world()
 {
-    LOG << "Box2dPhysicsEngine created\n";
+    LOG << "created Box2dPhysicsEngine\n";
 
     // Debug drawing
-    m_debugDraw = new DebugDraw;
+    m_debugDraw.reset(new DebugDraw);
     m_drawDebugData = false;
 }
 
@@ -29,11 +29,9 @@ Box2dPhysicsEngine::Box2dPhysicsEngine()
 
 Box2dPhysicsEngine::~Box2dPhysicsEngine()
 {
-    assert(m_world == nullptr);
+    assert(!m_world);
 
-    delete m_debugDraw;
-
-    LOG << "Box2dPhysicsEngine destroyed\n";
+    LOG << "destroyed Box2dPhysicsEngine\n";
 }
 
 //------------------------------------------------------------------------------
@@ -41,7 +39,7 @@ Box2dPhysicsEngine::~Box2dPhysicsEngine()
 bool Box2dPhysicsEngine::init()
 {
     b2Vec2 gravity(0.0f, -9.8f);
-    m_world = new b2World(gravity);
+    m_world.reset(new b2World(gravity));
     m_world->SetAllowSleeping(true);
     m_world->SetContactListener(&m_contactListener);
 
@@ -52,8 +50,7 @@ bool Box2dPhysicsEngine::init()
 
 void Box2dPhysicsEngine::shutdown()
 {
-    delete m_world;
-    m_world = nullptr;
+    m_world.reset();
 }
 
 //------------------------------------------------------------------------------
@@ -72,7 +69,7 @@ void Box2dPhysicsEngine::toggleDrawDebug()
 {
     if (m_drawDebugData == false) {
         m_debugDraw->SetFlags(b2Draw::e_shapeBit | b2Draw::e_centerOfMassBit);
-        m_world->SetDebugDraw(m_debugDraw);    
+        m_world->SetDebugDraw(m_debugDraw.get());
     } else {
         m_world->SetDebugDraw(nullptr);
     }

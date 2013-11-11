@@ -7,14 +7,14 @@
 EventMgr::EventMgr()
     : m_activeQueue(0)
 {
-    LOG << "EventMgr created\n";
+    LOG << "created EventMgr\n";
 }
 
 //------------------------------------------------------------------------------
 
 EventMgr::~EventMgr()
 {
-    LOG << "EventMgr destroyed\n";
+    LOG << "destroyed EventMgr\n";
 }
 
 //------------------------------------------------------------------------------

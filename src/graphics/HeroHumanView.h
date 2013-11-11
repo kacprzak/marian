@@ -4,8 +4,9 @@
 #include "HumanView.h"
 #include "events/EventMgr.h"
 #include "graphics/MapNode.h"
-#include "input/KeyboardHandler.h"
+#include "input/HeroController.h"
 
+#include <memory>
 #include <map>
 
 class Renderer;
@@ -32,7 +33,7 @@ class HeroHumanView : public HumanView
     void handleActorDestroyed(EventPtr event);
     void handleInputCommand(EventPtr event);
 
-    Renderer *m_renderer;
+    std::unique_ptr<Renderer> m_renderer;
     ActorId m_heroId;
 
     EventListenerHelper elh;
@@ -40,7 +41,7 @@ class HeroHumanView : public HumanView
 
     std::map<ActorId, SpriteNode*> m_nodes;
 
-    KeyboardHandler *m_keyboardHandler;
+    std::unique_ptr<HeroController> m_keyboardHandler;
 };
 
 #endif // HEROHUMANVIEW_H

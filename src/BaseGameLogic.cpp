@@ -6,8 +6,8 @@
 
 BaseGameLogic::BaseGameLogic()
     : m_mapWidth(0.0f)
+    , m_physicsEngine(new Box2dPhysicsEngine)
 {
-    m_physicsEngine = new Box2dPhysicsEngine;
     m_physicsEngine->init();
 }
 
@@ -25,7 +25,6 @@ BaseGameLogic::~BaseGameLogic()
     }
 
     m_physicsEngine->shutdown();
-    delete m_physicsEngine;
 }
 
 //------------------------------------------------------------------------------
@@ -81,9 +80,7 @@ bool BaseGameLogic::isOnMap(ActorPtr a)
     if (auto pcsp = pcwp.lock()) {
         float x = pcsp->posX();
         float y = pcsp->posY();
-        if (x < 0.0f || x > m_mapWidth)
-            return false;
-        else if (y < 0.0f)
+        if (x < 0.0f || x > m_mapWidth || y < 0.0f)
             return false;
     }
 

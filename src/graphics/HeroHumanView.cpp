@@ -44,25 +44,23 @@ HeroHumanView::HeroHumanView(const std::string &title, int screenWidth, int scre
         ++actorId;
 
         if (obj.type == "Box") {
-            SpriteNode *sprite = new SpriteNode();
-
             const Texture *tex = ResourceMgr::singleton().getTexture("minecraft_tiles_big.png");
-
             Image img(tex, {256, 480, 288, 512});
 
+            SpriteNode *sprite = new SpriteNode();
             sprite->setActorId(actorId);
             sprite->setImage(img);
 
             m_nodes.insert(std::make_pair(actorId, sprite));
+
         } else if (obj.type == "Hero") {
             m_heroId = actorId;
 
             SpriteNode *sprite = new HeroNode();
-
             sprite->setActorId(actorId);
-            m_nodes.insert(std::make_pair(actorId, sprite));
 
-            static_cast<HeroController *>(m_keyboardHandler)->setActor(actorId);
+            m_nodes.insert(std::make_pair(actorId, sprite));
+            m_keyboardHandler->setActor(actorId);
         }
     }
 
@@ -83,9 +81,6 @@ HeroHumanView::~HeroHumanView()
     for (const auto& pair : m_nodes) {
         delete pair.second;
     }
-
-    delete m_keyboardHandler;
-    delete m_renderer;
 }
 
 //------------------------------------------------------------------------------
@@ -131,7 +126,7 @@ void HeroHumanView::draw()
     ViewRect r;
     viewBounds(&r);
 
-    m_mapNode.drawBackground(m_renderer, r);
+    m_mapNode.drawBackground(m_renderer.get(), r);
 
     // Draw actors
     for (auto& pair : m_nodes) {
@@ -142,7 +137,7 @@ void HeroHumanView::draw()
         }
     }
 
-    m_mapNode.drawForeground(m_renderer, r);
+    m_mapNode.drawForeground(m_renderer.get(), r);
 
     postDraw();
 }
@@ -197,11 +192,11 @@ void HeroHumanView::handleActorCreated(EventPtr event)
     auto e = std::static_pointer_cast<ActorCreatedEvent>(event);
 
     if (e->m_actorCategory == BOX) {
-        SpriteNode *sprite = new SpriteNode();
 
         const Texture *tex = ResourceMgr::singleton().getTexture("minecraft_tiles_big.png");
         Image img(tex, {256, 480, 288, 512});
 
+        SpriteNode *sprite = new SpriteNode();
         sprite->setActorId(e->m_actorId);
         sprite->setImage(img);
 

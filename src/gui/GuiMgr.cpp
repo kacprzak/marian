@@ -54,7 +54,7 @@ GuiMgr::GuiMgr()
 
     CEGUI::System::getSingleton().setGUISheet(myRoot);
 
-    LOG << "GuiMgr created\n";
+    LOG << "created GuiMgr\n";
 
     // Add Console window to gui
     Console *c = new Console;
@@ -71,7 +71,7 @@ GuiMgr::~GuiMgr()
 #ifdef USE_CEGUI
     delete Console::singletonPtr();
 #endif
-	LOG << "GuiMgr destroyed\n";
+    LOG << "destroyed GuiMgr\n";
 }
 
 //------------------------------------------------------------------------------

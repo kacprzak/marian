@@ -13,14 +13,14 @@ Console::Console()
     m_consoleVisible = true;
 
     registerHandlers();
-    LOG << "Console created\n";
+    LOG << "created Console\n";
 }
 
 //------------------------------------------------------------------------------
 
 Console::~Console()
 {
-    LOG << "Console destroyed\n";
+    LOG << "destroyed Console\n";
 }
 
 //------------------------------------------------------------------------------
