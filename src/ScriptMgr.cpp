@@ -50,7 +50,7 @@ void ScriptMgr::setDataFolder(const std::string& folder)
 bool ScriptMgr::executeString(const std::string& code)
 {
     if (luaL_dostring(L, code.c_str())) {
-        throw ScriptMgrError(lua_tostring(L, -1));
+        throw ScriptError(lua_tostring(L, -1));
     }
 
     LOG << "Executed code: " << code << std::endl;
@@ -63,7 +63,7 @@ bool ScriptMgr::executeFile(const std::string& filename)
 {
     std::string fullpath = dataFolder + filename;
     if (luaL_dofile(L, fullpath.c_str())) {
-        throw ScriptMgrError(lua_tostring(L, -1));
+        throw ScriptError(lua_tostring(L, -1));
     }
 
     LOG << "Executed script from: " << fullpath << std::endl;
@@ -76,7 +76,7 @@ int ScriptMgr::getGlobalInt(const std::string& varname)
 {
     lua_getglobal(L, varname.c_str());
     if (!lua_isnumber(L, -1)) {
-        throw ScriptMgrError(varname + " should be a number.");
+        throw ScriptError(varname + " should be a number.");
     }
     
     int retVal = lua_tonumber(L, -1);
@@ -91,7 +91,7 @@ bool ScriptMgr::getGlobalBool(const std::string& varname)
 {
     lua_getglobal(L, varname.c_str());
     if (!lua_isboolean(L, -1)) {
-        throw ScriptMgrError(varname + " should be a boolean.");
+        throw ScriptError(varname + " should be a boolean.");
     }
 
     int retVal = lua_toboolean(L, -1);

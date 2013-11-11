@@ -6,28 +6,17 @@
 
 #include <lua.hpp>
 
-#include <exception>
+#include <stdexcept>
 #include <string>
 
 //------------------------------------------------------------------------------
 
-class ScriptMgrError : public std::exception
+class ScriptError : public std::runtime_error
 {
  public:
-    ScriptMgrError(const std::string& msg) : m_msg(msg) {}
-    ~ScriptMgrError() throw() {}
-
-#ifdef _MSC_VER
-    const char* what() const //noexcept (MSVC er C3646)
-#else
-    const char* what() const noexcept
-#endif
-    {
-        return m_msg.c_str();
-    }
-
- private:
-    const std::string m_msg;
+    ScriptError(const std::string& msg)
+        : std::runtime_error(msg)
+    {}
 };
 
 //------------------------------------------------------------------------------
