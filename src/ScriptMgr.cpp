@@ -5,17 +5,8 @@
 #include "Engine.h"
 #include "Logger.h"
 
-static int l_addBox(lua_State *L)
-{
-    // get args from Lua
-    float x = luaL_checknumber(L, -2);
-    float y = luaL_checknumber(L, -1);
-
-    BaseGameLogic *currGame = static_cast<BaseGameLogic *>(Engine::singleton().game());
-    currGame->addGameObject(BOX, "box", x, y);
-
-    return 0;
-} 
+/* Functions exposed to Lua */
+static int l_addBox(lua_State *L);
 
 //------------------------------------------------------------------------------
 
@@ -98,4 +89,18 @@ bool ScriptMgr::getGlobalBool(const std::string& varname)
     lua_pop(L, 1);
 
     return ((retVal) ? true : false);
+}
+
+//==============================================================================
+
+static int l_addBox(lua_State *L)
+{
+    // get args from Lua
+    float x = luaL_checknumber(L, -2);
+    float y = luaL_checknumber(L, -1);
+
+    BaseGameLogic *currGame = static_cast<BaseGameLogic *>(Engine::singleton().game());
+    currGame->addGameObject(BOX, "box", x, y);
+
+    return 0;
 }
