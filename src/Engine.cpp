@@ -11,18 +11,18 @@
 #define DELTA_MAX 0.04f
 
 Engine::Engine(bool initVideo)
-    : breakLoop(false)
+    : m_breakLoop(false)
     , m_initVideo(initVideo)
     , m_appActive(true)
     , m_mouseFocus(true)
     , m_inputFocus(true)
-    , m_game(0)
+    , m_game(nullptr)
 {
     try {
         initializeSDL();
-    } catch (EngineError e) {
+    } catch (const EngineError& /*e*/) {
         SDL_Quit();
-        throw e;
+        throw;
     }
 }
 
@@ -48,7 +48,7 @@ void Engine::mainLoop(GameLogic *game)
     float delta = 0.0f;
 
     for (;;) {
-        if (breakLoop || !processEvents())
+        if (m_breakLoop || !processEvents())
             break;
         if (m_appActive) {
             if (/*m_inputFocus &&*/ delta > 0.0f) {

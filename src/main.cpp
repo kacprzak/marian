@@ -30,43 +30,46 @@ void remoteClientEventListener(EventPtr event);
 
 void ctrl_c_handler(int sgn);
 void register_ctrl_c_handler();
-
 #endif
 
 //------------------------------------------------------------------------------
 
 int main(int argc, char *argv[])
 {
-    new ScriptMgr;
-    new EventMgr;
+    try {
+        new ScriptMgr;
+        new EventMgr;
 
-    ScriptMgr::singleton().setDataFolder("scripts/");
-    ScriptMgr::singleton().executeFile("startup.lua");
+        ScriptMgr::singleton().setDataFolder("scripts/");
+        ScriptMgr::singleton().executeFile("startup.lua");
 
-    new ResourceMgr;
-    ResourceMgr::singleton().setDataFolder("assets/");
+        new ResourceMgr;
+        ResourceMgr::singleton().setDataFolder("assets/");
 
-    if (argc >= 2 && strcmp(argv[1], "-s") == 0)
-    {
-        runMultiplayerServer();
+        if (argc >= 2 && strcmp(argv[1], "-s") == 0)
+        {
+            runMultiplayerServer();
+        }
+        else if (argc >= 2 && strcmp(argv[1], "-c") == 0)
+        {
+            std::string gameServer = "localhost";
+            if (argc >= 3)
+                gameServer = argv[2];
+            runMultiplayerClient(gameServer);
+        }
+        else
+        {
+            runSingleplayer();
+        }
+
+        delete ResourceMgr::singletonPtr();
+        delete EventMgr::singletonPtr();
+        delete ScriptMgr::singletonPtr();
+
+    } catch (const std::exception& e) {
+        LOG_FATAL << e.what() << std::endl;
+        throw;
     }
-    else if (argc >= 2 && strcmp(argv[1], "-c") == 0)
-    {
-        std::string gameServer = "localhost";
-        if (argc >= 3)
-            gameServer = argv[2];
-        runMultiplayerClient(gameServer);
-    }
-    else
-    {
-        runSingleplayer();
-    }
-
-    delete ResourceMgr::singletonPtr();
-    delete EventMgr::singletonPtr();
-    delete ScriptMgr::singletonPtr();
-
-    return 0;
 }
 
 //------------------------------------------------------------------------------
@@ -153,7 +156,7 @@ void ctrl_c_handler(int sgn)
     LOG << "Caught signal " << sgn << std::endl;
     Engine *e = Engine::singletonPtr();
     if (e)
-        e->breakLoop = true;
+        e->breakLoop();
     else
         exit(-1);
 }

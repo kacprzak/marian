@@ -8,7 +8,7 @@
 template<typename T>
 struct Rect
 {
-    T left, right, top, bottom;
+    T left, bottom, right, top;
 };
 
 std::vector<int> hexColorToRgb(int hexValue);

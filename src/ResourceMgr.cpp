@@ -3,6 +3,8 @@
 
 #include "Logger.h"
 
+#include <memory>
+
 ResourceMgr::ResourceMgr()
 {
     LOG << "ResourceMgr created\n";
@@ -32,26 +34,21 @@ void ResourceMgr::release()
 
 //------------------------------------------------------------------------------
 
-bool ResourceMgr::addTexture(const std::string& filename)
+void ResourceMgr::addTexture(const std::string& filename)
 {
     if (m_textures.find(filename) != m_textures.end()) {
-        LOG_WARNING << "Warning: Trying to double load " << filename << " texture!" << std::endl;
-        return false;
+        LOG_WARNING << "Trying to double load " << filename << " texture!\n";
+        return;
     }
 
-    Texture *tex = new Texture;
+    std::unique_ptr<Texture> tex(new Texture);
     std::string fullpath = dataFolder + filename;
 
-    if(!tex->loadFromFile(fullpath)) {
-        LOG_ERROR << "Error: Unable to load " << filename << " texture!" << std::endl;
-        delete tex;
-        return false;
-    }
+    tex->loadFromFile(fullpath);
 
-    m_textures.insert(std::make_pair(filename, tex));
+    m_textures.insert(std::make_pair(filename, tex.release()));
+
     LOG << "Loaded texture from: " << fullpath << std::endl;
-
-    return true;
 }
 
 //------------------------------------------------------------------------------
@@ -74,7 +71,7 @@ const Texture* ResourceMgr::getTexture(const std::string& filename)
     if (it != std::end(m_textures)) {
         return it->second;
     } else {
-        std::cerr << "Error: Texture " << filename << " was not loaded!" << std::endl;
+        LOG_ERROR << "Texture " << filename << " was not loaded!\n";
         return 0;
     }
 }

@@ -9,8 +9,10 @@
 #include <GL/gl.h>
 #include <string>
 
+#include <boost/noncopyable.hpp>
+
 /** Class for holding an image in graphics card memory */
-class Texture
+class Texture : private boost::noncopyable
 {
  public:
     Texture();
@@ -20,7 +22,7 @@ class Texture
     int w() const { return m_w; }
     int h() const { return m_h; }
 
-    bool loadFromFile(const std::string& filename);
+    void loadFromFile(const std::string& filename);
 
  private:
     GLuint m_textureId;

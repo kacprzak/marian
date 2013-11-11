@@ -19,7 +19,7 @@ class HeroHumanView : public HumanView
  public:
     HeroHumanView(const std::string& title, int screenWidth, int screenHeight,
                   bool screenFull = false);
-    ~HeroHumanView();
+    ~HeroHumanView() override;
 
     bool processInput(const SDL_Event& event) override;
     void update(float elapsedTime) override;

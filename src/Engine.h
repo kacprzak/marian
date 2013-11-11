@@ -14,32 +14,19 @@
 #include <SDL.h>
 
 #include <string>
-#include <exception>
+#include <stdexcept>
 
-class EngineError : public std::exception
+class EngineError : public std::runtime_error
 {
  public:
     EngineError(const std::string& msg, const char *sdlError)
-        : m_msg(msg)
+        : std::runtime_error(msg + ": " + sdlError)
         , m_sdlError(sdlError)
-    {
-        //
-    }
+    {}
 
-    ~EngineError() throw() {}
-
-#ifdef _MSC_VER
-    const char* what() const //noexcept (MSVC er C3646)
-#else
-    const char* what() const noexcept
-#endif
-    {
-        std::string fullMsg = m_msg + ": " + m_sdlError;
-        return fullMsg.c_str();
-    }
+    const char *sdlError() { return m_sdlError; }
 
  private:
-    const std::string m_msg;
     const char *m_sdlError;
 };
 
@@ -54,7 +41,7 @@ class Engine : public Singleton<Engine>
     void mainLoop(GameLogic *game);
     GameLogic *game() { return m_game; }
 
-    bool breakLoop;
+    void breakLoop() { m_breakLoop = true; }
 
  private:
     void initializeSDL();
@@ -63,6 +50,7 @@ class Engine : public Singleton<Engine>
     void update(float elapsedTime);
     void draw();
 
+    bool m_breakLoop;
     bool m_initVideo;
 
     bool m_appActive;

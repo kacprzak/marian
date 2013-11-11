@@ -2,21 +2,18 @@
 #include "TexCoords.h"
 
 
-TexCoords<4> calculateTexCoords(int texWidth, int texHeight, const Rect<int> &tileCoords)
+TexCoords<4> calculateTexCoords(int texWidth, int texHeight, const Rect<int>& tileCoords)
 {
     TexCoords<4> cs;
-#if 0
-    if (x1 == 0) x1 = texWidth;
-    if (y1 == 0) y1 = texHeight;
 
     // Left bottom
-    cs.coords[0].s = tileCoords / static_cast<float>(texWidth);
-    cs.coords[0].t = y0 / static_cast<float>(texHeight);
+    cs.coords[0].s = tileCoords.left   / static_cast<float>(texWidth);
+    cs.coords[0].t = tileCoords.bottom / static_cast<float>(texHeight);
 
     // Top right
-    cs.coords[2].s = x1 / static_cast<float>(texWidth);
-    cs.coords[2].t = y1 / static_cast<float>(texHeight);
-#endif
+    cs.coords[2].s = tileCoords.right / static_cast<float>(texWidth);
+    cs.coords[2].t = tileCoords.top   / static_cast<float>(texHeight);
+
     // Right bottom
     cs.coords[1].s = cs.coords[2].s;
     cs.coords[1].t = cs.coords[0].t;

@@ -18,12 +18,10 @@ class HeroNodeState : public State<HeroNode *>
         setFacingRight(owner->isFacingRight());
     }
 
-    virtual void onExit(HeroNode * /*owner*/, int /*nextStateId*/) override {}
+    void onExit(HeroNode * /*owner*/, int /*nextStateId*/) override {}
 
     virtual void update(float elapsedTime) = 0;
-
     virtual const Image& currentImage() const = 0;
-
     virtual void setFacingRight(bool right) = 0;
 
  protected:
@@ -40,15 +38,16 @@ class StandHeroState : public HeroNodeState
     {
         const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
-        int ax = 38;
-        int ax_off = 36;
-        int ay = 255;
+        Rect<int> tileCoords = { 38, 255, 38 + 32, 255 + 32 };
 
         m_animation.setReversable(true);
-        Image idleFrame1(tex, ax, ay, ax + 32, ay + 32);
+        Image idleFrame1(tex, tileCoords);
         idleFrame1.scale(2.0f);
         m_animation.addFrame(idleFrame1, 1.0f);
-        Image idleFrame2(tex, ax + ax_off, ay, ax + ax_off + 32, ay + 32);
+
+        tileCoords.left += 36;
+        tileCoords.right += 36;
+        Image idleFrame2(tex, tileCoords);
         idleFrame2.scale(2.0f);
         m_animation.addFrame(idleFrame2, 0.1f); // Blink
     }
@@ -63,7 +62,7 @@ class StandHeroState : public HeroNodeState
         return m_animation.currentFrame();
     }
 
-    void setFacingRight(bool right)
+    void setFacingRight(bool right) override
     {
         static bool animFacingRight = true;
         if (animFacingRight != right) {
@@ -85,11 +84,9 @@ class FallHeroState : public HeroNodeState
     {
         const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
-        int ax = 38;
-        int ax_off = 4*36;
-        int ay = 219;
+        Rect<int> tileCoords = { 182, 219, 182 + 32, 219 + 32 };
 
-        m_image = std::unique_ptr<Image>(new Image(tex, ax + ax_off, ay, ax + ax_off + 32, ay + 32));
+        m_image = std::unique_ptr<Image>(new Image(tex, tileCoords));
         m_image->scale(2.0f);
     }
 
@@ -103,7 +100,7 @@ class FallHeroState : public HeroNodeState
         return *m_image;
     }
 
-    void setFacingRight(bool right)
+    void setFacingRight(bool right) override
     {
         static bool imageFacingRight = true;
         if (imageFacingRight != right) {
@@ -125,22 +122,28 @@ class RunHeroState : public HeroNodeState
     {
         const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
-        int ax = 38 + 36;
-        int ax_off = 36;
-        int ay_off = 36;
-        int ay = 219 - 36;
         float frameSpeed = 0.25f;
         m_animation.setReversable(true);
 
-        int y = 1;
+        const Rect<int> tileCoords = { 74, 183, 74 + 32, 183 + 32 };
+        const int ax_off = 36;
+        const int ay_off = 36;
+
+        const int y = 1;
         for (int x = 2 ; x >= 0; --x) {
-            Image runFrame(tex,
-                           ax + (ax_off * x),      ay + (ay_off * y),
-                           ax + (ax_off * x) + 32, ay + (ay_off * y) + 32);
+            Rect<int> tc = tileCoords;
+
+            tc.left   += ax_off * x;
+            tc.right  += ax_off * x;
+            tc.top    += ay_off * y;
+            tc.bottom += ay_off * y;
+
+            Image runFrame(tex, tc);
             runFrame.scale(2.0f);
             float fs = frameSpeed;
             // Make last and first shorter
-            if (x == 0 || x == 2) fs = frameSpeed / 2.0f;
+            if (x == 0 || x == 2)
+                fs = frameSpeed / 2.0f;
             m_animation.addFrame(runFrame, fs);
         }
     }
@@ -155,7 +158,7 @@ class RunHeroState : public HeroNodeState
         return m_animation.currentFrame();
     }
 
-    void setFacingRight(bool right)
+    void setFacingRight(bool right) override
     {
         static bool animFacingRight = true;
         if (animFacingRight != right) {

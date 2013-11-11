@@ -10,6 +10,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
+#include <stdexcept>
 #include <iostream>
 
 static GLuint load_texture(const char *filename, int *w, int *h);
@@ -32,10 +33,12 @@ Texture::~Texture()
 
 //------------------------------------------------------------------------------
 
-bool Texture::loadFromFile(const std::string& filename)
+void Texture::loadFromFile(const std::string& filename)
 {
     m_textureId = load_texture(filename.c_str(), &m_w, &m_h);
-    return m_textureId == 0 ? false : true;
+
+    if (m_textureId == 0)
+        throw std::runtime_error("Unable to load " + filename + " texture");
 }
 
 //==============================================================================

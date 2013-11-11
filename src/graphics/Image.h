@@ -29,18 +29,13 @@ class Image {
         m_texCoords.coords[3] = { 0.0f, 1.0f };
     }
 
-    Image(const Texture *texture, int x0, int y0, int x1, int y1)
+    Image(const Texture *texture, const Rect<int>& tileCoords)
         : m_texture(texture)
-        , m_pixelWidth(x1 - x0)
-        , m_pixelHeight(y1 - y0)
+        , m_pixelWidth(tileCoords.right - tileCoords.left)
+        , m_pixelHeight(tileCoords.top - tileCoords.bottom)
         , m_width(1.0f)
         , m_height(1.0f)
     {
-        Rect<int> tileCoords;
-        tileCoords.left = x0;
-        tileCoords.bottom = y0;
-        tileCoords.right = x1;
-        tileCoords.top = y1;
         m_texCoords = calculateTexCoords(texture->w(), texture->h(), tileCoords);
     }
 

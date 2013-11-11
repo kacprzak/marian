@@ -22,7 +22,7 @@ class ResourceMgr final : public Singleton<ResourceMgr>
     void release();
 
     // Textures management
-    bool addTexture(const std::string& filename);
+    void addTexture(const std::string& filename);
     const Texture* getTexture(const std::string& filename);
     void releaseTextures();
 

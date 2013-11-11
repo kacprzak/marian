@@ -47,7 +47,8 @@ HeroHumanView::HeroHumanView(const std::string &title, int screenWidth, int scre
             SpriteNode *sprite = new SpriteNode();
 
             const Texture *tex = ResourceMgr::singleton().getTexture("minecraft_tiles_big.png");
-            Image img(tex, 256, 480, 288, 512);
+
+            Image img(tex, {256, 480, 288, 512});
 
             sprite->setActorId(actorId);
             sprite->setImage(img);
@@ -199,7 +200,7 @@ void HeroHumanView::handleActorCreated(EventPtr event)
         SpriteNode *sprite = new SpriteNode();
 
         const Texture *tex = ResourceMgr::singleton().getTexture("minecraft_tiles_big.png");
-        Image img(tex, 256, 480, 288, 512);
+        Image img(tex, {256, 480, 288, 512});
 
         sprite->setActorId(e->m_actorId);
         sprite->setImage(img);
