@@ -43,6 +43,8 @@ class Engine : public Singleton<Engine>
 
     void breakLoop() { m_breakLoop = true; }
 
+    static int showErrorMessageBox(const char *msg);
+
  private:
     void initializeSDL();
 

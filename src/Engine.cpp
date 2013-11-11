@@ -38,6 +38,39 @@ Engine::~Engine()
 
 //------------------------------------------------------------------------------
 
+void Engine::initializeSDL()
+{
+    LOG << "Initializing SDL...\n";
+
+    uint32 sdl_flags = 0;
+    if (m_initVideo)
+        sdl_flags |= SDL_INIT_VIDEO;
+
+    if (SDL_Init(sdl_flags) < 0) {
+        throw EngineError("Could not initialize SDL", SDL_GetError());
+    }
+
+#if 1
+    if (m_initVideo) {
+        SDL_GL_SetAttribute(SDL_GL_RED_SIZE,   8);
+        SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+        SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,  8);
+        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+
+        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+        SDL_GL_SetSwapInterval(1);
+    }
+#endif
+
+    //SDL_ShowCursor(SDL_DISABLE);
+    //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+    SDL_StopTextInput(); // Disable text input events when GUI is not visible
+
+    LOG << "SDL initialized\n";
+}
+
+//------------------------------------------------------------------------------
+
 void Engine::mainLoop(GameLogic *game)
 {
     m_game = game;
@@ -142,34 +175,7 @@ void Engine::draw()
 
 //------------------------------------------------------------------------------
 
-void Engine::initializeSDL()
+int Engine::showErrorMessageBox(const char *msg)
 {
-    LOG << "Initializing SDL...\n";
-
-    uint32 sdl_flags = 0;
-    if (m_initVideo)
-        sdl_flags |= SDL_INIT_VIDEO;
-
-    if (SDL_Init(sdl_flags) < 0) {
-        throw EngineError("Could not initialize SDL", SDL_GetError());
-    }
-
-#if 1
-    if (m_initVideo) {
-        SDL_GL_SetAttribute(SDL_GL_RED_SIZE,   8);
-        SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-        SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,  8);
-        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
-
-        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-        SDL_GL_SetSwapInterval(1);
-    }
-#endif
-
-    //SDL_ShowCursor(SDL_DISABLE);
-    //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-    SDL_StopTextInput(); // Disable text input events when GUI is not visible
-
-    LOG << "SDL initialized\n";
+    return SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", msg, NULL);
 }
-
