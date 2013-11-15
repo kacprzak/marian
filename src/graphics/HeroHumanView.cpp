@@ -45,7 +45,7 @@ HeroHumanView::HeroHumanView(const std::string &title, int screenWidth, int scre
 
         if (obj.type == "Box") {
             const Texture *tex = ResourceMgr::singleton().getTexture("minecraft_tiles_big.png");
-            Image img(tex, {256, 480, 288, 512});
+            Image img(tex, Rect<int>(256, 480, 288, 512));
 
             SpriteNode *sprite = new SpriteNode();
             sprite->setActorId(actorId);
@@ -194,7 +194,7 @@ void HeroHumanView::handleActorCreated(EventPtr event)
     if (e->m_actorCategory == BOX) {
 
         const Texture *tex = ResourceMgr::singleton().getTexture("minecraft_tiles_big.png");
-        Image img(tex, {256, 480, 288, 512});
+        Image img(tex, Rect<int>(256, 480, 288, 512));
 
         SpriteNode *sprite = new SpriteNode();
         sprite->setActorId(e->m_actorId);

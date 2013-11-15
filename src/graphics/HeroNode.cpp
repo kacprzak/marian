@@ -38,7 +38,7 @@ class StandHeroState : public HeroNodeState
     {
         const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
-        Rect<int> tileCoords = { 38, 255, 38 + 32, 255 + 32 };
+        Rect<int> tileCoords = Rect<int>(38, 255, 38 + 32, 255 + 32);
 
         m_animation.setReversable(true);
         Image idleFrame1(tex, tileCoords);
@@ -84,7 +84,7 @@ class FallHeroState : public HeroNodeState
     {
         const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
-        Rect<int> tileCoords = { 182, 219, 182 + 32, 219 + 32 };
+        Rect<int> tileCoords = Rect<int>(182, 219, 182 + 32, 219 + 32);
 
         m_image = std::unique_ptr<Image>(new Image(tex, tileCoords));
         m_image->scale(2.0f);
@@ -125,7 +125,7 @@ class RunHeroState : public HeroNodeState
         float frameSpeed = 0.25f;
         m_animation.setReversable(true);
 
-        const Rect<int> tileCoords = { 74, 183, 74 + 32, 183 + 32 };
+        const Rect<int> tileCoords = Rect<int>(74, 183, 74 + 32, 183 + 32);
         const int ax_off = 36;
         const int ay_off = 36;
 

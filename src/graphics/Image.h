@@ -23,10 +23,10 @@ class Image {
         , m_width(1.0f)
         , m_height(1.0f)
     {
-        m_texCoords.coords[0] = { 0.0f, 0.0f };
-        m_texCoords.coords[1] = { 1.0f, 0.0f };
-        m_texCoords.coords[2] = { 1.0f, 1.0f };
-        m_texCoords.coords[3] = { 0.0f, 1.0f };
+        m_texCoords[0] = TexCoord(0.0f, 0.0f);
+        m_texCoords[1] = TexCoord(1.0f, 0.0f);
+        m_texCoords[2] = TexCoord(1.0f, 1.0f);
+        m_texCoords[3] = TexCoord(0.0f, 1.0f);
     }
 
     Image(const Texture *texture, const Rect<int>& tileCoords)

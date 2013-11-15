@@ -4,51 +4,51 @@
 
 TexCoords<4> calculateTexCoords(int texWidth, int texHeight, const Rect<int>& tileCoords)
 {
-    TexCoords<4> cs;
+    TexCoords<4> tc;
 
     // Left bottom
-    cs.coords[0].s = tileCoords.left   / static_cast<float>(texWidth);
-    cs.coords[0].t = tileCoords.bottom / static_cast<float>(texHeight);
+    tc[0].s = tileCoords.left   / static_cast<float>(texWidth);
+    tc[0].t = tileCoords.bottom / static_cast<float>(texHeight);
 
     // Top right
-    cs.coords[2].s = tileCoords.right / static_cast<float>(texWidth);
-    cs.coords[2].t = tileCoords.top   / static_cast<float>(texHeight);
+    tc[2].s = tileCoords.right / static_cast<float>(texWidth);
+    tc[2].t = tileCoords.top   / static_cast<float>(texHeight);
 
     // Right bottom
-    cs.coords[1].s = cs.coords[2].s;
-    cs.coords[1].t = cs.coords[0].t;
+    tc[1].s = tc[2].s;
+    tc[1].t = tc[0].t;
 
     // Left top
-    cs.coords[3].s = cs.coords[0].s;
-    cs.coords[3].t = cs.coords[2].t;
+    tc[3].s = tc[0].s;
+    tc[3].t = tc[2].t;
 
-    return cs;
+    return tc;
 }
 
 //------------------------------------------------------------------------------
 
 TexCoords<4> flipVerticallyTexCoords(const TexCoords<4>& texCoords)
 {
-    TexCoords<4> cs;
+    TexCoords<4> tc;
 
-    cs.coords[0] = texCoords.coords[1];
-    cs.coords[1] = texCoords.coords[0];
-    cs.coords[2] = texCoords.coords[3];
-    cs.coords[3] = texCoords.coords[2];
+    tc[0] = texCoords[1];
+    tc[1] = texCoords[0];
+    tc[2] = texCoords[3];
+    tc[3] = texCoords[2];
 
-    return cs;
+    return tc;
 }
 
 //------------------------------------------------------------------------------
 
 TexCoords<4> flipHorizontallyTexCoords(const TexCoords<4>& texCoords)
 {
-    TexCoords<4> cs;
+    TexCoords<4> tc;
 
-    cs.coords[0] = texCoords.coords[3];
-    cs.coords[1] = texCoords.coords[2];
-    cs.coords[2] = texCoords.coords[1];
-    cs.coords[3] = texCoords.coords[0];
+    tc[0] = texCoords[3];
+    tc[1] = texCoords[2];
+    tc[2] = texCoords[1];
+    tc[3] = texCoords[0];
 
-    return cs;
+    return tc;
 }

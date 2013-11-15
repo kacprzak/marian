@@ -53,7 +53,7 @@ void MapNode::calculateTilesTextureData()
                 // Calculate coords for OpenGL
                 TexCoords<4> coords = calculateTexCoords(texture->w(), texture->h(), tileCoords);
 
-                std::memcpy(tile->texCoords, &coords, sizeof(Tile::texCoords));
+                std::memcpy(tile->texCoords, &coords, sizeof(coords));
 
                 tile->texId = texture->textureId();
             }

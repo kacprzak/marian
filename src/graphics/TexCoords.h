@@ -12,6 +12,9 @@
 /** Single texture coord. S and T have bounds [0, 1] */
 struct TexCoord
 {
+    TexCoord() : s(0.0f), t(0.0f) {}
+    TexCoord(float aS, float aT) : s(aS), t(aT) {}
+
     float s, t;
 };
 
@@ -33,8 +36,13 @@ inline std::ostream& operator<<(std::ostream& os, const TexCoord& tc)
 //==============================================================================
 
 template <std::size_t size>
-struct TexCoords
+class TexCoords
 {
+ public:
+    TexCoord& operator[](std::size_t i) { return coords[i]; }
+    const TexCoord& operator[](std::size_t i) const { return coords[i]; }
+
+ private:
     TexCoord coords[size];
 };
 
