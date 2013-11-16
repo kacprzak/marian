@@ -39,18 +39,18 @@ template <std::size_t size>
 class TexCoords
 {
  public:
-    TexCoord& operator[](std::size_t i) { return coords[i]; }
-    const TexCoord& operator[](std::size_t i) const { return coords[i]; }
+    TexCoord& operator[](std::size_t i) { return m_coords[i]; }
+    const TexCoord& operator[](std::size_t i) const { return m_coords[i]; }
 
  private:
-    TexCoord coords[size];
+    TexCoord m_coords[size];
 };
 
 template<std::size_t size>
 bool operator==(const TexCoords<size>& lhs, const TexCoords<size>& rhs)
 {
     for (std::size_t i = 0; i < size; ++i) {
-        if (lhs.coords[i] != rhs.coords[i])
+        if (lhs[i] != rhs[i])
             return false;
     }
 
@@ -62,7 +62,7 @@ std::ostream& operator<<(std::ostream& os, const TexCoords<size>& tc)
 {
     os << "{";
     for (std::size_t i = 0; i < size; ++i) {
-        const TexCoord& c = tc.coords[i];
+        const TexCoord& c = tc[i];
         os << c;
     }
     os << "}";
