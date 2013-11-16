@@ -4,6 +4,7 @@
 #include "BaseGameLogic.h"
 #include "Engine.h"
 #include "Logger.h"
+#include "Util.h"
 
 /* Functions exposed to Lua */
 static int l_addBox(lua_State *L);
@@ -33,7 +34,7 @@ ScriptMgr::~ScriptMgr()
 
 void ScriptMgr::setDataFolder(const std::string& folder)
 {
-    dataFolder = folder;
+    dataFolder = appendDirSeparator(folder);
 }
 
 //------------------------------------------------------------------------------
@@ -89,6 +90,21 @@ bool ScriptMgr::getGlobalBool(const std::string& varname)
     lua_pop(L, 1);
 
     return ((retVal) ? true : false);
+}
+
+//------------------------------------------------------------------------------
+
+const char *ScriptMgr::getGlobalString(const std::string &varname)
+{
+    lua_getglobal(L, varname.c_str());
+    if (!lua_isstring(L, -1)) {
+        throw ScriptError(varname + " should be a string.");
+    }
+
+    const char *retVal = lua_tostring(L, -1);
+    lua_pop(L, 1);
+
+    return retVal;
 }
 
 //==============================================================================

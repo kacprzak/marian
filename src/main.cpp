@@ -39,12 +39,14 @@ int main(int argc, char *argv[])
     try {
         new ScriptMgr;
         new EventMgr;
+        new ResourceMgr;
 
-        ScriptMgr::singleton().setDataFolder("scripts/");
         ScriptMgr::singleton().executeFile("startup.lua");
 
-        new ResourceMgr;
-        ResourceMgr::singleton().setDataFolder("assets/");
+        const char *scriptsFolder = ScriptMgr::singleton().getGlobalString("scripts_folder");
+        ScriptMgr::singleton().setDataFolder(scriptsFolder);
+        const char *assetsFolder = ScriptMgr::singleton().getGlobalString("assets_folder");
+        ResourceMgr::singleton().setDataFolder(assetsFolder);
 
         if (argc >= 2 && strcmp(argv[1], "-s") == 0)
         {

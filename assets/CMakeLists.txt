@@ -8,8 +8,5 @@ set ( assets_FILES
   cegui
 )
 
-file( COPY ${assets_FILES}
-      DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
-
 # To list files in QtCreator
 add_custom_target(assets SOURCES ${assets_FILES})

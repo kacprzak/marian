@@ -14,12 +14,27 @@ std::vector<int> hexColorToRgb(int hexValue)
 
 //------------------------------------------------------------------------------
 
-std::vector<int> hexColorToRgb(std::string hexString)
+std::vector<int> hexColorToRgb(const std::string& str)
 {
+    std::string hexString = str;
+
     if (hexString.front() == '#')
         hexString.erase(0, 1);
 
     int hexValue = std::stoi(hexString, nullptr, 16);;
 
     return hexColorToRgb(hexValue); 
+}
+
+//------------------------------------------------------------------------------
+
+std::string appendDirSeparator(const std::string &folder)
+{
+    const char dirSep = '/';
+
+    std::string retFolder = folder;
+    if (retFolder.back() != dirSep)
+        retFolder.push_back(dirSep);
+
+    return retFolder;
 }

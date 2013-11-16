@@ -20,7 +20,8 @@ HeroHumanView::HeroHumanView(const std::string &title, int screenWidth, int scre
 {
     std::shared_ptr<Map> map(new Map);
     // Read map from file
-    map->loadFromFile("assets/map2.tmx");
+    std::string assetsFolder = ResourceMgr::singleton().dataFolder();
+    map->loadFromFile(assetsFolder + "map2.tmx");
 
     // Load map images
     auto images = map->externalImages();

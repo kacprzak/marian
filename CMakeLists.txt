@@ -40,6 +40,11 @@ configure_file(
   ${PROJECT_BINARY_DIR}/config.h
 )
 
+configure_file(
+  ${PROJECT_SOURCE_DIR}/startup.lua.in
+  ${PROJECT_BINARY_DIR}/startup.lua
+)
+
 include_directories(
   ${PROJECT_BINARY_DIR}
   src

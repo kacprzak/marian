@@ -16,3 +16,6 @@ screen_width = 1680
 screen_height = 1050
 screen_full = true
 --]]
+
+assets_folder = "@PROJECT_SOURCE_DIR@/assets"
+scripts_folder = "@PROJECT_SOURCE_DIR@/scripts"

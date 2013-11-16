@@ -17,6 +17,7 @@ class ResourceMgr final : public Singleton<ResourceMgr>
 
     // Set data folder ex: "media/"
     void setDataFolder(const std::string& folder);
+    std::string dataFolder() const { return m_dataFolder; }
 
     // Releases all resources.
     void release();
@@ -27,7 +28,7 @@ class ResourceMgr final : public Singleton<ResourceMgr>
     void releaseTextures();
 
  private:
-    std::string dataFolder;
+    std::string m_dataFolder;
     std::unordered_map<std::string, Texture*> m_textures;
 };
 

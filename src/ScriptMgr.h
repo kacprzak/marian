@@ -36,6 +36,7 @@ class ScriptMgr : public Singleton<ScriptMgr>
 
     int  getGlobalInt(const std::string& varname);
     bool getGlobalBool(const std::string& varname);
+    const char *getGlobalString(const std::string& varname);
 
  private:
     std::string dataFolder;

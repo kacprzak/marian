@@ -2,6 +2,7 @@
 #include "ResourceMgr.h"
 
 #include "Logger.h"
+#include "Util.h"
 
 #include <memory>
 #include <stdexcept>
@@ -23,7 +24,7 @@ ResourceMgr::~ResourceMgr()
 
 void ResourceMgr::setDataFolder(const std::string& folder)
 {
-    dataFolder = folder;
+    m_dataFolder = appendDirSeparator(folder);
 }
 
 //------------------------------------------------------------------------------
@@ -43,7 +44,7 @@ void ResourceMgr::addTexture(const std::string& filename)
     }
 
     std::unique_ptr<Texture> tex(new Texture);
-    std::string fullpath = dataFolder + filename;
+    std::string fullpath = m_dataFolder + filename;
 
     tex->loadFromFile(fullpath);
 

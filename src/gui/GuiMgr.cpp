@@ -1,6 +1,7 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "GuiMgr.h"
 
+#include "ResourceMgr.h"
 #include "Logger.h"
 
 #include "config.h"
@@ -21,7 +22,8 @@ GuiMgr::GuiMgr()
 #ifdef USE_CEGUI
     CEGUI::OpenGLRenderer::bootstrapSystem();
 
-    std::string folder = "assets/cegui/";
+    std::string assetsFolder = ResourceMgr::singleton().dataFolder();
+    std::string folder = assetsFolder + "cegui/";
     // Initialise the required dirs for the DefaultResourceProvider
     CEGUI::DefaultResourceProvider* rp = static_cast<CEGUI::DefaultResourceProvider*>
         (CEGUI::System::getSingleton().getResourceProvider());

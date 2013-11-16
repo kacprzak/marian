@@ -17,7 +17,8 @@ Game::Game()
     Map map;
 
     // Read map from file
-    map.loadFromFile("assets/map2.tmx");
+    std::string assetsFolder = ResourceMgr::singleton().dataFolder();
+    map.loadFromFile(assetsFolder + "map2.tmx");
 
     m_mapWidth = map.width();
 
