@@ -6,7 +6,7 @@
 BOOST_AUTO_TEST_CASE(map_test)
 {
     tmx::Map map;
-    map.loadFromFile("../assets/map1.tmx");
+    map.loadFromFile("../../marian/assets/map1.tmx");
 
     BOOST_CHECK_EQUAL( map.width, 20 );
     BOOST_CHECK_EQUAL( map.height, 20 );
