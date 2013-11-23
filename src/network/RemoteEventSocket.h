@@ -3,6 +3,8 @@
 
 #include "NetSocket.h"
 
+namespace net {
+
 class RemoteEventSocket : public NetSocket
 {
     typedef NetSocket super;
@@ -14,5 +16,7 @@ public:
     // NetSocket interface
     void handleInput();
 };
+
+} // namespace network
 
 #endif // REMOTEEVENTSOCKET_H

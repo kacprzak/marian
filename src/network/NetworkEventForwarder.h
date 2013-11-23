@@ -3,15 +3,19 @@
 
 #include "events/Event.h"
 
+namespace net {
+
 class NetworkEventForwarder
 {
  public:
     NetworkEventForwarder(int socketId);
 
-    void forwardEvent(EventPtr e);
+    void forwardEvent(event::EventPtr e);
 
  protected:
     int m_socketId;
 };
+
+} // namespace network
 
 #endif // NETWORKEVENTFORWARDER_H

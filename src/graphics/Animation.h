@@ -6,6 +6,8 @@
 
 #include <vector>
 
+namespace gfx {
+
 class Animation
 {
  public:
@@ -87,5 +89,7 @@ class Animation
     bool m_playingBack;
     int m_currentFrameIndex;
 };
+
+} // namespace gfx
 
 #endif // ANIMATION_H

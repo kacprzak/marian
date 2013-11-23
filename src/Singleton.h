@@ -5,8 +5,8 @@
 #include <cassert>
 #include <cstdint> // intptr_t
 
-/**
- * Singleton pattern implementation with controll over creation
+/*!
+ * \brief Singleton pattern implementation with controll over creation
  * and destruction times.
  *
  * Based on article form "Game Programming Gems vol.1"

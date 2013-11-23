@@ -4,6 +4,8 @@
 
 #include <sstream>
 
+using namespace net;
+
 NetworkEventForwarder::NetworkEventForwarder(int socketId)
 {
     m_socketId = socketId;
@@ -11,7 +13,7 @@ NetworkEventForwarder::NetworkEventForwarder(int socketId)
 
 //------------------------------------------------------------------------------
 
-void NetworkEventForwarder::forwardEvent(EventPtr e)
+void NetworkEventForwarder::forwardEvent(event::EventPtr e)
 {
     std::ostringstream out;
 

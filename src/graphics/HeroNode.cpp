@@ -3,6 +3,8 @@
 #include "Animation.h"
 #include "ResourceMgr.h"
 
+namespace gfx {
+
 //==============================================================================
 
 class HeroNodeState : public State<HeroNode *>
@@ -237,4 +239,4 @@ void HeroNode::setFacingRight(bool right)
     m_stateMachine.currentState()->setFacingRight(right);
 }
 
-
+} // namespace gfx

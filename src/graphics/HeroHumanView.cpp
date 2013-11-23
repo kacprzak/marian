@@ -12,6 +12,9 @@
 #include "graphics/MapNode.h"
 #include "input/HeroController.h"
 
+using namespace gfx;
+using namespace event;
+
 HeroHumanView::HeroHumanView(const std::string &title, int screenWidth, int screenHeight, bool screenFull)
     : HumanView(title, screenWidth, screenHeight, screenFull)
     , m_renderer(new GLRenderer)

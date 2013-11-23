@@ -7,6 +7,8 @@
 
 #include <vector>
 
+namespace gfx {
+
 class HeroNode;
 class HeroNodeState;
 
@@ -35,5 +37,7 @@ public:
     HeroNodeStateMachine m_stateMachine;
     std::vector<HeroNodeState *> m_states;
 };
+
+} // namespace gfx
 
 #endif // HERONODE_H

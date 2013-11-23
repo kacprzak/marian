@@ -13,6 +13,8 @@
 #include <stdexcept>
 #include <iostream>
 
+using namespace gfx;
+
 static GLuint load_texture(const char *filename, int *w, int *h);
 static int SDL_InvertSurface(SDL_Surface *image);
 

@@ -83,7 +83,7 @@ Layer * Map::findLayer(const std::string& layerName) const
 
 //------------------------------------------------------------------------------
 
-/**
+/*!
  * Names of images used in this map.
  */
 std::vector<std::string> Map::externalImages() const
@@ -105,7 +105,7 @@ std::string Map::backgroundColor() const
 }
 
 //------------------------------------------------------------------------------
-/**
+/*!
  * Pixel coords rectangle that bounds image on it's texture.
  *
  * @param tileCoords    output argument

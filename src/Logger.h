@@ -5,7 +5,7 @@
 #include <ctime>
 #include <iomanip>
 
-/**
+/*!
  * @brief Super simple log library.
  */
 
@@ -67,7 +67,7 @@ class PerrorLogger {
 #define PLOG        PerrorLogger(nullptr)
 #endif
 
-/**
+/*!
  * Use this for logging only in debug mode.
  */
 #ifndef NDEBUG

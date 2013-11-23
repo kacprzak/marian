@@ -4,6 +4,8 @@
 
 #include "Logger.h"
 
+using namespace event;
+
 EventMgr::EventMgr()
     : m_activeQueue(0)
 {

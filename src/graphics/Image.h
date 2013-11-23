@@ -9,8 +9,10 @@
 #include <sstream>
 #include <ostream>
 
-/**
- * An image. Represents whole or part of a texture.
+namespace gfx {
+
+/*!
+ * \brief An image. Represents whole or part of a texture.
  *
  * It's a light object. Can be passed to fuctions as copy. 
  */
@@ -84,8 +86,9 @@ class Image {
     TexCoords<4>   m_texCoords;
 };
 
+} // namespace gfx
 
-inline std::ostream& operator<<(std::ostream& os, const Image& image)
+inline std::ostream& operator<<(std::ostream& os, const gfx::Image& image)
 {
     os << image.toString();
     return os;

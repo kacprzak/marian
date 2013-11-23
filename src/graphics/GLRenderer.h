@@ -4,6 +4,8 @@
 
 #include "Renderer.h"
 
+namespace gfx {
+
 class GLRenderer : public Renderer
 {
  public:
@@ -18,5 +20,7 @@ class GLRenderer : public Renderer
     void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
                   const GLfloat *texCoords) const;
 };
+
+} // namespace gfx
 
 #endif // GLRENDERER_H

@@ -1,5 +1,7 @@
 #include "SpriteNode.h"
 
+using namespace gfx;
+
 SpriteNode::SpriteNode()
     : m_actorId(0)
     , m_image(nullptr)

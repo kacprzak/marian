@@ -9,6 +9,8 @@
 #include <memory>
 #include <map>
 
+namespace gfx {
+
 class Renderer;
 class SpriteNode;
 class MapNode;
@@ -27,21 +29,23 @@ class HeroHumanView : public HumanView
     void draw() override;
 
  private:
-    void handleActorMoved(EventPtr event);
-    void handleActorPhysicsStateChanged(EventPtr event);
-    void handleActorCreated(EventPtr event);
-    void handleActorDestroyed(EventPtr event);
-    void handleInputCommand(EventPtr event);
+    void handleActorMoved(event::EventPtr event);
+    void handleActorPhysicsStateChanged(event::EventPtr event);
+    void handleActorCreated(event::EventPtr event);
+    void handleActorDestroyed(event::EventPtr event);
+    void handleInputCommand(event::EventPtr event);
 
     std::unique_ptr<Renderer> m_renderer;
     ActorId m_heroId;
 
-    EventListenerHelper elh;
+    event::EventListenerHelper elh;
     MapNode m_mapNode;
 
     std::map<ActorId, SpriteNode*> m_nodes;
 
     std::unique_ptr<HeroController> m_keyboardHandler;
 };
+
+} // namespace gfx
 
 #endif // HEROHUMANVIEW_H

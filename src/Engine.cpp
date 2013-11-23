@@ -74,7 +74,7 @@ void Engine::initializeSDL()
 void Engine::mainLoop(GameLogic *game)
 {
     m_game = game;
-    m_game->initialize(this);
+    m_game->onBeforeMainLoop(this);
  
     unsigned int curr_time = SDL_GetTicks();
     unsigned int last_time = curr_time;
@@ -99,12 +99,12 @@ void Engine::mainLoop(GameLogic *game)
         last_time = curr_time;
     }
 
-    m_game->cleanup(this);
+    m_game->onAfterMainLoop(this);
 }
 
 //------------------------------------------------------------------------------
 
-/** Return true if should keep going. */
+/*! Return true if should keep going. */
 bool Engine::processEvents()
 {
     SDL_Event event;
@@ -155,7 +155,7 @@ void Engine::update(float elapsedTime)
         gv->update(elapsedTime);
 
     // Update network
-    BaseSocketMgr *sm = BaseSocketMgr::singletonPtr();
+    net::BaseSocketMgr *sm = net::BaseSocketMgr::singletonPtr();
     if (sm)
         sm->select(20);
 }

@@ -6,6 +6,8 @@
 
 #include "Util.h"
 
+namespace gfx {
+
 typedef Rect<float> ViewRect;
 
 //------------------------------------------------------------------------------
@@ -28,7 +30,7 @@ class HumanView : public GameView
     void setBackgroundColor(int r, int g, int b);
     void setBackgroundColor(const std::string& color);
 
-    /** Screen size in pixels */
+    /*! Screen size in pixels */
     int screenWidth() const  { return m_screenWidth; }
     int screenHeight() const { return m_screenHeight; }
 
@@ -53,5 +55,7 @@ class HumanView : public GameView
     float m_translate_z;
     float m_scale;
 };
+
+} // namespace gfx
 
 #endif // HUMANVIEW_H

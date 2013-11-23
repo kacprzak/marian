@@ -2,8 +2,8 @@
 #ifndef KEYBOARDHANDLER_H
 #define KEYBOARDHANDLER_H
 
-/**
- * Interface for handling keyboard input.
+/*!
+ * \brief Interface for handling keyboard input.
  */
 class KeyboardHandler
 {

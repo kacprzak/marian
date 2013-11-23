@@ -152,6 +152,7 @@ void HeroPhysicsComponent::update(float elapsedTime)
     }
     }
 
+    using namespace event;
     // emit move event if position changed
     if (m_lastX != posX() || m_lastY != posY()) {
         EventMgr::singleton().queueEvent(EventPtr(new MoveEvent(m_owner->id(), posX(), posY())));
@@ -168,6 +169,8 @@ void HeroPhysicsComponent::update(float elapsedTime)
 
 void HeroPhysicsComponent::changeState(ActorPhysicsStateId state)
 {
+    using namespace event;
+
     m_heroStateId = state;
     // emit event
     EventMgr::singleton().queueEvent(EventPtr(new PhysicsStateChangeEvent(m_owner->id(), state)));
@@ -175,8 +178,10 @@ void HeroPhysicsComponent::changeState(ActorPhysicsStateId state)
 
 //------------------------------------------------------------------------------
 
-void HeroPhysicsComponent::handleInputCommand(InputCommand command)
+void HeroPhysicsComponent::handleInputCommand(event::InputCommand command)
 {
+    using namespace event;
+
     switch(command) {
     case MOVE_RIGHT_START: m_movingRight = true;  break;
     case MOVE_RIGHT_END:   m_movingRight = false; break;

@@ -15,6 +15,8 @@
 static CEGUI::uint SDLKeyToCEGUIKey(SDL_Keycode key);
 #endif
 
+using namespace gui;
+
 //------------------------------------------------------------------------------
 
 GuiMgr::GuiMgr()
@@ -237,7 +239,7 @@ void GuiMgr::handle_mouse_up(Uint8 button)
 }
 
 #ifdef USE_CEGUI
-/************************************************************************
+/*!**********************************************************************
     Translate a SDLKey to the proper CEGUI::Key
 *************************************************************************/
 CEGUI::uint SDLKeyToCEGUIKey(SDL_Keycode key)

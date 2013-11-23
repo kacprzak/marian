@@ -7,6 +7,11 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+namespace gfx {
+
+/*!
+ * \brief The Renderer interface.
+ */
 class Renderer
 {
  public:
@@ -17,5 +22,7 @@ class Renderer
                           GLuint textureId, const GLfloat *texCoords) const = 0;
 
 };
+
+} // namespace gfx
 
 #endif // RENDERER_H

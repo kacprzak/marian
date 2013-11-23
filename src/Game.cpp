@@ -12,6 +12,8 @@
 #include "components/RenderComponent.h"
 #include "components/PhysicsComponent.h"
 
+using namespace event;
+
 Game::Game()
 {
     Map map;
@@ -41,7 +43,7 @@ Game::Game()
 
 //------------------------------------------------------------------------------
 
-void Game::initialize(Engine * /*e*/)
+void Game::onBeforeMainLoop(Engine * /*e*/)
 {
     ScriptMgr::singleton().executeFile("map2_init.lua");
 }

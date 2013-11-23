@@ -3,6 +3,8 @@
 
 #include "ListenNetSocket.h"
 
+namespace net {
+
 class GameServerListenNetSocket : public ListenNetSocket
 {
 public:
@@ -10,5 +12,7 @@ public:
 
     void handleInput();
 };
+
+} // namespace network
 
 #endif // GAMESERVERLISTENNETSOCKET_H

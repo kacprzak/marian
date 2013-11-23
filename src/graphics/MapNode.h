@@ -7,6 +7,8 @@
 
 #include <memory>
 
+namespace gfx {
+
 class MapNode
 {
 public:
@@ -41,5 +43,7 @@ private:
 
     float m_cloudsTransition;
 };
+
+} // namespace gfx
 
 #endif // MAPNODE_H

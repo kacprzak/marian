@@ -5,6 +5,8 @@
 #include "Singleton.h"
 #include <CEGUI.h>
 
+namespace gui {
+
 class Console : public Singleton<Console>
 {
  public:
@@ -46,5 +48,7 @@ class Console : public Singleton<Console>
     bool m_consoleVisible;
     CEGUI::String m_previousCmd;
 };
+
+} // namespace gui
 
 #endif // CONSOLE_H

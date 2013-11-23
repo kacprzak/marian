@@ -1,5 +1,8 @@
 #include "RemoteGameView.h"
 
+using namespace net;
+using namespace event;
+
 RemoteGameView::RemoteGameView(int socketId)
     : m_nef(socketId)
 {

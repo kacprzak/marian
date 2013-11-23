@@ -8,6 +8,8 @@
 
 #define GAME_PORT 3456
 
+namespace net {
+
 class BaseSocketMgr : public Singleton<BaseSocketMgr>
 {
 public:
@@ -40,8 +42,8 @@ protected:
     typedef std::list<NetSocket *> SocketList;
     typedef std::map<int, NetSocket *> SocketIdMap;
 
-    SocketList  m_sockList;        ///< List of sockets
-    SocketIdMap m_sockMap;         ///< Map from id to socket handles
+    SocketList  m_sockList;        //!< List of sockets
+    SocketIdMap m_sockMap;         //!< Map from id to socket handles
 
     int m_nextSocketId;
 
@@ -49,10 +51,12 @@ protected:
     unsigned int m_outbound;       // statistics gathering - outbound data
     unsigned int m_maxOpenSockets; // statistics gathering - max open sockets
 
-    unsigned int m_subnet;         ///< the subnet of the internal network
-    unsigned int m_subnetMask;     ///< the subnet mask of the internal network
+    unsigned int m_subnet;         //!< the subnet of the internal network
+    unsigned int m_subnetMask;     //!< the subnet mask of the internal network
 
     NetSocket *findSocket(int sockId);
 };
+
+} // namespace network
 
 #endif // BASESOCKETMGR_H

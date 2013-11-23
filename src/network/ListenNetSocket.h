@@ -3,6 +3,8 @@
 
 #include "NetSocket.h"
 
+namespace net {
+
 class ListenNetSocket : public NetSocket
 {
 public:
@@ -14,5 +16,7 @@ public:
 
     unsigned short port;
 };
+
+} // namespace network
 
 #endif // LISTENNETSOCKET_H

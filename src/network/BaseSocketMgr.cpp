@@ -11,6 +11,8 @@
 
 #include "Logger.h"
 
+using namespace net;
+
 BaseSocketMgr::BaseSocketMgr()
     : m_nextSocketId(1)
     , m_inbound(0)

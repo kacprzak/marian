@@ -7,6 +7,8 @@
 
 #include <sstream>
 
+using namespace net;
+
 RemoteEventSocket::RemoteEventSocket()
 {}
 
@@ -21,6 +23,8 @@ RemoteEventSocket::RemoteEventSocket(int socket, unsigned int ip)
 void RemoteEventSocket::handleInput()
 {
     super::handleInput();
+
+    using namespace event;
 
     while (!m_inList.empty()) {
         std::shared_ptr<Packet> packet = *(m_inList.begin());

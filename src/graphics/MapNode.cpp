@@ -4,6 +4,8 @@
 #include <cmath>
 #include <cstring> // memcpy
 
+using namespace gfx;
+
 #define TEST 0
 
 MapNode::MapNode()

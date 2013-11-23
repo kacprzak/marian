@@ -10,6 +10,8 @@
 #define MAX_PACKET_SIZE 256
 #define RECV_BUFFER_SIZE (MAX_PACKET_SIZE * 256)
 
+namespace net {
+
 class NetSocket
 {
     friend class BaseSocketMgr;
@@ -34,25 +36,27 @@ class NetSocket
     int ipAdress() { return m_ipaddr; }
 
  protected:
-    int m_socket;           ///< Socker file descriptor
-    int m_id;               ///< Id given by manager
+    int m_socket;           //!< Socker file descriptor
+    int m_id;               //!< Id given by manager
 
     // NOTE: if deleteFlag has bit 2 set, exceptions only close the
     //   socket and set to INVALID_SOCKET, and do not delete the NetSocket
     int m_deleteFlag;
 
-    PacketList m_outList;   ///< packet to send
-    PacketList m_inList;    ///< packets received
+    PacketList m_outList;   //!< packet to send
+    PacketList m_inList;    //!< packets received
 
-    char m_recvBuff[RECV_BUFFER_SIZE];      ///< recieved data
-    unsigned int m_recvOffset, m_recvBegin; ///< tracking buffer
+    char m_recvBuff[RECV_BUFFER_SIZE];      //!< recieved data
+    unsigned int m_recvOffset, m_recvBegin; //!< tracking buffer
 
-    int m_sendOffset;       ///< tracking output buffer
-    unsigned int m_timeOut; ///< when will the socket timeout
-    unsigned int m_ipaddr;  ///< IP of remote connection
+    int m_sendOffset;       //!< tracking output buffer
+    unsigned int m_timeOut; //!< when will the socket timeout
+    unsigned int m_ipaddr;  //!< IP of remote connection
 
-    int m_internal;         ///< remote IP internal or external
-    time_t m_timeCreated;      ///< socket creation time
+    int m_internal;         //!< remote IP internal or external
+    time_t m_timeCreated;      //!< socket creation time
 };
+
+} // namespace network
 
 #endif // NETSOCKET_H

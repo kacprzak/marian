@@ -80,18 +80,18 @@ class PhysicsComponent : public ActorComponent
         m_body->ApplyLinearImpulse(b2Vec2(x, y), m_body->GetWorldCenter());
     }
 
-    /**
-     * Handle contact with some other object.
+    /*!
+     * \brief Handle contact with some other object.
      *
-     * @param other      object that contacts this object
-     * @param fixtureUD  user data of fixture that collided with other
+     * \param other      object that contacts this object
+     * \param fixtureUD  user data of fixture that collided with other
      */
     virtual void handleBeginContact(ActorPtr /*other*/,
                                     void * /*fixtureUD*/ = nullptr) {}
     virtual void handleEndContact  (ActorPtr /*other*/,
                                     void * /*fixtureUD*/ = nullptr) {}
 
-    virtual void handleInputCommand(InputCommand /*command*/) {}
+    virtual void handleInputCommand(event::InputCommand /*command*/) {}
 
     ActorComponentId componentId() const { return PHYSICS; }
 

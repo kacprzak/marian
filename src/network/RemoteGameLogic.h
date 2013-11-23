@@ -6,6 +6,8 @@
 #include "events/EventMgr.h"
 #include "NetworkEventForwarder.h"
 
+namespace net {
+
 class RemoteGameLogic : public GameLogic
 {
 public:
@@ -19,7 +21,9 @@ protected:
     NetworkEventForwarder m_nef;
 
  private:
-    EventListenerHelper elh;
+    event::EventListenerHelper elh;
 };
+
+} // namespace network
 
 #endif // REMOTEGAMELOGIC_H

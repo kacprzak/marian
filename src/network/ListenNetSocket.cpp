@@ -8,6 +8,8 @@
 
 #include "Logger.h"
 
+using namespace net;
+
 ListenNetSocket::ListenNetSocket()
 {
 }

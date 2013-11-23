@@ -32,7 +32,7 @@ class HeroPhysicsComponent : public PhysicsComponent
 
     void changeState(ActorPhysicsStateId state);
 
-    void handleInputCommand(InputCommand command);
+    void handleInputCommand(event::InputCommand command);
 
  private:
     int m_feetContacts;

@@ -9,18 +9,16 @@
 
 namespace tmx {
 
-class Property
+struct Property
 {
- public:
     std::string name;
     std::string value;
 };
 
 //------------------------------------------------------------------------------
 
-class Tileset
+struct Tileset
 {
- public:
     std::string name;
     unsigned firstGid;
     int tileWidth;
@@ -34,13 +32,12 @@ class Tileset
 
 //------------------------------------------------------------------------------
 
-class Layer 
+struct Layer
 {
- public:
     std::string name;
     int width;
     int height;
-    std::string visible; //< "1" by default
+    std::string visible; //!< "1" by default
     std::string dataEncoding;
     std::string compression;
     std::vector<unsigned> data;
@@ -50,19 +47,18 @@ class Layer
 
 //------------------------------------------------------------------------------
 
-class Object
+struct Object
 {
- public:
     std::string name;
     std::string type;
-    unsigned gid; //< 0 by default
+    unsigned gid; //!< 0 by default
     int x;
     int y;
-    int width;    //< 0 by default
-    int height;   //< 0 by default
-    std::string visible; //< "1" by default
-    std::string shape;   //< ellipse, polygon, polyline or null
-    std::vector<std::pair<int, int> > points; //< polygon or polyline points
+    int width;    //!< 0 by default
+    int height;   //!< 0 by default
+    std::string visible; //!< "1" by default
+    std::string shape;   //!< ellipse, polygon, polyline or null
+    std::vector<std::pair<int, int> > points; //!< polygon or polyline points
 
     std::vector<Property> properties;
 };
@@ -70,9 +66,8 @@ class Object
 //------------------------------------------------------------------------------
 
 // In fact it's ObjectLayer
-class ObjectGroup
+struct ObjectGroup
 {
- public:
     std::string name;
     int width;
     int height;

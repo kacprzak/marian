@@ -11,9 +11,14 @@
 #include <memory>
 #include <functional>
 
+namespace event {
+
 typedef std::function<void (EventPtr)> EventListener;
 typedef std::shared_ptr<EventListener> EventListenerPtr;
 
+/*!
+ * \brief The global event manager class.
+ */
 class EventMgr : public Singleton<EventMgr>
 {
     typedef std::multimap<EventType, EventListenerPtr> EventListenerMap;
@@ -49,8 +54,8 @@ class EventMgr : public Singleton<EventMgr>
 
 //==============================================================================
 
-/**
- * Useful for classes that want to register methods as event listeners.
+/*!
+ * \brief Useful for classes that want to register methods as event listeners.
  */
 class EventListenerHelper final
 {
@@ -81,5 +86,7 @@ public:
     // Keeps pointers to make unregistration possible
     std::multimap<EventType, EventListenerPtr> m_listeners;
 };
+
+} // namespace event
 
 #endif // EVENTMANAGER_H

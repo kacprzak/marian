@@ -14,6 +14,8 @@
   //#include <signal.h>
 #endif
 
+using namespace net;
+
 NetSocket::NetSocket()
 {
     m_socket = -1;

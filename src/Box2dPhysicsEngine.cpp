@@ -15,6 +15,8 @@
 
 #include <cassert>
 
+using namespace event;
+
 Box2dPhysicsEngine::Box2dPhysicsEngine()
     : m_world()
 {

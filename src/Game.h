@@ -12,17 +12,17 @@ class Game : public BaseGameLogic
  public:
     Game();
 
-    void initialize(Engine *e);
+    void onBeforeMainLoop(Engine *e);
 
     void update(float elapsedTime) override;
 
  private:
 
-    void handleActorCollided(EventPtr event);
+    void handleActorCollided(event::EventPtr event);
     //void handleActorPhysicsStateChanged(EventPtr event);
-    void handleInputCommand(EventPtr event);
+    void handleInputCommand(event::EventPtr event);
 
-    EventListenerHelper elh;
+    event::EventListenerHelper elh;
 
 #ifdef PRINT_FPS
     FpsCounter m_fpsCounter;

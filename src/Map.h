@@ -15,7 +15,7 @@ class Layer;
 
 //------------------------------------------------------------------------------
 
-/** Map object but in game coords */
+/*! \brief Map object but in game coords. */
 class MapObject
 {
  public:
@@ -33,7 +33,7 @@ class MapObject
 
 //------------------------------------------------------------------------------
 
-/** Interface to game map in game coords */
+/*! \brief Interface to game map in game coords. */
 class Map : private boost::noncopyable
 {
     friend class Layer;
@@ -47,7 +47,7 @@ class Map : private boost::noncopyable
     int width() const { return m_width; }
     int height() const { return m_height; }
 
-    /** Get map objects */
+    /*! Get map objects */
     void getObjects(std::vector<MapObject>& v);
 
     std::vector<std::string> externalImages() const;
@@ -60,11 +60,11 @@ class Map : private boost::noncopyable
  private:
     void rectOnTextureForTile(Rect<int> *tileCoords, unsigned globalId) const;
 
-    /** Size in game (tile) coords */
+    /*! Size in game (tile) coords */
     int m_width;
     int m_height;
 
-    /** Size of one tile in pixels */
+    /*! Size of one tile in pixels */
     int m_tileWidth;
     int m_tileHeight;
 
@@ -81,7 +81,7 @@ public:
 
     //void draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const;
 
-    const Map *map; //< parent object
+    const Map *map; //!< Parent object
     std::string name;
     int width;
     int height;
@@ -96,7 +96,7 @@ class Tile
 public:
     Tile(const Map *map, unsigned agid);
 
-    const Map     *map; //< parent object
+    const Map     *map; //!< Parent object
     unsigned       gid;
     unsigned       texId;
     float          texCoords[8];

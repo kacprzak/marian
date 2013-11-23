@@ -2,6 +2,8 @@
 #ifndef EVENTTYPE_H
 #define EVENTTYPE_H
 
+namespace event {
+
 enum EventType {
     ACTOR_CREATED,
     ACTOR_DESTROYED,
@@ -28,5 +30,7 @@ enum InputCommand {
     JUMP,
     FIRE
 };
+
+} // namespace event
 
 #endif // EVENTTYPE

@@ -31,6 +31,8 @@ BaseGameLogic::~BaseGameLogic()
 
 void BaseGameLogic::update(float elapsedTime)
 {
+    using namespace event;
+
     m_physicsEngine->update(elapsedTime);
 
     for (const auto& pair : m_actors) {
@@ -64,6 +66,8 @@ void BaseGameLogic::update(float elapsedTime)
 void BaseGameLogic::addGameObject(ActorCategory type, const std::string& name,
                          float x, float y)
 {
+    using namespace event;
+
     ActorPtr a = ActorFactory::create(this, type, name, x, y);
     m_actors.insert(std::make_pair(a->id(), a));
 

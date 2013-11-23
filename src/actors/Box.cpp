@@ -48,6 +48,8 @@ BoxPhysicsComponent::BoxPhysicsComponent(GameLogic *game, float x, float y,
 
 void BoxPhysicsComponent::update(float)
 {
+    using namespace event;
+
     // emit move event if position changed
     if (m_lastX != posX() || m_lastY != posY() || m_lastAngle != angle()) {
         EventMgr::singleton().queueEvent(EventPtr(new MoveEvent(m_owner->id(), posX(), posY(), angle())));

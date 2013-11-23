@@ -24,12 +24,12 @@ class ResourceMgr final : public Singleton<ResourceMgr>
 
     // Textures management
     void addTexture(const std::string& filename);
-    const Texture* getTexture(const std::string& filename);
+    const gfx::Texture* getTexture(const std::string& filename);
     void releaseTextures();
 
  private:
     std::string m_dataFolder;
-    std::unordered_map<std::string, Texture*> m_textures;
+    std::unordered_map<std::string, gfx::Texture*> m_textures;
 };
 
 #endif

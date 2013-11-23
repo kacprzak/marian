@@ -20,6 +20,9 @@
 // Retro style pixel perfect rendering
 #define ROUND 1
 
+using namespace gfx;
+using namespace gui;
+
 HumanView::HumanView(const std::string &title, int screenWidth, int screenHeight, bool screenFull)
     : m_titile(title)
     , m_screenWidth(screenWidth)

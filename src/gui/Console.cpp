@@ -6,6 +6,8 @@
 
 #include <limits>
 
+using namespace gui;
+
 Console::Console()
 {
     m_consoleWindow =

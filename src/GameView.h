@@ -14,7 +14,7 @@ class GameView : private boost::noncopyable
     virtual void update(float elapsedTime) = 0;
     virtual void draw() = 0;
 
-    /** Callbacks */
+    /*! Callbacks */
     virtual void onAttach(int /*gameViewId*/, unsigned long /*actorId*/) {}
 };
 

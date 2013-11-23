@@ -43,7 +43,7 @@ void ResourceMgr::addTexture(const std::string& filename)
         return;
     }
 
-    std::unique_ptr<Texture> tex(new Texture);
+    std::unique_ptr<gfx::Texture> tex(new gfx::Texture);
     std::string fullpath = m_dataFolder + filename;
 
     tex->loadFromFile(fullpath);
@@ -66,7 +66,7 @@ void ResourceMgr::releaseTextures()
 
 //------------------------------------------------------------------------------
 
-const Texture* ResourceMgr::getTexture(const std::string& filename)
+const gfx::Texture* ResourceMgr::getTexture(const std::string& filename)
 {
     auto it = m_textures.find(filename);
     

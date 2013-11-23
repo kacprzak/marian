@@ -6,6 +6,8 @@
 #include "graphics/TexCoords.h"
 #include "Util.h"
 
+using namespace gfx;
+
 struct TestData
 {
     TestData()

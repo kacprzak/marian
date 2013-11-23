@@ -6,6 +6,9 @@
 #include "events/EventMgr.h"
 #include "Logger.h"
 
+using namespace net;
+using namespace event;
+
 GameServerListenNetSocket::GameServerListenNetSocket(int portNum)
 {
     init(portNum);

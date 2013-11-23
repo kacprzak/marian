@@ -5,6 +5,8 @@
 #include "Image.h"
 #include "components/PhysicsComponent.h"
 
+namespace gfx {
+
 class SpriteNode
 {
 public:
@@ -42,5 +44,7 @@ protected:
     bool m_flippedHori;
 
 };
+
+} // namespace gfx
 
 #endif // SPRITENODE_H

@@ -32,6 +32,9 @@ class EngineError : public std::runtime_error
 
 //------------------------------------------------------------------------------
 
+/*!
+ * \brief Main loop.
+ */
 class Engine : public Singleton<Engine>
 {
  public:

@@ -6,6 +6,8 @@
 
 #include <SDL.h>
 
+namespace gui {
+
 class GuiMgr : public Singleton<GuiMgr>
 {
  public:
@@ -22,5 +24,7 @@ class GuiMgr : public Singleton<GuiMgr>
     void handle_mouse_wheel(const SDL_MouseWheelEvent& e);
 
 };
+
+} // namespace gui
 
 #endif // GUIMGR_H

@@ -17,8 +17,10 @@ class State
 
 //------------------------------------------------------------------------------
 
-/**
- * Simple state machine. It does not own registered states.
+/*!
+ * \brief Simple state machine.
+ *
+ * It does not own registered states.
  */
 template <typename T, typename S>
 class StateMachine

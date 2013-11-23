@@ -5,6 +5,8 @@
 #include "events/EventMgr.h"
 #include "NetworkEventForwarder.h"
 
+namespace net {
+
 class RemoteGameView : public GameView
 {
  public:
@@ -27,7 +29,9 @@ class RemoteGameView : public GameView
     NetworkEventForwarder m_nef;
 
  private:
-    EventListenerHelper elh;
+    event::EventListenerHelper elh;
 };
+
+} // namespace network
 
 #endif // REMOTEGAMEVIEW_H

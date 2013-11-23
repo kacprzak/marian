@@ -11,11 +11,11 @@ class AiComponent : public ActorComponent
  public:
     virtual ~AiComponent();
 
-    /**
-     * Handle contact with some other object.
+    /*!
+     * \brief Handle contact with some other object.
      *
-     * @param other      object that contacts this object
-     * @param fixtureUD  user data of fixture that collided with other
+     * \param other      object that contacts this object
+     * \param fixtureUD  user data of fixture that collided with other
      */
     virtual void handleBeginContact(Actor * /*other*/,
                                     void * /*fixtureUD*/ = nullptr) {}

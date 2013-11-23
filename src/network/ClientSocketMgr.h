@@ -5,6 +5,8 @@
 
 #include <string>
 
+namespace net {
+
 class ClientSocketMgr : public BaseSocketMgr
 {
     typedef BaseSocketMgr super;
@@ -18,5 +20,7 @@ private:
     std::string m_hostName;
     unsigned int m_port;
 };
+
+} // namespace network
 
 #endif // CLIENTSOCKETMGR_H

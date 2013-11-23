@@ -7,9 +7,15 @@
 #include <cstddef> // size_t
 #include <iostream>
 
+namespace gfx {
+
 /* Texture coords utils. */
 
-/** Single texture coord. S and T have bounds [0, 1] */
+/*!
+ * \brief Single texture coord.
+ *
+ * S and T have bounds [0, 1].
+ */
 struct TexCoord
 {
     TexCoord() : s(0.0f), t(0.0f) {}
@@ -75,5 +81,7 @@ std::ostream& operator<<(std::ostream& os, const TexCoords<size>& tc)
 TexCoords<4> calculateTexCoords(int texWidth, int texHeight, const Rect<int>& tileCoords);
 TexCoords<4> flipVerticallyTexCoords(const TexCoords<4>& texCoords);
 TexCoords<4> flipHorizontallyTexCoords(const TexCoords<4>& texCoords);
+
+} // namespace gfx
 
 #endif // TEXCOORDS_H

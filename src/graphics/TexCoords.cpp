@@ -1,6 +1,7 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "TexCoords.h"
 
+namespace gfx {
 
 TexCoords<4> calculateTexCoords(int texWidth, int texHeight, const Rect<int>& tileCoords)
 {
@@ -52,3 +53,5 @@ TexCoords<4> flipHorizontallyTexCoords(const TexCoords<4>& texCoords)
 
     return tc;
 }
+
+} // namespace gfx

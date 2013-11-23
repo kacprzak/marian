@@ -18,6 +18,8 @@
 #include <cassert>
 #include <cstring>     // memcpy
 
+namespace net {
+
 class Packet
 {
  public:
@@ -61,5 +63,7 @@ inline uint32 Packet::getSize() const
     // Size is in first 4 bytes of data
     return ntohl(*(uint32 *)m_data);
 }
+
+} // namespace network
 
 #endif // PACKET_H

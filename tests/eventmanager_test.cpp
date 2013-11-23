@@ -3,6 +3,7 @@
 #include <boost/test/unit_test.hpp>
 #include "events/EventMgr.h"
 
+using namespace event;
 
 void eventListener(EventPtr event)
 {

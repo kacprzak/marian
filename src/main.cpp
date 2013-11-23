@@ -23,7 +23,7 @@ void runSingleplayer();
 void runMultiplayerClient(const std::string& serverAddress);
 void runMultiplayerServer();
 
-void remoteClientEventListener(EventPtr event);
+void remoteClientEventListener(event::EventPtr event);
 
 #if PLATFORM == PLATFORM_UNIX
   #include <signal.h>
@@ -36,6 +36,8 @@ void register_ctrl_c_handler();
 
 int main(int argc, char *argv[])
 {
+    using namespace event;
+
     try {
         new ScriptMgr;
         new EventMgr;
@@ -87,7 +89,7 @@ void runSingleplayer()
 
     new Engine;
     Game *game = new Game;
-    game->attachView(std::shared_ptr<GameView>(new HeroHumanView("Marian", screenWidth, screenHeight, fullScreen)));
+    game->attachView(std::shared_ptr<GameView>(new gfx::HeroHumanView("Marian", screenWidth, screenHeight, fullScreen)));
     Engine::singleton().mainLoop(game);
     delete game;
     delete Engine::singletonPtr();
@@ -97,6 +99,8 @@ void runSingleplayer()
 
 void runMultiplayerClient(const std::string& serverAddress)
 {
+    using namespace net;
+
     int screenWidth  = ScriptMgr::singleton().getGlobalInt("screen_width");
     int screenHeight = ScriptMgr::singleton().getGlobalInt("screen_height");
     bool fullScreen  = ScriptMgr::singleton().getGlobalBool("screen_full");
@@ -110,7 +114,7 @@ void runMultiplayerClient(const std::string& serverAddress)
 
     new Engine;
     GameLogic *game = new RemoteGameLogic(socketId);
-    game->attachView(std::shared_ptr<GameView>(new HeroHumanView("Marian Cli", screenWidth, screenHeight, fullScreen)));
+    game->attachView(std::shared_ptr<GameView>(new gfx::HeroHumanView("Marian Cli", screenWidth, screenHeight, fullScreen)));
     Engine::singleton().mainLoop(game);
     delete game;
     delete Engine::singletonPtr();
@@ -120,6 +124,9 @@ void runMultiplayerClient(const std::string& serverAddress)
 
 void runMultiplayerServer()
 {
+    using namespace net;
+    using namespace event;
+
 #if PLATFORM == PLATFORM_UNIX
     register_ctrl_c_handler();
 #endif
@@ -139,16 +146,16 @@ void runMultiplayerServer()
 
 //------------------------------------------------------------------------------
 
-void remoteClientEventListener(EventPtr event)
+void remoteClientEventListener(event::EventPtr event)
 {
     LOG << "EVENT: " << event->eventName() << " {";
     event->serialize(std::clog);
     std::clog << " }"<< std::endl;
 
     // New client
-    auto e = std::static_pointer_cast<RemoteClientEvent>(event);
+    auto e = std::static_pointer_cast<event::RemoteClientEvent>(event);
 
-    std::shared_ptr<GameView> view(new RemoteGameView(e->m_socketId));
+    std::shared_ptr<GameView> view(new net::RemoteGameView(e->m_socketId));
     Engine::singleton().game()->attachView(view);
 }
 

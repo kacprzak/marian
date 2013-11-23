@@ -11,7 +11,11 @@
 
 #include <boost/noncopyable.hpp>
 
-/** Class for holding an image in graphics card memory */
+namespace gfx {
+
+/*!
+ * \brief Class for holding an image in graphics card memory.
+ */
 class Texture : private boost::noncopyable
 {
  public:
@@ -29,5 +33,7 @@ class Texture : private boost::noncopyable
     int m_w;
     int m_h;
 };
+
+} // namespace gfx
 
 #endif

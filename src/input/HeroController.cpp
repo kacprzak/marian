@@ -10,6 +10,8 @@
     #include <iostream>
 #endif
 
+using namespace event;
+
 HeroController::HeroController()
     : m_actorId(0)
 {
