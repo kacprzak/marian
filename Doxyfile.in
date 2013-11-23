@@ -32,7 +32,7 @@ PROJECT_NAME           = "Marian"
 # This could be handy for archiving the generated documentation or
 # if some version control system is used.
 
-PROJECT_NUMBER         =
+PROJECT_NUMBER         = @MARIAN_VERSION_MAJOR@.@MARIAN_VERSION_MINOR@
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer
@@ -668,10 +668,17 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT                  = ./ src \
-                         src/actors src/components src/events \
-                         src/events src/gui src/input src/network \
-                         src/graphics tmx
+INPUT                  = @CMAKE_CURRENT_SOURCE_DIR@  \
+                         @CMAKE_CURRENT_SOURCE_DIR@/src \
+                         @CMAKE_CURRENT_SOURCE_DIR@/src/actors \
+                         @CMAKE_CURRENT_SOURCE_DIR@/src/components \
+                         @CMAKE_CURRENT_SOURCE_DIR@/src/events \
+                         @CMAKE_CURRENT_SOURCE_DIR@/src/events \
+                         @CMAKE_CURRENT_SOURCE_DIR@/src/gui \
+                         @CMAKE_CURRENT_SOURCE_DIR@/src/input \
+                         @CMAKE_CURRENT_SOURCE_DIR@/src/network \
+                         @CMAKE_CURRENT_SOURCE_DIR@/src/graphics \
+                         @CMAKE_CURRENT_SOURCE_DIR@/tmx
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is
