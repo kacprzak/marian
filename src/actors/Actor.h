@@ -27,8 +27,6 @@ class Actor final
     typedef std::map<ActorComponentId, ActorComponentPtr> ComponentsMap;
 
  public:
-    Actor(ActorId id, GameLogic *game);
-
     ~Actor();
 
     void destroy() {
@@ -65,7 +63,7 @@ class Actor final
         }
     }
 
- protected:
+ private:
     ActorId       m_id;
     GameLogic    *m_game;           //!< Owner
     ActorCategory m_category; 
@@ -73,8 +71,9 @@ class Actor final
     bool          m_dead;           //!< Flag indicating that this actor should be deleted by GameLogic
     std::string   m_name;           //!< Name used in debug
 
- private:
     // Should be called only by ActorFactory
+    Actor(ActorId id, GameLogic *game);
+
     void addComponent(ActorComponentPtr c) {
         m_components.insert(std::make_pair(c->componentId(), c));
     }
