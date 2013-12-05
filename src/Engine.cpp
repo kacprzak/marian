@@ -62,7 +62,7 @@ void Engine::initializeSDL()
     }
 #endif
 
-    //SDL_ShowCursor(SDL_DISABLE);
+    SDL_ShowCursor(SDL_DISABLE);
     //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
     SDL_StopTextInput(); // Disable text input events when GUI is not visible
 

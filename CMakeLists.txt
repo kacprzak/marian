@@ -5,7 +5,8 @@ project( marian )
 set( MARIAN_VERSION_MAJOR 0 )
 set( MARIAN_VERSION_MINOR 2 )
 
-option( USE_CEGUI "Use CEGUI for game GUI" ON )
+option( USE_CEGUI "Use CEGUI for game GUI" OFF )
+option( USE_MYGUI "Use MyGUI for game GUI" ON )
 
 if( MSVC )
   #
@@ -17,6 +18,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
+set( CMAKE_DEBUG_POSTFIX "_d" )
+
 find_package( SDL2 REQUIRED )
 find_package( SDL2_image REQUIRED )
 find_package( OpenGL REQUIRED )
@@ -27,14 +30,20 @@ find_package( Box2D REQUIRED )
 find_package( ZLIB REQUIRED )
 find_package( Lua51 REQUIRED )
 
-if ( USE_CEGUI )
-	find_package( CEGUI REQUIRED COMPONENTS OPENGL )
-	include_directories( ${CEGUI_INCLUDE_DIR} )
-	set( EXTRA_LIBS ${EXTRA_LIBS} ${CEGUI_LIBRARY} )
+if( USE_CEGUI )
+    find_package( CEGUI REQUIRED COMPONENTS OPENGL )
+    include_directories( ${CEGUI_INCLUDE_DIR} )
+    set( EXTRA_LIBS ${EXTRA_LIBS} ${CEGUI_LIBRARY} )
 endif( USE_CEGUI )
-	
-set( CMAKE_DEBUG_POSTFIX "_d" )
 
+if( USE_MYGUI )
+    #find_package( MyGui REQUIRED )
+    include_directories( /home/kaczor/code/sourceforge/my-gui/MyGUIEngine/include )
+    include_directories( /home/kaczor/code/sourceforge/my-gui/Platforms/OpenGL/OpenGLPlatform/include )
+    link_directories( /home/kaczor/code/sourceforge/my-gui-debug/lib )
+    set( EXTRA_LIBS ${EXTRA_LIBS} MyGUIEngine_d MyGUI.OpenGLPlatform_d )
+endif( USE_MYGUI )
+	
 configure_file(
   ${PROJECT_SOURCE_DIR}/config.h.in
   ${PROJECT_BINARY_DIR}/config.h

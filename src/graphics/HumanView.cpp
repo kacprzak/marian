@@ -43,6 +43,7 @@ HumanView::HumanView(const std::string &title, int screenWidth, int screenHeight
     }
 
     new GuiMgr;
+    GuiMgr::singleton().setViewSize(m_screenWidth, m_screenHeight);
 }
 
 //------------------------------------------------------------------------------

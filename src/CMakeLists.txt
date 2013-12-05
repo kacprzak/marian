@@ -67,9 +67,13 @@ set( marian_HDRS
   debugdraw/Render.h
 )
 
-if ( USE_CEGUI )
+if( USE_CEGUI )
   set( marian_HDRS ${marian_HDRS} gui/Console.h )
-endif ( USE_CEGUI )
+endif( USE_CEGUI )
+
+if( USE_MYGUI )
+  #set( marian_HDRS ${marian_HDRS} gui/Console.h )
+endif( USE_MYGUI )
 
 set( marian_SRCS
   actors/Actor.cpp
@@ -103,8 +107,6 @@ set( marian_SRCS
 
   events/EventMgr.cpp
 
-  gui/GuiMgr.cpp
-
   Logger.cpp
   Box2dPhysicsEngine.cpp
   Engine.cpp
@@ -119,9 +121,13 @@ set( marian_SRCS
   debugdraw/Render.cpp
 )
 
-if ( USE_CEGUI )
-  set( marian_SRCS ${marian_SRCS} gui/Console.cpp )
-endif ( USE_CEGUI )
+if( USE_CEGUI )
+  set( marian_SRCS ${marian_SRCS} gui/GuiMgr_CEGUI.cpp gui/Console_CEGUI.cpp )
+endif( USE_CEGUI )
+
+if( USE_MYGUI )
+  set( marian_SRCS ${marian_SRCS} gui/GuiMgr_MyGUI.cpp )
+endif( USE_MYGUI )
 
 set( LINK_LIBS
   tmx

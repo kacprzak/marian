@@ -18,6 +18,8 @@ class GuiMgr : public Singleton<GuiMgr>
     void update(float elapsedTime);
     void draw();
 
+    void setViewSize(int width, int height);
+
  private:
     void handle_mouse_up(Uint8 button);
     void handle_mouse_down(Uint8 button);
