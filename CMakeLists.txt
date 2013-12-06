@@ -38,9 +38,9 @@ endif( USE_CEGUI )
 
 if( USE_MYGUI )
     #find_package( MyGui REQUIRED )
-    include_directories( /home/kaczor/code/sourceforge/my-gui/MyGUIEngine/include )
-    include_directories( /home/kaczor/code/sourceforge/my-gui/Platforms/OpenGL/OpenGLPlatform/include )
-    link_directories( /home/kaczor/code/sourceforge/my-gui-debug/lib )
+    include_directories( ~/code/sourceforge/my-gui/MyGUIEngine/include )
+    include_directories( ~/code/sourceforge/my-gui/Platforms/OpenGL/OpenGLPlatform/include )
+    link_directories( ~/code/sourceforge/my-gui-debug/lib )
     set( EXTRA_LIBS ${EXTRA_LIBS} MyGUIEngine_d MyGUI.OpenGLPlatform_d )
 endif( USE_MYGUI )
 	

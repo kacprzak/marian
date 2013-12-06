@@ -40,6 +40,9 @@ GuiMgr::GuiMgr()
     const std::string assetsFolder = ResourceMgr::singleton().dataFolder() + "MyGUI_Media";
 
     s_platform = new MyGUI::OpenGLPlatform();
+
+    //MyGUI::LogManager::getInstance().setSTDOutputEnabled(false);
+
     s_platform->initialise(&s_imageLoader);
     s_platform->getDataManagerPtr()->addResourceLocation(assetsFolder, false);
 
@@ -229,7 +232,7 @@ void *ImageLoader::loadImage(int& _width, int& _height, MyGUI::PixelFormat& _for
 
 void ImageLoader::saveImage(int _width, int _height, MyGUI::PixelFormat _format, void *_texture, const std::string &_filename)
 {
-
+    throw std::logic_error("Not implemented!");
 }
 
 //==============================================================================
