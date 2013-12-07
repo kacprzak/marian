@@ -53,7 +53,7 @@ inline Packet::Packet(const char * const data, uint32 size)
 
 inline Packet::~Packet()
 {
-    delete m_data;
+    delete [] m_data;
 }
 
 //------------------------------------------------------------------------------
