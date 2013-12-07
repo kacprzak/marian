@@ -50,7 +50,7 @@ void Engine::initializeSDL()
         throw EngineError("Could not initialize SDL", SDL_GetError());
     }
 
-#if 1
+#if 0
     if (m_initVideo) {
         SDL_GL_SetAttribute(SDL_GL_RED_SIZE,   8);
         SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);

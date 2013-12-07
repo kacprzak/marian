@@ -66,7 +66,7 @@ class Image {
     }
 
     const Texture *texture() const { return m_texture; }
-    const GLfloat *getTextureCoords() const { return reinterpret_cast<const GLfloat *>(&m_texCoords); }
+    const float *getTextureCoords() const { return reinterpret_cast<const float *>(&m_texCoords); }
     
     std::string toString() const
     {

@@ -49,9 +49,7 @@ GuiMgr::GuiMgr()
     s_gui = new MyGUI::Gui();
     s_gui->initialise();
 
-    // Test
-    MyGUI::ButtonPtr button = s_gui->createWidget<MyGUI::Button>("Button", 100, 10, 100, 26, MyGUI::Align::Default, "Main", "test");
-    button->setCaption("Test");
+    MyGUI::LayoutManager::getInstance().loadLayout("Console.layout");
 
     LOG << "created GuiMgr\n";
 }
@@ -185,7 +183,6 @@ void *ImageLoader::loadImage(int& _width, int& _height, MyGUI::PixelFormat& _for
         return 0;
     }
 
-    // work out what format to tell glTexImage2D to use...
     if (surface->format->BytesPerPixel == 3) { // RGB 24bit
         _format = MyGUI::PixelFormat::R8G8B8;
     } else if (surface->format->BytesPerPixel == 4) { // RGBA 32bit
@@ -219,11 +216,56 @@ void *ImageLoader::loadImage(int& _width, int& _height, MyGUI::PixelFormat& _for
     _height = surface->h;
 
     std::size_t data_size = surface->w * surface->h * surface->format->BytesPerPixel;
-    unsigned char *data = new unsigned char[data_size];
+    Uint8 *data = new Uint8[data_size];
 
     // Copy data for SDL to data
-    memcpy(data, surface->pixels, data_size);
+    SDL_PixelFormat *fmt = surface->format;
+    SDL_LockSurface(surface);
 
+    if (_format == MyGUI::PixelFormat::R8G8B8) {
+        memcpy(data, surface->pixels, data_size);
+    } else { // RGBA
+        Uint32 *pixels = (Uint32*)surface->pixels;
+        int pixels_size = surface->w * surface->h;
+        for (int i = 0; i < pixels_size; ++i) {
+            Uint32 pixel = pixels[i];
+            Uint32 temp;
+            Uint8 red, green, blue, alpha;
+
+            /* Get Red component */
+            temp = pixel & fmt->Rmask;  /* Isolate red component */
+            temp = temp >> fmt->Rshift; /* Shift it down to 8-bit */
+            temp = temp << fmt->Rloss;  /* Expand to a full 8-bit number */
+            red = (Uint8)temp;
+
+            /* Get Green component */
+            temp = pixel & fmt->Gmask;  /* Isolate green component */
+            temp = temp >> fmt->Gshift; /* Shift it down to 8-bit */
+            temp = temp << fmt->Gloss;  /* Expand to a full 8-bit number */
+            green = (Uint8)temp;
+
+            /* Get Blue component */
+            temp = pixel & fmt->Bmask;  /* Isolate blue component */
+            temp = temp >> fmt->Bshift; /* Shift it down to 8-bit */
+            temp = temp << fmt->Bloss;  /* Expand to a full 8-bit number */
+            blue = (Uint8)temp;
+
+            /* Get Alpha component */
+            temp = pixel & fmt->Amask;  /* Isolate alpha component */
+            temp = temp >> fmt->Ashift; /* Shift it down to 8-bit */
+            temp = temp << fmt->Aloss;  /* Expand to a full 8-bit number */
+            alpha = (Uint8)temp;
+
+            int data_idx = i * 4;
+            // This (BGRA) works but why?
+            data[data_idx + 2] = red;
+            data[data_idx + 1] = green;
+            data[data_idx + 0] = blue;
+            data[data_idx + 3] = alpha;
+        }
+    }
+
+    SDL_UnlockSurface(surface);
     // Clean up
     SDL_FreeSurface(surface);
 

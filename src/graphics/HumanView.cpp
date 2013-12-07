@@ -187,12 +187,12 @@ void HumanView::preDraw()
 
 void HumanView::postDraw()
 {
-    // Draw debug information
-    Engine::singleton().game()->drawDebugData();
-
     // Draw gui
     if (GuiMgr::singletonPtr())
         GuiMgr::singleton().draw();
+
+    // Draw debug information
+    Engine::singleton().game()->drawDebugData();
 
     SDL_GL_SwapWindow(m_window);
 }
