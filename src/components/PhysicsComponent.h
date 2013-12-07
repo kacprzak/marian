@@ -26,7 +26,8 @@ class PhysicsComponent : public ActorComponent
         , m_body(nullptr)
     {}
 
-    ~PhysicsComponent() {
+    ~PhysicsComponent()
+    {
         if (m_body) {
             m_body->SetUserData(nullptr); // To silence contact listener
             m_body->GetWorld()->DestroyBody(m_body);
@@ -52,31 +53,21 @@ class PhysicsComponent : public ActorComponent
         m_body = body;
     }
 
-    float posX() const {
-        return m_body->GetPosition().x;
-    }
+    float posX() const { return m_body->GetPosition().x; }
+    float posY() const { return m_body->GetPosition().y; }
 
-    float posY() const {
-        return m_body->GetPosition().y;
-    }
+    float angle() const { return m_body->GetAngle(); }
 
-    float angle() const {
-        return m_body->GetAngle();
-    }
+    float velX() const { return m_body->GetLinearVelocity().x; }
+    float velY() const { return m_body->GetLinearVelocity().y; }
 
-    float velX() const {
-        return m_body->GetLinearVelocity().x;
-    }
-
-    float velY() const {
-        return m_body->GetLinearVelocity().y;
-    }
-
-    void applyForceToCenter(float x, float y) {
+    void applyForceToCenter(float x, float y)
+    {
         m_body->ApplyForceToCenter(b2Vec2(x, y));
     }
 
-    void applyLinearImpulse(float x, float y) {
+    void applyLinearImpulse(float x, float y)
+    {
         m_body->ApplyLinearImpulse(b2Vec2(x, y), m_body->GetWorldCenter());
     }
 

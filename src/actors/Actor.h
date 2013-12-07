@@ -29,16 +29,15 @@ class Actor final
  public:
     ~Actor();
 
-    void destroy() {
-        m_components.clear();
-    }
+    void destroy() { m_components.clear(); }
 
     ActorId id() const { return m_id; }
 
     ActorCategory category() const { return m_category; }
     void setCategory(ActorCategory c) { m_category = c; }
 
-    void update(float elapsedTime) {
+    void update(float elapsedTime)
+    {
         for (const auto &pair : m_components)
             pair.second->update(elapsedTime);
     }
@@ -49,7 +48,8 @@ class Actor final
     void setName(const std::string& name) { m_name = name; }
     const std::string& name() const { return m_name; }
 
-    template <class T> std::weak_ptr<T> getComponent(ActorComponentId id) {
+    template <class T> std::weak_ptr<T> getComponent(ActorComponentId id)
+    {
         ComponentsMap::iterator found = m_components.find(id);
         if (found != m_components.end()) {
             ActorComponentPtr base(found->second);
@@ -74,7 +74,8 @@ class Actor final
     // Should be called only by ActorFactory
     Actor(ActorId id, GameLogic *game);
 
-    void addComponent(ActorComponentPtr c) {
+    void addComponent(ActorComponentPtr c)
+    {
         m_components.insert(std::make_pair(c->componentId(), c));
     }
 

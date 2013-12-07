@@ -11,7 +11,8 @@ struct Rect
     Rect() {}
 
     Rect(T aLeft, T aBottom, T aRight, T aTop)
-        : left(aLeft), bottom(aBottom), right(aRight), top(aTop) {}
+        : left(aLeft), bottom(aBottom), right(aRight), top(aTop)
+    {}
 
     T left, bottom, right, top;
 };

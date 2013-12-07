@@ -6,7 +6,7 @@
 #include <iomanip>
 
 /*!
- * @brief Super simple log library.
+ * \brief Super simple log library.
  */
 
 static std::clock_t startTime = std::clock();

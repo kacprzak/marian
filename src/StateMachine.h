@@ -21,6 +21,9 @@ class State
  * \brief Simple state machine.
  *
  * It does not own registered states.
+ *
+ * \tparam T state machine owner type
+ * \tparam S state type
  */
 template <typename T, typename S>
 class StateMachine
@@ -89,7 +92,7 @@ class StateMachine
 
  private:
     T m_owner;
-    int m_idleStateId;
+    const int m_idleStateId;
     int m_currentStateId;
     S  *m_currentState;
     std::map<int, S *> m_states;

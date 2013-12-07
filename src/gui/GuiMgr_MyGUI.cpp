@@ -41,7 +41,7 @@ GuiMgr::GuiMgr()
 
     s_platform = new MyGUI::OpenGLPlatform();
 
-    //MyGUI::LogManager::getInstance().setSTDOutputEnabled(false);
+    MyGUI::LogManager::getInstance().setSTDOutputEnabled(false);
 
     s_platform->initialise(&s_imageLoader);
     s_platform->getDataManagerPtr()->addResourceLocation(assetsFolder, false);
@@ -52,6 +52,8 @@ GuiMgr::GuiMgr()
     // Test
     MyGUI::ButtonPtr button = s_gui->createWidget<MyGUI::Button>("Button", 100, 10, 100, 26, MyGUI::Align::Default, "Main", "test");
     button->setCaption("Test");
+
+    LOG << "created GuiMgr\n";
 }
 
 //------------------------------------------------------------------------------
@@ -59,9 +61,9 @@ GuiMgr::GuiMgr()
 GuiMgr::~GuiMgr()
 {
     s_gui->shutdown();
-    s_platform->shutdown();
-
     delete s_gui;
+
+    s_platform->shutdown();
     delete s_platform;
 
     LOG << "destroyed GuiMgr\n";

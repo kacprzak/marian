@@ -47,8 +47,7 @@ ActorPtr ActorFactory::create(GameLogic *game, const MapObject &obj)
     } else if (obj.type == "Sensor") {
         actor->setCategory(SENSOR);
 
-        ActorComponentPtr physics(
-                    new SensorPhysicsComponent(game, obj));
+        ActorComponentPtr physics(new SensorPhysicsComponent(game, obj));
         actor->addComponent(physics);
         physics->setOwner(actor);
         physics->init();
@@ -57,8 +56,7 @@ ActorPtr ActorFactory::create(GameLogic *game, const MapObject &obj)
         // Static collision shape
         actor->setCategory(GROUND);
 
-        ActorComponentPtr physics(
-                    new GroundPhysicsComponent(game, obj));
+        ActorComponentPtr physics(new GroundPhysicsComponent(game, obj));
         actor->addComponent(physics);
         physics->setOwner(actor);
         physics->init();
@@ -78,8 +76,7 @@ ActorPtr ActorFactory::create(GameLogic *game, ActorCategory type, const std::st
     if (type == BOX) {
         actor->setCategory(BOX);
 
-        ActorComponentPtr physics(
-                    new BoxPhysicsComponent(game, x, y));
+        ActorComponentPtr physics(new BoxPhysicsComponent(game, x, y));
         actor->addComponent(physics);
         physics->setOwner(actor);
         physics->init();

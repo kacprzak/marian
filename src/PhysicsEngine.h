@@ -11,9 +11,6 @@ class PhysicsEngine
  public:
     virtual ~PhysicsEngine() {}
 
-    virtual bool init() = 0;
-    virtual void shutdown() = 0;
-
     virtual void update(float elapsedTime) = 0;
 
     virtual void toggleDrawDebug() = 0;

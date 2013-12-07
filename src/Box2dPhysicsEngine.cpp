@@ -20,39 +20,25 @@ using namespace event;
 Box2dPhysicsEngine::Box2dPhysicsEngine()
     : m_world()
 {
-    LOG << "created Box2dPhysicsEngine\n";
-
     // Debug drawing
     m_debugDraw.reset(new DebugDraw);
     m_drawDebugData = false;
+
+    b2Vec2 gravity(0.0f, -9.8f);
+    m_world.reset(new b2World(gravity));
+    m_world->SetAllowSleeping(true);
+    m_world->SetContactListener(&m_contactListener);
+
+    LOG << "created Box2dPhysicsEngine\n";
 }
 
 //------------------------------------------------------------------------------
 
 Box2dPhysicsEngine::~Box2dPhysicsEngine()
 {
-    assert(!m_world);
+    //assert(!m_world);
 
     LOG << "destroyed Box2dPhysicsEngine\n";
-}
-
-//------------------------------------------------------------------------------
-
-bool Box2dPhysicsEngine::init()
-{
-    b2Vec2 gravity(0.0f, -9.8f);
-    m_world.reset(new b2World(gravity));
-    m_world->SetAllowSleeping(true);
-    m_world->SetContactListener(&m_contactListener);
-
-    return true;
-}
-
-//------------------------------------------------------------------------------
-
-void Box2dPhysicsEngine::shutdown()
-{
-    m_world.reset();
 }
 
 //------------------------------------------------------------------------------

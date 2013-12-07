@@ -23,7 +23,8 @@ class ActorComponent
 
  private:
     // Only ActroFactory should use this
-    void setOwner(std::shared_ptr<Actor> actor) {
+    void setOwner(std::shared_ptr<Actor> actor)
+    {
         m_owner = actor;
     }
 

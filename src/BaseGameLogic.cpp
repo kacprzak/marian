@@ -3,12 +3,13 @@
 #include "actors/ActorFactory.h"
 #include "events/EventMgr.h"
 #include "Box2dPhysicsEngine.h"
+#include "Logger.h"
 
 BaseGameLogic::BaseGameLogic()
     : m_mapWidth(0.0f)
     , m_physicsEngine(new Box2dPhysicsEngine)
 {
-    m_physicsEngine->init();
+    LOG << "created BaseGameLogic\n";
 }
 
 //------------------------------------------------------------------------------
@@ -24,7 +25,7 @@ BaseGameLogic::~BaseGameLogic()
         it = m_actors.erase(it);
     }
 
-    m_physicsEngine->shutdown();
+    LOG << "destroyed BaseGameLogic\n";
 }
 
 //------------------------------------------------------------------------------

@@ -25,7 +25,8 @@ public:
     bool send(int sockId, std::shared_ptr<Packet> packet);
     void select(int pauseMicroSecs, bool handleInput = true);
 
-    void setSubnet(unsigned int subnet, unsigned int subnetMask) {
+    void setSubnet(unsigned int subnet, unsigned int subnetMask)
+    {
         m_subnet = subnet;
         m_subnetMask = subnetMask;
     }

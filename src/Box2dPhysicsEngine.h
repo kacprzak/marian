@@ -23,9 +23,6 @@ class Box2dPhysicsEngine : public PhysicsEngine
     Box2dPhysicsEngine();
     ~Box2dPhysicsEngine();
 
-    bool init() override;
-    void shutdown() override;
-    
     void update(float elapsedTime) override;
 
     void toggleDrawDebug() override;
