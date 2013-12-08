@@ -31,20 +31,26 @@ class Console
  private:
     // Register our handler functions
     void registerHandlers();
-    // Handle when we press Enter after typing
-    bool handle_TextSubmitted(MyGUI::Widget * _sender);
     // Handle when we press the Send button
     void handle_SendButtonPressed(MyGUI::Widget* _sender);
-    // Parse the text the user submitted.
+    // Handle when we press Enter after typing
+    void handle_ComboAccept(MyGUI::ComboBox* _sender, size_t _index);
+    // Parse the text the user submitted
     void parseText(MyGUI::UString inMsg);
-    // Post the message to the ChatHistory listbox.
-    // with a white color default
-    void outputText(MyGUI::UString inMsg /*, //CEGUI::colour colour = CEGUI::colour(0xFFFFFFFF) */);
+    // Post the message to the ChatHistory listbox
+    void outputText(MyGUI::UString inMsg);
 
     void clearText();
-
-    MyGUI::Window *m_consoleWindow;
+private:
     bool m_consoleVisible;
+
+    MyGUI::Window   *m_consoleWindow;
+    MyGUI::EditBox  *m_listHistory;
+    MyGUI::ComboBox *m_comboCommand;
+    MyGUI::Button   *m_buttonSubmit;
+
+    MyGUI::UString m_errorColor;
+    MyGUI::UString m_echoColor;
     MyGUI::UString m_previousCmd;
 };
 
