@@ -13,7 +13,7 @@ Dependencies
 * OpenGL
 * Box2D
 * Lua
-* CEGUI
+* MyGUI
 * zlib
 
 

@@ -86,34 +86,32 @@ bool GuiMgr::processInput(const SDL_Event& e)
     MyGUI::InputManager& inputMgr = MyGUI::InputManager::getInstance();
 
     switch (e.type) {
-        /* mouse motion handler */
+
     case SDL_MOUSEMOTION:
         inputMgr.injectMouseMove(e.motion.x, e.motion.y, 0);
         break;
 
-        /* mouse down handler */
     case SDL_MOUSEBUTTONDOWN:
         inputMgr.injectMousePress(e.button.x, e.button.y, SDLMouseButtonToMyGUI(e.button.button));
         break;
 
-        /* mouse up handler */
     case SDL_MOUSEBUTTONUP:
         inputMgr.injectMouseRelease(e.button.x, e.button.y, SDLMouseButtonToMyGUI(e.button.button));
         break;
 
     case SDL_MOUSEWHEEL:
-        handle_mouse_wheel(e.wheel);
+        //handle_mouse_wheel(e.wheel);
         break;
 
-        /* key down */
     case SDL_KEYDOWN:
         {
-            MyGUI::Char text = SDLKeycodeToMyGUI(e.key.keysym.sym);
             MyGUI::KeyCode key = SDLScancodeToMyGUI(e.key.keysym.scancode);
 
             bool toogleConsole = (e.key.keysym.sym == SDLK_BACKQUOTE);
 
             if (s_console) {
+                if (s_console->isVisible()) s_console->handleKey(key);
+
                 if (toogleConsole && !s_console->isVisible()) {
                     SDL_StartTextInput();
                     s_console->setVisible(true);
@@ -121,21 +119,24 @@ bool GuiMgr::processInput(const SDL_Event& e)
                     s_console->setVisible(false);
                     SDL_StopTextInput();
                 }
-
-                if (s_console->isVisible()) s_console->handleKey(key);
             }
 
-
-            inputMgr.injectKeyPress(key, text);
+            inputMgr.injectKeyPress(key);
         }
         break;
 
-        /* key up */
     case SDL_KEYUP:
         inputMgr.injectKeyRelease(SDLScancodeToMyGUI(e.key.keysym.scancode));
         break;
 
     case SDL_TEXTINPUT:
+        {
+            const char *ch = e.text.text;
+            while (*ch != '\0') {
+                inputMgr.injectKeyPress(MyGUI::KeyCode::None, *ch);
+                ch++;
+            }
+        }
         break;
 
     case SDL_TEXTEDITING:
@@ -153,14 +154,17 @@ bool GuiMgr::processInput(const SDL_Event& e)
         }
     }
 
+    if (s_console->isVisible())
+        interceptEvent = true;
+
     return interceptEvent; // was intercepted
 }
 
 //------------------------------------------------------------------------------
 
-void GuiMgr::update(float elapsedTime)
+void GuiMgr::update(float /* elapsedTime */)
 {
-
+    // MyGUI manages time on it's own
 }
 
 //------------------------------------------------------------------------------
@@ -188,14 +192,14 @@ void GuiMgr::handle_mouse_down(Uint8 button)
 
 void GuiMgr::handle_mouse_wheel(const SDL_MouseWheelEvent &e)
 {
-    MyGUI::InputManager& inputMgr = MyGUI::InputManager::getInstance();
+
 }
 
 //------------------------------------------------------------------------------
  
 void GuiMgr::handle_mouse_up(Uint8 button)
 {
-    MyGUI::InputManager& inputMgr = MyGUI::InputManager::getInstance();
+
 }
 
 //==============================================================================
@@ -312,12 +316,9 @@ void ImageLoader::saveImage(int _width, int _height, MyGUI::PixelFormat _format,
 MyGUI::MouseButton::Enum SDLMouseButtonToMyGUI(const Uint8 button)
 {
     switch (button) {
-    case SDL_BUTTON_LEFT:
-        return MyGUI::MouseButton::Left;
-    case SDL_BUTTON_MIDDLE:
-        return MyGUI::MouseButton::Middle;
-    case SDL_BUTTON_RIGHT:
-        return MyGUI::MouseButton::Right;
+    case SDL_BUTTON_LEFT:   return MyGUI::MouseButton::Left;
+    case SDL_BUTTON_MIDDLE: return MyGUI::MouseButton::Middle;
+    case SDL_BUTTON_RIGHT:  return MyGUI::MouseButton::Right;
     default:
         return MyGUI::MouseButton::None;
     }
