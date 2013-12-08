@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <MyGUI type="Layout" version="3.2.0">
-    <Widget type="Window" skin="WindowCSX" position="168 72 416 318" layer="Overlapped" name="_Main">
+    <Widget type="Window" skin="WindowCS" position="0 0 416 318" layer="Overlapped" name="_Main">
         <Property key="Caption" value="Console"/>
         <Property key="MinSize" value="200 100"/>
         <UserString key="Current" value="#0000FFcurrent : #000000"/>

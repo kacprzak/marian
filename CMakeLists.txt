@@ -11,7 +11,7 @@ option( USE_MYGUI "Use MyGUI for game GUI" ON )
 if( MSVC )
   #
 else()
-  add_definitions( "-Wall -Wextra -std=c++0x" )
+  add_definitions( "-Wall -Wextra -Wno-unused-parameter -std=c++0x" )
 endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
