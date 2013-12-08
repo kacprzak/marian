@@ -1,5 +1,5 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
-#include "Console.h"
+#include "Console_MyGUI.h"
 
 #include "ScriptMgr.h"
 #include "Logger.h"
@@ -10,8 +10,9 @@ using namespace gui;
 
 Console::Console()
 {
-    m_consoleWindow =
-        CEGUI::WindowManager::getSingleton().loadWindowLayout("VanillaConsole.layout");
+    MyGUI::LayoutManager::getInstance().loadLayout("Console.layout");
+    m_consoleWindow = MyGUI::Gui::getInstance().findWidget<MyGUI::Window>("_Main");
+
     m_consoleVisible = true;
 
     registerHandlers();
@@ -22,15 +23,16 @@ Console::Console()
 
 Console::~Console()
 {
+    MyGUI::Gui::getInstance().destroyWidget(m_consoleWindow);
     LOG << "destroyed Console\n";
 }
 
 //------------------------------------------------------------------------------
 
-void Console::handleKey(CEGUI::uint key)
+void Console::handleKey(MyGUI::KeyCode key)
 {
-    switch (key) {
-    case CEGUI::Key::ArrowUp :
+    switch (key.getValue()) {
+    case MyGUI::KeyCode::ArrowUp :
         revertPreviousCommand();
         break;
     default:
@@ -45,24 +47,29 @@ void Console::setVisible(bool visible)
     m_consoleWindow->setVisible(visible);
     m_consoleVisible = visible;
  
-    CEGUI::Window *editBox = m_consoleWindow->getChild("Vanilla/Console/Editbox");
+    /*CEGUI::Window *editBox = m_consoleWindow->getChild("Vanilla/Console/Editbox");
     if(visible)
         editBox->activate();
     else
         editBox->deactivate();
+*/
 }
 
 //------------------------------------------------------------------------------
 
 bool Console::isVisible()
 {
-    return m_consoleWindow->isVisible();
+    return m_consoleWindow->getVisible();
 }
 
 //------------------------------------------------------------------------------
 
 void Console::registerHandlers()
 {
+    MyGUI::Button *submitBtn = MyGUI::Gui::getInstance().findWidget<MyGUI::Button>("button_Submit");
+    submitBtn->eventMouseButtonClick += MyGUI::newDelegate(this, &Console::handle_SendButtonPressed);
+
+    /*
     m_consoleWindow->getChild("Vanilla/Console/Submit")->
         subscribeEvent(CEGUI::PushButton::EventClicked,
                        CEGUI::Event::Subscriber(&Console::handle_SendButtonPressed, this));
@@ -70,12 +77,14 @@ void Console::registerHandlers()
     m_consoleWindow->getChild("Vanilla/Console/Editbox")->
         subscribeEvent(CEGUI::Editbox::EventTextAccepted,
                        CEGUI::Event::Subscriber(&Console::handle_TextSubmitted, this));
+*/
 }
 
 //------------------------------------------------------------------------------
 
-bool Console::handle_TextSubmitted(const CEGUI::EventArgs& /*e*/)
+bool Console::handle_TextSubmitted(MyGUI::Widget * _sender)
 {
+ /*
     //const CEGUI::WindowEventArgs* args = static_cast<const CEGUI::WindowEventArgs*>(&e);
  
     CEGUI::String msg = m_consoleWindow->getChild("Vanilla/Console/Editbox")->getText();
@@ -83,24 +92,24 @@ bool Console::handle_TextSubmitted(const CEGUI::EventArgs& /*e*/)
     parseText(msg);
  
     m_consoleWindow->getChild("Vanilla/Console/Editbox")->setText("");
- 
+ */
     return true;
 }
 
 //------------------------------------------------------------------------------
 
-bool Console::handle_SendButtonPressed(const CEGUI::EventArgs& /*e*/)
+void Console::handle_SendButtonPressed(MyGUI::Widget * _sender)
 {
+    /*
     CEGUI::String msg = m_consoleWindow->getChild("Vanilla/Console/Editbox")->getText();
     parseText(msg);
     m_consoleWindow->getChild("Vanilla/Console/Editbox")->setText("");
- 
-    return true;
+ */
 }
 
 //------------------------------------------------------------------------------
 
-void Console::parseText(CEGUI::String inMsg)
+void Console::parseText(MyGUI::UString inMsg)
 {
     if (inMsg.empty())
         return;
@@ -114,7 +123,7 @@ void Console::parseText(CEGUI::String inMsg)
     }
 
     try {
-        ScriptMgr::singleton().executeString(inMsg.c_str());
+        ScriptMgr::singleton().executeString(inMsg.asUTF8_c_str());
         outputText(inMsg); // echo
     } catch (const ScriptError& ex) {
         outputText(ex.what());
@@ -123,8 +132,9 @@ void Console::parseText(CEGUI::String inMsg)
 
 //------------------------------------------------------------------------------
 
-void Console::outputText(CEGUI::String inMsg, CEGUI::colour /*colour*/)
+void Console::outputText(MyGUI::UString inMsg /*, CEGUI::colour /*colour*/)
 {
+    /*
     CEGUI::MultiLineEditbox *outWin =
         static_cast<CEGUI::MultiLineEditbox *>
         (m_consoleWindow->getChild("Vanilla/Console/History"));
@@ -136,19 +146,22 @@ void Console::outputText(CEGUI::String inMsg, CEGUI::colour /*colour*/)
     // Push scrollbar to bottom
     CEGUI::Scrollbar *sb = outWin->getVertScrollbar();
     sb->setScrollPosition(std::numeric_limits<float>::max());
+*/
 }
 
 //------------------------------------------------------------------------------
 
 void Console::clearText()
 {
+    /*
     CEGUI::Window *outputWindow = m_consoleWindow->getChild("Vanilla/Console/History");
     outputWindow->setText(CEGUI::String());
+*/
 }
 
 //------------------------------------------------------------------------------
 
 void Console::revertPreviousCommand()
 {
-    m_consoleWindow->getChild("Vanilla/Console/Editbox")->setText(m_previousCmd);
+    //m_consoleWindow->getChild("Vanilla/Console/Editbox")->setText(m_previousCmd);
 }

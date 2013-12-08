@@ -68,11 +68,11 @@ set( marian_HDRS
 )
 
 if( USE_CEGUI )
-  set( marian_HDRS ${marian_HDRS} gui/Console.h )
+  set( marian_HDRS ${marian_HDRS} gui/Console_CEGUI.h )
 endif( USE_CEGUI )
 
 if( USE_MYGUI )
-  #set( marian_HDRS ${marian_HDRS} gui/Console.h )
+  #set( marian_HDRS ${marian_HDRS} gui/Console_MyGUI.h )
 endif( USE_MYGUI )
 
 set( marian_SRCS
@@ -126,7 +126,7 @@ if( USE_CEGUI )
 endif( USE_CEGUI )
 
 if( USE_MYGUI )
-  set( marian_SRCS ${marian_SRCS} gui/GuiMgr_MyGUI.cpp )
+  set( marian_SRCS ${marian_SRCS} gui/GuiMgr_MyGUI.cpp gui/Console_MyGUI.cpp )
 endif( USE_MYGUI )
 
 set( LINK_LIBS

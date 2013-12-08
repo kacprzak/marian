@@ -1,6 +1,10 @@
 /* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "GuiMgr.h"
 
+#define MYGUI_DONT_REPLACE_NULLPTR
+
+#include "Console_MyGUI.h"
+
 #include "ResourceMgr.h"
 #include "Logger.h"
 
@@ -31,9 +35,11 @@ public:
 
 //==============================================================================
 
-static MyGUI::OpenGLPlatform *s_platform;
-static MyGUI::Gui *s_gui;
+static MyGUI::OpenGLPlatform *s_platform = nullptr;
+static MyGUI::Gui *s_gui = nullptr;
 static ImageLoader s_imageLoader;
+
+static Console *s_console = nullptr;
 
 //------------------------------------------------------------------------------
 
@@ -51,7 +57,8 @@ GuiMgr::GuiMgr()
     s_gui = new MyGUI::Gui();
     s_gui->initialise();
 
-    MyGUI::LayoutManager::getInstance().loadLayout("Console.layout");
+    s_console = new Console;
+    s_console->setVisible(false);
 
     LOG << "created GuiMgr\n";
 }
@@ -60,6 +67,8 @@ GuiMgr::GuiMgr()
 
 GuiMgr::~GuiMgr()
 {
+    delete s_console;
+
     s_gui->shutdown();
     delete s_gui;
 
@@ -79,21 +88,16 @@ bool GuiMgr::processInput(const SDL_Event& e)
     switch (e.type) {
         /* mouse motion handler */
     case SDL_MOUSEMOTION:
-        /* we inject the mouse position directly. */
         inputMgr.injectMouseMove(e.motion.x, e.motion.y, 0);
-
         break;
 
         /* mouse down handler */
     case SDL_MOUSEBUTTONDOWN:
-        /* let a special function handle the mouse button down event */
-        //handle_mouse_down(e.button.button);
         inputMgr.injectMousePress(e.button.x, e.button.y, SDLMouseButtonToMyGUI(e.button.button));
         break;
 
         /* mouse up handler */
     case SDL_MOUSEBUTTONUP:
-        /* let a special function handle the mouse button up event */
         inputMgr.injectMouseRelease(e.button.x, e.button.y, SDLMouseButtonToMyGUI(e.button.button));
         break;
 
@@ -106,6 +110,22 @@ bool GuiMgr::processInput(const SDL_Event& e)
         {
             MyGUI::Char text = SDLKeycodeToMyGUI(e.key.keysym.sym);
             MyGUI::KeyCode key = SDLScancodeToMyGUI(e.key.keysym.scancode);
+
+            bool toogleConsole = (e.key.keysym.sym == SDLK_BACKQUOTE);
+
+            if (s_console) {
+                if (toogleConsole && !s_console->isVisible()) {
+                    SDL_StartTextInput();
+                    s_console->setVisible(true);
+                } else if (toogleConsole && s_console->isVisible()) {
+                    s_console->setVisible(false);
+                    SDL_StopTextInput();
+                }
+
+                if (s_console->isVisible()) s_console->handleKey(key);
+            }
+
+
             inputMgr.injectKeyPress(key, text);
         }
         break;

@@ -6,6 +6,7 @@ set ( assets_FILES
   TileKit-border.png
   MegaMan_001.png
   cegui
+  MyGUI_Media
 )
 
 # To list files in QtCreator
