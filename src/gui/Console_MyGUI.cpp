@@ -40,7 +40,7 @@ Console::~Console()
 
 void Console::handleKey(MyGUI::KeyCode key)
 {
-    switch (key.getValue()) {
+    switch (key.toValue()) {
     case MyGUI::KeyCode::ArrowUp :
         revertPreviousCommand();
         break;
