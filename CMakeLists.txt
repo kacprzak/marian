@@ -28,7 +28,7 @@ find_package( Boost COMPONENTS unit_test_framework )
 find_package( Box2D REQUIRED )
 #find_package( GLUT REQUIRED )
 find_package( ZLIB REQUIRED )
-find_package( Lua51 REQUIRED )
+find_package( Lua52 REQUIRED )
 
 if( USE_CEGUI )
     find_package( CEGUI REQUIRED COMPONENTS OPENGL )
