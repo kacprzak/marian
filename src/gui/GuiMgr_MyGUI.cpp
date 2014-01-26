@@ -47,14 +47,14 @@ GuiMgr::GuiMgr()
 {
     const std::string assetsFolder = ResourceMgr::singleton().dataFolder() + "MyGUI_Media";
 
-    s_platform = new MyGUI::OpenGLPlatform();
+    s_platform = new MyGUI::OpenGLPlatform;
 
     MyGUI::LogManager::getInstance().setSTDOutputEnabled(false);
 
     s_platform->initialise(&s_imageLoader);
     s_platform->getDataManagerPtr()->addResourceLocation(assetsFolder, false);
 
-    s_gui = new MyGUI::Gui();
+    s_gui = new MyGUI::Gui;
     s_gui->initialise();
 
     s_console = new Console;

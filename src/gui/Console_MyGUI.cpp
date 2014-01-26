@@ -24,6 +24,9 @@ Console::Console()
     m_errorColor = m_consoleWindow->getUserString("ErrorColor");
     m_echoColor = m_consoleWindow->getUserString("EchoColor");
 
+    // Example commands
+    m_comboCommand->addItem("addBox(x, y)");
+
     registerHandlers();
     LOG << "created Console\n";
 }
@@ -57,10 +60,12 @@ void Console::setVisible(bool visible)
     m_consoleWindow->setVisible(visible);
     m_consoleVisible = visible;
 
-    if(visible)
+    if(visible) {
         m_comboCommand->setEnabled(true);
-    else
+        MyGUI::InputManager::getInstance().setKeyFocusWidget(m_comboCommand);
+    } else {
         m_comboCommand->setEnabled(false);
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -145,5 +150,5 @@ void Console::clearText()
 
 void Console::revertPreviousCommand()
 {
-    //m_consoleWindow->getChild("Vanilla/Console/Editbox")->setText(m_previousCmd);
+    m_comboCommand->setCaption(m_previousCmd);
 }

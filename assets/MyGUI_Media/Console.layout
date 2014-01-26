@@ -6,7 +6,9 @@
         <UserString key="ErrorColor" value="#FF0000"/>
         <UserString key="EchoColor" value="#FFFFFF"/>
         <Widget type="Widget" skin="PanelSkin" position="4 4 401 245" align="Stretch">
+            <Property key="Alpha" value="0.3"/>
             <Widget type="EditBox" skin="WordWrapEmpty" position="4 3 392 237" align="Stretch" name="list_History">
+                <Property key="InheritsAlpha" value="false"/>
                 <Property key="ReadOnly" value="true"/>
             </Widget>
         </Widget>
