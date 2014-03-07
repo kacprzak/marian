@@ -14,7 +14,7 @@ public:
     BaseGameLogic();
     ~BaseGameLogic() override;
 
-    PhysicsEngine *physicsEngine() { return m_physicsEngine.get(); }
+    PhysicsEngine *physicsEngine() override { return m_physicsEngine.get(); }
 
     void addGameObject(ActorCategory type,
                        const std::string& name,

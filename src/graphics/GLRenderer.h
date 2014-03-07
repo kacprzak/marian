@@ -9,11 +9,11 @@ namespace gfx {
 class GLRenderer : public Renderer
 {
  public:
-    ~GLRenderer() {}
+    ~GLRenderer() override {}
 
     // Renderer interface
-    void drawImage(const Image &image, float x, float y, float rotation) const;
-    void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h, GLuint textureId, const GLfloat *texCoords) const;
+    void drawImage(const Image &image, float x, float y, float rotation) const override;
+    void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h, GLuint textureId, const GLfloat *texCoords) const override;
 
  private:
     void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h) const;

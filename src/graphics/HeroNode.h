@@ -18,7 +18,7 @@ class HeroNode : public SpriteNode
 {
 public:
     HeroNode();
-    ~HeroNode();
+    ~HeroNode() override;
 
     void update(float elapsedTime) override;
     void moveTo(float x, float y, float angle) override;

@@ -39,7 +39,7 @@ class Engine : public Singleton<Engine>
 {
  public:
     Engine(bool initVideo = true);
-    ~Engine();
+    ~Engine() override;
 
     void mainLoop(GameLogic *game);
     GameLogic *game() { return m_game; }

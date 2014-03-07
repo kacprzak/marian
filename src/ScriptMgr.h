@@ -25,7 +25,7 @@ class ScriptMgr : public Singleton<ScriptMgr>
 {
  public:
     ScriptMgr();
-    ~ScriptMgr();
+    ~ScriptMgr() override;
 
     // Set data folder ex: "scripts/"
     void setDataFolder(const std::string& folder);

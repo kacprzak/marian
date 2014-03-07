@@ -13,7 +13,7 @@ class ResourceMgr final : public Singleton<ResourceMgr>
  public:
     ResourceMgr();
 
-    ~ResourceMgr();
+    ~ResourceMgr() override;
 
     // Set data folder ex: "media/"
     void setDataFolder(const std::string& folder);

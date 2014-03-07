@@ -12,7 +12,7 @@ class Game : public BaseGameLogic
  public:
     Game();
 
-    void onBeforeMainLoop(Engine *e);
+    void onBeforeMainLoop(Engine *e) override;
 
     void update(float elapsedTime) override;
 

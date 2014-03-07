@@ -21,7 +21,7 @@ class Box2dPhysicsEngine : public PhysicsEngine
 {
  public:
     Box2dPhysicsEngine();
-    ~Box2dPhysicsEngine();
+    ~Box2dPhysicsEngine() override;
 
     void update(float elapsedTime) override;
 

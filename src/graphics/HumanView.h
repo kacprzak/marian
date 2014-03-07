@@ -18,7 +18,7 @@ class HumanView : public GameView
     HumanView(const std::string& title, int screenWidth, int screenHeight,
               bool screenFull = false);
 
-    ~HumanView();
+    ~HumanView() override;
 
     // GameView interface
     bool processInput(const SDL_Event &event) override;

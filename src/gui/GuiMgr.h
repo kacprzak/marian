@@ -12,7 +12,7 @@ class GuiMgr : public Singleton<GuiMgr>
 {
  public:
     GuiMgr();
-    ~GuiMgr();
+    ~GuiMgr() override;
 
     bool processInput(const SDL_Event& event);
     void update(float elapsedTime);
