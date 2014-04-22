@@ -63,12 +63,12 @@ class PhysicsComponent : public ActorComponent
 
     void applyForceToCenter(float x, float y)
     {
-        m_body->ApplyForceToCenter(b2Vec2(x, y));
+        m_body->ApplyForceToCenter(b2Vec2(x, y), true);
     }
 
     void applyLinearImpulse(float x, float y)
     {
-        m_body->ApplyLinearImpulse(b2Vec2(x, y), m_body->GetWorldCenter());
+        m_body->ApplyLinearImpulse(b2Vec2(x, y), m_body->GetWorldCenter(), true);
     }
 
     /*!
