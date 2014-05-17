@@ -29,7 +29,10 @@ Box2dPhysicsEngine::Box2dPhysicsEngine()
     m_world->SetAllowSleeping(true);
     m_world->SetContactListener(&m_contactListener);
 
-    LOG << "created Box2dPhysicsEngine\n";
+    LOG << "created Box2dPhysicsEngine (Box2d ver: "
+        << b2_version.major << "."
+        << b2_version.minor << "."
+        << b2_version.revision << ")\n";
 }
 
 //------------------------------------------------------------------------------

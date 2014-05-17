@@ -14,9 +14,9 @@ else()
   add_definitions( "-Wall -Wextra -Wno-unused-parameter -std=c++0x" )
 endif()
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/" )
 
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+set( LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 set( CMAKE_DEBUG_POSTFIX "_d" )
 
@@ -86,18 +86,18 @@ add_subdirectory( assets )
 add_subdirectory( scripts )
 add_subdirectory( tools )
 
-if ( Boost_UNIT_TEST_FRAMEWORK_FOUND ) 
+if( Boost_UNIT_TEST_FRAMEWORK_FOUND )
   enable_testing()
   add_subdirectory( tests )
 endif()
 
 # add a target to generate API documentation with Doxygen
-find_package(Doxygen)
-if(DOXYGEN_FOUND)
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
-  add_custom_target(doc
+find_package( Doxygen )
+if( DOXYGEN_FOUND )
+  configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY )
+  add_custom_target( doc
     ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Generating API documentation with Doxygen" VERBATIM
 )
-endif(DOXYGEN_FOUND)
+endif( DOXYGEN_FOUND )
