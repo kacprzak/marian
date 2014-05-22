@@ -173,6 +173,34 @@ void HumanView::setBackgroundColor(const std::string& bgColor)
 
 //------------------------------------------------------------------------------
 
+bool HumanView::setFullScreen(bool fullScreen)
+{
+    if (m_screenFull == fullScreen)
+        return true;
+
+    Uint32 flags = (SDL_GetWindowFlags(m_window) ^ SDL_WINDOW_FULLSCREEN_DESKTOP);
+    if (SDL_SetWindowFullscreen(m_window, flags) < 0)
+    {
+        LOG << "Toggling fullscreen mode failed: " << SDL_GetError() << std::endl;
+        return false;
+    }
+
+    int w = m_screenWidth;
+    int h = m_screenHeight;
+    
+    if ((flags & SDL_WINDOW_FULLSCREEN_DESKTOP) != 0) {
+        //SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+        //SDL_RenderSetLogicalSize(Renderer, w, h);
+    } else {
+        SDL_SetWindowSize(m_window, w, h);
+    }    
+
+    m_screenFull = fullScreen;
+    return true; 
+}
+
+//------------------------------------------------------------------------------
+
 void HumanView::preDraw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

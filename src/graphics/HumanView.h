@@ -34,6 +34,8 @@ class HumanView : public GameView
     int screenWidth() const  { return m_screenWidth; }
     int screenHeight() const { return m_screenHeight; }
 
+    bool setFullScreen(bool fullScreen);
+
  protected:
     void preDraw();
     void postDraw();
