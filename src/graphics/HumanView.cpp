@@ -23,7 +23,8 @@
 using namespace gfx;
 using namespace gui;
 
-HumanView::HumanView(const std::string &title, int screenWidth, int screenHeight, bool screenFull)
+HumanView::HumanView(const std::string &title, int screenWidth, int screenHeight,
+                     bool screenFull)
     : m_titile(title)
     , m_screenWidth(screenWidth)
     , m_screenHeight(screenHeight)
@@ -121,7 +122,9 @@ void HumanView::initializeOpenGL()
     glLoadIdentity();
     //gluPerspective(60.0, ratio, 1.0, 1024.0);
     //glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-    glOrtho(-m_screenWidth/2, m_screenWidth/2, -m_screenHeight/2, m_screenHeight/2, -1, 1);
+    glOrtho(-m_screenWidth/2, m_screenWidth/2,
+            -m_screenHeight/2, m_screenHeight/2,
+            -1, 1);
 
     glDisable(GL_DEPTH_TEST); // uncomment this if going 2D
 

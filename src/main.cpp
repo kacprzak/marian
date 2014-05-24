@@ -43,11 +43,12 @@ int main(int argc, char *argv[])
         new EventMgr;
         new ResourceMgr;
 
-        ScriptMgr::singleton().executeFile("startup.lua");
+        ScriptMgr& scriptMgr = ScriptMgr::singleton();
+        scriptMgr.executeFile("startup.lua");
 
-        const char *scriptsFolder = ScriptMgr::singleton().getGlobalString("scripts_folder");
-        ScriptMgr::singleton().setDataFolder(scriptsFolder);
-        const char *assetsFolder = ScriptMgr::singleton().getGlobalString("assets_folder");
+        const char *scriptsFolder = scriptMgr.getGlobalString("scripts_folder");
+        scriptMgr.setDataFolder(scriptsFolder);
+        const char *assetsFolder = scriptMgr.getGlobalString("assets_folder");
         ResourceMgr::singleton().setDataFolder(assetsFolder);
 
         if (argc >= 2 && strcmp(argv[1], "-s") == 0)
@@ -89,7 +90,10 @@ void runSingleplayer()
 
     new Engine;
     Game *game = new Game;
-    game->attachView(std::shared_ptr<GameView>(new gfx::HeroHumanView("Marian", screenWidth, screenHeight, fullScreen)));
+    game->attachView(std::make_shared<gfx::HeroHumanView>("Marian",
+                                                          screenWidth,
+                                                          screenHeight,
+                                                          fullScreen));
     Engine::singleton().mainLoop(game);
     delete game;
     delete Engine::singletonPtr();
@@ -114,7 +118,10 @@ void runMultiplayerClient(const std::string& serverAddress)
 
     new Engine;
     GameLogic *game = new RemoteGameLogic(socketId);
-    game->attachView(std::shared_ptr<GameView>(new gfx::HeroHumanView("Marian Cli", screenWidth, screenHeight, fullScreen)));
+    game->attachView(std::make_shared<gfx::HeroHumanView>("Marian Cli",
+                                                          screenWidth,
+                                                          screenHeight,
+                                                          fullScreen));
     Engine::singleton().mainLoop(game);
     delete game;
     delete Engine::singletonPtr();
@@ -130,7 +137,8 @@ void runMultiplayerServer()
 #if PLATFORM == PLATFORM_UNIX
     register_ctrl_c_handler();
 #endif
-    EventMgr::singleton().addListener(REMOTE_CLIENT, EventListenerPtr(new EventListener(remoteClientEventListener)));
+    EventMgr::singleton().addListener(REMOTE_CLIENT,
+                                      EventListenerPtr(new EventListener(remoteClientEventListener)));
 
     BaseSocketMgr *bsm = new BaseSocketMgr;
     bsm->init();
