@@ -5,10 +5,10 @@
 
 using namespace event;
 
-void eventListener(EventPtr event)
+void eventListener(Event& event)
 {
-    std::clog << "EVENT: " << event->eventName() << " {";
-    event->serialize(std::clog);
+    std::clog << "EVENT: " << event.eventName() << " {";
+    event.serialize(std::clog);
     std::clog << " }"<< std::endl;
 }
 
@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_CASE(eventmanager_test)
 
     BOOST_CHECK_EQUAL( em->listenersCount(), 0 );
 
-    EventListenerPtr el = EventMgr::makeListener(eventListener);
+    auto el = std::make_shared<EventListener>(eventListener);
     em->addListener(ACTOR_COLLIDED, el);
 
     BOOST_CHECK_EQUAL( em->listenersCount(), 1 );

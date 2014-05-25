@@ -1,3 +1,4 @@
+/* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "BaseGameLogic.h"
 
 #include "actors/ActorFactory.h"
@@ -40,7 +41,8 @@ void BaseGameLogic::update(float elapsedTime)
         pair.second->update(elapsedTime);
     }
 
-    EventMgr::singleton().update();
+    EventMgr& evtMgr = EventMgr::singleton();
+    evtMgr.update();
 
     // Remove dead GameObjects
     auto it = std::begin(m_actors);
@@ -51,7 +53,8 @@ void BaseGameLogic::update(float elapsedTime)
             actor->destroy();
 
             // Emit event
-            EventMgr::singleton().queueEvent(EventPtr(new ActorDestroyedEvent(actor->id())));
+            evtMgr.queueEvent(std::unique_ptr<Event>(
+                                  new ActorDestroyedEvent(actor->id())));
             it = m_actors.erase(it);
         } else {
             // Kill it if out of map
@@ -73,7 +76,8 @@ void BaseGameLogic::addGameObject(ActorCategory type, const std::string& name,
     m_actors.insert(std::make_pair(a->id(), a));
 
     // Emit event
-    EventMgr::singleton().queueEvent(EventPtr(new ActorCreatedEvent(a->id(), type, x, y)));
+    EventMgr::singleton().queueEvent(
+        std::unique_ptr<Event>(new ActorCreatedEvent(a->id(), type, x, y)));
 }
 
 //------------------------------------------------------------------------------

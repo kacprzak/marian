@@ -15,21 +15,23 @@
 using namespace gfx;
 using namespace event;
 
-HeroHumanView::HeroHumanView(const std::string &title, int screenWidth, int screenHeight, bool screenFull)
+HeroHumanView::HeroHumanView(const std::string &title, int screenWidth,
+			     int screenHeight, bool screenFull)
     : HumanView(title, screenWidth, screenHeight, screenFull)
     , m_renderer(new GLRenderer)
     , m_heroId(0)
     , m_keyboardHandler(new HeroController)
 {
     std::shared_ptr<Map> map(new Map);
+    ResourceMgr& resourceMgr = ResourceMgr::singleton();
     // Read map from file
-    std::string assetsFolder = ResourceMgr::singleton().dataFolder();
+    std::string assetsFolder = resourceMgr.dataFolder();
     map->loadFromFile(assetsFolder + "map2.tmx");
 
     // Load map images
     auto images = map->externalImages();
     for (const std::string& image : images)
-        ResourceMgr::singleton().addTexture(image);
+        resourceMgr.addTexture(image);
 
     // Build objects
     std::vector<MapObject> mapObjects;
@@ -37,7 +39,7 @@ HeroHumanView::HeroHumanView(const std::string &title, int screenWidth, int scre
 
     //std::cout << "INFO: " << mapObjects.size() << " MapObjects loaded.\n";
     // Hero texture
-    ResourceMgr::singleton().addTexture("MegaMan_001.png");
+    resourceMgr.addTexture("MegaMan_001.png");
 
     m_mapNode.setMap(map);
 
@@ -48,7 +50,7 @@ HeroHumanView::HeroHumanView(const std::string &title, int screenWidth, int scre
         ++actorId;
 
         if (obj.type == "Box") {
-            const Texture *tex = ResourceMgr::singleton().getTexture("minecraft_tiles_big.png");
+            const Texture *tex = resourceMgr.getTexture("minecraft_tiles_big.png");
             Image img(tex, Rect<int>(256, 480, 288, 512));
 
             SpriteNode *sprite = new SpriteNode();
@@ -71,11 +73,21 @@ HeroHumanView::HeroHumanView(const std::string &title, int screenWidth, int scre
     // Set background color
     setBackgroundColor(m_mapNode.backgroundColor());
 
-    elh.registerListener(ACTOR_MOVED, std::bind(&HeroHumanView::handleActorMoved, this, std::placeholders::_1));
-    elh.registerListener(ACTOR_PHYSICS_STATE_CHANGED, std::bind(&HeroHumanView::handleActorPhysicsStateChanged, this, std::placeholders::_1));
-    elh.registerListener(ACTOR_CREATED, std::bind(&HeroHumanView::handleActorCreated, this, std::placeholders::_1));
-    elh.registerListener(ACTOR_DESTROYED, std::bind(&HeroHumanView::handleActorDestroyed, this, std::placeholders::_1));
-    elh.registerListener(INPUT_COMMAND, std::bind(&HeroHumanView::handleInputCommand, this, std::placeholders::_1));
+    elh.registerListener(ACTOR_MOVED,
+			 std::bind(&HeroHumanView::handleActorMoved,
+				   this, std::placeholders::_1));
+    elh.registerListener(ACTOR_PHYSICS_STATE_CHANGED,
+			 std::bind(&HeroHumanView::handleActorPhysicsStateChanged,
+				   this, std::placeholders::_1));
+    elh.registerListener(ACTOR_CREATED,
+			 std::bind(&HeroHumanView::handleActorCreated,
+				   this, std::placeholders::_1));
+    elh.registerListener(ACTOR_DESTROYED,
+			 std::bind(&HeroHumanView::handleActorDestroyed,
+				   this, std::placeholders::_1));
+    elh.registerListener(INPUT_COMMAND,
+			 std::bind(&HeroHumanView::handleInputCommand,
+				   this, std::placeholders::_1));
 }
 
 //------------------------------------------------------------------------------
@@ -148,15 +160,15 @@ void HeroHumanView::draw()
 
 //------------------------------------------------------------------------------
 
-void HeroHumanView::handleActorMoved(EventPtr event)
+void HeroHumanView::handleActorMoved(Event& event)
 {
-    auto e = std::static_pointer_cast<MoveEvent>(event);
+    auto& e = static_cast<MoveEvent&>(event);
 
     //ActorPtr actor = m_actors[e->m_actor];
 
-    if (e->m_actorId == m_heroId) {
-        float x = e->m_x;
-        float y = e->m_y;
+    if (e.m_actorId == m_heroId) {
+        float x = e.m_x;
+        float y = e.m_y;
 
         // Respect map borders
         ViewRect r;
@@ -171,69 +183,69 @@ void HeroHumanView::handleActorMoved(EventPtr event)
         centerViewOn(x, y);
     }
 
-    SpriteNode *sprite = m_nodes[e->m_actorId];
+    SpriteNode *sprite = m_nodes[e.m_actorId];
     if (sprite) {
-        sprite->moveTo(e->m_x, e->m_y, e->m_angle);
+        sprite->moveTo(e.m_x, e.m_y, e.m_angle);
     }
 }
 
 //------------------------------------------------------------------------------
 
-void HeroHumanView::handleActorPhysicsStateChanged(EventPtr event)
+void HeroHumanView::handleActorPhysicsStateChanged(Event& event)
 {
-    auto e = std::static_pointer_cast<PhysicsStateChangeEvent>(event);
+    auto& e = static_cast<PhysicsStateChangeEvent&>(event);
 
-    SpriteNode *sprite = m_nodes[e->m_actorId];
+    SpriteNode *sprite = m_nodes[e.m_actorId];
     if (sprite) {
-        sprite->changePhysicsState(e->m_newState);
+        sprite->changePhysicsState(e.m_newState);
     }
 }
 
 //------------------------------------------------------------------------------
 
-void HeroHumanView::handleActorCreated(EventPtr event)
+void HeroHumanView::handleActorCreated(Event& event)
 {
-    auto e = std::static_pointer_cast<ActorCreatedEvent>(event);
+    auto& e = static_cast<ActorCreatedEvent&>(event);
 
-    if (e->m_actorCategory == BOX) {
+    if (e.m_actorCategory == BOX) {
 
         const Texture *tex = ResourceMgr::singleton().getTexture("minecraft_tiles_big.png");
         Image img(tex, Rect<int>(256, 480, 288, 512));
 
         SpriteNode *sprite = new SpriteNode();
-        sprite->setActorId(e->m_actorId);
+        sprite->setActorId(e.m_actorId);
         sprite->setImage(img);
 
-        m_nodes.insert(std::make_pair(e->m_actorId, sprite));
+        m_nodes.insert(std::make_pair(e.m_actorId, sprite));
     }
 }
 
 //------------------------------------------------------------------------------
 
-void HeroHumanView::handleActorDestroyed(EventPtr event)
+void HeroHumanView::handleActorDestroyed(Event& event)
 {
-    auto e = std::static_pointer_cast<ActorDestroyedEvent>(event);
+    auto& e = static_cast<ActorDestroyedEvent&>(event);
 
-    SpriteNode *sprite = m_nodes[e->m_actorId];
+    SpriteNode *sprite = m_nodes[e.m_actorId];
 
     if (sprite) {
-        m_nodes.erase(e->m_actorId);
+        m_nodes.erase(e.m_actorId);
         delete sprite;
     }
 }
 
 //------------------------------------------------------------------------------
 
-void HeroHumanView::handleInputCommand(EventPtr event)
+void HeroHumanView::handleInputCommand(Event& event)
 {
-    auto e = std::static_pointer_cast<ActorInputEvent>(event);
+    auto& e = static_cast<ActorInputEvent&>(event);
 
-    SpriteNode *sprite = m_nodes[e->m_actorId];
+    SpriteNode *sprite = m_nodes[e.m_actorId];
 
-    if (sprite && (e->m_actorId == m_heroId)) {
-        if (e->m_command == MOVE_RIGHT_START)
+    if (sprite && (e.m_actorId == m_heroId)) {
+        if (e.m_command == MOVE_RIGHT_START)
             sprite->flipHorizontally(false);
-        if (e->m_command == MOVE_LEFT_START)
+        if (e.m_command == MOVE_LEFT_START)
             sprite->flipHorizontally(true);
     }
 }

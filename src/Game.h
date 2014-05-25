@@ -3,9 +3,6 @@
 #define GAME_H
 
 #include "BaseGameLogic.h"
-#include "FpsCounter.h"
-
-#define PRINT_FPS
 
 class Game : public BaseGameLogic
 {
@@ -18,15 +15,11 @@ class Game : public BaseGameLogic
 
  private:
 
-    void handleActorCollided(event::EventPtr event);
-    //void handleActorPhysicsStateChanged(EventPtr event);
-    void handleInputCommand(event::EventPtr event);
+    void handleActorCollided(event::Event& event);
+    //void handleActorPhysicsStateChanged(Event& event);
+    void handleInputCommand(event::Event& event);
 
     event::EventListenerHelper elh;
-
-#ifdef PRINT_FPS
-    FpsCounter m_fpsCounter;
-#endif
 };
 
 #endif

@@ -71,6 +71,10 @@ void HumanView::update(float elapsedTime)
     // Update gui
     if (GuiMgr::singletonPtr())
         GuiMgr::singleton().update(elapsedTime);
+
+#ifdef PRINT_FPS
+    m_fpsCounter.update(elapsedTime);
+#endif
 }
 
 //------------------------------------------------------------------------------

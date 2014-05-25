@@ -21,7 +21,7 @@ EventMgr::~EventMgr()
 
 //------------------------------------------------------------------------------
 
-void EventMgr::addListener(EventType et, EventListenerPtr listener)
+void EventMgr::addListener(EventType et, std::shared_ptr<EventListener> listener)
 {
     // TODO: Prevent double registration
 
@@ -30,7 +30,7 @@ void EventMgr::addListener(EventType et, EventListenerPtr listener)
 
 //------------------------------------------------------------------------------
 
-void EventMgr::removeListener(EventType et, EventListenerPtr listener)
+void EventMgr::removeListener(EventType et, std::shared_ptr<EventListener> listener)
 {
     auto ii = m_listeners.equal_range(et);
     for(auto i = ii.first; i != ii.second;) {
@@ -44,22 +44,22 @@ void EventMgr::removeListener(EventType et, EventListenerPtr listener)
 
 //------------------------------------------------------------------------------
 
-void EventMgr::triggerEvent(const EventPtr& event)
+void EventMgr::triggerEvent(std::unique_ptr<Event> event)
 {
     auto ii = m_listeners.equal_range(event->eventType());
     for(auto i = ii.first; i != ii.second; ++i) {
-        (*(i->second))(event);
+        (*(i->second))(*event);
     }
 }
 
 //------------------------------------------------------------------------------
 
-void EventMgr::queueEvent(const EventPtr& event)
+void EventMgr::queueEvent(std::unique_ptr<Event> event)
 {
     // Check if the are listeners for event
     auto listenersIter = m_listeners.find(event->eventType());
     if (listenersIter != std::end(m_listeners)) {
-        m_eventQueues[m_activeQueue].push_back(event);
+        m_eventQueues[m_activeQueue].push_back(std::move(event));
     }
 }
 
@@ -67,8 +67,8 @@ void EventMgr::queueEvent(const EventPtr& event)
 
 void EventMgr::update()
 {
-    for (EventPtr event : m_eventQueues[m_activeQueue]) {
-        triggerEvent(event);
+    for (std::unique_ptr<Event>& event : m_eventQueues[m_activeQueue]) {
+        triggerEvent(std::move(event));
     }
     m_eventQueues[m_activeQueue].clear();
 

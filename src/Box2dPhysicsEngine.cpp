@@ -101,10 +101,11 @@ void ContactListener::BeginContact(b2Contact *contact)
         ActorId actorA = reinterpret_cast<ActorId>(bodyAUserData);
         ActorId actorB = reinterpret_cast<ActorId>(bodyBUserData);
 
-        EventPtr e(new CollisionEvent(CollisionEvent::BEGIN,
-                                      actorA, fixAUserData,
-                                      actorB, fixBUserData));
-        EventMgr::singleton().queueEvent(e);
+        EventMgr& evtMgr = EventMgr::singleton();
+        evtMgr.queueEvent(std::unique_ptr<Event>(
+                              new CollisionEvent(CollisionEvent::BEGIN,
+                                                 actorA, fixAUserData,
+                                                 actorB, fixBUserData)));
     }
 }
 
@@ -122,9 +123,10 @@ void ContactListener::EndContact(b2Contact *contact)
         ActorId actorA = reinterpret_cast<ActorId>(bodyAUserData);
         ActorId actorB = reinterpret_cast<ActorId>(bodyBUserData);
 
-        EventPtr e(new CollisionEvent(CollisionEvent::END,
-                                      actorA, fixAUserData,
-                                      actorB, fixBUserData));
-        EventMgr::singleton().queueEvent(e);
+        EventMgr& evtMgr = EventMgr::singleton();
+        evtMgr.queueEvent(std::unique_ptr<Event>(
+                              new CollisionEvent(CollisionEvent::END,
+                                                 actorA, fixAUserData,
+                                                 actorB, fixBUserData)));
     }
 }

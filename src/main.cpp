@@ -23,7 +23,7 @@ void runSingleplayer();
 void runMultiplayerClient(const std::string& serverAddress);
 void runMultiplayerServer();
 
-void remoteClientEventListener(event::EventPtr event);
+void remoteClientEventListener(event::Event& event);
 
 #if PLATFORM == PLATFORM_UNIX
   #include <signal.h>
@@ -137,8 +137,9 @@ void runMultiplayerServer()
 #if PLATFORM == PLATFORM_UNIX
     register_ctrl_c_handler();
 #endif
-    EventMgr::singleton().addListener(REMOTE_CLIENT,
-                                      EventListenerPtr(new EventListener(remoteClientEventListener)));
+    EventMgr& evtMgr = EventMgr::singleton();
+    evtMgr.addListener(REMOTE_CLIENT,
+                       std::make_shared<EventListener>(remoteClientEventListener));
 
     BaseSocketMgr *bsm = new BaseSocketMgr;
     bsm->init();
@@ -154,17 +155,16 @@ void runMultiplayerServer()
 
 //------------------------------------------------------------------------------
 
-void remoteClientEventListener(event::EventPtr event)
+void remoteClientEventListener(event::Event& event)
 {
-    LOG << "EVENT: " << event->eventName() << " {";
-    event->serialize(std::clog);
-    std::clog << " }"<< std::endl;
+    LOG << "EVENT: " << event.eventName() << " {";
+    event.serialize(std::clog);
+    std::clog << " }" << std::endl;
 
-    // New client
-    auto e = std::static_pointer_cast<event::RemoteClientEvent>(event);
+    //    event::RemoteClientEvent& e = std::static_cast<event::RemoteClientEvent&>(event);
 
-    std::shared_ptr<GameView> view(new net::RemoteGameView(e->m_socketId));
-    Engine::singleton().game()->attachView(view);
+    //std::shared_ptr<GameView> view(new net::RemoteGameView(e.m_socketId));
+    //Engine::singleton().game()->attachView(view);
 }
 
 //------------------------------------------------------------------------------

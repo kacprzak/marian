@@ -20,8 +20,8 @@ class HeroHumanView : public HumanView
     typedef HumanView super;
 
  public:
-    HeroHumanView(const std::string& title, int screenWidth, int screenHeight,
-                  bool screenFull = false);
+    HeroHumanView(const std::string& title, int screenWidth,
+		  int screenHeight, bool screenFull = false);
     ~HeroHumanView() override;
 
     bool processInput(const SDL_Event& event) override;
@@ -29,11 +29,11 @@ class HeroHumanView : public HumanView
     void draw() override;
 
  private:
-    void handleActorMoved(event::EventPtr event);
-    void handleActorPhysicsStateChanged(event::EventPtr event);
-    void handleActorCreated(event::EventPtr event);
-    void handleActorDestroyed(event::EventPtr event);
-    void handleInputCommand(event::EventPtr event);
+    void handleActorMoved(event::Event& event);
+    void handleActorPhysicsStateChanged(event::Event& event);
+    void handleActorCreated(event::Event& event);
+    void handleActorDestroyed(event::Event& event);
+    void handleInputCommand(event::Event& event);
 
     std::unique_ptr<Renderer> m_renderer;
     ActorId m_heroId;

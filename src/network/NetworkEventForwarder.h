@@ -10,7 +10,7 @@ class NetworkEventForwarder
  public:
     NetworkEventForwarder(int socketId);
 
-    void forwardEvent(event::EventPtr e);
+    void forwardEvent(event::Event& e);
 
  protected:
     int m_socketId;

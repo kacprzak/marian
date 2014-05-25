@@ -155,7 +155,10 @@ void HeroPhysicsComponent::update(float elapsedTime)
     using namespace event;
     // emit move event if position changed
     if (m_lastX != posX() || m_lastY != posY()) {
-        EventMgr::singleton().queueEvent(EventPtr(new MoveEvent(m_owner->id(), posX(), posY())));
+        EventMgr& evtMgr = EventMgr::singleton();
+        // todo: Change to make_unique if C++14 available
+        evtMgr.queueEvent(std::unique_ptr<Event>(new MoveEvent(m_owner->id(),
+                                                               posX(), posY())));
     }
 
     if (m_jumpTimeout > 0.0f)
@@ -173,7 +176,9 @@ void HeroPhysicsComponent::changeState(ActorPhysicsStateId state)
 
     m_heroStateId = state;
     // emit event
-    EventMgr::singleton().queueEvent(EventPtr(new PhysicsStateChangeEvent(m_owner->id(), state)));
+    EventMgr& evtMgr = EventMgr::singleton();
+    // todo: Change to make_unique if C++14 available
+    evtMgr.queueEvent(std::unique_ptr<Event>(new PhysicsStateChangeEvent(m_owner->id(), state)));
 }
 
 //------------------------------------------------------------------------------

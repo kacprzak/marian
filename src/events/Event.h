@@ -26,7 +26,7 @@ class Event
     virtual void deserialize(std::istream& in) = 0;
 };
 
-typedef std::shared_ptr<Event> EventPtr;
+//typedef std::shared_ptr<Event> EventPtr;
 
 //------------------------------------------------------------------------------
 
@@ -167,7 +167,8 @@ class PhysicsStateChangeEvent : public BaseEvent
 class ActorCreatedEvent : public BaseEvent
 {
 public:
-    ActorCreatedEvent(ActorId actor, ActorCategory actorCategory, float x = 0.0f, float y = 0.0f)
+    ActorCreatedEvent(ActorId actor, ActorCategory actorCategory,
+                      float x = 0.0f, float y = 0.0f)
         : BaseEvent(ACTOR_CREATED, "ActorCreated")
         , m_actorId(actor)
         , m_actorCategory(actorCategory)
@@ -244,7 +245,8 @@ public:
 
     void serialize(std::ostream& out) const
     {
-        out << "socketId: " << m_socketId << " ip: " << net::BaseSocketMgr::singleton().getHostByAddr(m_ip);
+        out << "socketId: " << m_socketId
+            << " ip: " << net::BaseSocketMgr::singleton().getHostByAddr(m_ip);
     }
 
     int m_socketId;

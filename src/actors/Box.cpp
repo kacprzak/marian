@@ -52,7 +52,11 @@ void BoxPhysicsComponent::update(float)
 
     // emit move event if position changed
     if (m_lastX != posX() || m_lastY != posY() || m_lastAngle != angle()) {
-        EventMgr::singleton().queueEvent(EventPtr(new MoveEvent(m_owner->id(), posX(), posY(), angle())));
+        EventMgr& evtMgr = EventMgr::singleton();
+        // todo: Change to make_unique if C++14 available
+        evtMgr.queueEvent(std::unique_ptr<Event>(new MoveEvent(m_owner->id(),
+                                                               posX(), posY(),
+                                                               angle())));
     }
 
     m_lastX = posX();

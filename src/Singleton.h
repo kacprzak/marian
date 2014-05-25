@@ -27,6 +27,9 @@ class Singleton
         s_singleton = (T*)((intptr_t)this + offset);
     }
 
+    Singleton(const Singleton&) = delete;
+    Singleton& operator=(const Singleton&) = delete;
+
     virtual ~Singleton()
     {
         assert(s_singleton);

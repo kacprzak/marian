@@ -13,13 +13,13 @@ NetworkEventForwarder::NetworkEventForwarder(int socketId)
 
 //------------------------------------------------------------------------------
 
-void NetworkEventForwarder::forwardEvent(event::EventPtr e)
+void NetworkEventForwarder::forwardEvent(event::Event& e)
 {
     std::ostringstream out;
 
-    out << static_cast<unsigned short>(e->eventType()) << " ";
-    //out << e->eventName() << " ";
-    e->serialize(out);
+    out << static_cast<unsigned short>(e.eventType()) << " ";
+    //out << e.eventName() << " ";
+    e.serialize(out);
     //out << "\r\n";
 
     const std::string& data = out.str();

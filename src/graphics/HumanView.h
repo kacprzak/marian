@@ -3,8 +3,11 @@
 #define HUMANVIEW_H
 
 #include "GameView.h"
-
 #include "Util.h"
+
+#include "FpsCounter.h"
+
+//#define PRINT_FPS
 
 namespace gfx {
 
@@ -56,6 +59,10 @@ class HumanView : public GameView
     float m_translate_y;
     float m_translate_z;
     float m_scale;
+
+#ifdef PRINT_FPS
+    FpsCounter m_fpsCounter;
+#endif
 };
 
 } // namespace gfx

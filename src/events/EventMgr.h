@@ -13,37 +13,30 @@
 
 namespace event {
 
-typedef std::function<void (EventPtr)> EventListener;
-typedef std::shared_ptr<EventListener> EventListenerPtr;
+typedef std::function<void (Event&)> EventListener;
 
 /*!
  * \brief The global event manager class.
  */
 class EventMgr : public Singleton<EventMgr>
 {
-    typedef std::multimap<EventType, EventListenerPtr> EventListenerMap;
-    typedef std::list<EventPtr> EventQueue;
+    typedef std::multimap<EventType, std::shared_ptr<EventListener>> EventListenerMap;
+    typedef std::list<std::unique_ptr<Event>> EventQueue;
 
  public:
     EventMgr();
     ~EventMgr() override;
 
-    void addListener(EventType et, EventListenerPtr listener);
-    void removeListener(EventType et, EventListenerPtr listener);
+    void addListener(EventType et, std::shared_ptr<EventListener> listener);
+    void removeListener(EventType et, std::shared_ptr<EventListener> listener);
 
-    void triggerEvent(const EventPtr& event);
-
-    void queueEvent(const EventPtr& event);
+    void triggerEvent(std::unique_ptr<Event> event);
+    void queueEvent(std::unique_ptr<Event> event);
 
     void update();
 
     // For testing
     int listenersCount() const { return m_listeners.size(); }
-
-    static EventListenerPtr makeListener(EventListener el)
-    {
-        return EventListenerPtr(new EventListener(el));
-    }
 
  private:
     static const int NUM_OF_QUEUES = 2;
@@ -59,7 +52,7 @@ class EventMgr : public Singleton<EventMgr>
  */
 class EventListenerHelper final
 {
-public:
+ public:
 
     ~EventListenerHelper()
     {
@@ -68,7 +61,7 @@ public:
 
     bool registerListener(EventType type, EventListener listener)
     {
-        EventListenerPtr el(new EventListener(listener));
+        std::shared_ptr<EventListener> el(new EventListener(listener));
         EventMgr::singleton().addListener(type, el);
         m_listeners.insert(std::make_pair(type, el));
 
@@ -84,7 +77,7 @@ public:
 
  private:
     // Keeps pointers to make unregistration possible
-    std::multimap<EventType, EventListenerPtr> m_listeners;
+    std::multimap<EventType, std::shared_ptr<EventListener>> m_listeners;
 };
 
 } // namespace event

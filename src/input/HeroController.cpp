@@ -31,20 +31,22 @@ bool HeroController::onKeyDown(const unsigned int kcode)
     if (!m_actorId)
         return false;
 
+    EventMgr& evtMgr = EventMgr::singleton();
+
     if (kcode == SDL_SCANCODE_RIGHT) {
-        EventMgr::singleton().queueEvent(EventPtr(new ActorInputEvent(m_actorId, MOVE_RIGHT_START)));
+        evtMgr.queueEvent(std::unique_ptr<Event>(new ActorInputEvent(m_actorId, MOVE_RIGHT_START)));
     }
 
     if (kcode == SDL_SCANCODE_LEFT) {
-        EventMgr::singleton().queueEvent(EventPtr(new ActorInputEvent(m_actorId, MOVE_LEFT_START)));
+        evtMgr.queueEvent(std::unique_ptr<Event>(new ActorInputEvent(m_actorId, MOVE_LEFT_START)));
     }
 
     if (kcode == SDL_SCANCODE_DOWN) {
-        EventMgr::singleton().queueEvent(EventPtr(new ActorInputEvent(m_actorId, MOVE_DOWN_START)));
+        evtMgr.queueEvent(std::unique_ptr<Event>(new ActorInputEvent(m_actorId, MOVE_DOWN_START)));
     }
 
     if (kcode == SDL_SCANCODE_UP) {
-        EventMgr::singleton().queueEvent(EventPtr(new ActorInputEvent(m_actorId, JUMP)));
+        evtMgr.queueEvent(std::unique_ptr<Event>(new ActorInputEvent(m_actorId, JUMP)));
     }
 
     return true;
@@ -58,16 +60,18 @@ bool HeroController::onKeyUp(const unsigned int kcode)
     if (!m_actorId)
         return false;
 
+    EventMgr& evtMgr = EventMgr::singleton();
+
     if (kcode == SDL_SCANCODE_RIGHT) {
-        EventMgr::singleton().queueEvent(EventPtr(new ActorInputEvent(m_actorId, MOVE_RIGHT_END)));
+        evtMgr.queueEvent(std::unique_ptr<Event>(new ActorInputEvent(m_actorId, MOVE_RIGHT_END)));
     }
 
     if (kcode == SDL_SCANCODE_LEFT) {
-        EventMgr::singleton().queueEvent(EventPtr(new ActorInputEvent(m_actorId, MOVE_LEFT_END)));
+        evtMgr.queueEvent(std::unique_ptr<Event>(new ActorInputEvent(m_actorId, MOVE_LEFT_END)));
     }
 
     if (kcode == SDL_SCANCODE_DOWN) {
-        EventMgr::singleton().queueEvent(EventPtr(new ActorInputEvent(m_actorId, MOVE_DOWN_END)));
+        evtMgr.queueEvent(std::unique_ptr<Event>(new ActorInputEvent(m_actorId, MOVE_DOWN_END)));
     }
 
     return true;

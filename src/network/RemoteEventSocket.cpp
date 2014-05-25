@@ -1,3 +1,4 @@
+/* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "RemoteEventSocket.h"
 
 #include "events/EventMgr.h"
@@ -43,24 +44,26 @@ void RemoteEventSocket::handleInput()
         in >> eventTypeVal;
         EventType eventType = static_cast<EventType>(eventTypeVal);
 
+        EventMgr& evtMgr = EventMgr::singleton();
+        std::unique_ptr<Event> eventPtr;
+
         switch (eventType) {
         case ACTOR_MOVED:
         {
-            EventPtr event(new MoveEvent(in));
-            EventMgr::singleton().queueEvent(event);
+            eventPtr.reset(new MoveEvent(in));
             break;
         }
         case ACTOR_PHYSICS_STATE_CHANGED:
         {
-            EventPtr event(new PhysicsStateChangeEvent(in));
-            EventMgr::singleton().queueEvent(event);
+            eventPtr.reset(new PhysicsStateChangeEvent(in));
             break;
         }
         case INPUT_COMMAND:
-            EventPtr event(new ActorInputEvent(in));
-            EventMgr::singleton().queueEvent(event);
+            eventPtr.reset(new ActorInputEvent(in));
             break;
         }
 
+        if (eventPtr)
+            evtMgr.queueEvent(std::move(eventPtr));
     }
 }

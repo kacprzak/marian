@@ -19,7 +19,7 @@ Game::Game()
     Map map;
 
     // Read map from file
-    std::string assetsFolder = ResourceMgr::singleton().dataFolder();
+    const std::string& assetsFolder = ResourceMgr::singleton().dataFolder();
     map.loadFromFile(assetsFolder + "map2.tmx");
 
     m_mapWidth = map.width();
@@ -36,9 +36,13 @@ Game::Game()
     }
 
     // Register event listeners
-    elh.registerListener(ACTOR_COLLIDED, std::bind(&Game::handleActorCollided, this, std::placeholders::_1));
+    elh.registerListener(ACTOR_COLLIDED,
+                         std::bind(&Game::handleActorCollided,
+                                   this, std::placeholders::_1));
     //elh.registerListener(ACTOR_PHYSICS_STATE_CHANGED, std::bind(&Game::handleActorPhysicsStateChanged, this, std::placeholders::_1));
-    elh.registerListener(INPUT_COMMAND, std::bind(&Game::handleInputCommand, this, std::placeholders::_1));
+    elh.registerListener(INPUT_COMMAND,
+                         std::bind(&Game::handleInputCommand,
+                                   this, std::placeholders::_1));
 }
 
 //------------------------------------------------------------------------------
@@ -53,48 +57,45 @@ void Game::onBeforeMainLoop(Engine * /*e*/)
 void Game::update(float elapsedTime)
 {
     BaseGameLogic::update(elapsedTime);
-#ifdef PRINT_FPS
-    m_fpsCounter.update(elapsedTime);
-#endif
 }
 
 //------------------------------------------------------------------------------
 
-void Game::handleActorCollided(EventPtr event)
+void Game::handleActorCollided(Event& event)
 {
-    std::shared_ptr<CollisionEvent> e = std::static_pointer_cast<CollisionEvent>(event);
+    CollisionEvent& e = static_cast<CollisionEvent&>(event);
 
-    ActorPtr a = m_actors.at(e->m_actorA);
-    ActorPtr b = m_actors.at(e->m_actorB);
-    CollisionEvent::Phase phase = e->m_phase;
+    ActorPtr a = m_actors.at(e.m_actorA);
+    ActorPtr b = m_actors.at(e.m_actorB);
+    CollisionEvent::Phase phase = e.m_phase;
 
     auto pcqpA = a->getComponent<PhysicsComponent>(PHYSICS);
     if (auto pcsp = pcqpA.lock()) {
         if (phase == CollisionEvent::BEGIN)
-            pcsp->handleBeginContact(b, e->m_actorALimbData);
+            pcsp->handleBeginContact(b, e.m_actorALimbData);
         else
-            pcsp->handleEndContact(b, e->m_actorALimbData);
+            pcsp->handleEndContact(b, e.m_actorALimbData);
     }
 
     auto pcqpB = b->getComponent<PhysicsComponent>(PHYSICS);
     if (auto pcsp = pcqpB.lock()) {
         if (phase == CollisionEvent::BEGIN)
-            pcsp->handleBeginContact(a, e->m_actorBLimbData);
+            pcsp->handleBeginContact(a, e.m_actorBLimbData);
         else
-            pcsp->handleEndContact(a, e->m_actorBLimbData);
+            pcsp->handleEndContact(a, e.m_actorBLimbData);
     }
 }
 
 //------------------------------------------------------------------------------
 
-void Game::handleInputCommand(EventPtr event)
+void Game::handleInputCommand(Event& event)
 {
-    std::shared_ptr<ActorInputEvent> e = std::static_pointer_cast<ActorInputEvent>(event);
+    ActorInputEvent& e = static_cast<ActorInputEvent&>(event);
 
-    auto it = m_actors.find(e->m_actorId);
+    auto it = m_actors.find(e.m_actorId);
 
     if(it == std::end(m_actors)) {
-        LOG << "There is no actor with id " << e->m_actorId << '\n';
+        LOG << "There is no actor with id " << e.m_actorId << '\n';
         return;
     }
 
@@ -103,7 +104,7 @@ void Game::handleInputCommand(EventPtr event)
     if (a && (a->category() == HERO)) {
         auto hpcw = a->getComponent<PhysicsComponent>(PHYSICS);
         if (auto hpcs = hpcw.lock()) {
-            hpcs->handleInputCommand(e->m_command);
+            hpcs->handleInputCommand(e.m_command);
         }
     }
 }
