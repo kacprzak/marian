@@ -161,10 +161,10 @@ void remoteClientEventListener(event::Event& event)
     event.serialize(std::clog);
     std::clog << " }" << std::endl;
 
-    //    event::RemoteClientEvent& e = std::static_cast<event::RemoteClientEvent&>(event);
+    event::RemoteClientEvent& e = static_cast<event::RemoteClientEvent&>(event);
 
-    //std::shared_ptr<GameView> view(new net::RemoteGameView(e.m_socketId));
-    //Engine::singleton().game()->attachView(view);
+    std::shared_ptr<GameView> view(new net::RemoteGameView(e.m_socketId));
+    Engine::singleton().game()->attachView(view);
 }
 
 //------------------------------------------------------------------------------
