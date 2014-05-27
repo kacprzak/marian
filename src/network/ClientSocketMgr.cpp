@@ -14,9 +14,6 @@ ClientSocketMgr::ClientSocketMgr(const std::string &hostName, unsigned int port)
 
 bool ClientSocketMgr::connect()
 {
-    if (!super::init())
-        return false;
-
     RemoteEventSocket *socket = new RemoteEventSocket;
 
     if (!socket->connect(getHostByName(m_hostName), m_port)) {

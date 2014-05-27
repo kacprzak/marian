@@ -12,12 +12,9 @@ namespace net {
 
 class BaseSocketMgr : public Singleton<BaseSocketMgr>
 {
-public:
+ public:
     BaseSocketMgr();
     virtual ~BaseSocketMgr();
-
-    bool init();
-    void shutdown();
 
     int addSocket(NetSocket *socket);
     void removeSocket(NetSocket *socket);
@@ -39,7 +36,9 @@ public:
     void addToOutbound(int rc) { m_outbound += rc; }
     void addToInbound(int rc)  { m_inbound += rc; }
 
-protected:
+ protected:
+    void shutdown();
+
     typedef std::list<NetSocket *> SocketList;
     typedef std::map<int, NetSocket *> SocketIdMap;
 

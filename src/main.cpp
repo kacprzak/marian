@@ -110,7 +110,6 @@ void runMultiplayerClient(const std::string& serverAddress)
     bool fullScreen  = ScriptMgr::singleton().getGlobalBool("screen_full");
 
     ClientSocketMgr *bsm = new ClientSocketMgr(serverAddress, GAME_PORT);
-    bsm->init();
     int socketId = bsm->connect();
     if (socketId == -1) {
         LOG << "Unable to connect to: " << serverAddress << std::endl;
@@ -142,7 +141,6 @@ void runMultiplayerServer()
                        std::make_shared<EventListener>(remoteClientEventListener));
 
     BaseSocketMgr *bsm = new BaseSocketMgr;
-    bsm->init();
     GameServerListenNetSocket *gslns = new GameServerListenNetSocket(GAME_PORT);
     bsm->addSocket(gslns);
 

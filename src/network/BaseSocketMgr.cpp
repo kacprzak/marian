@@ -1,6 +1,8 @@
+/* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "BaseSocketMgr.h"
 
 #include "config.h"
+#include "Logger.h"
 
 #if PLATFORM == PLATFORM_WINDOWS
   #include <winsock2.h>
@@ -9,7 +11,7 @@
   #include <netdb.h>  // hostent
 #endif
 
-#include "Logger.h"
+#include <string>
 
 using namespace net;
 
@@ -21,6 +23,16 @@ BaseSocketMgr::BaseSocketMgr()
     , m_subnet(0xffffffff)
     , m_subnetMask(0)
 {
+#if PLATFORM == PLATFORM_WINDOWS
+    WSADATA WsaData;
+    int err = WSAStartup(MAKEWORD(2,2), &WsaData) == NO_ERROR;
+    if (err != NO_ERROR) {
+        std::string msg("WSAStartup failed with error: ");
+        msg += std::to_string(err);
+        LOG_FATAL << msg << std::endl;
+        throw std::runtime_error(msg);
+    }
+#endif
 }
 
 //------------------------------------------------------------------------------
@@ -34,18 +46,6 @@ BaseSocketMgr::~BaseSocketMgr()
 #endif
 
     LOG << "Data sent: " << m_outbound << " bytes | Data recv: " << m_inbound << " bytes" << std::endl;
-}
-
-//------------------------------------------------------------------------------
-
-bool BaseSocketMgr::init()
-{
-#if PLATFORM == PLATFORM_WINDOWS
-    WSADATA WsaData;
-    return WSAStartup(MAKEWORD(2,2), &WsaData) == NO_ERROR;
-#else
-    return true;
-#endif
 }
 
 //------------------------------------------------------------------------------
