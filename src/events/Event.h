@@ -17,16 +17,31 @@ namespace event {
  */
 class Event
 {
+    friend std::ostream& operator<<(std::ostream& os, const Event& e);
+    friend std::istream& operator>>(std::istream& is, Event& e);
+
  public:
     virtual ~Event() {}
 
     virtual EventType eventType() const = 0;
     virtual const char *eventName() const = 0;
+
+ protected:
     virtual void serialize(std::ostream& out) const = 0;
     virtual void deserialize(std::istream& in) = 0;
 };
 
-//typedef std::shared_ptr<Event> EventPtr;
+inline std::ostream& operator<<(std::ostream& os, const Event& e)
+{
+    e.serialize(os);
+    return os;
+}
+
+inline std::istream& operator>>(std::istream& is, Event& e)
+{
+    e.deserialize(is);
+    return is;
+}
 
 //------------------------------------------------------------------------------
 
@@ -41,6 +56,8 @@ class BaseEvent : public Event
  public:
     EventType eventType() const override final { return m_type; }
     const char *eventName() const override final { return m_name; }
+
+ protected:
     void serialize(std::ostream& /*out*/) const override {}
     void deserialize(std::istream& /*in*/) override {}
 
@@ -68,6 +85,7 @@ class CollisionEvent : public BaseEvent
         , m_actorBLimbData(actorBLimbData)
     {}
 
+    //protected:
     void serialize(std::ostream& out) const override
     {
         const char *phase = (m_phase == BEGIN) ? "BEGIN" : "END  ";

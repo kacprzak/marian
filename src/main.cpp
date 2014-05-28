@@ -155,9 +155,7 @@ void runMultiplayerServer()
 
 void remoteClientEventListener(event::Event& event)
 {
-    LOG << "EVENT: " << event.eventName() << " {";
-    event.serialize(std::clog);
-    std::clog << " }" << std::endl;
+    LOG << "EVENT: " << event.eventName() << " {" << event << " }\n";
 
     event::RemoteClientEvent& e = static_cast<event::RemoteClientEvent&>(event);
 

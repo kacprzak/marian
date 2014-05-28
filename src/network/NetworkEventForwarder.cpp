@@ -1,3 +1,4 @@
+/* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "NetworkEventForwarder.h"
 
 #include "Packet.h"
@@ -19,7 +20,7 @@ void NetworkEventForwarder::forwardEvent(event::Event& e)
 
     out << static_cast<unsigned short>(e.eventType()) << " ";
     //out << e.eventName() << " ";
-    e.serialize(out);
+    out << e;
     //out << "\r\n";
 
     const std::string& data = out.str();
