@@ -27,10 +27,11 @@ MyGUI::KeyCode SDLScancodeToMyGUI(SDL_Scancode code);
 
 class ImageLoader : public MyGUI::OpenGLImageLoader
 {
-    // OpenGLImageLoader interface
 public:
-    void *loadImage(int &_width, int &_height, MyGUI::PixelFormat &_format, const std::string &_filename);
-    void saveImage(int _width, int _height, MyGUI::PixelFormat _format, void *_texture, const std::string &_filename);
+    void *loadImage(int &_width, int &_height, MyGUI::PixelFormat &_format,
+                    const std::string &_filename) override;
+    void saveImage(int _width, int _height, MyGUI::PixelFormat _format,
+                   void *_texture, const std::string &_filename) override;
 };
 
 //==============================================================================
@@ -92,11 +93,13 @@ bool GuiMgr::processInput(const SDL_Event& e)
         break;
 
     case SDL_MOUSEBUTTONDOWN:
-        inputMgr.injectMousePress(e.button.x, e.button.y, SDLMouseButtonToMyGUI(e.button.button));
+        inputMgr.injectMousePress(e.button.x, e.button.y,
+                                  SDLMouseButtonToMyGUI(e.button.button));
         break;
 
     case SDL_MOUSEBUTTONUP:
-        inputMgr.injectMouseRelease(e.button.x, e.button.y, SDLMouseButtonToMyGUI(e.button.button));
+        inputMgr.injectMouseRelease(e.button.x, e.button.y,
+                                    SDLMouseButtonToMyGUI(e.button.button));
         break;
 
     case SDL_MOUSEWHEEL:
@@ -204,7 +207,8 @@ void GuiMgr::handle_mouse_up(Uint8 button)
 
 //==============================================================================
 
-void *ImageLoader::loadImage(int& _width, int& _height, MyGUI::PixelFormat& _format, const std::string& _filename)
+void *ImageLoader::loadImage(int& _width, int& _height, MyGUI::PixelFormat& _format,
+                             const std::string& _filename)
 {
     std::string filename = s_platform->getDataManagerPtr()->getDataPath(_filename);
 
@@ -306,7 +310,8 @@ void *ImageLoader::loadImage(int& _width, int& _height, MyGUI::PixelFormat& _for
 
 //------------------------------------------------------------------------------
 
-void ImageLoader::saveImage(int _width, int _height, MyGUI::PixelFormat _format, void *_texture, const std::string &_filename)
+void ImageLoader::saveImage(int _width, int _height, MyGUI::PixelFormat _format,
+                            void *_texture, const std::string &_filename)
 {
     throw std::logic_error("Not implemented!");
 }

@@ -8,6 +8,11 @@
 
 #include <stdexcept>
 #include <string>
+#include <list>
+#include <memory>
+#include <functional>
+
+typedef std::function<void (const std::string& msg)> ScriptListener;
 
 //------------------------------------------------------------------------------
 
@@ -23,6 +28,8 @@ class ScriptError : public std::runtime_error
 
 class ScriptMgr : public Singleton<ScriptMgr>
 {
+    typedef std::list<std::shared_ptr<ScriptListener>> ListenersList;
+
  public:
     ScriptMgr();
     ~ScriptMgr() override;
@@ -38,10 +45,16 @@ class ScriptMgr : public Singleton<ScriptMgr>
     bool getGlobalBool(const std::string& varname);
     const char *getGlobalString(const std::string& varname);
 
+    // todo: Maybe they should be weak_ptr's
+    void addListener(std::shared_ptr<ScriptListener> listener);
+    void removeListener(std::shared_ptr<ScriptListener> listener);
+
+    void notifyListeners(const std::string msg);
+
  private:
     std::string dataFolder;
-
     lua_State *L;
+    ListenersList m_listeners;
 };
 
 //------------------------------------------------------------------------------

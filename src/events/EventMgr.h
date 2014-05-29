@@ -27,6 +27,7 @@ class EventMgr : public Singleton<EventMgr>
     EventMgr();
     ~EventMgr() override;
 
+    // todo: Maybe they should be weak_ptr's
     void addListener(EventType et, std::shared_ptr<EventListener> listener);
     void removeListener(EventType et, std::shared_ptr<EventListener> listener);
 

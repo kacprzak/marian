@@ -28,6 +28,11 @@ Console::Console()
     m_comboCommand->addItem("addBox(x, y)");
 
     registerHandlers();
+
+    ScriptListener listenerFun = std::bind(&Console::output, this, std::placeholders::_1);
+    m_scriptListener.reset(new ScriptListener(listenerFun));
+    ScriptMgr::singleton().addListener(m_scriptListener);
+
     LOG << "created Console\n";
 }
 
@@ -35,6 +40,8 @@ Console::Console()
 
 Console::~Console()
 {
+    ScriptMgr::singleton().removeListener(m_scriptListener);
+
     MyGUI::Gui::getInstance().destroyWidget(m_consoleWindow);
     LOG << "destroyed Console\n";
 }
@@ -79,9 +86,11 @@ bool Console::isVisible()
 
 void Console::registerHandlers()
 {
-    m_buttonSubmit->eventMouseButtonClick += MyGUI::newDelegate(this, &Console::handle_SendButtonPressed);
+    m_buttonSubmit->eventMouseButtonClick += MyGUI::newDelegate(this,
+                                                 &Console::handle_SendButtonPressed);
 
-    m_comboCommand->eventComboAccept += MyGUI::newDelegate(this, &Console::handle_ComboAccept);
+    m_comboCommand->eventComboAccept += MyGUI::newDelegate(this,
+                                            &Console::handle_ComboAccept);
 }
 
 //------------------------------------------------------------------------------
@@ -119,8 +128,8 @@ void Console::parseText(MyGUI::UString inMsg)
     }
 
     try {
+        outputText(m_echoColor + "> " + inMsg); // echo
         ScriptMgr::singleton().executeString(inMsg.asUTF8_c_str());
-        outputText(m_echoColor + inMsg); // echo
     } catch (const ScriptError& ex) {
         outputText(m_errorColor + ex.what());
     }
@@ -136,7 +145,15 @@ void Console::outputText(MyGUI::UString inMsg)
         m_listHistory->addText("\n" + inMsg);
 
     //m_listHistory->setTextCursor(0);
-    m_listHistory->setTextSelection(m_listHistory->getTextLength(), m_listHistory->getTextLength());
+    m_listHistory->setTextSelection(m_listHistory->getTextLength(),
+                                    m_listHistory->getTextLength());
+}
+
+//------------------------------------------------------------------------------
+
+void Console::output(const std::string& inMsg)
+{
+    outputText(MyGUI::UString(inMsg));
 }
 
 //------------------------------------------------------------------------------

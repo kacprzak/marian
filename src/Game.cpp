@@ -39,7 +39,9 @@ Game::Game()
     elh.registerListener(ACTOR_COLLIDED,
                          std::bind(&Game::handleActorCollided,
                                    this, std::placeholders::_1));
-    //elh.registerListener(ACTOR_PHYSICS_STATE_CHANGED, std::bind(&Game::handleActorPhysicsStateChanged, this, std::placeholders::_1));
+    //elh.registerListener(ACTOR_PHYSICS_STATE_CHANGED,
+    //                     std::bind(&Game::handleActorPhysicsStateChanged,
+    //                               this, std::placeholders::_1));
     elh.registerListener(INPUT_COMMAND,
                          std::bind(&Game::handleInputCommand,
                                    this, std::placeholders::_1));

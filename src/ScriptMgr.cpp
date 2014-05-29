@@ -8,6 +8,7 @@
 
 /* Functions exposed to Lua */
 static int l_addBox(lua_State *L);
+static int l_print(lua_State *L);
 
 //------------------------------------------------------------------------------
 
@@ -17,6 +18,7 @@ ScriptMgr::ScriptMgr()
 
     // Expose functions to lua code
     lua_register(L, "addBox", l_addBox);
+    lua_register(L, "print", l_print);
 
     LOG << "created ScriptMgr\n";
 }
@@ -107,6 +109,29 @@ const char *ScriptMgr::getGlobalString(const std::string &varname)
     return retVal;
 }
 
+//------------------------------------------------------------------------------
+
+void ScriptMgr::addListener(std::shared_ptr<ScriptListener> listener)
+{
+    m_listeners.push_back(listener);
+}
+
+//------------------------------------------------------------------------------
+
+void ScriptMgr::removeListener(std::shared_ptr<ScriptListener> listener)
+{
+    m_listeners.remove(listener);
+}
+
+//------------------------------------------------------------------------------
+
+void ScriptMgr::notifyListeners(const std::string msg)
+{
+    for (auto listenerPtr : m_listeners) {
+        (*listenerPtr)(msg);
+    }
+}
+
 //==============================================================================
 
 static int l_addBox(lua_State *L)
@@ -117,6 +142,21 @@ static int l_addBox(lua_State *L)
 
     BaseGameLogic *currGame = static_cast<BaseGameLogic *>(Engine::singleton().game());
     currGame->addGameObject(BOX, "box", x, y);
+
+    return 0;
+}
+
+//------------------------------------------------------------------------------
+
+static int l_print(lua_State *L)
+{
+    int nargs = lua_gettop(L);
+
+    for (int i = 1; i <= nargs; ++i) {
+        if (lua_isstring(L, i)) {
+            ScriptMgr::singleton().notifyListeners(lua_tostring(L, i));
+        }
+    }
 
     return 0;
 }

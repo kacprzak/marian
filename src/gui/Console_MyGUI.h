@@ -5,6 +5,8 @@
 #include "Singleton.h"
 #include <MyGUI.h>
 
+#include <functional>
+
 namespace gui {
 
 class Console
@@ -39,10 +41,12 @@ class Console
     void parseText(MyGUI::UString inMsg);
     // Post the message to the ChatHistory listbox
     void outputText(MyGUI::UString inMsg);
+    void output(const std::string& inMsg);
 
     void clearText();
 private:
     bool m_consoleVisible;
+    std::shared_ptr<std::function<void (const std::string& msg)>> m_scriptListener;
 
     MyGUI::Window   *m_consoleWindow;
     MyGUI::EditBox  *m_listHistory;
