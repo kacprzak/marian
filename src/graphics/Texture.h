@@ -11,6 +11,9 @@
 
 #include <boost/noncopyable.hpp>
 
+// Forward declaration
+struct SDL_Surface;
+
 namespace gfx {
 
 /*!
@@ -27,6 +30,7 @@ class Texture : private boost::noncopyable
     int h() const { return m_h; }
 
     void loadFromFile(const std::string& filename);
+    void loadFromSDL(SDL_Surface *surface);
 
  private:
     GLuint m_textureId;

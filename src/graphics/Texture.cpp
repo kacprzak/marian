@@ -15,7 +15,7 @@
 
 using namespace gfx;
 
-static GLuint load_texture(const char *filename, int *w, int *h);
+static GLuint load_texture(SDL_Surface *surface, int *w, int *h);
 static int SDL_InvertSurface(SDL_Surface *image);
 
 //------------------------------------------------------------------------------
@@ -37,29 +37,38 @@ Texture::~Texture()
 
 void Texture::loadFromFile(const std::string& filename)
 {
-    m_textureId = load_texture(filename.c_str(), &m_w, &m_h);
+    SDL_Surface *surface = IMG_Load(filename.c_str());
+
+    if (!surface) {
+        throw std::runtime_error("SDL_Image load error: "
+                                 + std::string(IMG_GetError()));
+    }
+
+    loadFromSDL(surface);
+    SDL_FreeSurface(surface);
+}
+
+//------------------------------------------------------------------------------
+
+void Texture::loadFromSDL(SDL_Surface *surface)
+{
+    // Top down inversion
+    if (SDL_InvertSurface(surface) != 0)
+        throw std::runtime_error("SDL Error: " + std::string(SDL_GetError()));
+
+    m_textureId = load_texture(surface, &m_w, &m_h);
 
     if (m_textureId == 0)
-        throw std::runtime_error("Unable to load " + filename + " texture");
+        throw std::runtime_error("Unable to load texture");
 }
 
 //==============================================================================
 
-static GLuint load_texture(const char *filename, int *w, int *h)
+static GLuint load_texture(SDL_Surface *surface, int *w, int *h)
 {
-    SDL_Surface *surface;
     GLuint textureid;
     int mode;
-
-    surface = IMG_Load(filename);
-
-    if (!surface) {
-        std::cerr << "Could not load " << filename << std::endl;
-        return 0;
-    }
-
-    // Top down inversion
-    SDL_InvertSurface(surface);
+    int converted = false;
 
     // work out what format to tell glTexImage2D to use...
     if (surface->format->BytesPerPixel == 3) { // RGB 24bit
@@ -79,14 +88,15 @@ static GLuint load_texture(const char *filename, int *w, int *h)
         fmt.Amask = 0xff000000;
 
         SDL_Surface *nimg = SDL_ConvertSurface(surface, &fmt, 0);
-        SDL_FreeSurface(surface);
-
+        
         if(!nimg) {
-            std::cerr << "Could not convert image " << filename << " to 32-bit\n";
+            std::cerr << "SDL error: " << SDL_GetError() << "\n";
             return 0;
         }
 
         // Done converting.
+        converted = true;
+        // surface is now pointing to object that needs to be freed!
         surface = nimg;
         mode = GL_RGBA;
     }
@@ -117,7 +127,8 @@ static GLuint load_texture(const char *filename, int *w, int *h)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     // Clean up
-    SDL_FreeSurface(surface);
+    if (converted)
+        SDL_FreeSurface(surface);
 
     return textureid;
 }
@@ -125,7 +136,7 @@ static GLuint load_texture(const char *filename, int *w, int *h)
 //------------------------------------------------------------------------------
 // Code from
 // http://www.gribblegames.com/articles/game_programming/sdlgl/invert_sdl_surfaces.html
-
+//
 static int invert_image(int pitch, int height, void* image_pixels)
 {
     int index;
@@ -162,7 +173,7 @@ static int invert_image(int pitch, int height, void* image_pixels)
 //This is the function you want to call!
 static int SDL_InvertSurface(SDL_Surface *image)
 {
-    if(NULL == image) {
+    if (NULL == image) {
         SDL_SetError("Surface is NULL");
         return -1;
     }

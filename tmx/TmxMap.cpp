@@ -159,7 +159,7 @@ void Map::loadLayers(rapidxml::xml_node<> *layer_node)
 
             for (unsigned i = 0; i < data.size(); i += 4) {
                 unsigned global_tile_id = data[i]
-                | data[i + 1] << 8
+                    | data[i + 1] << 8
                     | data[i + 2] << 16
                     | data[i + 3] << 24;
 
