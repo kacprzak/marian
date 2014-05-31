@@ -42,16 +42,33 @@ void Engine::initializeSDL()
 {
     LOG << "Initializing SDL...\n";
 
+    SDL_version compiled;
+    SDL_version linked;
+
+    SDL_VERSION(&compiled);
+    SDL_GetVersion(&linked);
+    LOG << "  Compiled against SDL " << (uint)compiled.major << "."
+        << (uint)compiled.minor << "." << (uint)compiled.patch << std::endl;
+    LOG << "  Linking against SDL " << (uint)linked.major << "."
+        << (uint)linked.minor << "." << (uint)linked.patch << std::endl;
+
+
     uint32 sdl_flags = 0;
-    if (m_initVideo)
+    if (m_initVideo) {
         sdl_flags |= SDL_INIT_VIDEO;
+        LOG << "  Video drives available:" << std::endl;
+        for (int i = 0; i < SDL_GetNumVideoDrivers(); ++i) {
+            LOG << "    " << SDL_GetVideoDriver(i) << std::endl;
+        }
+    }
 
     if (SDL_Init(sdl_flags) < 0) {
         throw EngineError("Could not initialize SDL", SDL_GetError());
     }
 
-#if 0
     if (m_initVideo) {
+        LOG << "  Current video driver: " << SDL_GetCurrentVideoDriver() << "\n";
+#if 0
         SDL_GL_SetAttribute(SDL_GL_RED_SIZE,   8);
         SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
         SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,  8);
@@ -59,8 +76,8 @@ void Engine::initializeSDL()
 
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
         SDL_GL_SetSwapInterval(1);
-    }
 #endif
+    }
 
     SDL_ShowCursor(SDL_DISABLE);
     //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
