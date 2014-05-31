@@ -1,3 +1,4 @@
+/* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef LOGGER_H
 #define LOGGER_H
 
@@ -26,9 +27,9 @@ void logHelper(int sockId, const char *data,
 #define _LOG_CLOCK  << std::setw(4) << std::setprecision(2) << std::fixed << (float(std::clock() - startTime) / CLOCKS_PER_SEC) << " "
 
 #if !(defined NDEBUG) && !(defined _MSC_VER)
-#define _LOG_EXTRA(f)  << "{" << std::setw(19) << f << "} "
+  #define _LOG_EXTRA(f)  << "{" << std::setw(19) << f << "} "
 #else
-#define _LOG_EXTRA(f)
+  #define _LOG_EXTRA(f)
 #endif
 
 #define _LOG_DEBUG  std::cerr << severMsg[0]  _LOG_CLOCK _LOG_EXTRA(__func__)
@@ -41,10 +42,10 @@ void logHelper(int sockId, const char *data,
 
 #define LOG_FATAL   std::cerr << severMsg[4]  _LOG_CLOCK _LOG_EXTRA(__func__)
 
-#define LOG_PACKET(sockId, data, size, msg) \
-    do { \
+#define LOG_PACKET(sockId, data, size, msg)  \
+    do {                                     \
         std::clog << "[PACKET] " _LOG_CLOCK; \
-        logHelper(sockId, data, size, msg);\
+        logHelper(sockId, data, size, msg);  \
     } while (0)
 
 class PerrorLogger {
@@ -62,9 +63,9 @@ class PerrorLogger {
 };
 
 #if !(defined NDEBUG) && !(defined _MSC_VER)
-#define PLOG        PerrorLogger(__func__)
+  #define PLOG PerrorLogger(__func__)
 #else
-#define PLOG        PerrorLogger(nullptr)
+  #define PLOG PerrorLogger(nullptr)
 #endif
 
 /*!
