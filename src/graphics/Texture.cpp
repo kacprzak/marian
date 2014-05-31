@@ -111,8 +111,10 @@ static GLuint load_texture(SDL_Surface *surface, int *w, int *h)
     glBindTexture(GL_TEXTURE_2D, textureid);
 
     // This reads from the sdl surface and puts it into an opengl texture
+    SDL_LockSurface(surface);
     glTexImage2D(GL_TEXTURE_2D, 0, mode, surface->w, surface->h, 0,
                  mode, GL_UNSIGNED_BYTE, surface->pixels);
+    SDL_UnlockSurface(surface);
 
     // These affect how this texture is drawn later on...
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -144,7 +146,7 @@ static int invert_image(int pitch, int height, void* image_pixels)
     int height_div_2;
 
     temp_row = (void *)malloc(pitch);
-    if(NULL == temp_row) {
+    if (NULL == temp_row) {
         SDL_SetError("Not enough memory for image inversion");
         return -1;
     }
@@ -177,5 +179,10 @@ static int SDL_InvertSurface(SDL_Surface *image)
         SDL_SetError("Surface is NULL");
         return -1;
     }
-    return invert_image(image->pitch, image->h, image->pixels);
+    if (SDL_LockSurface(image) != 0) {
+        return -1;
+    }
+    int err = invert_image(image->pitch, image->h, image->pixels);
+    SDL_UnlockSurface(image);
+    return err;
 }
