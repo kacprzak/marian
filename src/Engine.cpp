@@ -42,24 +42,11 @@ void Engine::initializeSDL()
 {
     LOG << "Initializing SDL...\n";
 
-    SDL_version compiled;
-    SDL_version linked;
-
-    SDL_VERSION(&compiled);
-    SDL_GetVersion(&linked);
-    LOG << "  Compiled against SDL " << (uint)compiled.major << "."
-        << (uint)compiled.minor << "." << (uint)compiled.patch << std::endl;
-    LOG << "  Linking against SDL " << (uint)linked.major << "."
-        << (uint)linked.minor << "." << (uint)linked.patch << std::endl;
-
+    logSDLInfo();
 
     uint32 sdl_flags = 0;
     if (m_initVideo) {
         sdl_flags |= SDL_INIT_VIDEO;
-        LOG << "  Video drives available:" << std::endl;
-        for (int i = 0; i < SDL_GetNumVideoDrivers(); ++i) {
-            LOG << "    " << SDL_GetVideoDriver(i) << std::endl;
-        }
     }
 
     if (SDL_Init(sdl_flags) < 0) {
@@ -84,6 +71,28 @@ void Engine::initializeSDL()
     SDL_StopTextInput(); // Disable text input events when GUI is not visible
 
     LOG << "SDL initialized\n";
+}
+
+//------------------------------------------------------------------------------
+
+void Engine::logSDLInfo()
+{
+    SDL_version compiled;
+    SDL_version linked;
+
+    SDL_VERSION(&compiled);
+    SDL_GetVersion(&linked);
+    LOG << "  Compiled against SDL " << (uint)compiled.major << "."
+        << (uint)compiled.minor << "." << (uint)compiled.patch << std::endl;
+    LOG << "  Linking against SDL " << (uint)linked.major << "."
+        << (uint)linked.minor << "." << (uint)linked.patch << std::endl;
+
+    if (m_initVideo) {
+        LOG << "  Video drivers available:" << std::endl;
+        for (int i = 0; i < SDL_GetNumVideoDrivers(); ++i) {
+            LOG << "    " << SDL_GetVideoDriver(i) << std::endl;
+        }
+    }
 }
 
 //------------------------------------------------------------------------------

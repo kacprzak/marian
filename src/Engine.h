@@ -50,6 +50,7 @@ class Engine : public Singleton<Engine>
 
  private:
     void initializeSDL();
+    void logSDLInfo();
 
     bool processEvents();
     void update(float elapsedTime);
