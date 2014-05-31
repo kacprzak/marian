@@ -7,9 +7,8 @@ using namespace event;
 
 void eventListener(Event& event)
 {
-    std::clog << "EVENT: " << event.eventName() << " {";
-    event.serialize(std::clog);
-    std::clog << " }"<< std::endl;
+    std::clog << "EVENT: " << event.eventName() << " {"
+	      << event << " }"<< std::endl;
 }
 
 
