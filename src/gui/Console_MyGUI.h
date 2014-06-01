@@ -40,13 +40,14 @@ class Console
     // Parse the text the user submitted
     void parseText(MyGUI::UString inMsg);
     // Post the message to the ChatHistory listbox
-    void outputText(MyGUI::UString inMsg);
-    void output(const std::string& inMsg);
+    void outputText(MyGUI::UString inMsg, bool err = false);
+    void output(const std::string& inMsg, bool err = false);
 
     void clearText();
 private:
     bool m_consoleVisible;
     std::shared_ptr<std::function<void (const std::string& msg)>> m_scriptListener;
+std::shared_ptr<std::function<void (const std::string& msg)>> m_errScriptListener;
 
     MyGUI::Window   *m_consoleWindow;
     MyGUI::EditBox  *m_listHistory;

@@ -29,9 +29,13 @@ Console::Console()
 
     registerHandlers();
 
-    ScriptListener listenerFun = std::bind(&Console::output, this, std::placeholders::_1);
+    ScriptListener listenerFun = std::bind(&Console::output, this, std::placeholders::_1, false);
     m_scriptListener.reset(new ScriptListener(listenerFun));
-    ScriptMgr::singleton().addListener(m_scriptListener);
+    ScriptMgr::singleton().addListener(ScriptMgr::OUT, m_scriptListener);
+
+    ScriptListener errListenerFun = std::bind(&Console::output, this, std::placeholders::_1, true);
+    m_errScriptListener.reset(new ScriptListener(errListenerFun));
+    ScriptMgr::singleton().addListener(ScriptMgr::ERR, m_errScriptListener);
 
     LOG << "created Console\n";
 }
@@ -40,7 +44,8 @@ Console::Console()
 
 Console::~Console()
 {
-    ScriptMgr::singleton().removeListener(m_scriptListener);
+    ScriptMgr::singleton().removeListener(ScriptMgr::OUT, m_scriptListener);
+    ScriptMgr::singleton().removeListener(ScriptMgr::ERR, m_errScriptListener);
 
     MyGUI::Gui::getInstance().destroyWidget(m_consoleWindow);
     LOG << "destroyed Console\n";
@@ -131,18 +136,23 @@ void Console::parseText(MyGUI::UString inMsg)
         outputText(m_echoColor + "> " + inMsg); // echo
         ScriptMgr::singleton().executeString(inMsg.asUTF8_c_str());
     } catch (const ScriptError& ex) {
-        outputText(m_errorColor + ex.what());
+        // Just output by listener
+        //outputText(m_errorColor + ex.what());
     }
 }
 
 //------------------------------------------------------------------------------
 
-void Console::outputText(MyGUI::UString inMsg)
+void Console::outputText(MyGUI::UString inMsg, bool err)
 {
+    MyGUI::UString color = m_echoColor;
+    if (err)
+        color = m_errorColor;
+
     if (m_listHistory->getCaption().empty())
         m_listHistory->addText(inMsg);
     else
-        m_listHistory->addText("\n" + inMsg);
+        m_listHistory->addText("\n" + color + inMsg);
 
     //m_listHistory->setTextCursor(0);
     m_listHistory->setTextSelection(m_listHistory->getTextLength(),
@@ -151,9 +161,9 @@ void Console::outputText(MyGUI::UString inMsg)
 
 //------------------------------------------------------------------------------
 
-void Console::output(const std::string& inMsg)
+void Console::output(const std::string& inMsg, bool err)
 {
-    outputText(MyGUI::UString(inMsg));
+    outputText(MyGUI::UString(inMsg), err);
 }
 
 //------------------------------------------------------------------------------

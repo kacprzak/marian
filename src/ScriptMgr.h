@@ -28,9 +28,12 @@ class ScriptError : public std::runtime_error
 
 class ScriptMgr : public Singleton<ScriptMgr>
 {
-    typedef std::list<std::shared_ptr<ScriptListener>> ListenersList;
-
  public:
+    enum OutputType {
+        OUT,
+        ERR,
+    };
+
     ScriptMgr();
     ~ScriptMgr() override;
 
@@ -46,15 +49,20 @@ class ScriptMgr : public Singleton<ScriptMgr>
     const char *getGlobalString(const std::string& varname);
 
     // todo: Maybe they should be weak_ptr's
-    void addListener(std::shared_ptr<ScriptListener> listener);
-    void removeListener(std::shared_ptr<ScriptListener> listener);
+    void addListener(OutputType ot, std::shared_ptr<ScriptListener> listener);
+    void removeListener(OutputType ot, std::shared_ptr<ScriptListener> listener);
 
-    void notifyListeners(const std::string msg);
+    void notifyListeners(OutputType ot, const std::string msg);
 
  private:
+    typedef std::list<std::shared_ptr<ScriptListener>> ListenersList;
+
+    ListenersList& listenersForOutput(OutputType); 
+
     std::string dataFolder;
     lua_State *L;
-    ListenersList m_listeners;
+    ListenersList m_outListeners;
+    ListenersList m_errListeners;
 };
 
 //------------------------------------------------------------------------------
