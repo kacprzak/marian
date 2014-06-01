@@ -1,3 +1,4 @@
+/* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef HEROHUMANVIEW_H
 #define HEROHUMANVIEW_H
 

@@ -1,3 +1,4 @@
+/* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef HERONODE_H
 #define HERONODE_H
 

@@ -1,3 +1,4 @@
+/* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE EventManagerTest
 #include <boost/test/unit_test.hpp>

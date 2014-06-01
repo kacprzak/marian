@@ -1,3 +1,4 @@
+/* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "SpriteNode.h"
 
 using namespace gfx;

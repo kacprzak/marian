@@ -1,3 +1,4 @@
+/* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef BASESOCKETMGR_H
 #define BASESOCKETMGR_H
 

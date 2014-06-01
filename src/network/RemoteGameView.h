@@ -1,3 +1,4 @@
+/* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef REMOTEGAMEVIEW_H
 #define REMOTEGAMEVIEW_H
 

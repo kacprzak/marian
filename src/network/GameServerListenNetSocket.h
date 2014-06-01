@@ -1,3 +1,4 @@
+/* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef GAMESERVERLISTENNETSOCKET_H
 #define GAMESERVERLISTENNETSOCKET_H
 
