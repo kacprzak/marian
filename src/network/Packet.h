@@ -20,14 +20,17 @@
 
 namespace net {
 
-class Packet
+class Packet final
 {
  public:
     Packet(const char * const data, uint32 size);
     ~Packet();
+    Packet(const Packet& other) = delete;
+    Packet& operator=(const Packet& other) = delete;
 
-    virtual const char *  getData() const { return m_data; }
-    virtual uint32        getSize() const;
+
+    const char * getData() const { return m_data; }
+    uint32       getSize() const;
 
  protected:
     char *m_data;

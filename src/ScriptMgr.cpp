@@ -131,7 +131,7 @@ void ScriptMgr::removeListener(OutputType ot, std::shared_ptr<ScriptListener> li
 
 //------------------------------------------------------------------------------
 
-void ScriptMgr::notifyListeners(OutputType ot, const std::string msg)
+void ScriptMgr::notifyListeners(OutputType ot, const std::string& msg)
 {
     for (auto listenerPtr : listenersForOutput(ot)) {
         (*listenerPtr)(msg);

@@ -37,9 +37,8 @@ class Image {
         , m_pixelHeight(tileCoords.top - tileCoords.bottom)
         , m_width(1.0f)
         , m_height(1.0f)
-    {
-        m_texCoords = calculateTexCoords(texture->w(), texture->h(), tileCoords);
-    }
+        , m_texCoords(calculateTexCoords(texture->w(), texture->h(), tileCoords))
+    {}
 
     int pixelWidth() const  { return m_pixelWidth; }
     int pixelHeight() const { return m_pixelHeight; }

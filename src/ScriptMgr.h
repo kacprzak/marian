@@ -52,7 +52,7 @@ class ScriptMgr : public Singleton<ScriptMgr>
     void addListener(OutputType ot, std::shared_ptr<ScriptListener> listener);
     void removeListener(OutputType ot, std::shared_ptr<ScriptListener> listener);
 
-    void notifyListeners(OutputType ot, const std::string msg);
+    void notifyListeners(OutputType ot, const std::string& msg);
 
  private:
     typedef std::list<std::shared_ptr<ScriptListener>> ListenersList;
