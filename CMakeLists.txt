@@ -28,7 +28,7 @@ find_package( Boost COMPONENTS unit_test_framework )
 find_package( Box2D REQUIRED )
 #find_package( GLUT REQUIRED )
 find_package( ZLIB REQUIRED )
-find_package( Lua52 REQUIRED )
+find_package( Lua53 REQUIRED )
 
 if( USE_CEGUI )
     find_package( CEGUI REQUIRED COMPONENTS OPENGL )
@@ -37,22 +37,11 @@ if( USE_CEGUI )
 endif( USE_CEGUI )
 
 if( USE_MYGUI )
-    set( MYGUI_HOME ${PROJECT_SOURCE_DIR}/../mygui )
-    set( MYGUI_INCLUDE_DIR ${MYGUI_HOME}/MyGUIEngine/include )
-    set( MYGUI_PLATFORM_INCLUDE_DIR ${MYGUI_HOME}/Platforms/OpenGL/OpenGLPlatform/include )
-    set( MYGUI_LIBS MyGUIEngine_d MyGUI.OpenGLPlatform_d )
-
-    if( WIN32 )
-        set( MYGUI_LINK_DIR ${MYGUI_HOME}/../mygui-build/lib/Debug )
-    else()
-        set( MYGUI_LINK_DIR ${MYGUI_HOME}/../mygui-debug/lib )
-    endif()
-
-    #find_package( MyGui REQUIRED )
-    include_directories( ${MYGUI_INCLUDE_DIR} )
-    include_directories( ${MYGUI_PLATFORM_INCLUDE_DIR} )
-    link_directories( ${MYGUI_LINK_DIR} )
-    set( EXTRA_LIBS ${EXTRA_LIBS} ${MYGUI_LIBS} )
+    find_package( MyGUI REQUIRED )
+  
+    include_directories( ${MYGUI_INCLUDE_DIRS} )
+    link_directories( ${MYGUI_LIB_DIR} )
+    set( EXTRA_LIBS ${EXTRA_LIBS} ${MYGUI_LIBRARIES} )
 endif( USE_MYGUI )
 	
 configure_file(
@@ -76,7 +65,7 @@ include_directories(
   ${BOX2D_INCLUDE_DIR}
 #  ${GLUT_INCLUDE_DIRS}
   ${ZLIB_INCLUDE_DIR}
-  ${LUA_INCLUDE_DIR}
+  ${LUA53_INCLUDE_DIR}
 )
 
 add_subdirectory( tmx )
