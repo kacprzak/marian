@@ -41,6 +41,7 @@ if( USE_MYGUI )
   
     include_directories( ${MYGUI_INCLUDE_DIRS} )
     link_directories( ${MYGUI_LIB_DIR} )
+    set( MYGUI_LIBRARIES ${MYGUI_LIBRARIES} libMyGUI.OpenGLPlatform.so )
     set( EXTRA_LIBS ${EXTRA_LIBS} ${MYGUI_LIBRARIES} )
 endif( USE_MYGUI )
 	
