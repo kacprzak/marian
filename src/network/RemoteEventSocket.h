@@ -8,7 +8,7 @@ namespace net {
 
 class RemoteEventSocket : public NetSocket
 {
-    typedef NetSocket super;
+    using super = NetSocket;
 
 public:
     RemoteEventSocket();

@@ -11,9 +11,9 @@
 
 class GameLogic;
 
-typedef unsigned long ActorId;
-typedef std::shared_ptr<Actor> ActorPtr;
-typedef std::shared_ptr<ActorComponent> ActorComponentPtr;
+using ActorId = unsigned long;
+using ActorPtr = std::shared_ptr<Actor>;
+using ActorComponentPtr = std::shared_ptr<ActorComponent>;
 
 /*!
  * \brief Game entity.
@@ -24,7 +24,7 @@ class Actor final
 {
     friend class ActorFactory;
 
-    typedef std::map<ActorComponentId, ActorComponentPtr> ComponentsMap;
+    using ComponentsMap = std::map<ActorComponentId, ActorComponentPtr>;
 
  public:
     ~Actor();

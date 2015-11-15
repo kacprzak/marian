@@ -40,8 +40,8 @@ class BaseSocketMgr : public Singleton<BaseSocketMgr>
  protected:
     void shutdown();
 
-    typedef std::list<NetSocket *> SocketList;
-    typedef std::map<int, NetSocket *> SocketIdMap;
+    using SocketList = std::list<NetSocket *>;
+    using SocketIdMap = std::map<int, NetSocket *>;
 
     SocketList  m_sockList;        //!< List of sockets
     SocketIdMap m_sockMap;         //!< Map from id to socket handles

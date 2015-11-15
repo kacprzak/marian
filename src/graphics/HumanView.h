@@ -11,7 +11,7 @@
 
 namespace gfx {
 
-typedef Rect<float> ViewRect;
+using ViewRect = Rect<float>;
 
 //------------------------------------------------------------------------------
 

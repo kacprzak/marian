@@ -13,15 +13,15 @@
 
 namespace event {
 
-typedef std::function<void (Event&)> EventListener;
+using EventListener = std::function<void (Event&)>;
 
 /*!
  * \brief The global event manager class.
  */
 class EventMgr : public Singleton<EventMgr>
 {
-    typedef std::multimap<EventType, std::shared_ptr<EventListener>> EventListenerMap;
-    typedef std::list<std::unique_ptr<Event>> EventQueue;
+    using EventListenerMap = std::multimap<EventType, std::shared_ptr<EventListener>>;
+    using EventQueue = std::list<std::unique_ptr<Event>>;
 
  public:
     EventMgr();

@@ -12,7 +12,7 @@
 #include <memory>
 #include <functional>
 
-typedef std::function<void (const std::string& msg)> ScriptListener;
+using ScriptListener = std::function<void (const std::string& msg)>;
 
 //------------------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ class ScriptError : public std::runtime_error
 class ScriptMgr : public Singleton<ScriptMgr>
 {
  public:
-    enum OutputType {
+    enum class OutputType {
         OUT,
         ERR,
     };
@@ -55,7 +55,7 @@ class ScriptMgr : public Singleton<ScriptMgr>
     void notifyListeners(OutputType ot, const std::string& msg);
 
  private:
-    typedef std::list<std::shared_ptr<ScriptListener>> ListenersList;
+    using ListenersList = std::list<std::shared_ptr<ScriptListener>>;
 
     ListenersList& listenersForOutput(OutputType); 
 

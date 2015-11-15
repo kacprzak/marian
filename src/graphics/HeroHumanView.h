@@ -18,7 +18,7 @@ class MapNode;
 
 class HeroHumanView : public HumanView
 {
-    typedef HumanView super;
+    using super = HumanView;
 
  public:
     HeroHumanView(const std::string& title, int screenWidth,

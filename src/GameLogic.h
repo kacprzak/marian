@@ -11,7 +11,7 @@
 
 class Engine;
 
-typedef std::list<std::shared_ptr<GameView> > GameViewList;
+using GameViewList = std::list<std::shared_ptr<GameView> >;
 
 class GameLogic : private boost::noncopyable
 {

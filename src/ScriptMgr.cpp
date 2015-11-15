@@ -47,7 +47,7 @@ bool ScriptMgr::executeString(const std::string& code)
 {
     if (luaL_dostring(L, code.c_str())) {
         const char *errMsg = lua_tostring(L, -1);
-        notifyListeners(ERR, errMsg);
+        notifyListeners(OutputType::ERR, errMsg);
         throw ScriptError(errMsg);
     }
 
@@ -62,7 +62,7 @@ bool ScriptMgr::executeFile(const std::string& filename)
     std::string fullpath = dataFolder + filename;
     if (luaL_dofile(L, fullpath.c_str())) {
         const char *errMsg = lua_tostring(L, -1);
-        notifyListeners(ERR, errMsg);
+        notifyListeners(OutputType::ERR, errMsg);
         throw ScriptError(errMsg);
     }
 
@@ -143,8 +143,8 @@ void ScriptMgr::notifyListeners(OutputType ot, const std::string& msg)
 ScriptMgr::ListenersList& ScriptMgr::listenersForOutput(OutputType ot)
 {
     switch (ot) {
-    case OUT: return m_outListeners;
-    case ERR: return m_errListeners;
+    case OutputType::OUT: return m_outListeners;
+    case OutputType::ERR: return m_errListeners;
     default:
         return m_outListeners; // Silence warning
     }
@@ -184,7 +184,7 @@ static int l_print(lua_State *L)
         }
     }
 
-    ScriptMgr::singleton().notifyListeners(ScriptMgr::OUT, os.str());
+    ScriptMgr::singleton().notifyListeners(ScriptMgr::OutputType::OUT, os.str());
 
     return 0;
 }

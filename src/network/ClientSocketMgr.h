@@ -10,7 +10,7 @@ namespace net {
 
 class ClientSocketMgr : public BaseSocketMgr
 {
-    typedef BaseSocketMgr super;
+    using super = BaseSocketMgr;
 
 public:
     ClientSocketMgr(const std::string& hostName, unsigned int port);

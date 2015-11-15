@@ -16,7 +16,7 @@ class NetSocket
 {
     friend class BaseSocketMgr;
 
-    typedef std::list<std::shared_ptr<Packet> > PacketList;
+    using PacketList = std::list<std::shared_ptr<Packet> >;
 
  public:
     NetSocket();

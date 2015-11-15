@@ -13,7 +13,7 @@ namespace gfx {
 class HeroNode;
 class HeroNodeState;
 
-typedef StateMachine<HeroNode *, HeroNodeState> HeroNodeStateMachine;
+using HeroNodeStateMachine = StateMachine<HeroNode *, HeroNodeState>;
 
 class HeroNode : public SpriteNode
 {
