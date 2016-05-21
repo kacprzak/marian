@@ -8,24 +8,24 @@
 
 namespace gui {
 
-class GuiMgr : public Singleton<GuiMgr>
-{
- public:
-    GuiMgr();
-    ~GuiMgr() override;
+    class GuiMgr : public Singleton<GuiMgr>
+    {
+        public:
+        GuiMgr();
+        ~GuiMgr() override;
 
-    bool processInput(const SDL_Event& event);
-    void update(float elapsedTime);
-    void draw();
+        bool processInput(const SDL_Event& event);
+        void update(float elapsedTime);
+        void draw();
 
-    void setViewSize(int width, int height);
+        void setViewSize(int width, int height);
 
- private:
-    void handle_mouse_up(Uint8 button);
-    void handle_mouse_down(Uint8 button);
-    void handle_mouse_wheel(const SDL_MouseWheelEvent& e);
+        private:
+        void handle_mouse_up(Uint8 button);
+        void handle_mouse_down(Uint8 button);
+        void handle_mouse_wheel(const SDL_MouseWheelEvent& e);
 
-};
+    };
 
 } // namespace gui
 

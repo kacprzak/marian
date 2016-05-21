@@ -15,7 +15,7 @@ using GameViewList = std::list<std::shared_ptr<GameView> >;
 
 class GameLogic : private boost::noncopyable
 {
- public:
+    public:
     virtual ~GameLogic() {}
 
     virtual void update(float elapsedTime) = 0;
@@ -30,14 +30,14 @@ class GameLogic : private boost::noncopyable
 
     void drawDebugData()
     {
-      if (physicsEngine())
-          physicsEngine()->drawDebugData();
+        if (physicsEngine())
+            physicsEngine()->drawDebugData();
     }
 
     void toggleDrawDebug()
     {
-      if (physicsEngine())
-          physicsEngine()->toggleDrawDebug();
+        if (physicsEngine())
+            physicsEngine()->toggleDrawDebug();
     }
 
     void attachView(std::shared_ptr<GameView> gameView, ActorId actorId = 0)
@@ -47,7 +47,7 @@ class GameLogic : private boost::noncopyable
         gameView->onAttach(viewId, actorId);
     }
 
- private:
+    private:
     GameViewList m_gameViews;
 };
 

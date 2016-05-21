@@ -10,7 +10,7 @@
 
 class ResourceMgr final : public Singleton<ResourceMgr>
 {
- public:
+    public:
     ResourceMgr();
 
     ~ResourceMgr() override;
@@ -27,7 +27,7 @@ class ResourceMgr final : public Singleton<ResourceMgr>
     const gfx::Texture* getTexture(const std::string& filename);
     void releaseTextures();
 
- private:
+    private:
     std::string m_dataFolder;
     std::unordered_map<std::string, gfx::Texture*> m_textures;
 };

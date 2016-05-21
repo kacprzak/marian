@@ -4,32 +4,32 @@
 
 namespace event {
 
-enum EventType {
-    ACTOR_CREATED,
-    ACTOR_DESTROYED,
-    ACTOR_KILLED,
-    ACTOR_MOVED,
-    ACTOR_COLLIDED,
-    ACTOR_PHYSICS_STATE_CHANGED,
+    enum EventType {
+        ACTOR_CREATED,
+        ACTOR_DESTROYED,
+        ACTOR_KILLED,
+        ACTOR_MOVED,
+        ACTOR_COLLIDED,
+        ACTOR_PHYSICS_STATE_CHANGED,
 
-    GAME_STARTED,
-    GAME_FINISHED,
+        GAME_STARTED,
+        GAME_FINISHED,
 
-    INPUT_COMMAND,
+        INPUT_COMMAND,
 
-    REMOTE_CLIENT
-};
+        REMOTE_CLIENT
+    };
 
-enum InputCommand {
-    MOVE_RIGHT_START,
-    MOVE_RIGHT_END,
-    MOVE_LEFT_START,
-    MOVE_LEFT_END,
-    MOVE_DOWN_START,
-    MOVE_DOWN_END,
-    JUMP,
-    FIRE
-};
+    enum InputCommand {
+        MOVE_RIGHT_START,
+        MOVE_RIGHT_END,
+        MOVE_LEFT_START,
+        MOVE_LEFT_END,
+        MOVE_DOWN_START,
+        MOVE_DOWN_END,
+        JUMP,
+        FIRE
+    };
 
 } // namespace event
 

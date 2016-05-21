@@ -7,7 +7,7 @@
 
 class HeroController : public KeyboardHandler
 {
- public:
+    public:
     HeroController();
 
     void setActor(ActorId actorId);
@@ -16,7 +16,7 @@ class HeroController : public KeyboardHandler
     bool onKeyDown(const unsigned int kcode);
     bool onKeyUp(const unsigned int kcode);
 
- private:
+    private:
     ActorId m_actorId;
 };
 

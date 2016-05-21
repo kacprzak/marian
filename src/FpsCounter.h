@@ -4,12 +4,12 @@
 
 class FpsCounter
 {
- public:
+    public:
     FpsCounter(float printInterval = 5.0f);
 
     void update(float delta);
 
- private:
+    private:
     const float m_fpsInterval;
     float m_fpsTimePassed;
     unsigned int m_framesPassed;

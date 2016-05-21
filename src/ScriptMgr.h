@@ -18,21 +18,21 @@ using ScriptListener = std::function<void (const std::string& msg)>;
 
 class ScriptError : public std::runtime_error
 {
- public:
+    public:
     ScriptError(const std::string& msg)
         : std::runtime_error(msg)
-    {}
+        {}
 };
 
 //------------------------------------------------------------------------------
 
 class ScriptMgr : public Singleton<ScriptMgr>
 {
- public:
+    public:
     enum class OutputType {
         OUT,
-        ERR,
-    };
+            ERR,
+            };
 
     ScriptMgr();
     ~ScriptMgr() override;
@@ -54,7 +54,7 @@ class ScriptMgr : public Singleton<ScriptMgr>
 
     void notifyListeners(OutputType ot, const std::string& msg);
 
- private:
+    private:
     using ListenersList = std::list<std::shared_ptr<ScriptListener>>;
 
     ListenersList& listenersForOutput(OutputType); 

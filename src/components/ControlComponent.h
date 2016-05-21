@@ -8,7 +8,7 @@ class ControlComponent : public ActorComponent
 {
     friend class ControlFactory;
 
- public:
+    public:
     ActorComponentId componentId() const { return CONTROL; }
 };
 

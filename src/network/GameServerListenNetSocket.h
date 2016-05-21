@@ -6,13 +6,13 @@
 
 namespace net {
 
-class GameServerListenNetSocket : public ListenNetSocket
-{
-public:
-    GameServerListenNetSocket(int portNum);
+    class GameServerListenNetSocket : public ListenNetSocket
+    {
+        public:
+        GameServerListenNetSocket(int portNum);
 
-    void handleInput();
-};
+        void handleInput();
+    };
 
 } // namespace network
 

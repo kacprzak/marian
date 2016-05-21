@@ -6,9 +6,9 @@
 #include <cassert>
 
 template <typename T>
-class State
+    class State
 {
- public:
+    public:
     virtual ~State() {}
 
     virtual void onEnter(T owner, int prevStateId) = 0;
@@ -26,9 +26,9 @@ class State
  * \tparam S state type
  */
 template <typename T, typename S>
-class StateMachine
+    class StateMachine
 {
- public:
+    public:
     StateMachine(T owner, int idleStateId)
         : m_owner(owner)
         , m_idleStateId(idleStateId)
@@ -90,7 +90,7 @@ class StateMachine
         nextState->onEnter(m_owner, prevStateId);
     }
 
- private:
+    private:
     T m_owner;
     const int m_idleStateId;
     int m_currentStateId;

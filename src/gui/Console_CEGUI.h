@@ -7,47 +7,47 @@
 
 namespace gui {
 
-class Console : public Singleton<Console>
-{
- public:
-    Console();
-    ~Console();
-
-    CEGUI::Window *getWindow() { return m_consoleWindow; }
-
-    void handleKey(CEGUI::uint key);
-
-    // Hide or show the console
-    void setVisible(bool visible);
-    // return true if console is visible, false if is hidden
-    bool isVisible();
-    void toggleVisible()
+    class Console : public Singleton<Console>
     {
-        setVisible(!m_consoleVisible);
-    }
+        public:
+        Console();
+        ~Console();
 
-    void revertPreviousCommand();
+        CEGUI::Window *getWindow() { return m_consoleWindow; }
 
- private:
-    // Register our handler functions
-    void registerHandlers();
-    // Handle when we press Enter after typing
-    bool handle_TextSubmitted(const CEGUI::EventArgs& e);
-    // Handle when we press the Send button
-    bool handle_SendButtonPressed(const CEGUI::EventArgs& e);
-    // Parse the text the user submitted.
-    void parseText(CEGUI::String inMsg);
-    // Post the message to the ChatHistory listbox.
-    // with a white color default
-    void outputText(CEGUI::String inMsg,
-                    CEGUI::colour colour = CEGUI::colour(0xFFFFFFFF));
+        void handleKey(CEGUI::uint key);
 
-    void clearText();
+        // Hide or show the console
+        void setVisible(bool visible);
+        // return true if console is visible, false if is hidden
+        bool isVisible();
+        void toggleVisible()
+        {
+            setVisible(!m_consoleVisible);
+        }
 
-    CEGUI::Window *m_consoleWindow;
-    bool m_consoleVisible;
-    CEGUI::String m_previousCmd;
-};
+        void revertPreviousCommand();
+
+        private:
+        // Register our handler functions
+        void registerHandlers();
+        // Handle when we press Enter after typing
+        bool handle_TextSubmitted(const CEGUI::EventArgs& e);
+        // Handle when we press the Send button
+        bool handle_SendButtonPressed(const CEGUI::EventArgs& e);
+        // Parse the text the user submitted.
+        void parseText(CEGUI::String inMsg);
+        // Post the message to the ChatHistory listbox.
+        // with a white color default
+        void outputText(CEGUI::String inMsg,
+                        CEGUI::colour colour = CEGUI::colour(0xFFFFFFFF));
+
+        void clearText();
+
+        CEGUI::Window *m_consoleWindow;
+        bool m_consoleVisible;
+        CEGUI::String m_previousCmd;
+    };
 
 } // namespace gui
 

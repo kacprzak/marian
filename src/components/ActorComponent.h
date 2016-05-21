@@ -13,7 +13,7 @@ class ActorComponent
 {
     friend class ActorFactory;
 
- public:
+    public:
     virtual ~ActorComponent() {}
 
     virtual bool init() { return true; }
@@ -21,14 +21,14 @@ class ActorComponent
   
     virtual ActorComponentId componentId() const = 0;
 
- private:
+    private:
     // Only ActroFactory should use this
     void setOwner(std::shared_ptr<Actor> actor)
     {
         m_owner = actor;
     }
 
- protected:
+    protected:
     std::shared_ptr<Actor> m_owner;
 
 };

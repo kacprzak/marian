@@ -7,7 +7,7 @@
 
 class GameView : private boost::noncopyable
 {
- public:
+    public:
 
     virtual ~GameView() {}
 

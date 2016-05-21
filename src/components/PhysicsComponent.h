@@ -20,19 +20,19 @@ class PhysicsComponent : public ActorComponent
 {
     friend class ActorFactory;
 
- public:
+    public:
     PhysicsComponent()
         : ActorComponent()
         , m_body(nullptr)
     {}
 
     ~PhysicsComponent()
-    {
-        if (m_body) {
-            m_body->SetUserData(nullptr); // To silence contact listener
-            m_body->GetWorld()->DestroyBody(m_body);
+        {
+            if (m_body) {
+                m_body->SetUserData(nullptr); // To silence contact listener
+                m_body->GetWorld()->DestroyBody(m_body);
+            }
         }
-    }
 
 
     bool init()
@@ -86,7 +86,7 @@ class PhysicsComponent : public ActorComponent
 
     ActorComponentId componentId() const { return PHYSICS; }
 
- protected:
+    protected:
     b2Body *m_body;
 };
 

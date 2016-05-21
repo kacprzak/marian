@@ -6,17 +6,17 @@
 
 namespace net {
 
-class RemoteEventSocket : public NetSocket
-{
-    using super = NetSocket;
+    class RemoteEventSocket : public NetSocket
+    {
+        using super = NetSocket;
 
-public:
-    RemoteEventSocket();
-    RemoteEventSocket(int socket, unsigned int ip);
+        public:
+        RemoteEventSocket();
+        RemoteEventSocket(int socket, unsigned int ip);
 
-    // NetSocket interface
-    void handleInput();
-};
+        // NetSocket interface
+        void handleInput();
+    };
 
 } // namespace network
 

@@ -7,7 +7,7 @@
  */
 class KeyboardHandler
 {
- public:
+    public:
     virtual ~KeyboardHandler() {}
 
     virtual bool onKeyDown(unsigned int const kcode) = 0;

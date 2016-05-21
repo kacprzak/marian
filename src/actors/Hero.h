@@ -11,7 +11,7 @@ class Engine;
 
 class HeroRenderComponent : public RenderComponent
 {
- public:
+    public:
     HeroRenderComponent() {}
 
 };
@@ -19,7 +19,7 @@ class HeroRenderComponent : public RenderComponent
 
 class HeroPhysicsComponent : public PhysicsComponent
 {
- public:
+    public:
     HeroPhysicsComponent(GameLogic *game, float x, float y,
                          float w = 1.0f, float h = 1.0f);
 
@@ -34,7 +34,7 @@ class HeroPhysicsComponent : public PhysicsComponent
 
     void handleInputCommand(event::InputCommand command);
 
- private:
+    private:
     int m_feetContacts;
     int m_heroStateId;
 

@@ -9,7 +9,7 @@ class RenderComponent : public ActorComponent
 {
     friend class ActorFactory;
 
- public:
+    public:
 
     ActorComponentId componentId() const { return RENDER; }
 };

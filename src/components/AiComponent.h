@@ -8,7 +8,7 @@ class AiComponent : public ActorComponent
 {
     friend class ActorFactory;
 
- public:
+    public:
     virtual ~AiComponent();
 
     /*!

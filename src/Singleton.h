@@ -12,29 +12,29 @@
  * Based on article form "Game Programming Gems vol.1"
  */
 template <typename T>
-class Singleton
+    class Singleton
 {
     static T *s_singleton;
 
- public:
+    public:
     Singleton()
-    {
-        assert(!s_singleton);
-        // Allows multiple inheritance
-        T *imgObj = (T *)(void*)1;
-        Singleton<T> *imgS = (Singleton<T> *)imgObj;
-        intptr_t offset = (intptr_t)imgObj - (intptr_t)imgS;
-        s_singleton = (T*)((intptr_t)this + offset);
-    }
+        {
+            assert(!s_singleton);
+            // Allows multiple inheritance
+            T *imgObj = (T *)(void*)1;
+            Singleton<T> *imgS = (Singleton<T> *)imgObj;
+            intptr_t offset = (intptr_t)imgObj - (intptr_t)imgS;
+            s_singleton = (T*)((intptr_t)this + offset);
+        }
 
     Singleton(const Singleton&) = delete;
     Singleton& operator=(const Singleton&) = delete;
 
     virtual ~Singleton()
-    {
-        assert(s_singleton);
-        s_singleton = nullptr;
-    }
+        {
+            assert(s_singleton);
+            s_singleton = nullptr;
+        }
 
     static T& singleton()
     {
@@ -49,6 +49,6 @@ class Singleton
 };
 
 template <typename T>
-T* Singleton<T>::s_singleton = nullptr;
+    T* Singleton<T>::s_singleton = nullptr;
 
 #endif // SINGLETON_H

@@ -11,7 +11,7 @@
 
 class BaseGameLogic : public GameLogic
 {
-public:
+    public:
     BaseGameLogic();
     ~BaseGameLogic() override;
 
@@ -23,12 +23,12 @@ public:
 
     void update(float elapsedTime) override;
 
-protected:
+    protected:
     std::map<ActorId, ActorPtr> m_actors;
     float m_mapWidth;
     std::unique_ptr<PhysicsEngine> m_physicsEngine;
 
-private:
+    private:
     bool isOnMap(ActorPtr actor);
 };
 

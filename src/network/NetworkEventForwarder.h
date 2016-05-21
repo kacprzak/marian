@@ -6,16 +6,16 @@
 
 namespace net {
 
-class NetworkEventForwarder
-{
- public:
-    NetworkEventForwarder(int socketId);
+    class NetworkEventForwarder
+    {
+        public:
+        NetworkEventForwarder(int socketId);
 
-    void forwardEvent(event::Event& e);
+        void forwardEvent(event::Event& e);
 
- protected:
-    int m_socketId;
-};
+        protected:
+        int m_socketId;
+    };
 
 } // namespace network
 

@@ -19,7 +19,7 @@ class ContactListener : public b2ContactListener
 
 class Box2dPhysicsEngine : public PhysicsEngine
 {
- public:
+    public:
     Box2dPhysicsEngine();
     ~Box2dPhysicsEngine() override;
 
@@ -32,7 +32,7 @@ class Box2dPhysicsEngine : public PhysicsEngine
 
     b2World *world() { return m_world.get(); }
 
- private:
+    private:
     std::unique_ptr<b2World> m_world;
     ContactListener          m_contactListener;
 

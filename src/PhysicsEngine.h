@@ -8,7 +8,7 @@ class Vec2;
 
 class PhysicsEngine
 {
- public:
+    public:
     virtual ~PhysicsEngine() {}
 
     virtual void update(float elapsedTime) = 0;

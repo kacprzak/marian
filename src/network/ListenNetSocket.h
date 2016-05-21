@@ -6,17 +6,17 @@
 
 namespace net {
 
-class ListenNetSocket : public NetSocket
-{
-public:
-    ListenNetSocket();
-    ListenNetSocket(int portNum) : port(0) { init(portNum); }
+    class ListenNetSocket : public NetSocket
+    {
+        public:
+        ListenNetSocket();
+        ListenNetSocket(int portNum) : port(0) { init(portNum); }
 
-    void init(int portNum);
-    int acceptConnection(unsigned int *addr);
+        void init(int portNum);
+        int acceptConnection(unsigned int *addr);
 
-    unsigned short port;
-};
+        unsigned short port;
+    };
 
 } // namespace network
 

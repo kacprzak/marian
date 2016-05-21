@@ -6,7 +6,7 @@
 
 class SensorPhysicsComponent : public GroundPhysicsComponent
 {
- public:
+    public:
     SensorPhysicsComponent(GameLogic *game, const MapObject& obj);
 };
 

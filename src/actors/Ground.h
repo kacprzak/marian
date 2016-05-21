@@ -9,7 +9,7 @@ class GameLogic;
 
 class GroundPhysicsComponent : public PhysicsComponent
 {
- public:
+    public:
     GroundPhysicsComponent(GameLogic *game, const MapObject& obj);
 };
 

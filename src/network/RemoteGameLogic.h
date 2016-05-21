@@ -9,21 +9,21 @@
 
 namespace net {
 
-class RemoteGameLogic : public GameLogic
-{
-public:
-    RemoteGameLogic(int socketId);
+    class RemoteGameLogic : public GameLogic
+    {
+        public:
+        RemoteGameLogic(int socketId);
 
-    // GameLogic interface
-    void update(float elapsedTime);
+        // GameLogic interface
+        void update(float elapsedTime);
 
-protected:
-    int m_socketId;
-    NetworkEventForwarder m_nef;
+        protected:
+        int m_socketId;
+        NetworkEventForwarder m_nef;
 
- private:
-    event::EventListenerHelper elh;
-};
+        private:
+        event::EventListenerHelper elh;
+    };
 
 } // namespace network
 
