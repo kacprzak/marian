@@ -1,4 +1,4 @@
-/* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef GROUND_H
 #define GROUND_H
 

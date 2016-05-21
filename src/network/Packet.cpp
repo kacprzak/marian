@@ -1,4 +1,4 @@
-/* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "Packet.h"
 
 using namespace net;

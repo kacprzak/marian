@@ -1,4 +1,4 @@
-/* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "Engine.h"
 
 #include "ResourceMgr.h"
@@ -144,19 +144,19 @@ bool Engine::processEvents()
             if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) return false;
             break;
         case SDL_WINDOWEVENT:
-        {
-            switch (event.window.event) {
-            case SDL_WINDOWEVENT_FOCUS_GAINED:
-                m_inputFocus = true;
-                break;
-            case SDL_WINDOWEVENT_FOCUS_LOST:
-                m_inputFocus = false;
-                break;
-            default:
+            {
+                switch (event.window.event) {
+                case SDL_WINDOWEVENT_FOCUS_GAINED:
+                    m_inputFocus = true;
+                    break;
+                case SDL_WINDOWEVENT_FOCUS_LOST:
+                    m_inputFocus = false;
+                    break;
+                default:
+                    break;
+                }
                 break;
             }
-            break;
-        }
         case SDL_QUIT:
             return false;
         }
