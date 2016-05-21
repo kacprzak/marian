@@ -11,8 +11,8 @@ namespace gfx {
     class Animation
     {
     public:
-    Animation()
-        : m_currentTime(0.0f)
+        Animation()
+            : m_currentTime(0.0f)
             , m_fullTime(0.0f)
             , m_reverse(false)
             , m_playingBack(false)
