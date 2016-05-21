@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef HEROHUMANVIEW_H
 #define HEROHUMANVIEW_H
 
@@ -20,7 +20,7 @@ namespace gfx {
     {
         using super = HumanView;
 
-        public:
+    public:
         HeroHumanView(const std::string& title, int screenWidth,
                       int screenHeight, bool screenFull = false);
         ~HeroHumanView() override;
@@ -29,7 +29,7 @@ namespace gfx {
         void update(float elapsedTime) override;
         void draw() override;
 
-        private:
+    private:
         void handleActorMoved(event::Event& event);
         void handleActorPhysicsStateChanged(event::Event& event);
         void handleActorCreated(event::Event& event);

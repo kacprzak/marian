@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
@@ -21,7 +21,7 @@ namespace gfx {
      */
     class Texture : private boost::noncopyable
     {
-        public:
+    public:
         Texture();
         ~Texture();
 
@@ -32,7 +32,7 @@ namespace gfx {
         void loadFromFile(const std::string& filename);
         void loadFromSDL(SDL_Surface *surface);
 
-        private:
+    private:
         GLuint m_textureId;
         int m_w;
         int m_h;

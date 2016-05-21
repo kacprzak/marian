@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef AICOMPONENT_H
 #define AICOMPONENT_H
 
@@ -8,7 +8,7 @@ class AiComponent : public ActorComponent
 {
     friend class ActorFactory;
 
-    public:
+public:
     virtual ~AiComponent();
 
     /*!

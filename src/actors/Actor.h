@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef ACTOR_H
 #define ACTOR_H
 
@@ -26,7 +26,7 @@ class Actor final
 
     using ComponentsMap = std::map<ActorComponentId, ActorComponentPtr>;
 
-    public:
+public:
     ~Actor();
 
     void destroy() { m_components.clear(); }
@@ -49,21 +49,21 @@ class Actor final
     const std::string& name() const { return m_name; }
 
     template <class T> std::weak_ptr<T> getComponent(ActorComponentId id)
-        {
-            ComponentsMap::iterator found = m_components.find(id);
-            if (found != m_components.end()) {
-                ActorComponentPtr base(found->second);
-                // Cast to subclass
-                std::shared_ptr<T> sub(std::static_pointer_cast<T>(base));
-                // Conver to weak_ptr
-                std::weak_ptr<T> weak(sub);
-                return weak;
-            } else {
-                return std::weak_ptr<T>();
-            }
+    {
+        ComponentsMap::iterator found = m_components.find(id);
+        if (found != m_components.end()) {
+            ActorComponentPtr base(found->second);
+            // Cast to subclass
+            std::shared_ptr<T> sub(std::static_pointer_cast<T>(base));
+            // Conver to weak_ptr
+            std::weak_ptr<T> weak(sub);
+            return weak;
+        } else {
+            return std::weak_ptr<T>();
         }
+    }
 
-    private:
+private:
     ActorId       m_id;
     GameLogic    *m_game;           //!< Owner
     ActorCategory m_category; 

@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef NETSOCKET_H
 #define NETSOCKET_H
 
@@ -18,7 +18,7 @@ namespace net {
 
         using PacketList = std::list<std::shared_ptr<Packet> >;
 
-        public:
+    public:
         NetSocket();
         NetSocket(int newSock, unsigned int hostIp);
         virtual ~NetSocket();
@@ -35,7 +35,7 @@ namespace net {
 
         int ipAdress() { return m_ipaddr; }
 
-        protected:
+    protected:
         int m_socket;           //!< Socker file descriptor
         int m_id;               //!< Id given by manager
 

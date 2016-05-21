@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef STATEMACHINE_H
 #define STATEMACHINE_H
 
@@ -6,9 +6,9 @@
 #include <cassert>
 
 template <typename T>
-    class State
+class State
 {
-    public:
+public:
     virtual ~State() {}
 
     virtual void onEnter(T owner, int prevStateId) = 0;
@@ -28,9 +28,9 @@ template <typename T>
 template <typename T, typename S>
     class StateMachine
 {
-    public:
-    StateMachine(T owner, int idleStateId)
-        : m_owner(owner)
+public:
+StateMachine(T owner, int idleStateId)
+    : m_owner(owner)
         , m_idleStateId(idleStateId)
         , m_currentStateId(idleStateId)
         , m_currentState(nullptr)
@@ -90,7 +90,7 @@ template <typename T, typename S>
         nextState->onEnter(m_owner, prevStateId);
     }
 
-    private:
+private:
     T m_owner;
     const int m_idleStateId;
     int m_currentStateId;

@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef RESOURCE_MGR_H
 #define RESOURCE_MGR_H
 
@@ -10,7 +10,7 @@
 
 class ResourceMgr final : public Singleton<ResourceMgr>
 {
-    public:
+public:
     ResourceMgr();
 
     ~ResourceMgr() override;
@@ -27,7 +27,7 @@ class ResourceMgr final : public Singleton<ResourceMgr>
     const gfx::Texture* getTexture(const std::string& filename);
     void releaseTextures();
 
-    private:
+private:
     std::string m_dataFolder;
     std::unordered_map<std::string, gfx::Texture*> m_textures;
 };

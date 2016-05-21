@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
@@ -11,7 +11,7 @@ namespace gui {
 
     class Console
     {
-        public:
+    public:
         Console();
         ~Console();
 
@@ -30,7 +30,7 @@ namespace gui {
 
         void revertPreviousCommand();
 
-        private:
+    private:
         // Register our handler functions
         void registerHandlers();
         // Handle when we press the Send button
@@ -44,7 +44,7 @@ namespace gui {
         void output(const std::string& inMsg, bool err = false);
 
         void clearText();
-        private:
+    private:
         bool m_consoleVisible;
         std::shared_ptr<std::function<void (const std::string& msg)>> m_scriptListener;
         std::shared_ptr<std::function<void (const std::string& msg)>> m_errScriptListener;

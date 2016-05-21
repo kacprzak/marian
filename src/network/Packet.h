@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef PACKET_H
 #define PACKET_H
 
@@ -22,7 +22,7 @@ namespace net {
 
     class Packet final
     {
-        public:
+    public:
         Packet(const char * const data, uint32 size);
         ~Packet();
         Packet(const Packet& other) = delete;
@@ -32,10 +32,10 @@ namespace net {
         const char * getData() const { return m_data; }
         uint32       getSize() const;
 
-        protected:
+    protected:
         char *m_data;
 
-        private:
+    private:
 
     };
 

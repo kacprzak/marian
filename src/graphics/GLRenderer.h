@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef GLRENDERER_H
 #define GLRENDERER_H
 
@@ -8,7 +8,7 @@ namespace gfx {
 
     class GLRenderer : public Renderer
     {
-        public:
+    public:
         ~GLRenderer() override {}
 
         // Renderer interface
@@ -17,7 +17,7 @@ namespace gfx {
         void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
                       GLuint textureId, const GLfloat *texCoords) const override;
 
-        private:
+    private:
         void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h) const;
         void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
                       const GLfloat *texCoords) const;

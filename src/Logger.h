@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef LOGGER_H
 #define LOGGER_H
 
@@ -49,8 +49,8 @@ void logHelper(int sockId, const char *data,
     } while (0)
 
 class PerrorLogger {
-    public:
-    PerrorLogger(const char *func) {
+public:
+    explicit PerrorLogger(const char *func) {
         if (func)
             std::cerr << severMsg[3] _LOG_CLOCK _LOG_EXTRA(func);
         else

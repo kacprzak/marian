@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef HUMANVIEW_H
 #define HUMANVIEW_H
 
@@ -17,7 +17,7 @@ namespace gfx {
 
     class HumanView : public GameView
     {
-        public:
+    public:
         HumanView(const std::string& title, int screenWidth, int screenHeight,
                   bool screenFull = false);
 
@@ -39,11 +39,11 @@ namespace gfx {
 
         bool setFullScreen(bool fullScreen);
 
-        protected:
+    protected:
         void preDraw();
         void postDraw();
 
-        private:
+    private:
         void createSDLWindow();
         void initializeOpenGL();
 

@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef MAPNODE_H
 #define MAPNODE_H
 
@@ -12,7 +12,7 @@ namespace gfx {
 
     class MapNode
     {
-        public:
+    public:
         MapNode();
 
         void setMap(std::shared_ptr<Map> map)
@@ -31,7 +31,7 @@ namespace gfx {
         void drawBackground(Renderer *rndr, const ViewRect& rect) const;
         void drawForeground(Renderer *rndr, const ViewRect& rect) const;
 
-        private:
+    private:
         void calculateTilesTextureData();
 
         //void draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo) const;

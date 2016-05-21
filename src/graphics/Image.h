@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef IMAGE_H
 #define IMAGE_H
 
@@ -17,19 +17,19 @@ namespace gfx {
      * It's a light object. Can be passed to fuctions as copy. 
      */
     class Image {
-        public:
-        Image(const Texture *texture)
+    public:
+        explicit Image(const Texture *texture)
             : m_texture(texture)
             , m_pixelWidth(m_texture->w())
             , m_pixelHeight(m_texture->h())
             , m_width(1.0f)
             , m_height(1.0f)
-            {
-                m_texCoords[0] = TexCoord(0.0f, 0.0f);
-                m_texCoords[1] = TexCoord(1.0f, 0.0f);
-                m_texCoords[2] = TexCoord(1.0f, 1.0f);
-                m_texCoords[3] = TexCoord(0.0f, 1.0f);
-            }
+        {
+            m_texCoords[0] = TexCoord(0.0f, 0.0f);
+            m_texCoords[1] = TexCoord(1.0f, 0.0f);
+            m_texCoords[2] = TexCoord(1.0f, 1.0f);
+            m_texCoords[3] = TexCoord(0.0f, 1.0f);
+        }
 
         Image(const Texture *texture, const Rect<int>& tileCoords)
             : m_texture(texture)
@@ -38,7 +38,7 @@ namespace gfx {
             , m_width(1.0f)
             , m_height(1.0f)
             , m_texCoords(calculateTexCoords(texture->w(), texture->h(), tileCoords))
-            {}
+        {}
 
         int pixelWidth() const  { return m_pixelWidth; }
         int pixelHeight() const { return m_pixelHeight; }
@@ -65,18 +65,21 @@ namespace gfx {
         }
 
         const Texture *texture() const { return m_texture; }
-        const float *getTextureCoords() const { return reinterpret_cast<const float *>(&m_texCoords); }
+        const float *getTextureCoords() const
+        {
+            return reinterpret_cast<const float *>(&m_texCoords);
+        }
     
         std::string toString() const
-            {
-                std::stringstream ss;
-                ss << "Image: {" << this
-                   << ", pixelSize: {" << m_pixelWidth << ", " << m_pixelHeight << "}"
-                   << ", texId: " << m_texture->textureId() << "}";
-                return ss.str();
-            }
+        {
+            std::stringstream ss;
+            ss << "Image: {" << this
+               << ", pixelSize: {" << m_pixelWidth << ", " << m_pixelHeight << "}"
+               << ", texId: " << m_texture->textureId() << "}";
+            return ss.str();
+        }
 
-        private:
+    private:
         const Texture *m_texture;
         int            m_pixelWidth;
         int            m_pixelHeight;

@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef GAMELOGIC_H
 #define GAMELOGIC_H
 
@@ -15,7 +15,7 @@ using GameViewList = std::list<std::shared_ptr<GameView> >;
 
 class GameLogic : private boost::noncopyable
 {
-    public:
+public:
     virtual ~GameLogic() {}
 
     virtual void update(float elapsedTime) = 0;
@@ -47,7 +47,7 @@ class GameLogic : private boost::noncopyable
         gameView->onAttach(viewId, actorId);
     }
 
-    private:
+private:
     GameViewList m_gameViews;
 };
 

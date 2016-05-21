@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef CLIENTSOCKETMGR_H
 #define CLIENTSOCKETMGR_H
 
@@ -12,12 +12,12 @@ namespace net {
     {
         using super = BaseSocketMgr;
 
-        public:
+    public:
         ClientSocketMgr(const std::string& hostName, unsigned int port);
 
         bool connect();
 
-        private:
+    private:
         std::string m_hostName;
         unsigned int m_port;
     };

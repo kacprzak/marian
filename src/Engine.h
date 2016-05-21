@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef ENGINE_H
 #define ENGINE_H
 
@@ -18,7 +18,7 @@
 
 class EngineError : public std::runtime_error
 {
-    public:
+public:
     EngineError(const std::string& msg, const char *sdlError)
         : std::runtime_error(msg + ": " + sdlError)
         , m_sdlError(sdlError)
@@ -26,7 +26,7 @@ class EngineError : public std::runtime_error
 
     const char *sdlError() { return m_sdlError; }
 
-    private:
+private:
     const char *m_sdlError;
 };
 
@@ -37,8 +37,8 @@ class EngineError : public std::runtime_error
  */
 class Engine : public Singleton<Engine>
 {
-    public:
-    Engine(bool initVideo = true);
+public:
+    explicit Engine(bool initVideo = true);
     ~Engine() override;
 
     void mainLoop(GameLogic *game);
@@ -48,7 +48,7 @@ class Engine : public Singleton<Engine>
 
     static int showErrorMessageBox(const char *msg);
 
-    private:
+private:
     void initializeSDL();
     void logSDLInfo();
 

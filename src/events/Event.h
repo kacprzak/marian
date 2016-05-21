@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef EVENT_H
 #define EVENT_H
 
@@ -20,13 +20,13 @@ namespace event {
 	friend std::ostream& operator<<(std::ostream& os, const Event& e);
 	friend std::istream& operator>>(std::istream& is, Event& e);
 
-	public:
+    public:
 	virtual ~Event() {}
 
 	virtual EventType eventType() const = 0;
 	virtual const char *eventName() const = 0;
 
-	protected:
+    protected:
 	virtual void serialize(std::ostream& out) const = 0;
 	virtual void deserialize(std::istream& in) = 0;
     };
@@ -47,21 +47,21 @@ namespace event {
 
     class BaseEvent : public Event
     {
-	protected:
-	BaseEvent(EventType type, const char *name)
-	    : m_type(type)
+    protected:
+    BaseEvent(EventType type, const char *name)
+        : m_type(type)
 	    , m_name(name)
 	{}
 
-	public:
+    public:
 	EventType eventType() const override final { return m_type; }
 	const char *eventName() const override final { return m_name; }
 
-	protected:
+    protected:
 	void serialize(std::ostream& /*out*/) const override {}
 	void deserialize(std::istream& /*in*/) override {}
 
-	private:
+    private:
 	EventType m_type;
 	const char* m_name;
     };
@@ -70,14 +70,14 @@ namespace event {
 
     class CollisionEvent : public BaseEvent
     {
-	public:
+    public:
 	enum Phase {
 	    BEGIN, END
 	};
 
-	CollisionEvent(Phase phase, ActorId actorA, void *actorALimbData,
-		       ActorId actorB, void *actorBLimbData)
-	    : BaseEvent(ACTOR_COLLIDED, "ActorCollided")
+    CollisionEvent(Phase phase, ActorId actorA, void *actorALimbData,
+                   ActorId actorB, void *actorBLimbData)
+        : BaseEvent(ACTOR_COLLIDED, "ActorCollided")
 	    , m_phase(phase)
 	    , m_actorA(actorA)
 	    , m_actorALimbData(actorALimbData)
@@ -106,9 +106,9 @@ namespace event {
 
     class MoveEvent : public BaseEvent
     {
-	public:
-	MoveEvent(ActorId actor, float x, float y, float angle = 0.0f)
-	    : BaseEvent(ACTOR_MOVED, "ActorMoved")
+    public:
+    MoveEvent(ActorId actor, float x, float y, float angle = 0.0f)
+        : BaseEvent(ACTOR_MOVED, "ActorMoved")
 	    , m_actorId(actor)
 	    , m_x(x)
 	    , m_y(y)
@@ -117,9 +117,9 @@ namespace event {
 
 	explicit MoveEvent(std::istream& in)
 	    : BaseEvent(ACTOR_MOVED, "ActorMoved")
-	    {
-		deserialize(in);
-	    }
+        {
+            deserialize(in);
+        }
 
 	void serialize(std::ostream& out) const
 	{
@@ -147,18 +147,18 @@ namespace event {
 
     class PhysicsStateChangeEvent : public BaseEvent
     {
-	public:
-	PhysicsStateChangeEvent(ActorId actor, ActorPhysicsStateId newState)
-	    : BaseEvent(ACTOR_PHYSICS_STATE_CHANGED, "ActorPhysicsStateChanged")
+    public:
+    PhysicsStateChangeEvent(ActorId actor, ActorPhysicsStateId newState)
+        : BaseEvent(ACTOR_PHYSICS_STATE_CHANGED, "ActorPhysicsStateChanged")
 	    , m_actorId(actor)
 	    , m_newState(newState)
 	{}
 
 	explicit PhysicsStateChangeEvent(std::istream& in)
 	    : BaseEvent(ACTOR_PHYSICS_STATE_CHANGED, "ActorPhysicsStateChanged")
-	    {
-		deserialize(in);
-	    }
+        {
+            deserialize(in);
+        }
 
 	void serialize(std::ostream& out) const
 	{
@@ -184,10 +184,10 @@ namespace event {
 
     class ActorCreatedEvent : public BaseEvent
     {
-	public:
-	ActorCreatedEvent(ActorId actor, ActorCategory actorCategory,
-			  float x = 0.0f, float y = 0.0f)
-	    : BaseEvent(ACTOR_CREATED, "ActorCreated")
+    public:
+    ActorCreatedEvent(ActorId actor, ActorCategory actorCategory,
+                      float x = 0.0f, float y = 0.0f)
+        : BaseEvent(ACTOR_CREATED, "ActorCreated")
 	    , m_actorId(actor)
 	    , m_actorCategory(actorCategory)
 	    , m_x(x)
@@ -204,7 +204,7 @@ namespace event {
 
     class ActorDestroyedEvent : public BaseEvent
     {
-	public:
+    public:
 	explicit ActorDestroyedEvent(ActorId actor)
 	    : BaseEvent(ACTOR_DESTROYED, "ActorDestroyed")
 	    , m_actorId(actor)
@@ -217,18 +217,18 @@ namespace event {
 
     class ActorInputEvent : public BaseEvent
     {
-	public:
-	ActorInputEvent(ActorId actor, InputCommand command)
-	    : BaseEvent(INPUT_COMMAND, "ActorInput")
+    public:
+    ActorInputEvent(ActorId actor, InputCommand command)
+        : BaseEvent(INPUT_COMMAND, "ActorInput")
 	    , m_actorId(actor)
 	    , m_command(command)
 	{}
 
 	explicit ActorInputEvent(std::istream& in)
 	    : BaseEvent(INPUT_COMMAND, "ActorInput")
-	    {
-		deserialize(in);
-	    }
+        {
+            deserialize(in);
+        }
 
 	void serialize(std::ostream& out) const
 	{
@@ -254,9 +254,9 @@ namespace event {
 
     class RemoteClientEvent : public BaseEvent
     {
-	public:
-	RemoteClientEvent(int socketId, int ip)
-	    : BaseEvent(REMOTE_CLIENT, "RemoteClient")
+    public:
+    RemoteClientEvent(int socketId, int ip)
+        : BaseEvent(REMOTE_CLIENT, "RemoteClient")
 	    , m_socketId(socketId)
 	    , m_ip(ip)
 	{}

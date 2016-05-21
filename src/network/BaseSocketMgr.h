@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef BASESOCKETMGR_H
 #define BASESOCKETMGR_H
 
@@ -13,7 +13,7 @@ namespace net {
 
     class BaseSocketMgr : public Singleton<BaseSocketMgr>
     {
-        public:
+    public:
         BaseSocketMgr();
         virtual ~BaseSocketMgr();
 
@@ -37,7 +37,7 @@ namespace net {
         void addToOutbound(int rc) { m_outbound += rc; }
         void addToInbound(int rc)  { m_inbound += rc; }
 
-        protected:
+    protected:
         void shutdown();
 
         using SocketList = std::list<NetSocket *>;

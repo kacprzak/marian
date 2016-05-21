@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef HERONODE_H
 #define HERONODE_H
 
@@ -17,7 +17,7 @@ namespace gfx {
 
     class HeroNode : public SpriteNode
     {
-        public:
+    public:
         HeroNode();
         ~HeroNode() override;
 
@@ -30,7 +30,7 @@ namespace gfx {
 
         bool isFacingRight() const { return m_facingRight; }
 
-        private:
+    private:
         void setFacingRight(bool right);
 
         bool m_facingRight;

@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 /*
  * Copyright (c) 2006-2007 Erin Catto http://www.box2d.org
  *
@@ -28,7 +28,7 @@ struct b2AABB;
 // inside b2World::Step.
 class DebugDraw : public b2Draw
 {
-    public:
+public:
     void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color);
 
     void DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color);

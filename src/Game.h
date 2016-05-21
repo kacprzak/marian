@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef GAME_H
 #define GAME_H
 
@@ -6,14 +6,14 @@
 
 class Game : public BaseGameLogic
 {
-    public:
+public:
     Game();
 
     void onBeforeMainLoop(Engine *e) override;
 
     void update(float elapsedTime) override;
 
-    private:
+private:
 
     void handleActorCollided(event::Event& event);
     //void handleActorPhysicsStateChanged(Event& event);

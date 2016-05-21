@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "network/BaseSocketMgr.h"
 #include "network/ClientSocketMgr.h"
 #include "network/RemoteGameLogic.h"

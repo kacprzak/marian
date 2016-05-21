@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
@@ -9,7 +9,7 @@ namespace gui {
 
     class Console : public Singleton<Console>
     {
-        public:
+    public:
         Console();
         ~Console();
 
@@ -28,7 +28,7 @@ namespace gui {
 
         void revertPreviousCommand();
 
-        private:
+    private:
         // Register our handler functions
         void registerHandlers();
         // Handle when we press Enter after typing

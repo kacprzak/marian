@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef REMOTEGAMELOGIC_H
 #define REMOTEGAMELOGIC_H
 
@@ -11,17 +11,17 @@ namespace net {
 
     class RemoteGameLogic : public GameLogic
     {
-        public:
-        RemoteGameLogic(int socketId);
+    public:
+        explicit RemoteGameLogic(int socketId);
 
         // GameLogic interface
         void update(float elapsedTime);
 
-        protected:
+    protected:
         int m_socketId;
         NetworkEventForwarder m_nef;
 
-        private:
+    private:
         event::EventListenerHelper elh;
     };
 

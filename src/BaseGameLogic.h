@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef BASEGAMELOGIC_H
 #define BASEGAMELOGIC_H
 
@@ -11,7 +11,7 @@
 
 class BaseGameLogic : public GameLogic
 {
-    public:
+public:
     BaseGameLogic();
     ~BaseGameLogic() override;
 
@@ -23,12 +23,12 @@ class BaseGameLogic : public GameLogic
 
     void update(float elapsedTime) override;
 
-    protected:
+protected:
     std::map<ActorId, ActorPtr> m_actors;
     float m_mapWidth;
     std::unique_ptr<PhysicsEngine> m_physicsEngine;
 
-    private:
+private:
     bool isOnMap(ActorPtr actor);
 };
 

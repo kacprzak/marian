@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "HeroNode.h"
 
 #include "Animation.h"
@@ -11,7 +11,7 @@ namespace gfx {
 class HeroNodeState : public State<HeroNode *>
 {
  public:
-    HeroNodeState(HeroNodeStateMachine& stateMachine)
+    explicit HeroNodeState(HeroNodeStateMachine& stateMachine)
         : State<HeroNode *>()
         , m_stateMachine(stateMachine)
     {}
@@ -36,7 +36,7 @@ class HeroNodeState : public State<HeroNode *>
 class StandHeroState : public HeroNodeState
 {
  public:
-    StandHeroState(HeroNodeStateMachine& stateMachine)
+    explicit StandHeroState(HeroNodeStateMachine& stateMachine)
         : HeroNodeState(stateMachine)
     {
         const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
@@ -82,7 +82,7 @@ class StandHeroState : public HeroNodeState
 class FallHeroState : public HeroNodeState
 {
  public:
-    FallHeroState(HeroNodeStateMachine& stateMachine)
+    explicit FallHeroState(HeroNodeStateMachine& stateMachine)
         : HeroNodeState(stateMachine)
     {
         const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
@@ -120,7 +120,7 @@ class FallHeroState : public HeroNodeState
 class RunHeroState : public HeroNodeState
 {
  public:
-    RunHeroState(HeroNodeStateMachine& stateMachine)
+    explicit RunHeroState(HeroNodeStateMachine& stateMachine)
         : HeroNodeState(stateMachine)
     {
         const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");

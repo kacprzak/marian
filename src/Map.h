@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef MAP_H
 #define MAP_H
 
@@ -18,7 +18,7 @@ class Layer;
 /*! \brief Map object but in game coords. */
 class MapObject
 {
-    public:
+public:
     std::string name;
     std::string type;
     unsigned gid; //< 0 means no gid
@@ -39,7 +39,7 @@ class Map : private boost::noncopyable
     friend class Layer;
     friend class Tile;
 
-    public:
+public:
     Map();
     ~Map();
     bool loadFromFile(const std::string& filename);
@@ -57,7 +57,7 @@ class Map : private boost::noncopyable
 
     std::vector<Layer *> m_layers;
 
-    private:
+private:
     void rectOnTextureForTile(Rect<int> *tileCoords, unsigned globalId) const;
 
     /*! Size in game (tile) coords */
@@ -75,7 +75,7 @@ class Map : private boost::noncopyable
 
 class Layer : private boost::noncopyable
 {
-    public:
+public:
     Layer(const Map *map, const tmx::Layer& layer);
     ~Layer();
 
@@ -93,7 +93,7 @@ class Layer : private boost::noncopyable
 
 class Tile
 {
-    public:
+public:
     Tile(const Map *map, unsigned agid);
 
     const Map     *map; //!< Parent object

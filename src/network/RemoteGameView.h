@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef REMOTEGAMEVIEW_H
 #define REMOTEGAMEVIEW_H
 
@@ -10,8 +10,8 @@ namespace net {
 
     class RemoteGameView : public GameView
     {
-        public:
-        RemoteGameView(int socketId);
+    public:
+        explicit RemoteGameView(int socketId);
 
         // GameView interface
         bool processInput(const SDL_Event &/*event*/) { return true; }
@@ -23,13 +23,13 @@ namespace net {
             m_actorId = actorId;
         }
 
-        protected:
+    protected:
         unsigned long m_actorId;
         int m_viewId;
         int m_socketId;
         NetworkEventForwarder m_nef;
 
-        private:
+    private:
         event::EventListenerHelper elh;
     };
 

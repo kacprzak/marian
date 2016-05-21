@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef GROUND_H
 #define GROUND_H
 
@@ -9,7 +9,7 @@ class GameLogic;
 
 class GroundPhysicsComponent : public PhysicsComponent
 {
-    public:
+public:
     GroundPhysicsComponent(GameLogic *game, const MapObject& obj);
 };
 

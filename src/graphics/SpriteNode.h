@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef SPRITENODE_H
 #define SPRITENODE_H
 
@@ -10,7 +10,7 @@ namespace gfx {
 
     class SpriteNode
     {
-        public:
+    public:
         SpriteNode();
         virtual ~SpriteNode() { delete m_image; }
 
@@ -32,7 +32,7 @@ namespace gfx {
         virtual void flipHorizontally(bool flip);
         virtual void flipVertically(bool flip);
 
-        protected:
+    protected:
         ActorId m_actorId;
         const Image *m_image;
 

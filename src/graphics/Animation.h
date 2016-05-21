@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
@@ -10,14 +10,14 @@ namespace gfx {
 
     class Animation
     {
-        public:
-        Animation()
-            : m_currentTime(0.0f)
+    public:
+    Animation()
+        : m_currentTime(0.0f)
             , m_fullTime(0.0f)
             , m_reverse(false)
             , m_playingBack(false)
             , m_currentFrameIndex(0)
-            {}
+        {}
 
         void update(float delta)
         {
@@ -80,7 +80,7 @@ namespace gfx {
                 img.flipHorizontally();
         }
 
-        private:
+    private:
         std::vector<Image> m_frames;
         std::vector<float> m_frameDurations;
         float m_currentTime;

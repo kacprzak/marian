@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef PHYSICSENGINE_H
 #define PHYSICSENGINE_H
 
@@ -8,7 +8,7 @@ class Vec2;
 
 class PhysicsEngine
 {
-    public:
+public:
     virtual ~PhysicsEngine() {}
 
     virtual void update(float elapsedTime) = 0;

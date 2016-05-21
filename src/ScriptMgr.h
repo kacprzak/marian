@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef SCRIPT_MGR_H
 #define SCRIPT_MGR_H
 
@@ -18,21 +18,18 @@ using ScriptListener = std::function<void (const std::string& msg)>;
 
 class ScriptError : public std::runtime_error
 {
-    public:
-    ScriptError(const std::string& msg)
+public:
+    explicit ScriptError(const std::string& msg)
         : std::runtime_error(msg)
-        {}
+    {}
 };
 
 //------------------------------------------------------------------------------
 
 class ScriptMgr : public Singleton<ScriptMgr>
 {
-    public:
-    enum class OutputType {
-        OUT,
-            ERR,
-            };
+public:
+    enum class OutputType { OUT, ERR };
 
     ScriptMgr();
     ~ScriptMgr() override;
@@ -54,7 +51,7 @@ class ScriptMgr : public Singleton<ScriptMgr>
 
     void notifyListeners(OutputType ot, const std::string& msg);
 
-    private:
+private:
     using ListenersList = std::list<std::shared_ptr<ScriptListener>>;
 
     ListenersList& listenersForOutput(OutputType); 

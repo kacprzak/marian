@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef GUIMGR_H
 #define GUIMGR_H
 
@@ -10,7 +10,7 @@ namespace gui {
 
     class GuiMgr : public Singleton<GuiMgr>
     {
-        public:
+    public:
         GuiMgr();
         ~GuiMgr() override;
 
@@ -20,7 +20,7 @@ namespace gui {
 
         void setViewSize(int width, int height);
 
-        private:
+    private:
         void handle_mouse_up(Uint8 button);
         void handle_mouse_down(Uint8 button);
         void handle_mouse_wheel(const SDL_MouseWheelEvent& e);

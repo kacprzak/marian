@@ -1,4 +1,4 @@
-/* -*- c-file-style: "java"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef EVENTMANAGER_H
 #define EVENTMANAGER_H
 
@@ -23,7 +23,7 @@ namespace event {
         using EventListenerMap = std::multimap<EventType, std::shared_ptr<EventListener>>;
         using EventQueue = std::list<std::unique_ptr<Event>>;
 
-        public:
+    public:
         EventMgr();
         ~EventMgr() override;
 
@@ -39,7 +39,7 @@ namespace event {
         // For testing
         int listenersCount() const { return m_listeners.size(); }
 
-        private:
+    private:
         static const int NUM_OF_QUEUES = 2;
         EventListenerMap m_listeners;
         EventQueue m_eventQueues[NUM_OF_QUEUES];
@@ -53,12 +53,12 @@ namespace event {
      */
     class EventListenerHelper final
     {
-        public:
+    public:
 
         ~EventListenerHelper()
-            {
-                unregisterAll();
-            }
+        {
+            unregisterAll();
+        }
 
         bool registerListener(EventType type, EventListener listener)
         {
@@ -76,7 +76,7 @@ namespace event {
             }
         }
 
-        private:
+    private:
         // Keeps pointers to make unregistration possible
         std::multimap<EventType, std::shared_ptr<EventListener>> m_listeners;
     };
