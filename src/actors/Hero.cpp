@@ -120,7 +120,7 @@ void HeroPhysicsComponent::update(float elapsedTime)
     case FALL:
     {
         if (isOnGround() && std::abs(velY()) < 0.1f) {
-            changeState(STAND);
+            changeState(IDLE);
         }
         break;
     }
@@ -133,12 +133,12 @@ void HeroPhysicsComponent::update(float elapsedTime)
         }
 
         if (std::abs(velX()) < 0.5f) {
-            changeState(STAND);
+            changeState(IDLE);
         }
         break;
     }
 
-    case STAND:
+    case IDLE:
     {
         if (std::abs(velY()) > 6.0f) {
             changeState(FALL);

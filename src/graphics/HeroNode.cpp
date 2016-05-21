@@ -184,7 +184,7 @@ HeroNode::HeroNode()
     // States
     HeroNodeState *state = new StandHeroState(m_stateMachine);
     m_states.push_back(state);
-    m_stateMachine.registerState(STAND, state);
+    m_stateMachine.registerState(IDLE, state);
 
     state = new RunHeroState(m_stateMachine);
     m_states.push_back(state);
@@ -194,7 +194,7 @@ HeroNode::HeroNode()
     m_states.push_back(state);
     m_stateMachine.registerState(FALL, state);
 
-    m_stateMachine.changeState(STAND);
+    m_stateMachine.changeState(IDLE);
 }
 
 //------------------------------------------------------------------------------

@@ -9,7 +9,7 @@
 #include <Box2D/Box2D.h>
 
 enum ActorPhysicsStateId {
-    STAND = 1,
+    IDLE = 1,
     RUN,
     FALL
 };
@@ -21,8 +21,8 @@ class PhysicsComponent : public ActorComponent
     friend class ActorFactory;
 
 public:
-PhysicsComponent()
-    : ActorComponent()
+    PhysicsComponent()
+        : ActorComponent()
         , m_body(nullptr)
     {}
 
