@@ -53,8 +53,7 @@ void BaseGameLogic::update(float elapsedTime)
             actor->destroy();
 
             // Emit event
-            evtMgr.queueEvent(std::unique_ptr<Event>(
-                                  new ActorDestroyedEvent(actor->id())));
+            evtMgr.queueEvent(std::make_unique<ActorDestroyedEvent>(actor->id()));
             it = m_actors.erase(it);
         } else {
             // Kill it if out of map
@@ -68,7 +67,7 @@ void BaseGameLogic::update(float elapsedTime)
 //------------------------------------------------------------------------------
 
 void BaseGameLogic::addGameObject(ActorCategory type, const std::string& name,
-                         float x, float y)
+                                  float x, float y)
 {
     using namespace event;
 
@@ -76,8 +75,7 @@ void BaseGameLogic::addGameObject(ActorCategory type, const std::string& name,
     m_actors.insert(std::make_pair(a->id(), a));
 
     // Emit event
-    EventMgr::singleton().queueEvent(
-        std::unique_ptr<Event>(new ActorCreatedEvent(a->id(), type, x, y)));
+    EventMgr::singleton().queueEvent(std::make_unique<ActorCreatedEvent>(a->id(), type, x, y));
 }
 
 //------------------------------------------------------------------------------

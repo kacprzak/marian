@@ -4,7 +4,7 @@
 #include "config.h"
 
 #if PLATFORM == PLATFORM_WINDOWS
-  #include <windows.h>
+#include <windows.h>
 #endif
 
 #include "events/EventMgr.h"
@@ -102,10 +102,9 @@ void ContactListener::BeginContact(b2Contact *contact)
         ActorId actorB = reinterpret_cast<ActorId>(bodyBUserData);
 
         EventMgr& evtMgr = EventMgr::singleton();
-        evtMgr.queueEvent(std::unique_ptr<Event>(
-                              new CollisionEvent(CollisionEvent::BEGIN,
-                                                 actorA, fixAUserData,
-                                                 actorB, fixBUserData)));
+        evtMgr.queueEvent(std::make_unique<CollisionEvent>(CollisionEvent::BEGIN,
+                                                           actorA, fixAUserData,
+                                                           actorB, fixBUserData));
     }
 }
 
@@ -124,9 +123,8 @@ void ContactListener::EndContact(b2Contact *contact)
         ActorId actorB = reinterpret_cast<ActorId>(bodyBUserData);
 
         EventMgr& evtMgr = EventMgr::singleton();
-        evtMgr.queueEvent(std::unique_ptr<Event>(
-                              new CollisionEvent(CollisionEvent::END,
-                                                 actorA, fixAUserData,
-                                                 actorB, fixBUserData)));
+        evtMgr.queueEvent(std::make_unique<CollisionEvent>(CollisionEvent::END,
+                                                           actorA, fixAUserData,
+                                                           actorB, fixBUserData));
     }
 }

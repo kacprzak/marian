@@ -89,7 +89,7 @@ class FallHeroState : public HeroNodeState
 
         Rect<int> tileCoords = Rect<int>(182, 219, 182 + 32, 219 + 32);
 
-        m_image = std::unique_ptr<Image>(new Image(tex, tileCoords));
+        m_image = std::make_unique<Image>(tex, tileCoords);
         m_image->scale(2.0f);
     }
 
