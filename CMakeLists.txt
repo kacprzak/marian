@@ -5,9 +5,6 @@ project( marian )
 set( MARIAN_VERSION_MAJOR 0 )
 set( MARIAN_VERSION_MINOR 2 )
 
-option( USE_CEGUI "Use CEGUI for game GUI" OFF )
-option( USE_MYGUI "Use MyGUI for game GUI" ON )
-
 if( MSVC )
   #
 else()
@@ -30,20 +27,11 @@ find_package( Box2D REQUIRED )
 find_package( ZLIB REQUIRED )
 find_package( Lua53 REQUIRED )
 
-if( USE_CEGUI )
-    find_package( CEGUI REQUIRED COMPONENTS OPENGL )
-    include_directories( ${CEGUI_INCLUDE_DIR} )
-    set( EXTRA_LIBS ${EXTRA_LIBS} ${CEGUI_LIBRARY} )
-endif( USE_CEGUI )
-
-if( USE_MYGUI )
-    find_package( MyGUI REQUIRED )
-  
-    include_directories( ${MYGUI_INCLUDE_DIRS} )
-    link_directories( ${MYGUI_LIB_DIR} )
-    set( MYGUI_LIBRARIES ${MYGUI_LIBRARIES} libMyGUI.OpenGLPlatform.so )
-    set( EXTRA_LIBS ${EXTRA_LIBS} ${MYGUI_LIBRARIES} )
-endif( USE_MYGUI )
+find_package( MyGUI REQUIRED )
+include_directories( ${MYGUI_INCLUDE_DIRS} )
+link_directories( ${MYGUI_LIB_DIR} )
+set( MYGUI_LIBRARIES ${MYGUI_LIBRARIES} libMyGUI.OpenGLPlatform.so )
+set( EXTRA_LIBS ${EXTRA_LIBS} ${MYGUI_LIBRARIES} )
 	
 configure_file(
   ${PROJECT_SOURCE_DIR}/config.h.in
