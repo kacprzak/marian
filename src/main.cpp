@@ -12,7 +12,7 @@
 #include "ScriptMgr.h"
 #include "ResourceMgr.h"
 #include "Engine.h"
-#include "Game.h"
+#include "GameLogicImpl.h"
 
 #include "Logger.h"
 #include "config.h"
@@ -89,7 +89,7 @@ void runSingleplayer()
     bool fullScreen  = ScriptMgr::singleton().getGlobalBool("screen_full");
 
     new Engine;
-    Game *game = new Game;
+    GameLogicImpl *game = new GameLogicImpl;
     game->attachView(std::make_shared<gfx::HeroHumanView>("Marian",
                                                           screenWidth,
                                                           screenHeight,
@@ -145,7 +145,7 @@ void runMultiplayerServer()
     bsm->addSocket(gslns);
 
     new Engine(false); // Starts engine without video subsystem
-    Game *game = new Game;
+    GameLogicImpl *game = new GameLogicImpl;
     Engine::singleton().mainLoop(game);
     delete game;
     delete Engine::singletonPtr();

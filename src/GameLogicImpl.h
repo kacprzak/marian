@@ -4,10 +4,10 @@
 
 #include "BaseGameLogic.h"
 
-class Game : public BaseGameLogic
+class GameLogicImpl : public BaseGameLogic
 {
 public:
-    Game();
+    GameLogicImpl();
 
     void onBeforeMainLoop(Engine *e) override;
 

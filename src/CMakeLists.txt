@@ -51,7 +51,7 @@ set( marian_HDRS
   Logger.h
   Engine.h
   FpsCounter.h
-  Game.h
+  GameLogicImpl.h
   GameLogic.h
   BaseGameLogic.h
   GameView.h
@@ -111,7 +111,7 @@ set( marian_SRCS
   Box2dPhysicsEngine.cpp
   Engine.cpp
   FpsCounter.cpp
-  Game.cpp
+  GameLogicImpl.cpp
   BaseGameLogic.cpp
   Map.cpp
   ResourceMgr.cpp

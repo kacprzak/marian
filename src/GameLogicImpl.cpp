@@ -1,5 +1,5 @@
 /* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
-#include "Game.h"
+#include "GameLogicImpl.h"
 
 #include "actors/Actor.h"
 #include "actors/ActorFactory.h"
@@ -14,7 +14,7 @@
 
 using namespace event;
 
-Game::Game()
+GameLogicImpl::GameLogicImpl()
 {
     Map map;
 
@@ -37,33 +37,33 @@ Game::Game()
 
     // Register event listeners
     elh.registerListener(ACTOR_COLLIDED,
-                         std::bind(&Game::handleActorCollided,
+                         std::bind(&GameLogicImpl::handleActorCollided,
                                    this, std::placeholders::_1));
     //elh.registerListener(ACTOR_PHYSICS_STATE_CHANGED,
     //                     std::bind(&Game::handleActorPhysicsStateChanged,
     //                               this, std::placeholders::_1));
     elh.registerListener(INPUT_COMMAND,
-                         std::bind(&Game::handleInputCommand,
+                         std::bind(&GameLogicImpl::handleInputCommand,
                                    this, std::placeholders::_1));
 }
 
 //------------------------------------------------------------------------------
 
-void Game::onBeforeMainLoop(Engine * /*e*/)
+void GameLogicImpl::onBeforeMainLoop(Engine * /*e*/)
 {
     ScriptMgr::singleton().executeFile("map2_init.lua");
 }
 
 //------------------------------------------------------------------------------
 
-void Game::update(float elapsedTime)
+void GameLogicImpl::update(float elapsedTime)
 {
     BaseGameLogic::update(elapsedTime);
 }
 
 //------------------------------------------------------------------------------
 
-void Game::handleActorCollided(Event& event)
+void GameLogicImpl::handleActorCollided(Event& event)
 {
     CollisionEvent& e = static_cast<CollisionEvent&>(event);
 
@@ -90,7 +90,7 @@ void Game::handleActorCollided(Event& event)
 
 //------------------------------------------------------------------------------
 
-void Game::handleInputCommand(Event& event)
+void GameLogicImpl::handleInputCommand(Event& event)
 {
     ActorInputEvent& e = static_cast<ActorInputEvent&>(event);
 

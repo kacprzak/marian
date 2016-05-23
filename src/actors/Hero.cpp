@@ -3,7 +3,7 @@
 
 #include "Engine.h"
 #include "ResourceMgr.h"
-#include "Game.h"
+#include "GameLogicImpl.h"
 #include "graphics/Animation.h"
 #include "Box2dPhysicsEngine.h"
 #include "events/EventMgr.h"
