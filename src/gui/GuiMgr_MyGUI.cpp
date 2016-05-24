@@ -261,43 +261,17 @@ void *ImageLoader::loadImage(int& _width, int& _height, MyGUI::PixelFormat& _for
     if (_format == MyGUI::PixelFormat::R8G8B8) {
         memcpy(data, surface->pixels, data_size);
     } else { // RGBA
-        Uint32 *pixels = (Uint32*)surface->pixels;
+        Uint32 *pixels_src = (Uint32*)surface->pixels;
+        Uint32 *pixels_dst = (Uint32*)data;
         int pixels_size = surface->w * surface->h;
         for (int i = 0; i < pixels_size; ++i) {
-            Uint32 pixel = pixels[i];
-            Uint32 temp;
-            Uint8 red, green, blue, alpha;
-
-            /* Get Red component */
-            temp = pixel & fmt->Rmask;  /* Isolate red component */
-            temp = temp >> fmt->Rshift; /* Shift it down to 8-bit */
-            temp = temp << fmt->Rloss;  /* Expand to a full 8-bit number */
-            red = (Uint8)temp;
-
-            /* Get Green component */
-            temp = pixel & fmt->Gmask;  /* Isolate green component */
-            temp = temp >> fmt->Gshift; /* Shift it down to 8-bit */
-            temp = temp << fmt->Gloss;  /* Expand to a full 8-bit number */
-            green = (Uint8)temp;
-
-            /* Get Blue component */
-            temp = pixel & fmt->Bmask;  /* Isolate blue component */
-            temp = temp >> fmt->Bshift; /* Shift it down to 8-bit */
-            temp = temp << fmt->Bloss;  /* Expand to a full 8-bit number */
-            blue = (Uint8)temp;
-
-            /* Get Alpha component */
-            temp = pixel & fmt->Amask;  /* Isolate alpha component */
-            temp = temp >> fmt->Ashift; /* Shift it down to 8-bit */
-            temp = temp << fmt->Aloss;  /* Expand to a full 8-bit number */
-            alpha = (Uint8)temp;
-
-            int data_idx = i * 4;
-            // This (BGRA) works but why?
-            data[data_idx + 2] = red;
-            data[data_idx + 1] = green;
-            data[data_idx + 0] = blue;
-            data[data_idx + 3] = alpha;
+            if (fmt->format == SDL_PIXELFORMAT_BGRA8888) {
+                pixels_dst[i] = pixels_src[i];
+            } else {
+                pixels_dst[i] = ((pixels_src[i] & 0xff) << 16)
+                        | ((pixels_src[i] & 0xff0000) >> 16)
+                        | (pixels_src[i] & 0xff00ff00);
+            }
         }
     }
 
