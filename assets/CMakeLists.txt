@@ -5,7 +5,6 @@ set ( assets_FILES
   TileKit.png
   TileKit-border.png
   MegaMan_001.png
-  cegui
   MyGUI_Media
 )
 

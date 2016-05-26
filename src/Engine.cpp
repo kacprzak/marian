@@ -82,10 +82,10 @@ void Engine::logSDLInfo()
 
     SDL_VERSION(&compiled);
     SDL_GetVersion(&linked);
-    LOG << "  Compiled against SDL " << (uint)compiled.major << "."
-        << (uint)compiled.minor << "." << (uint)compiled.patch << std::endl;
-    LOG << "  Linking against SDL " << (uint)linked.major << "."
-        << (uint)linked.minor << "." << (uint)linked.patch << std::endl;
+    LOG << "  Compiled against SDL " << (uint32_t)compiled.major << "."
+        << (uint32_t)compiled.minor << "." << (uint32_t)compiled.patch << std::endl;
+    LOG << "  Linking against SDL " << (uint32_t)linked.major << "."
+        << (uint32_t)linked.minor << "." << (uint32_t)linked.patch << std::endl;
 
     if (m_initVideo) {
         LOG << "  Video drivers available:" << std::endl;

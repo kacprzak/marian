@@ -16,11 +16,11 @@ static int l_print(lua_State *L);
 
 ScriptMgr::ScriptMgr()
 {
-    L = luaL_newstate();
+    m_L = luaL_newstate();
 
     // Expose functions to lua code
-    lua_register(L, "addBox", l_addBox);
-    lua_register(L, "print", l_print);
+    lua_register(m_L, "addBox", l_addBox);
+    lua_register(m_L, "print", l_print);
 
     LOG << "created ScriptMgr\n";
 }
@@ -29,7 +29,7 @@ ScriptMgr::ScriptMgr()
 
 ScriptMgr::~ScriptMgr()
 {
-    lua_close(L);
+    lua_close(m_L);
 
     LOG << "destroyed ScriptMgr\n";
 }
@@ -38,16 +38,16 @@ ScriptMgr::~ScriptMgr()
 
 void ScriptMgr::setDataFolder(const std::string& folder)
 {
-    dataFolder = appendDirSeparator(folder);
+	m_dataFolder = appendDirSeparator(folder);
 }
 
 //------------------------------------------------------------------------------
 
 bool ScriptMgr::executeString(const std::string& code)
 {
-    if (luaL_dostring(L, code.c_str())) {
-        const char *errMsg = lua_tostring(L, -1);
-        notifyListeners(OutputType::ERR, errMsg);
+    if (luaL_dostring(m_L, code.c_str())) {
+        const char *errMsg = lua_tostring(m_L, -1);
+		notifyListenersOnError(errMsg);
         throw ScriptError(errMsg);
     }
 
@@ -59,10 +59,10 @@ bool ScriptMgr::executeString(const std::string& code)
 
 bool ScriptMgr::executeFile(const std::string& filename)
 {
-    std::string fullpath = dataFolder + filename;
-    if (luaL_dofile(L, fullpath.c_str())) {
-        const char *errMsg = lua_tostring(L, -1);
-        notifyListeners(OutputType::ERR, errMsg);
+    std::string fullpath = m_dataFolder + filename;
+    if (luaL_dofile(m_L, fullpath.c_str())) {
+        const char *errMsg = lua_tostring(m_L, -1);
+        notifyListenersOnError(errMsg);
         throw ScriptError(errMsg);
     }
 
@@ -74,13 +74,13 @@ bool ScriptMgr::executeFile(const std::string& filename)
 
 int ScriptMgr::getGlobalInt(const std::string& varname)
 {
-    lua_getglobal(L, varname.c_str());
-    if (!lua_isnumber(L, -1)) {
+    lua_getglobal(m_L, varname.c_str());
+    if (!lua_isnumber(m_L, -1)) {
         throw ScriptError(varname + " should be a number.");
     }
     
-    int retVal = lua_tonumber(L, -1);
-    lua_pop(L, 1);
+    int retVal = lua_tonumber(m_L, -1);
+    lua_pop(m_L, 1);
 
     return retVal;
 }
@@ -89,13 +89,13 @@ int ScriptMgr::getGlobalInt(const std::string& varname)
 
 bool ScriptMgr::getGlobalBool(const std::string& varname)
 {
-    lua_getglobal(L, varname.c_str());
-    if (!lua_isboolean(L, -1)) {
+    lua_getglobal(m_L, varname.c_str());
+    if (!lua_isboolean(m_L, -1)) {
         throw ScriptError(varname + " should be a boolean.");
     }
 
-    int retVal = lua_toboolean(L, -1);
-    lua_pop(L, 1);
+    int retVal = lua_toboolean(m_L, -1);
+    lua_pop(m_L, 1);
 
     return ((retVal) ? true : false);
 }
@@ -104,51 +104,48 @@ bool ScriptMgr::getGlobalBool(const std::string& varname)
 
 const char *ScriptMgr::getGlobalString(const std::string &varname)
 {
-    lua_getglobal(L, varname.c_str());
-    if (!lua_isstring(L, -1)) {
+    lua_getglobal(m_L, varname.c_str());
+    if (!lua_isstring(m_L, -1)) {
         throw ScriptError(varname + " should be a string.");
     }
 
-    const char *retVal = lua_tostring(L, -1);
-    lua_pop(L, 1);
+    const char *retVal = lua_tostring(m_L, -1);
+    lua_pop(m_L, 1);
 
     return retVal;
 }
 
 //------------------------------------------------------------------------------
 
-void ScriptMgr::addListener(OutputType ot, std::shared_ptr<ScriptListener> listener)
+void ScriptMgr::addListener(ScriptListener* listener)
 {
-    listenersForOutput(ot).push_back(listener);
+	m_listeners.push_back(listener);
 }
 
 //------------------------------------------------------------------------------
 
-void ScriptMgr::removeListener(OutputType ot, std::shared_ptr<ScriptListener> listener)
+void ScriptMgr::removeListener(ScriptListener* listener)
 {
-    listenersForOutput(ot).remove(listener);
+	m_listeners.remove(listener);
 }
 
 //------------------------------------------------------------------------------
 
-void ScriptMgr::notifyListeners(OutputType ot, const std::string& msg)
+void ScriptMgr::notifyListenersOnOutput(const std::string & msg)
 {
-    for (auto listenerPtr : listenersForOutput(ot)) {
-        (*listenerPtr)(msg);
-    }
+	for (auto listener : m_listeners) {
+		listener->onScriptOutput(msg);
+	}
 }
 
 //------------------------------------------------------------------------------
 
-ScriptMgr::ListenersList& ScriptMgr::listenersForOutput(OutputType ot)
+void ScriptMgr::notifyListenersOnError(const std::string & msg)
 {
-    switch (ot) {
-    case OutputType::OUT: return m_outListeners;
-    case OutputType::ERR: return m_errListeners;
-    default:
-        return m_outListeners; // Silence warning
-    }
-} 
+	for (auto listener : m_listeners) {
+		listener->onScriptError(msg);
+	}
+}
 
 //==============================================================================
 
@@ -184,7 +181,7 @@ static int l_print(lua_State *L)
         }
     }
 
-    ScriptMgr::singleton().notifyListeners(ScriptMgr::OutputType::OUT, os.str());
+    ScriptMgr::singleton().notifyListenersOnOutput(os.str());
 
     return 0;
 }

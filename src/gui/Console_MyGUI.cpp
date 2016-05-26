@@ -29,15 +29,7 @@ Console::Console()
 
     registerHandlers();
 
-    ScriptListener listenerFun = std::bind(&Console::output, this,
-                                           std::placeholders::_1, false);
-    m_scriptListener.reset(new ScriptListener(listenerFun));
-    ScriptMgr::singleton().addListener(ScriptMgr::OutputType::OUT, m_scriptListener);
-
-    ScriptListener errListenerFun = std::bind(&Console::output,
-                                              this, std::placeholders::_1, true);
-    m_errScriptListener.reset(new ScriptListener(errListenerFun));
-    ScriptMgr::singleton().addListener(ScriptMgr::OutputType::ERR, m_errScriptListener);
+    ScriptMgr::singleton().addListener(this);
 
     LOG << "created Console\n";
 }
@@ -46,8 +38,7 @@ Console::Console()
 
 Console::~Console()
 {
-    ScriptMgr::singleton().removeListener(ScriptMgr::OutputType::OUT, m_scriptListener);
-    ScriptMgr::singleton().removeListener(ScriptMgr::OutputType::ERR, m_errScriptListener);
+    ScriptMgr::singleton().removeListener(this);
 
     MyGUI::Gui::getInstance().destroyWidget(m_consoleWindow);
     LOG << "destroyed Console\n";
@@ -98,6 +89,20 @@ void Console::registerHandlers()
 
     m_comboCommand->eventComboAccept += MyGUI::newDelegate(this,
                                             &Console::handle_ComboAccept);
+}
+
+//------------------------------------------------------------------------------
+
+void Console::onScriptOutput(const std::string & out)
+{
+	output(out);
+}
+
+//------------------------------------------------------------------------------
+
+void Console::onScriptError(const std::string & out)
+{
+	output(out, true);
 }
 
 //------------------------------------------------------------------------------

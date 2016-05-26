@@ -12,10 +12,6 @@
 #include <memory>
 #include <functional>
 
-using ScriptListener = std::function<void (const std::string& msg)>;
-
-//------------------------------------------------------------------------------
-
 class ScriptError : public std::runtime_error
 {
 public:
@@ -26,11 +22,20 @@ public:
 
 //------------------------------------------------------------------------------
 
+class ScriptListener
+{
+public:
+	virtual ~ScriptListener() = default;
+
+	virtual void onScriptOutput(const std::string& out) = 0;
+	virtual void onScriptError(const std::string& out) = 0;
+};
+
+//------------------------------------------------------------------------------
+
 class ScriptMgr : public Singleton<ScriptMgr>
 {
 public:
-    enum class OutputType { OUT, ERR };
-
     ScriptMgr();
     ~ScriptMgr() override;
 
@@ -45,21 +50,18 @@ public:
     bool getGlobalBool(const std::string& varname);
     const char *getGlobalString(const std::string& varname);
 
-    // todo: Maybe they should be weak_ptr's
-    void addListener(OutputType ot, std::shared_ptr<ScriptListener> listener);
-    void removeListener(OutputType ot, std::shared_ptr<ScriptListener> listener);
+    void addListener(ScriptListener* listener);
+    void removeListener(ScriptListener* listener);
 
-    void notifyListeners(OutputType ot, const std::string& msg);
+    void notifyListenersOnOutput(const std::string& msg);
+	void notifyListenersOnError(const std::string& msg);
 
 private:
-    using ListenersList = std::list<std::shared_ptr<ScriptListener>>;
+    using ListenersList = std::list<ScriptListener*>;
 
-    ListenersList& listenersForOutput(OutputType); 
-
-    std::string dataFolder;
-    lua_State *L;
-    ListenersList m_outListeners;
-    ListenersList m_errListeners;
+    std::string m_dataFolder;
+    lua_State *m_L;
+    ListenersList m_listeners;
 };
 
 //------------------------------------------------------------------------------

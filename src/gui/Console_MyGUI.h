@@ -3,13 +3,14 @@
 #define CONSOLE_H
 
 #include "Singleton.h"
+#include "ScriptMgr.h"
 #include <MyGUI.h>
 
 #include <functional>
 
 namespace gui {
 
-    class Console
+    class Console : public ScriptListener
     {
     public:
         Console();
@@ -30,6 +31,10 @@ namespace gui {
 
         void revertPreviousCommand();
 
+		// Inherited via ScriptListener
+		virtual void onScriptOutput(const std::string & out) override;
+		virtual void onScriptError(const std::string & out) override;
+
     private:
         // Register our handler functions
         void registerHandlers();
@@ -46,8 +51,6 @@ namespace gui {
         void clearText();
     private:
         bool m_consoleVisible;
-        std::shared_ptr<std::function<void (const std::string& msg)>> m_scriptListener;
-        std::shared_ptr<std::function<void (const std::string& msg)>> m_errScriptListener;
 
         MyGUI::Window   *m_consoleWindow;
         MyGUI::EditBox  *m_listHistory;
@@ -57,7 +60,7 @@ namespace gui {
         MyGUI::UString m_errorColor;
         MyGUI::UString m_echoColor;
         MyGUI::UString m_previousCmd;
-    };
+	};
 
 } // namespace gui
 
