@@ -33,7 +33,6 @@ void register_ctrl_c_handler();
 #endif
 
 //------------------------------------------------------------------------------
-#undef main // Fixes problem on Windows
 int main(int argc, char *argv[])
 {
     using namespace event;

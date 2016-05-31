@@ -121,6 +121,7 @@ set( LINK_LIBS
   tmx
   ${BOX2D_LIBRARY}
   ${SDL2_LIBRARY}
+  ${SDL2MAIN_LIBRARY}
   ${SDL2IMAGE_LIBRARY}
   ${OPENGL_LIBRARIES}
   ${LUA53_LIBRARIES}
@@ -137,9 +138,3 @@ endif( WIN32 )
 add_executable( marian main.cpp ${marian_HDRS} ${marian_SRCS} )
 set_target_properties( marian PROPERTIES DEBUG_POSTFIX _d )
 target_link_libraries( marian ${LINK_LIBS} )
-
-add_custom_target(run
-    COMMAND ${CMAKE_BINARY_DIR}/marian_d
-    DEPENDS marian
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-)

@@ -6,7 +6,7 @@ set( MARIAN_VERSION_MAJOR 0 )
 set( MARIAN_VERSION_MINOR 2 )
 
 if( MSVC )
-  #
+  add_definitions( "/W2" )
 else()
   add_definitions( "-Wall -Wextra -Wno-unused-parameter -std=c++1y" )
 endif()
@@ -21,16 +21,17 @@ find_package( SDL2 REQUIRED )
 find_package( SDL2_image REQUIRED )
 find_package( OpenGL REQUIRED )
 find_package( Boost REQUIRED )
-find_package( Boost COMPONENTS unit_test_framework )
+if( UNIX )
+  find_package( Boost COMPONENTS unit_test_framework )
+endif()
 find_package( Box2D REQUIRED )
-#find_package( GLUT REQUIRED )
 find_package( ZLIB REQUIRED )
 find_package( Lua53 REQUIRED )
 
 find_package( MyGUI REQUIRED )
 include_directories( ${MYGUI_INCLUDE_DIRS} )
 link_directories( ${MYGUI_LIB_DIR} )
-set( MYGUI_LIBRARIES ${MYGUI_LIBRARIES} libMyGUI.OpenGLPlatform.so )
+set( MYGUI_LIBRARIES ${MYGUI_LIBRARIES} MyGUI.OpenGLPlatform )
 set( EXTRA_LIBS ${EXTRA_LIBS} ${MYGUI_LIBRARIES} )
 	
 configure_file(
@@ -52,16 +53,15 @@ include_directories(
   ${OPENGL_INCLUDE_DIR}
   ${Boost_INCLUDE_DIR}
   ${BOX2D_INCLUDE_DIR}
-#  ${GLUT_INCLUDE_DIRS}
   ${ZLIB_INCLUDE_DIR}
   ${LUA53_INCLUDE_DIR}
 )
 
 add_subdirectory( tmx )
 add_subdirectory( src )
-add_subdirectory( assets )
-add_subdirectory( scripts )
-add_subdirectory( tools )
+#add_subdirectory( assets )
+#add_subdirectory( scripts )
+#add_subdirectory( tools )
 
 if( Boost_UNIT_TEST_FRAMEWORK_FOUND )
   enable_testing()
