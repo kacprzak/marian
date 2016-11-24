@@ -32,7 +32,7 @@ public:
 
     void changeState(ActorPhysicsStateId state);
 
-    void handleInputCommand(event::InputCommand command);
+    void handleInputCommand(event::InputCommand command) override;
 
 private:
     int m_feetContacts;

@@ -3,16 +3,15 @@
 
 #include "graphics/Texture.h"
 
-using namespace gfx;
+#include <boost/math/constants/constants.hpp>
 
-const double PI   = 3.141592653589793238462;
-const float  PI_F = 3.14159265358979f;
+using namespace gfx;
 
 //------------------------------------------------------------------------------
 
 void GLRenderer::drawImage(const Image& image, float x, float y, float rotation) const
 {
-    float deg = rotation * 180.0f / PI_F;
+    float deg = rotation * 180.0f / boost::math::constants::pi<float>();
     float hw = image.width()  / 2.0f;
     float hh = image.height() / 2.0f;
 
