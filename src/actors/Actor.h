@@ -27,9 +27,8 @@ class Actor final
     using ComponentsMap = std::map<ActorComponentId, ActorComponentPtr>;
 
 public:
+    Actor(ActorId id, GameLogic *game);
     ~Actor();
-
-    void destroy() { m_components.clear(); }
 
     ActorId id() const { return m_id; }
 
@@ -72,10 +71,9 @@ private:
     std::string   m_name;           //!< Name used in debug
 
     // Should be called only by ActorFactory
-    Actor(ActorId id, GameLogic *game);
-
     void addComponent(ActorComponentPtr c)
     {
+        c->setOwner(this);
         m_components.insert(std::make_pair(c->componentId(), c));
     }
 

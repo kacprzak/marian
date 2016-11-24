@@ -74,17 +74,17 @@ void GameLogicImpl::handleActorCollided(Event& event)
     auto pcqpA = a->getComponent<PhysicsComponent>(PHYSICS);
     if (auto pcsp = pcqpA.lock()) {
         if (phase == CollisionEvent::BEGIN)
-            pcsp->handleBeginContact(b, e.m_actorALimbData);
+            pcsp->handleBeginContact(*b, e.m_actorALimbData);
         else
-            pcsp->handleEndContact(b, e.m_actorALimbData);
+            pcsp->handleEndContact(*b, e.m_actorALimbData);
     }
 
     auto pcqpB = b->getComponent<PhysicsComponent>(PHYSICS);
     if (auto pcsp = pcqpB.lock()) {
         if (phase == CollisionEvent::BEGIN)
-            pcsp->handleBeginContact(a, e.m_actorBLimbData);
+            pcsp->handleBeginContact(*a, e.m_actorBLimbData);
         else
-            pcsp->handleEndContact(a, e.m_actorBLimbData);
+            pcsp->handleEndContact(*a, e.m_actorBLimbData);
     }
 }
 

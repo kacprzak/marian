@@ -14,7 +14,7 @@
 ActorPtr ActorFactory::create(GameLogic *game, const MapObject &obj)
 {
     assert(game);
-    ActorPtr actor(new Actor(getNextId(), game));
+    auto actor = std::make_shared<Actor>(getNextId(), game);
 
     if (obj.type == "Hero") {
         actor->setCategory(HERO);
@@ -22,12 +22,10 @@ ActorPtr ActorFactory::create(GameLogic *game, const MapObject &obj)
         ActorComponentPtr physics(
                     new HeroPhysicsComponent(game, obj.x, obj.y, obj.width, obj.height));
         actor->addComponent(physics);
-        physics->setOwner(actor);
         physics->init();
 
         ActorComponentPtr render(new HeroRenderComponent);
         actor->addComponent(render);
-        render->setOwner(actor);
         render->init();
 
     } else if (obj.type == "Box") {
@@ -36,12 +34,10 @@ ActorPtr ActorFactory::create(GameLogic *game, const MapObject &obj)
         ActorComponentPtr physics(
                     new BoxPhysicsComponent(game, obj.x, obj.y, obj.width, obj.height));
         actor->addComponent(physics);
-        physics->setOwner(actor);
         physics->init();
 
         ActorComponentPtr render(new RenderComponent);
         actor->addComponent(render);
-        render->setOwner(actor);
         render->init();
 
     } else if (obj.type == "Sensor") {
@@ -49,7 +45,6 @@ ActorPtr ActorFactory::create(GameLogic *game, const MapObject &obj)
 
         ActorComponentPtr physics(new SensorPhysicsComponent(game, obj));
         actor->addComponent(physics);
-        physics->setOwner(actor);
         physics->init();
 
     } else {
@@ -58,7 +53,6 @@ ActorPtr ActorFactory::create(GameLogic *game, const MapObject &obj)
 
         ActorComponentPtr physics(new GroundPhysicsComponent(game, obj));
         actor->addComponent(physics);
-        physics->setOwner(actor);
         physics->init();
     }
 
@@ -78,12 +72,10 @@ ActorPtr ActorFactory::create(GameLogic *game, ActorCategory type, const std::st
 
         ActorComponentPtr physics(new BoxPhysicsComponent(game, x, y));
         actor->addComponent(physics);
-        physics->setOwner(actor);
         physics->init();
 
         ActorComponentPtr render(new RenderComponent());
         actor->addComponent(render);
-        render->setOwner(actor);
         render->init();
     }
 

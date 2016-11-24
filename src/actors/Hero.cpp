@@ -71,28 +71,28 @@ HeroPhysicsComponent::HeroPhysicsComponent(GameLogic *game, float x, float y,
 
 //------------------------------------------------------------------------------
 
-void HeroPhysicsComponent::handleBeginContact(ActorPtr other, void *fixtureUD)
+void HeroPhysicsComponent::handleBeginContact(Actor& other, void *fixtureUD)
 {
     if (fixtureUD == (void*)FEET_SENSOR) {
         ++m_feetContacts;
     }
 
-    if (other->category() != SENSOR) return;
+    if (other.category() != SENSOR) return;
 
-    LOG << "Hero is touching " << other->name() << std::endl;
+    LOG << "Hero is touching " << other.name() << std::endl;
 }
 
 //------------------------------------------------------------------------------
 
-void HeroPhysicsComponent::handleEndContact(ActorPtr other, void *fixtureUD)
+void HeroPhysicsComponent::handleEndContact(Actor& other, void *fixtureUD)
 {
     if (fixtureUD == (void*)FEET_SENSOR) {
         --m_feetContacts;
     }
 
-    if (other->category() != SENSOR) return;
+    if (other.category() != SENSOR) return;
 
-    LOG << "Hero is not touching " << other->name() << std::endl;
+    LOG << "Hero is not touching " << other.name() << std::endl;
 }
 
 //------------------------------------------------------------------------------

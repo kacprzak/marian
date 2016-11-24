@@ -7,8 +7,8 @@
 #include "Logger.h"
 
 BaseGameLogic::BaseGameLogic()
-    : m_mapWidth(0.0f)
-    , m_physicsEngine(new Box2dPhysicsEngine)
+    : m_physicsEngine(new Box2dPhysicsEngine)
+    , m_mapWidth(0.0f)
 {
     LOG << "created BaseGameLogic\n";
 }
@@ -17,15 +17,6 @@ BaseGameLogic::BaseGameLogic()
 
 BaseGameLogic::~BaseGameLogic()
 {
-    auto it = std::begin(m_actors);
-    while (it != std::end(m_actors)) {
-        ActorPtr actor = it->second;
-
-        // Must be called to break cyclic references
-        actor->destroy();
-        it = m_actors.erase(it);
-    }
-
     LOG << "destroyed BaseGameLogic\n";
 }
 
@@ -49,9 +40,6 @@ void BaseGameLogic::update(float elapsedTime)
     while (it != std::end(m_actors)) {
         ActorPtr actor = it->second;
         if (actor->dead()) {
-            // Must be called to break cyclic references
-            actor->destroy();
-
             // Emit event
             evtMgr.queueEvent(std::make_unique<ActorDestroyedEvent>(actor->id()));
             it = m_actors.erase(it);

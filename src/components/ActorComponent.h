@@ -11,7 +11,7 @@ class Engine;
 
 class ActorComponent
 {
-    friend class ActorFactory;
+    friend class Actor;
 
 public:
     virtual ~ActorComponent() {}
@@ -22,14 +22,14 @@ public:
     virtual ActorComponentId componentId() const = 0;
 
 private:
-    // Only ActroFactory should use this
-    void setOwner(std::shared_ptr<Actor> actor)
+    // Only Actor should use this
+    void setOwner(Actor* actor)
     {
         m_owner = actor;
     }
 
 protected:
-    std::shared_ptr<Actor> m_owner;
+    Actor* m_owner = nullptr;
 
 };
 

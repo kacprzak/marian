@@ -24,9 +24,9 @@ public:
     void update(float elapsedTime) override;
 
 protected:
+    std::unique_ptr<PhysicsEngine> m_physicsEngine;
     std::map<ActorId, ActorPtr> m_actors;
     float m_mapWidth;
-    std::unique_ptr<PhysicsEngine> m_physicsEngine;
 
 private:
     bool isOnMap(ActorPtr actor);
