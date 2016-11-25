@@ -38,7 +38,7 @@ ScriptMgr::~ScriptMgr()
 
 void ScriptMgr::setDataFolder(const std::string& folder)
 {
-	m_dataFolder = appendDirSeparator(folder);
+    m_dataFolder = appendDirSeparator(folder);
 }
 
 //------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ bool ScriptMgr::executeString(const std::string& code)
 {
     if (luaL_dostring(m_L, code.c_str())) {
         const char *errMsg = lua_tostring(m_L, -1);
-		notifyListenersOnError(errMsg);
+        notifyListenersOnError(errMsg);
         throw ScriptError(errMsg);
     }
 
@@ -119,32 +119,32 @@ const char *ScriptMgr::getGlobalString(const std::string &varname)
 
 void ScriptMgr::addListener(ScriptListener* listener)
 {
-	m_listeners.push_back(listener);
+    m_listeners.push_back(listener);
 }
 
 //------------------------------------------------------------------------------
 
 void ScriptMgr::removeListener(ScriptListener* listener)
 {
-	m_listeners.remove(listener);
+    m_listeners.remove(listener);
 }
 
 //------------------------------------------------------------------------------
 
 void ScriptMgr::notifyListenersOnOutput(const std::string & msg)
 {
-	for (auto listener : m_listeners) {
-		listener->onScriptOutput(msg);
-	}
+    for (auto listener : m_listeners) {
+        listener->onScriptOutput(msg);
+    }
 }
 
 //------------------------------------------------------------------------------
 
 void ScriptMgr::notifyListenersOnError(const std::string & msg)
 {
-	for (auto listener : m_listeners) {
-		listener->onScriptError(msg);
-	}
+    for (auto listener : m_listeners) {
+        listener->onScriptError(msg);
+    }
 }
 
 //==============================================================================
