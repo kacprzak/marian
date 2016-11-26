@@ -70,7 +70,7 @@ class Actor final
     ActorCategory m_category;
     ComponentsMap m_components;
     bool m_dead; //!< Flag indicating that this actor should be deleted by
-                 //!GameLogic
+                 //! GameLogic
     std::string m_name; //!< Name used in debug
 
     // Should be called only by ActorFactory

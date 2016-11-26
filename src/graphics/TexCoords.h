@@ -19,8 +19,16 @@ namespace gfx {
  */
 struct TexCoord
 {
-    TexCoord() : s(0.0f), t(0.0f) {}
-    TexCoord(float aS, float aT) : s(aS), t(aT) {}
+    TexCoord()
+        : s(0.0f)
+        , t(0.0f)
+    {
+    }
+    TexCoord(float aS, float aT)
+        : s(aS)
+        , t(aT)
+    {
+    }
 
     float s, t;
 };

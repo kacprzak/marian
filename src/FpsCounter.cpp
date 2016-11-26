@@ -5,7 +5,9 @@
 #include "Logger.h"
 
 FpsCounter::FpsCounter(float printInterval)
-    : m_fpsInterval(printInterval), m_fpsTimePassed(0.0f), m_framesPassed(0)
+    : m_fpsInterval(printInterval)
+    , m_fpsTimePassed(0.0f)
+    , m_framesPassed(0)
 {
 }
 

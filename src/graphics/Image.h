@@ -21,8 +21,11 @@ class Image
 {
   public:
     explicit Image(const Texture *texture)
-        : m_texture(texture), m_pixelWidth(m_texture->w()),
-          m_pixelHeight(m_texture->h()), m_width(1.0f), m_height(1.0f)
+        : m_texture(texture)
+        , m_pixelWidth(m_texture->w())
+        , m_pixelHeight(m_texture->h())
+        , m_width(1.0f)
+        , m_height(1.0f)
     {
         m_texCoords[0] = TexCoord(0.0f, 0.0f);
         m_texCoords[1] = TexCoord(1.0f, 0.0f);
@@ -31,10 +34,13 @@ class Image
     }
 
     Image(const Texture *texture, const Rect<int> &tileCoords)
-        : m_texture(texture), m_pixelWidth(tileCoords.right - tileCoords.left),
-          m_pixelHeight(tileCoords.top - tileCoords.bottom), m_width(1.0f),
-          m_height(1.0f), m_texCoords(calculateTexCoords(
-                              texture->w(), texture->h(), tileCoords))
+        : m_texture(texture)
+        , m_pixelWidth(tileCoords.right - tileCoords.left)
+        , m_pixelHeight(tileCoords.top - tileCoords.bottom)
+        , m_width(1.0f)
+        , m_height(1.0f)
+        , m_texCoords(
+              calculateTexCoords(texture->w(), texture->h(), tileCoords))
     {
     }
 

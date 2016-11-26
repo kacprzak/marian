@@ -6,7 +6,11 @@
 
 using namespace event;
 
-EventMgr::EventMgr() : m_activeQueue(0) { LOG << "created EventMgr\n"; }
+EventMgr::EventMgr()
+    : m_activeQueue(0)
+{
+    LOG << "created EventMgr\n";
+}
 
 //------------------------------------------------------------------------------
 

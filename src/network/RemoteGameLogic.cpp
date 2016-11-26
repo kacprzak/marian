@@ -6,7 +6,8 @@
 
 using namespace net;
 
-RemoteGameLogic::RemoteGameLogic(int socketId) : m_nef(socketId)
+RemoteGameLogic::RemoteGameLogic(int socketId)
+    : m_nef(socketId)
 {
     m_socketId = socketId;
     elh.registerListener(event::INPUT_COMMAND,

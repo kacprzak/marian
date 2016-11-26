@@ -17,8 +17,12 @@
 using namespace net;
 
 BaseSocketMgr::BaseSocketMgr()
-    : m_nextSocketId(1), m_inbound(0), m_outbound(0), m_maxOpenSockets(0),
-      m_subnet(0xffffffff), m_subnetMask(0)
+    : m_nextSocketId(1)
+    , m_inbound(0)
+    , m_outbound(0)
+    , m_maxOpenSockets(0)
+    , m_subnet(0xffffffff)
+    , m_subnetMask(0)
 {
 #if PLATFORM == PLATFORM_WINDOWS
     WSADATA WsaData;

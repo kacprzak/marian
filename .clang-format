@@ -18,4 +18,5 @@ BraceWrapping:
 BreakBeforeBinaryOperators: None
 BreakBeforeBraces: Custom
 BreakBeforeTernaryOperators: true
+BreakConstructorInitializersBeforeComma: true
 IndentWidth:     4

@@ -13,7 +13,8 @@
 
 using namespace event;
 
-HeroController::HeroController() : m_actorId(0)
+HeroController::HeroController()
+    : m_actorId(0)
 {
     // ctor code
 }

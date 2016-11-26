@@ -2,7 +2,11 @@
  */
 #include "Map.h"
 
-Map::Map() : m_width(0), m_height(0), m_tileWidth(32), m_tileHeight(32)
+Map::Map()
+    : m_width(0)
+    , m_height(0)
+    , m_tileWidth(32)
+    , m_tileHeight(32)
 {
     //
 }
@@ -140,9 +144,12 @@ const unsigned FLIPPED_VERTICALLY_FLAG   = 0x40000000;
 const unsigned FLIPPED_DIAGONALLY_FLAG   = 0x20000000;
 
 Layer::Layer(const Map *aMap, const tmx::Layer &tmxLayer)
-    : map(aMap), name(tmxLayer.name), width(tmxLayer.width),
-      height(tmxLayer.height), visible((tmxLayer.visible == "1")),
-      tiles(width * height, nullptr)
+    : map(aMap)
+    , name(tmxLayer.name)
+    , width(tmxLayer.width)
+    , height(tmxLayer.height)
+    , visible((tmxLayer.visible == "1"))
+    , tiles(width * height, nullptr)
 {
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
@@ -182,7 +189,10 @@ Layer::~Layer()
 //==============================================================================
 
 Tile::Tile(const Map *aMap, unsigned agid)
-    : map(aMap), gid(agid), texId(0), texCoords()
+    : map(aMap)
+    , gid(agid)
+    , texId(0)
+    , texCoords()
 {
 }
 

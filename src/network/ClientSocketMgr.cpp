@@ -7,7 +7,8 @@
 using namespace net;
 
 ClientSocketMgr::ClientSocketMgr(const std::string &hostName, unsigned int port)
-    : m_hostName(hostName), m_port(port)
+    : m_hostName(hostName)
+    , m_port(port)
 {
 }
 

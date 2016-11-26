@@ -19,7 +19,8 @@ class EngineError : public std::runtime_error
 {
   public:
     EngineError(const std::string &msg, const char *sdlError)
-        : std::runtime_error(msg + ": " + sdlError), m_sdlError(sdlError)
+        : std::runtime_error(msg + ": " + sdlError)
+        , m_sdlError(sdlError)
     {
     }
 

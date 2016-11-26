@@ -10,8 +10,12 @@
 #define DELTA_MAX 0.04f
 
 Engine::Engine(bool initVideo)
-    : m_breakLoop(false), m_initVideo(initVideo), m_appActive(true),
-      m_mouseFocus(true), m_inputFocus(true), m_game(nullptr)
+    : m_breakLoop(false)
+    , m_initVideo(initVideo)
+    , m_appActive(true)
+    , m_mouseFocus(true)
+    , m_inputFocus(true)
+    , m_game(nullptr)
 {
     try {
         initializeSDL();

@@ -5,7 +5,8 @@
 using namespace net;
 using namespace event;
 
-RemoteGameView::RemoteGameView(int socketId) : m_nef(socketId)
+RemoteGameView::RemoteGameView(int socketId)
+    : m_nef(socketId)
 {
     m_socketId = socketId;
     m_viewId   = -1;

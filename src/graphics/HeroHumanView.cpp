@@ -19,9 +19,10 @@ using namespace event;
 
 HeroHumanView::HeroHumanView(const std::string &title, int screenWidth,
                              int screenHeight, bool screenFull)
-    : HumanView(title, screenWidth, screenHeight, screenFull),
-      m_renderer(new GLRenderer), m_heroId(0),
-      m_keyboardHandler(new HeroController)
+    : HumanView(title, screenWidth, screenHeight, screenFull)
+    , m_renderer(new GLRenderer)
+    , m_heroId(0)
+    , m_keyboardHandler(new HeroController)
 {
     std::shared_ptr<Map> map(new Map);
     ResourceMgr &resourceMgr = ResourceMgr::singleton();

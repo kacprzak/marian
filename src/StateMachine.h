@@ -31,8 +31,10 @@ class StateMachine
 {
   public:
     StateMachine(T owner, int idleStateId)
-        : m_owner(owner), m_idleStateId(idleStateId),
-          m_currentStateId(idleStateId), m_currentState(nullptr)
+        : m_owner(owner)
+        , m_idleStateId(idleStateId)
+        , m_currentStateId(idleStateId)
+        , m_currentState(nullptr)
     {
     }
 

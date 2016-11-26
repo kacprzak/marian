@@ -49,7 +49,11 @@ inline std::istream &operator>>(std::istream &is, Event &e)
 class BaseEvent : public Event
 {
   protected:
-    BaseEvent(EventType type, const char *name) : m_type(type), m_name(name) {}
+    BaseEvent(EventType type, const char *name)
+        : m_type(type)
+        , m_name(name)
+    {
+    }
 
   public:
     EventType eventType() const override final { return m_type; }
@@ -73,9 +77,12 @@ class CollisionEvent : public BaseEvent
 
     CollisionEvent(Phase phase, ActorId actorA, void *actorALimbData,
                    ActorId actorB, void *actorBLimbData)
-        : BaseEvent(ACTOR_COLLIDED, "ActorCollided"), m_phase(phase),
-          m_actorA(actorA), m_actorALimbData(actorALimbData), m_actorB(actorB),
-          m_actorBLimbData(actorBLimbData)
+        : BaseEvent(ACTOR_COLLIDED, "ActorCollided")
+        , m_phase(phase)
+        , m_actorA(actorA)
+        , m_actorALimbData(actorALimbData)
+        , m_actorB(actorB)
+        , m_actorBLimbData(actorBLimbData)
     {
     }
 
@@ -103,12 +110,16 @@ class MoveEvent : public BaseEvent
 {
   public:
     MoveEvent(ActorId actor, float x, float y, float angle = 0.0f)
-        : BaseEvent(ACTOR_MOVED, "ActorMoved"), m_actorId(actor), m_x(x),
-          m_y(y), m_angle(angle)
+        : BaseEvent(ACTOR_MOVED, "ActorMoved")
+        , m_actorId(actor)
+        , m_x(x)
+        , m_y(y)
+        , m_angle(angle)
     {
     }
 
-    explicit MoveEvent(std::istream &in) : BaseEvent(ACTOR_MOVED, "ActorMoved")
+    explicit MoveEvent(std::istream &in)
+        : BaseEvent(ACTOR_MOVED, "ActorMoved")
     {
         deserialize(in);
     }
@@ -138,8 +149,9 @@ class PhysicsStateChangeEvent : public BaseEvent
 {
   public:
     PhysicsStateChangeEvent(ActorId actor, ActorPhysicsStateId newState)
-        : BaseEvent(ACTOR_PHYSICS_STATE_CHANGED, "ActorPhysicsStateChanged"),
-          m_actorId(actor), m_newState(newState)
+        : BaseEvent(ACTOR_PHYSICS_STATE_CHANGED, "ActorPhysicsStateChanged")
+        , m_actorId(actor)
+        , m_newState(newState)
     {
     }
 
@@ -175,8 +187,11 @@ class ActorCreatedEvent : public BaseEvent
   public:
     ActorCreatedEvent(ActorId actor, ActorCategory actorCategory,
                       float x = 0.0f, float y = 0.0f)
-        : BaseEvent(ACTOR_CREATED, "ActorCreated"), m_actorId(actor),
-          m_actorCategory(actorCategory), m_x(x), m_y(y)
+        : BaseEvent(ACTOR_CREATED, "ActorCreated")
+        , m_actorId(actor)
+        , m_actorCategory(actorCategory)
+        , m_x(x)
+        , m_y(y)
     {
     }
 
@@ -192,7 +207,8 @@ class ActorDestroyedEvent : public BaseEvent
 {
   public:
     explicit ActorDestroyedEvent(ActorId actor)
-        : BaseEvent(ACTOR_DESTROYED, "ActorDestroyed"), m_actorId(actor)
+        : BaseEvent(ACTOR_DESTROYED, "ActorDestroyed")
+        , m_actorId(actor)
     {
     }
 
@@ -205,8 +221,9 @@ class ActorInputEvent : public BaseEvent
 {
   public:
     ActorInputEvent(ActorId actor, InputCommand command)
-        : BaseEvent(INPUT_COMMAND, "ActorInput"), m_actorId(actor),
-          m_command(command)
+        : BaseEvent(INPUT_COMMAND, "ActorInput")
+        , m_actorId(actor)
+        , m_command(command)
     {
     }
 
@@ -241,8 +258,9 @@ class RemoteClientEvent : public BaseEvent
 {
   public:
     RemoteClientEvent(int socketId, int ip)
-        : BaseEvent(REMOTE_CLIENT, "RemoteClient"), m_socketId(socketId),
-          m_ip(ip)
+        : BaseEvent(REMOTE_CLIENT, "RemoteClient")
+        , m_socketId(socketId)
+        , m_ip(ip)
     {
     }
 

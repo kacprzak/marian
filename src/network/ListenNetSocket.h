@@ -11,7 +11,11 @@ class ListenNetSocket : public NetSocket
 {
   public:
     ListenNetSocket();
-    explicit ListenNetSocket(int portNum) : port(0) { init(portNum); }
+    explicit ListenNetSocket(int portNum)
+        : port(0)
+    {
+        init(portNum);
+    }
 
     void init(int portNum);
     int acceptConnection(unsigned int *addr);

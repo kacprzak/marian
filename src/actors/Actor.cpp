@@ -5,7 +5,9 @@
 #include "Logger.h"
 
 Actor::Actor(ActorId id, GameLogic *game)
-    : m_id(id), m_game(game), m_dead(false)
+    : m_id(id)
+    , m_game(game)
+    , m_dead(false)
 {
     // DBG( "new Actor: id = " << m_id  );
 }

@@ -9,7 +9,8 @@
 
 using namespace gui;
 
-Console::Console() : m_consoleVisible(true)
+Console::Console()
+    : m_consoleVisible(true)
 {
     MyGUI::LayoutManager::getInstance().loadLayout("Console.layout");
 

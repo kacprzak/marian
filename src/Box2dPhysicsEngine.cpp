@@ -18,7 +18,8 @@
 
 using namespace event;
 
-Box2dPhysicsEngine::Box2dPhysicsEngine() : m_world()
+Box2dPhysicsEngine::Box2dPhysicsEngine()
+    : m_world()
 {
     // Debug drawing
     m_debugDraw.reset(new DebugDraw);

@@ -8,7 +8,8 @@
 #include "events/EventMgr.h"
 
 BaseGameLogic::BaseGameLogic()
-    : m_physicsEngine(new Box2dPhysicsEngine), m_mapWidth(0.0f)
+    : m_physicsEngine(new Box2dPhysicsEngine)
+    , m_mapWidth(0.0f)
 {
     LOG << "created BaseGameLogic\n";
 }

@@ -16,7 +16,10 @@
 class ScriptError : public std::runtime_error
 {
   public:
-    explicit ScriptError(const std::string &msg) : std::runtime_error(msg) {}
+    explicit ScriptError(const std::string &msg)
+        : std::runtime_error(msg)
+    {
+    }
 };
 
 //------------------------------------------------------------------------------

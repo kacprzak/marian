@@ -18,7 +18,11 @@ class PhysicsComponent : public ActorComponent
     friend class ActorFactory;
 
   public:
-    PhysicsComponent() : ActorComponent(), m_body(nullptr) {}
+    PhysicsComponent()
+        : ActorComponent()
+        , m_body(nullptr)
+    {
+    }
 
     ~PhysicsComponent()
     {

@@ -5,8 +5,13 @@
 using namespace gfx;
 
 SpriteNode::SpriteNode()
-    : m_actorId(0), m_image(nullptr), m_x(0.0f), m_y(0.0f), m_rot(0.0f),
-      m_flippedVert(false), m_flippedHori(false)
+    : m_actorId(0)
+    , m_image(nullptr)
+    , m_x(0.0f)
+    , m_y(0.0f)
+    , m_rot(0.0f)
+    , m_flippedVert(false)
+    , m_flippedHori(false)
 {
 }
 

@@ -26,10 +26,16 @@ using namespace gui;
 
 HumanView::HumanView(const std::string &title, int screenWidth,
                      int screenHeight, bool screenFull)
-    : m_titile(title), m_screenWidth(screenWidth), m_screenHeight(screenHeight),
-      m_screenFull(screenFull), m_window(nullptr), m_glContext(nullptr),
-      m_translate_x(0.0f), m_translate_y(0.0f), m_translate_z(0.0f),
-      m_scale(SCALE)
+    : m_titile(title)
+    , m_screenWidth(screenWidth)
+    , m_screenHeight(screenHeight)
+    , m_screenFull(screenFull)
+    , m_window(nullptr)
+    , m_glContext(nullptr)
+    , m_translate_x(0.0f)
+    , m_translate_y(0.0f)
+    , m_translate_z(0.0f)
+    , m_scale(SCALE)
 {
     try {
         createSDLWindow();

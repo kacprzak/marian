@@ -13,7 +13,8 @@ class HeroNodeState : public State<HeroNode *>
 {
   public:
     explicit HeroNodeState(HeroNodeStateMachine &stateMachine)
-        : State<HeroNode *>(), m_stateMachine(stateMachine)
+        : State<HeroNode *>()
+        , m_stateMachine(stateMachine)
     {
     }
 
@@ -170,7 +171,9 @@ class RunHeroState : public HeroNodeState
 
 //==============================================================================
 
-HeroNode::HeroNode() : m_facingRight(true), m_stateMachine(nullptr, 0)
+HeroNode::HeroNode()
+    : m_facingRight(true)
+    , m_stateMachine(nullptr, 0)
 {
     m_stateMachine.setOwner(this);
 
