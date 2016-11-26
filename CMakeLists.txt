@@ -11,6 +11,8 @@ else()
   add_definitions( "-Wall -Wextra -Wno-unused-parameter -std=c++1y" )
 endif()
 
+set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
+
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/" )
 
 set( LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
