@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #ifndef PHYSICSCOMPONENT_H
 #define PHYSICSCOMPONENT_H
 
@@ -8,11 +9,7 @@
 
 #include <Box2D/Box2D.h>
 
-enum ActorPhysicsStateId {
-    IDLE = 1,
-    RUN,
-    FALL
-};
+enum ActorPhysicsStateId { IDLE = 1, RUN, FALL };
 
 //==============================================================================
 
@@ -20,11 +17,8 @@ class PhysicsComponent : public ActorComponent
 {
     friend class ActorFactory;
 
-public:
-    PhysicsComponent()
-        : ActorComponent()
-        , m_body(nullptr)
-    {}
+  public:
+    PhysicsComponent() : ActorComponent(), m_body(nullptr) {}
 
     ~PhysicsComponent()
     {
@@ -34,7 +28,6 @@ public:
         }
     }
 
-
     bool init()
     {
         if (!m_owner || !m_body)
@@ -43,7 +36,6 @@ public:
         m_body->SetUserData(reinterpret_cast<void *>(m_owner->id()));
         return true;
     }
-
 
     // TODO: Make private
     b2Body *body() { return m_body; }
@@ -68,7 +60,8 @@ public:
 
     void applyLinearImpulse(float x, float y)
     {
-        m_body->ApplyLinearImpulse(b2Vec2(x, y), m_body->GetWorldCenter(), true);
+        m_body->ApplyLinearImpulse(b2Vec2(x, y), m_body->GetWorldCenter(),
+                                   true);
     }
 
     /*!
@@ -77,16 +70,20 @@ public:
      * \param other      object that contacts this object
      * \param fixtureUD  user data of fixture that collided with other
      */
-    virtual void handleBeginContact(Actor& /*other*/,
-                                    void * /*fixtureUD*/ = nullptr) {}
-    virtual void handleEndContact  (Actor& /*other*/,
-                                    void * /*fixtureUD*/ = nullptr) {}
+    virtual void handleBeginContact(Actor & /*other*/,
+                                    void * /*fixtureUD*/ = nullptr)
+    {
+    }
+    virtual void handleEndContact(Actor & /*other*/,
+                                  void * /*fixtureUD*/ = nullptr)
+    {
+    }
 
     virtual void handleInputCommand(event::InputCommand /*command*/) {}
 
     ActorComponentId componentId() const { return PHYSICS; }
 
-protected:
+  protected:
     b2Body *m_body;
 };
 

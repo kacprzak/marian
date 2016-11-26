@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #ifndef GLRENDERER_H
 #define GLRENDERER_H
 
@@ -6,22 +7,22 @@
 
 namespace gfx {
 
-    class GLRenderer : public Renderer
-    {
-    public:
-        ~GLRenderer() override {}
+class GLRenderer : public Renderer
+{
+  public:
+    ~GLRenderer() override {}
 
-        // Renderer interface
-        void drawImage(const Image &image, float x, float y,
-                       float rotation) const override;
-        void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
-                      GLuint textureId, const GLfloat *texCoords) const override;
+    // Renderer interface
+    void drawImage(const Image &image, float x, float y,
+                   float rotation) const override;
+    void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h, GLuint textureId,
+                  const GLfloat *texCoords) const override;
 
-    private:
-        void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h) const;
-        void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
-                      const GLfloat *texCoords) const;
-    };
+  private:
+    void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h) const;
+    void drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
+                  const GLfloat *texCoords) const;
+};
 
 } // namespace gfx
 

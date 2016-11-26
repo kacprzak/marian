@@ -1,19 +1,18 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #include "ListenNetSocket.h"
 
 #if PLATFORM == PLATFORM_WINDOWS
-  #include <winsock2.h>
+#include <winsock2.h>
 #else
-  #include <unistd.h> // close
+#include <unistd.h> // close
 #endif
 
 #include "Logger.h"
 
 using namespace net;
 
-ListenNetSocket::ListenNetSocket()
-{
-}
+ListenNetSocket::ListenNetSocket() {}
 
 //------------------------------------------------------------------------------
 
@@ -26,17 +25,18 @@ void ListenNetSocket::init(int portNum)
     }
 
     int value = 1;
-    if (setsockopt(m_socket, SOL_SOCKET, SO_REUSEADDR, (const char *)&value, sizeof(value)) == -1) {
+    if (setsockopt(m_socket, SOL_SOCKET, SO_REUSEADDR, (const char *)&value,
+                   sizeof(value)) == -1) {
         PLOG << "setsockopt";
     }
 
     struct sockaddr_in sa;
     memset(&sa, 0, sizeof(sa));
-    sa.sin_family = AF_INET;
+    sa.sin_family      = AF_INET;
     sa.sin_addr.s_addr = INADDR_ANY;
-    sa.sin_port = htons(portNum);
+    sa.sin_port        = htons(portNum);
 
-    if (bind(m_socket, (struct sockaddr*)&sa, sizeof(sa)) == -1) {
+    if (bind(m_socket, (struct sockaddr *)&sa, sizeof(sa)) == -1) {
         PLOG << "bind";
 #if PLATFORM == PLATFORM_WINDOWS
         closesocket(m_socket);
@@ -73,13 +73,13 @@ int ListenNetSocket::acceptConnection(unsigned int *addr)
     struct sockaddr_in socka;
     socklen_t size = sizeof(socka);
 
-    new_socket = accept(m_socket, (struct sockaddr*)&socka, &size);
+    new_socket = accept(m_socket, (struct sockaddr *)&socka, &size);
     if (new_socket == -1) {
         PLOG << "accept";
         return -1;
     }
 
-    if (getpeername(new_socket, (struct sockaddr*)&socka, &size) == -1) {
+    if (getpeername(new_socket, (struct sockaddr *)&socka, &size) == -1) {
         PLOG << "getpeername";
 #if PLATFORM == PLATFORM_WINDOWS
         closesocket(m_socket);

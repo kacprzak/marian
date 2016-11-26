@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #include "HeroController.h"
 
 #include "events/EventMgr.h"
@@ -7,21 +8,17 @@
 #define TEST 0
 
 #if TEST
-    #include <iostream>
+#include <iostream>
 #endif
 
 using namespace event;
 
-HeroController::HeroController()
-    : m_actorId(0)
+HeroController::HeroController() : m_actorId(0)
 {
     // ctor code
 }
 
-void HeroController::setActor(ActorId actorId)
-{
-    m_actorId = actorId;
-}
+void HeroController::setActor(ActorId actorId) { m_actorId = actorId; }
 
 bool HeroController::onKeyDown(const unsigned int kcode)
 {
@@ -31,18 +28,21 @@ bool HeroController::onKeyDown(const unsigned int kcode)
     if (!m_actorId)
         return false;
 
-    EventMgr& evtMgr = EventMgr::singleton();
+    EventMgr &evtMgr = EventMgr::singleton();
 
     if (kcode == SDL_SCANCODE_RIGHT) {
-        evtMgr.queueEvent(std::make_unique<ActorInputEvent>(m_actorId, MOVE_RIGHT_START));
+        evtMgr.queueEvent(
+            std::make_unique<ActorInputEvent>(m_actorId, MOVE_RIGHT_START));
     }
 
     if (kcode == SDL_SCANCODE_LEFT) {
-        evtMgr.queueEvent(std::make_unique<ActorInputEvent>(m_actorId, MOVE_LEFT_START));
+        evtMgr.queueEvent(
+            std::make_unique<ActorInputEvent>(m_actorId, MOVE_LEFT_START));
     }
 
     if (kcode == SDL_SCANCODE_DOWN) {
-        evtMgr.queueEvent(std::make_unique<ActorInputEvent>(m_actorId, MOVE_DOWN_START));
+        evtMgr.queueEvent(
+            std::make_unique<ActorInputEvent>(m_actorId, MOVE_DOWN_START));
     }
 
     if (kcode == SDL_SCANCODE_UP) {
@@ -60,18 +60,21 @@ bool HeroController::onKeyUp(const unsigned int kcode)
     if (!m_actorId)
         return false;
 
-    EventMgr& evtMgr = EventMgr::singleton();
+    EventMgr &evtMgr = EventMgr::singleton();
 
     if (kcode == SDL_SCANCODE_RIGHT) {
-        evtMgr.queueEvent(std::make_unique<ActorInputEvent>(m_actorId, MOVE_RIGHT_END));
+        evtMgr.queueEvent(
+            std::make_unique<ActorInputEvent>(m_actorId, MOVE_RIGHT_END));
     }
 
     if (kcode == SDL_SCANCODE_LEFT) {
-        evtMgr.queueEvent(std::make_unique<ActorInputEvent>(m_actorId, MOVE_LEFT_END));
+        evtMgr.queueEvent(
+            std::make_unique<ActorInputEvent>(m_actorId, MOVE_LEFT_END));
     }
 
     if (kcode == SDL_SCANCODE_DOWN) {
-        evtMgr.queueEvent(std::make_unique<ActorInputEvent>(m_actorId, MOVE_DOWN_END));
+        evtMgr.queueEvent(
+            std::make_unique<ActorInputEvent>(m_actorId, MOVE_DOWN_END));
     }
 
     return true;

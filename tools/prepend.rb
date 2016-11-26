@@ -15,7 +15,7 @@ def prepend_line(original_file, line, replace)
 end
 
 replace_regex = /\/\*\s-\*-\s.*\s-\*-\s\*\//m
-text_to_add = '/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */'
+text_to_add = '/* -*- c-basic-offset: 4; indent-tabs-mode: nil; -*- */'
 
 ARGV.each do |f|
   unless text_to_add == File::open(f, &:readline).chomp

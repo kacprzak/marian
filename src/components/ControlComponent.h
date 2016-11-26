@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #ifndef CONTROLCOMPONENT_H
 #define CONTROLCOMPONENT_H
 
@@ -8,7 +9,7 @@ class ControlComponent : public ActorComponent
 {
     friend class ControlFactory;
 
-public:
+  public:
     ActorComponentId componentId() const { return CONTROL; }
 };
 

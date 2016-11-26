@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #include "Box2dPhysicsEngine.h"
 
 #include "config.h"
@@ -7,8 +8,8 @@
 #include <windows.h>
 #endif
 
-#include "events/EventMgr.h"
 #include "Logger.h"
+#include "events/EventMgr.h"
 
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -17,8 +18,7 @@
 
 using namespace event;
 
-Box2dPhysicsEngine::Box2dPhysicsEngine()
-    : m_world()
+Box2dPhysicsEngine::Box2dPhysicsEngine() : m_world()
 {
     // Debug drawing
     m_debugDraw.reset(new DebugDraw);
@@ -29,17 +29,15 @@ Box2dPhysicsEngine::Box2dPhysicsEngine()
     m_world->SetAllowSleeping(true);
     m_world->SetContactListener(&m_contactListener);
 
-    LOG << "created Box2dPhysicsEngine (Box2d ver: "
-        << b2_version.major << "."
-        << b2_version.minor << "."
-        << b2_version.revision << ")\n";
+    LOG << "created Box2dPhysicsEngine (Box2d ver: " << b2_version.major << "."
+        << b2_version.minor << "." << b2_version.revision << ")\n";
 }
 
 //------------------------------------------------------------------------------
 
 Box2dPhysicsEngine::~Box2dPhysicsEngine()
 {
-    //assert(!m_world);
+    // assert(!m_world);
 
     LOG << "destroyed Box2dPhysicsEngine\n";
 }
@@ -84,7 +82,8 @@ void Box2dPhysicsEngine::drawDebugData()
 
 //------------------------------------------------------------------------------
 
-//void Box2dPhysicsEngine::applyForce(const Vec2& dir, float newtons, ActorId actorId)
+// void Box2dPhysicsEngine::applyForce(const Vec2& dir, float newtons, ActorId
+// actorId)
 //{}
 
 //------------------------------------------------------------------------------
@@ -97,14 +96,13 @@ void ContactListener::BeginContact(b2Contact *contact)
     void *bodyAUserData = contact->GetFixtureA()->GetBody()->GetUserData();
     void *bodyBUserData = contact->GetFixtureB()->GetBody()->GetUserData();
 
-    if ( bodyAUserData && bodyBUserData ) {
+    if (bodyAUserData && bodyBUserData) {
         ActorId actorA = reinterpret_cast<ActorId>(bodyAUserData);
         ActorId actorB = reinterpret_cast<ActorId>(bodyBUserData);
 
-        EventMgr& evtMgr = EventMgr::singleton();
-        evtMgr.queueEvent(std::make_unique<CollisionEvent>(CollisionEvent::BEGIN,
-                                                           actorA, fixAUserData,
-                                                           actorB, fixBUserData));
+        EventMgr &evtMgr = EventMgr::singleton();
+        evtMgr.queueEvent(std::make_unique<CollisionEvent>(
+            CollisionEvent::BEGIN, actorA, fixAUserData, actorB, fixBUserData));
     }
 }
 
@@ -118,13 +116,12 @@ void ContactListener::EndContact(b2Contact *contact)
     void *bodyAUserData = contact->GetFixtureA()->GetBody()->GetUserData();
     void *bodyBUserData = contact->GetFixtureB()->GetBody()->GetUserData();
 
-    if ( bodyAUserData && bodyBUserData ) {
+    if (bodyAUserData && bodyBUserData) {
         ActorId actorA = reinterpret_cast<ActorId>(bodyAUserData);
         ActorId actorB = reinterpret_cast<ActorId>(bodyBUserData);
 
-        EventMgr& evtMgr = EventMgr::singleton();
-        evtMgr.queueEvent(std::make_unique<CollisionEvent>(CollisionEvent::END,
-                                                           actorA, fixAUserData,
-                                                           actorB, fixBUserData));
+        EventMgr &evtMgr = EventMgr::singleton();
+        evtMgr.queueEvent(std::make_unique<CollisionEvent>(
+            CollisionEvent::END, actorA, fixAUserData, actorB, fixBUserData));
     }
 }

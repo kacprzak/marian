@@ -1,19 +1,19 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #ifndef GAMEVIEW_H
 #define GAMEVIEW_H
 
-#include <boost/utility.hpp>
 #include <SDL.h>
+#include <boost/utility.hpp>
 
 class GameView : private boost::noncopyable
 {
-public:
-
+  public:
     virtual ~GameView() {}
 
-    virtual bool processInput(const SDL_Event& event) = 0;
-    virtual void update(float elapsedTime) = 0;
-    virtual void draw() = 0;
+    virtual bool processInput(const SDL_Event &event) = 0;
+    virtual void update(float elapsedTime)            = 0;
+    virtual void draw()                               = 0;
 
     /*! Callbacks */
     virtual void onAttach(int /*gameViewId*/, unsigned long /*actorId*/) {}

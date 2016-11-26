@@ -1,4 +1,3 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #ifndef ENGINE_H
 #define ENGINE_H
 
@@ -8,25 +7,25 @@
 #include <windows.h>
 #endif
 
-#include "Singleton.h"
 #include "GameLogic.h"
+#include "Singleton.h"
 
 #include <SDL.h>
 
-#include <string>
 #include <stdexcept>
+#include <string>
 
 class EngineError : public std::runtime_error
 {
-public:
-    EngineError(const std::string& msg, const char *sdlError)
-        : std::runtime_error(msg + ": " + sdlError)
-        , m_sdlError(sdlError)
-    {}
+  public:
+    EngineError(const std::string &msg, const char *sdlError)
+        : std::runtime_error(msg + ": " + sdlError), m_sdlError(sdlError)
+    {
+    }
 
     const char *sdlError() { return m_sdlError; }
 
-private:
+  private:
     const char *m_sdlError;
 };
 
@@ -37,7 +36,7 @@ private:
  */
 class Engine : public Singleton<Engine>
 {
-public:
+  public:
     explicit Engine(bool initVideo = true);
     ~Engine() override;
 
@@ -48,7 +47,7 @@ public:
 
     static int showErrorMessageBox(const char *msg);
 
-private:
+  private:
     void initializeSDL();
     void logSDLInfo();
 

@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #ifndef ACTORCOMPONENT_H
 #define ACTORCOMPONENT_H
 
@@ -13,24 +14,20 @@ class ActorComponent
 {
     friend class Actor;
 
-public:
+  public:
     virtual ~ActorComponent() {}
 
     virtual bool init() { return true; }
     virtual void update(float /*elapsedTime*/) {}
-  
+
     virtual ActorComponentId componentId() const = 0;
 
-private:
+  private:
     // Only Actor should use this
-    void setOwner(Actor* actor)
-    {
-        m_owner = actor;
-    }
+    void setOwner(Actor *actor) { m_owner = actor; }
 
-protected:
-    Actor* m_owner = nullptr;
-
+  protected:
+    Actor *m_owner = nullptr;
 };
 
 #endif // ACTORCOMPONENT_H

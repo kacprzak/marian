@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #include "HeroNode.h"
 
 #include "Animation.h"
@@ -10,36 +11,37 @@ namespace gfx {
 
 class HeroNodeState : public State<HeroNode *>
 {
- public:
-    explicit HeroNodeState(HeroNodeStateMachine& stateMachine)
-        : State<HeroNode *>()
-        , m_stateMachine(stateMachine)
-    {}
+  public:
+    explicit HeroNodeState(HeroNodeStateMachine &stateMachine)
+        : State<HeroNode *>(), m_stateMachine(stateMachine)
+    {
+    }
 
-    void onEnter(HeroNode * owner, int /*prevStateId*/) override
+    void onEnter(HeroNode *owner, int /*prevStateId*/) override
     {
         setFacingRight(owner->isFacingRight());
     }
 
     void onExit(HeroNode * /*owner*/, int /*nextStateId*/) override {}
 
-    virtual void update(float elapsedTime) = 0;
-    virtual const Image& currentImage() const = 0;
-    virtual void setFacingRight(bool right) = 0;
+    virtual void update(float elapsedTime)    = 0;
+    virtual const Image &currentImage() const = 0;
+    virtual void setFacingRight(bool right)   = 0;
 
- protected:
-    HeroNodeStateMachine& m_stateMachine;
+  protected:
+    HeroNodeStateMachine &m_stateMachine;
 };
 
 //==============================================================================
 
 class StandHeroState : public HeroNodeState
 {
- public:
-    explicit StandHeroState(HeroNodeStateMachine& stateMachine)
+  public:
+    explicit StandHeroState(HeroNodeStateMachine &stateMachine)
         : HeroNodeState(stateMachine)
     {
-        const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
+        const Texture *tex =
+            ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
         Rect<int> tileCoords = Rect<int>(38, 255, 38 + 32, 255 + 32);
 
@@ -55,12 +57,9 @@ class StandHeroState : public HeroNodeState
         m_animation.addFrame(idleFrame2, 0.1f); // Blink
     }
 
-    void update(float elapsedTime) override
-    {
-        m_animation.update(elapsedTime);
-    }
+    void update(float elapsedTime) override { m_animation.update(elapsedTime); }
 
-    const Image& currentImage() const override
+    const Image &currentImage() const override
     {
         return m_animation.currentFrame();
     }
@@ -81,11 +80,12 @@ class StandHeroState : public HeroNodeState
 
 class FallHeroState : public HeroNodeState
 {
- public:
-    explicit FallHeroState(HeroNodeStateMachine& stateMachine)
+  public:
+    explicit FallHeroState(HeroNodeStateMachine &stateMachine)
         : HeroNodeState(stateMachine)
     {
-        const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
+        const Texture *tex =
+            ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
         Rect<int> tileCoords = Rect<int>(182, 219, 182 + 32, 219 + 32);
 
@@ -98,10 +98,7 @@ class FallHeroState : public HeroNodeState
         // Do nothing
     }
 
-    const Image& currentImage() const override
-    {
-        return *m_image;
-    }
+    const Image &currentImage() const override { return *m_image; }
 
     void setFacingRight(bool right) override
     {
@@ -119,26 +116,27 @@ class FallHeroState : public HeroNodeState
 
 class RunHeroState : public HeroNodeState
 {
- public:
-    explicit RunHeroState(HeroNodeStateMachine& stateMachine)
+  public:
+    explicit RunHeroState(HeroNodeStateMachine &stateMachine)
         : HeroNodeState(stateMachine)
     {
-        const Texture *tex = ResourceMgr::singleton().getTexture("MegaMan_001.png");
+        const Texture *tex =
+            ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
         float frameSpeed = 0.25f;
         m_animation.setReversable(true);
 
         const Rect<int> tileCoords = Rect<int>(74, 183, 74 + 32, 183 + 32);
-        const int ax_off = 36;
-        const int ay_off = 36;
+        const int ax_off           = 36;
+        const int ay_off           = 36;
 
         const int y = 1;
-        for (int x = 2 ; x >= 0; --x) {
+        for (int x = 2; x >= 0; --x) {
             Rect<int> tc = tileCoords;
 
-            tc.left   += ax_off * x;
-            tc.right  += ax_off * x;
-            tc.top    += ay_off * y;
+            tc.left += ax_off * x;
+            tc.right += ax_off * x;
+            tc.top += ay_off * y;
             tc.bottom += ay_off * y;
 
             Image runFrame(tex, tc);
@@ -151,12 +149,9 @@ class RunHeroState : public HeroNodeState
         }
     }
 
-    void update(float elapsedTime) override
-    {
-        m_animation.update(elapsedTime);
-    }
+    void update(float elapsedTime) override { m_animation.update(elapsedTime); }
 
-    const Image& currentImage() const override
+    const Image &currentImage() const override
     {
         return m_animation.currentFrame();
     }
@@ -175,9 +170,7 @@ class RunHeroState : public HeroNodeState
 
 //==============================================================================
 
-HeroNode::HeroNode()
-    : m_facingRight(true)
-    , m_stateMachine(nullptr, 0)
+HeroNode::HeroNode() : m_facingRight(true), m_stateMachine(nullptr, 0)
 {
     m_stateMachine.setOwner(this);
 
@@ -213,7 +206,8 @@ void HeroNode::update(float elapsedTime)
 {
     m_stateMachine.currentState()->update(elapsedTime);
 
-    const HeroNodeState *renderState = static_cast<const HeroNodeState*>(m_stateMachine.currentState());
+    const HeroNodeState *renderState =
+        static_cast<const HeroNodeState *>(m_stateMachine.currentState());
     m_image = &(renderState->currentImage());
 }
 

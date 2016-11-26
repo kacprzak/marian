@@ -1,12 +1,13 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #include "GuiMgr.h"
 
 #define MYGUI_DONT_REPLACE_NULLPTR
 
 #include "Console_MyGUI.h"
 
-#include "ResourceMgr.h"
 #include "Logger.h"
+#include "ResourceMgr.h"
 
 #include "config.h"
 
@@ -27,7 +28,7 @@ MyGUI::KeyCode SDLScancodeToMyGUI(SDL_Scancode code);
 
 class ImageLoader : public MyGUI::OpenGLImageLoader
 {
-public:
+  public:
     void *loadImage(int &_width, int &_height, MyGUI::PixelFormat &_format,
                     const std::string &_filename) override;
     void saveImage(int _width, int _height, MyGUI::PixelFormat _format,
@@ -37,7 +38,7 @@ public:
 //==============================================================================
 
 static MyGUI::OpenGLPlatform *s_platform = nullptr;
-static MyGUI::Gui *s_gui = nullptr;
+static MyGUI::Gui *s_gui                 = nullptr;
 static ImageLoader s_imageLoader;
 
 static Console *s_console = nullptr;
@@ -46,7 +47,8 @@ static Console *s_console = nullptr;
 
 GuiMgr::GuiMgr()
 {
-    const std::string assetsFolder = ResourceMgr::singleton().dataFolder() + "MyGUI_Media";
+    const std::string assetsFolder =
+        ResourceMgr::singleton().dataFolder() + "MyGUI_Media";
 
     s_platform = new MyGUI::OpenGLPlatform;
 
@@ -81,10 +83,10 @@ GuiMgr::~GuiMgr()
 
 //------------------------------------------------------------------------------
 
-bool GuiMgr::processInput(const SDL_Event& e)
+bool GuiMgr::processInput(const SDL_Event &e)
 {
-    bool interceptEvent = false;
-    MyGUI::InputManager& inputMgr = MyGUI::InputManager::getInstance();
+    bool interceptEvent           = false;
+    MyGUI::InputManager &inputMgr = MyGUI::InputManager::getInstance();
 
     switch (e.type) {
 
@@ -103,58 +105,54 @@ bool GuiMgr::processInput(const SDL_Event& e)
         break;
 
     case SDL_MOUSEWHEEL:
-        //handle_mouse_wheel(e.wheel);
+        // handle_mouse_wheel(e.wheel);
         break;
 
-    case SDL_KEYDOWN:
-        {
-            MyGUI::KeyCode key = SDLScancodeToMyGUI(e.key.keysym.scancode);
+    case SDL_KEYDOWN: {
+        MyGUI::KeyCode key = SDLScancodeToMyGUI(e.key.keysym.scancode);
 
-            bool toogleConsole = (e.key.keysym.sym == SDLK_BACKQUOTE);
+        bool toogleConsole = (e.key.keysym.sym == SDLK_BACKQUOTE);
 
-            if (s_console) {
-                if (s_console->isVisible()) s_console->handleKey(key);
+        if (s_console) {
+            if (s_console->isVisible())
+                s_console->handleKey(key);
 
-                if (toogleConsole && !s_console->isVisible()) {
-                    SDL_StartTextInput();
-                    s_console->setVisible(true);
-                } else if (toogleConsole && s_console->isVisible()) {
-                    s_console->setVisible(false);
-                    SDL_StopTextInput();
-                }
+            if (toogleConsole && !s_console->isVisible()) {
+                SDL_StartTextInput();
+                s_console->setVisible(true);
+            } else if (toogleConsole && s_console->isVisible()) {
+                s_console->setVisible(false);
+                SDL_StopTextInput();
             }
-
-            inputMgr.injectKeyPress(key);
         }
-        break;
+
+        inputMgr.injectKeyPress(key);
+    } break;
 
     case SDL_KEYUP:
         inputMgr.injectKeyRelease(SDLScancodeToMyGUI(e.key.keysym.scancode));
         break;
 
-    case SDL_TEXTINPUT:
-        {
-            const char *ch = e.text.text;
-            while (*ch != '\0') {
-                inputMgr.injectKeyPress(MyGUI::KeyCode::None, *ch);
-                ch++;
-            }
+    case SDL_TEXTINPUT: {
+        const char *ch = e.text.text;
+        while (*ch != '\0') {
+            inputMgr.injectKeyPress(MyGUI::KeyCode::None, *ch);
+            ch++;
         }
-        break;
+    } break;
 
     case SDL_TEXTEDITING:
         break;
 
-    case SDL_WINDOWEVENT:
-        {
-            switch (e.window.event) {
-            case SDL_WINDOWEVENT_RESIZED:
-                setViewSize(e.window.data1, e.window.data2);
-                break;
-            }
-
+    case SDL_WINDOWEVENT: {
+        switch (e.window.event) {
+        case SDL_WINDOWEVENT_RESIZED:
+            setViewSize(e.window.data1, e.window.data2);
             break;
         }
+
+        break;
+    }
     }
 
     if (s_console->isVisible())
@@ -172,10 +170,7 @@ void GuiMgr::update(float /* elapsedTime */)
 
 //------------------------------------------------------------------------------
 
-void GuiMgr::draw()
-{
-    s_platform->getRenderManagerPtr()->drawOneFrame();
-}
+void GuiMgr::draw() { s_platform->getRenderManagerPtr()->drawOneFrame(); }
 
 //------------------------------------------------------------------------------
 
@@ -186,31 +181,24 @@ void GuiMgr::setViewSize(int width, int height)
 
 //------------------------------------------------------------------------------
 
-void GuiMgr::handle_mouse_down(Uint8 button)
-{
-
-}
+void GuiMgr::handle_mouse_down(Uint8 button) {}
 
 //------------------------------------------------------------------------------
 
-void GuiMgr::handle_mouse_wheel(const SDL_MouseWheelEvent &e)
-{
-
-}
+void GuiMgr::handle_mouse_wheel(const SDL_MouseWheelEvent &e) {}
 
 //------------------------------------------------------------------------------
- 
-void GuiMgr::handle_mouse_up(Uint8 button)
-{
 
-}
+void GuiMgr::handle_mouse_up(Uint8 button) {}
 
 //==============================================================================
 
-void *ImageLoader::loadImage(int& _width, int& _height, MyGUI::PixelFormat& _format,
-                             const std::string& _filename)
+void *ImageLoader::loadImage(int &_width, int &_height,
+                             MyGUI::PixelFormat &_format,
+                             const std::string &_filename)
 {
-    std::string filename = s_platform->getDataManagerPtr()->getDataPath(_filename);
+    std::string filename =
+        s_platform->getDataManagerPtr()->getDataPath(_filename);
 
     SDL_Surface *surface = IMG_Load(filename.c_str());
 
@@ -227,19 +215,20 @@ void *ImageLoader::loadImage(int& _width, int& _height, MyGUI::PixelFormat& _for
         // Convert to 32 bits.
         SDL_PixelFormat fmt;
         memset(&fmt, 0, sizeof(fmt));
-        fmt.format = SDL_PIXELFORMAT_RGBA8888;
-        fmt.BitsPerPixel = 32;
+        fmt.format        = SDL_PIXELFORMAT_RGBA8888;
+        fmt.BitsPerPixel  = 32;
         fmt.BytesPerPixel = 4;
-        fmt.Rmask = 0xff;
-        fmt.Gmask = 0xff00;
-        fmt.Bmask = 0xff0000;
-        fmt.Amask = 0xff000000;
+        fmt.Rmask         = 0xff;
+        fmt.Gmask         = 0xff00;
+        fmt.Bmask         = 0xff0000;
+        fmt.Amask         = 0xff000000;
 
         SDL_Surface *nimg = SDL_ConvertSurface(surface, &fmt, 0);
         SDL_FreeSurface(surface);
 
-        if(!nimg) {
-            std::cerr << "Could not convert image " << _filename << " to 32-bit\n";
+        if (!nimg) {
+            std::cerr << "Could not convert image " << _filename
+                      << " to 32-bit\n";
             return 0;
         }
 
@@ -248,10 +237,11 @@ void *ImageLoader::loadImage(int& _width, int& _height, MyGUI::PixelFormat& _for
         _format = MyGUI::PixelFormat::R8G8B8A8;
     }
 
-    _width = surface->w;
+    _width  = surface->w;
     _height = surface->h;
 
-    std::size_t data_size = surface->w * surface->h * surface->format->BytesPerPixel;
+    std::size_t data_size =
+        surface->w * surface->h * surface->format->BytesPerPixel;
     Uint8 *data = new Uint8[data_size];
 
     // Copy data for SDL to data
@@ -261,16 +251,16 @@ void *ImageLoader::loadImage(int& _width, int& _height, MyGUI::PixelFormat& _for
     if (_format == MyGUI::PixelFormat::R8G8B8) {
         memcpy(data, surface->pixels, data_size);
     } else { // RGBA
-        Uint32 *pixels_src = (Uint32*)surface->pixels;
-        Uint32 *pixels_dst = (Uint32*)data;
-        int pixels_size = surface->w * surface->h;
+        Uint32 *pixels_src = (Uint32 *)surface->pixels;
+        Uint32 *pixels_dst = (Uint32 *)data;
+        int pixels_size    = surface->w * surface->h;
         for (int i = 0; i < pixels_size; ++i) {
             if (fmt->format == SDL_PIXELFORMAT_BGRA8888) {
                 pixels_dst[i] = pixels_src[i];
             } else {
-                pixels_dst[i] = ((pixels_src[i] & 0xff) << 16)
-                        | ((pixels_src[i] & 0xff0000) >> 16)
-                        | (pixels_src[i] & 0xff00ff00);
+                pixels_dst[i] = ((pixels_src[i] & 0xff) << 16) |
+                                ((pixels_src[i] & 0xff0000) >> 16) |
+                                (pixels_src[i] & 0xff00ff00);
             }
         }
     }
@@ -295,9 +285,12 @@ void ImageLoader::saveImage(int _width, int _height, MyGUI::PixelFormat _format,
 MyGUI::MouseButton::Enum SDLMouseButtonToMyGUI(const Uint8 button)
 {
     switch (button) {
-    case SDL_BUTTON_LEFT:   return MyGUI::MouseButton::Left;
-    case SDL_BUTTON_MIDDLE: return MyGUI::MouseButton::Middle;
-    case SDL_BUTTON_RIGHT:  return MyGUI::MouseButton::Right;
+    case SDL_BUTTON_LEFT:
+        return MyGUI::MouseButton::Left;
+    case SDL_BUTTON_MIDDLE:
+        return MyGUI::MouseButton::Middle;
+    case SDL_BUTTON_RIGHT:
+        return MyGUI::MouseButton::Right;
     default:
         return MyGUI::MouseButton::None;
     }
@@ -310,10 +303,10 @@ MyGUI::Char SDLKeycodeToMyGUI(SDL_Keycode code)
     MyGUI::Char c = 0;
 
     // ASCII codes
-    if (code >= 0x00 && code <= 0x7F )
+    if (code >= 0x00 && code <= 0x7F)
         c = code;
 
-    //LOG << char(sym) << std::endl;
+    // LOG << char(sym) << std::endl;
     return c;
 }
 
@@ -325,149 +318,251 @@ MyGUI::KeyCode SDLScancodeToMyGUI(SDL_Scancode code)
 
     switch (code) {
 
-    case SDL_SCANCODE_UNKNOWN: return KeyCode::None;
+    case SDL_SCANCODE_UNKNOWN:
+        return KeyCode::None;
 
-    case SDL_SCANCODE_A: return KeyCode::A;
-    case SDL_SCANCODE_B: return KeyCode::B;
-    case SDL_SCANCODE_C: return KeyCode::C;
-    case SDL_SCANCODE_D: return KeyCode::D;
-    case SDL_SCANCODE_E: return KeyCode::E;
-    case SDL_SCANCODE_F: return KeyCode::F;
-    case SDL_SCANCODE_G: return KeyCode::G;
-    case SDL_SCANCODE_H: return KeyCode::H;
-    case SDL_SCANCODE_I: return KeyCode::I;
-    case SDL_SCANCODE_J: return KeyCode::J;
-    case SDL_SCANCODE_K: return KeyCode::K;
-    case SDL_SCANCODE_L: return KeyCode::L;
-    case SDL_SCANCODE_M: return KeyCode::M;
-    case SDL_SCANCODE_N: return KeyCode::N;
-    case SDL_SCANCODE_O: return KeyCode::O;
-    case SDL_SCANCODE_P: return KeyCode::P;
-    case SDL_SCANCODE_Q: return KeyCode::Q;
-    case SDL_SCANCODE_R: return KeyCode::R;
-    case SDL_SCANCODE_S: return KeyCode::S;
-    case SDL_SCANCODE_T: return KeyCode::T;
-    case SDL_SCANCODE_U: return KeyCode::U;
-    case SDL_SCANCODE_V: return KeyCode::V;
-    case SDL_SCANCODE_W: return KeyCode::W;
-    case SDL_SCANCODE_X: return KeyCode::X;
-    case SDL_SCANCODE_Y: return KeyCode::Y;
-    case SDL_SCANCODE_Z: return KeyCode::Z;
+    case SDL_SCANCODE_A:
+        return KeyCode::A;
+    case SDL_SCANCODE_B:
+        return KeyCode::B;
+    case SDL_SCANCODE_C:
+        return KeyCode::C;
+    case SDL_SCANCODE_D:
+        return KeyCode::D;
+    case SDL_SCANCODE_E:
+        return KeyCode::E;
+    case SDL_SCANCODE_F:
+        return KeyCode::F;
+    case SDL_SCANCODE_G:
+        return KeyCode::G;
+    case SDL_SCANCODE_H:
+        return KeyCode::H;
+    case SDL_SCANCODE_I:
+        return KeyCode::I;
+    case SDL_SCANCODE_J:
+        return KeyCode::J;
+    case SDL_SCANCODE_K:
+        return KeyCode::K;
+    case SDL_SCANCODE_L:
+        return KeyCode::L;
+    case SDL_SCANCODE_M:
+        return KeyCode::M;
+    case SDL_SCANCODE_N:
+        return KeyCode::N;
+    case SDL_SCANCODE_O:
+        return KeyCode::O;
+    case SDL_SCANCODE_P:
+        return KeyCode::P;
+    case SDL_SCANCODE_Q:
+        return KeyCode::Q;
+    case SDL_SCANCODE_R:
+        return KeyCode::R;
+    case SDL_SCANCODE_S:
+        return KeyCode::S;
+    case SDL_SCANCODE_T:
+        return KeyCode::T;
+    case SDL_SCANCODE_U:
+        return KeyCode::U;
+    case SDL_SCANCODE_V:
+        return KeyCode::V;
+    case SDL_SCANCODE_W:
+        return KeyCode::W;
+    case SDL_SCANCODE_X:
+        return KeyCode::X;
+    case SDL_SCANCODE_Y:
+        return KeyCode::Y;
+    case SDL_SCANCODE_Z:
+        return KeyCode::Z;
 
-    case SDL_SCANCODE_1: return KeyCode::One;
-    case SDL_SCANCODE_2: return KeyCode::Two;
-    case SDL_SCANCODE_3: return KeyCode::Three;
-    case SDL_SCANCODE_4: return KeyCode::Four;
-    case SDL_SCANCODE_5: return KeyCode::Five;
-    case SDL_SCANCODE_6: return KeyCode::Six;
-    case SDL_SCANCODE_7: return KeyCode::Seven;
-    case SDL_SCANCODE_8: return KeyCode::Eight;
-    case SDL_SCANCODE_9: return KeyCode::Nine;
-    case SDL_SCANCODE_0: return KeyCode::Zero;
+    case SDL_SCANCODE_1:
+        return KeyCode::One;
+    case SDL_SCANCODE_2:
+        return KeyCode::Two;
+    case SDL_SCANCODE_3:
+        return KeyCode::Three;
+    case SDL_SCANCODE_4:
+        return KeyCode::Four;
+    case SDL_SCANCODE_5:
+        return KeyCode::Five;
+    case SDL_SCANCODE_6:
+        return KeyCode::Six;
+    case SDL_SCANCODE_7:
+        return KeyCode::Seven;
+    case SDL_SCANCODE_8:
+        return KeyCode::Eight;
+    case SDL_SCANCODE_9:
+        return KeyCode::Nine;
+    case SDL_SCANCODE_0:
+        return KeyCode::Zero;
 
-    case SDL_SCANCODE_RETURN: return KeyCode::Return;
-    case SDL_SCANCODE_ESCAPE: return KeyCode::Escape;
-    case SDL_SCANCODE_BACKSPACE: return KeyCode::Backspace;
-    case SDL_SCANCODE_TAB: return KeyCode::Tab;
-    case SDL_SCANCODE_SPACE: return KeyCode::Space;
+    case SDL_SCANCODE_RETURN:
+        return KeyCode::Return;
+    case SDL_SCANCODE_ESCAPE:
+        return KeyCode::Escape;
+    case SDL_SCANCODE_BACKSPACE:
+        return KeyCode::Backspace;
+    case SDL_SCANCODE_TAB:
+        return KeyCode::Tab;
+    case SDL_SCANCODE_SPACE:
+        return KeyCode::Space;
 
-    case SDL_SCANCODE_MINUS: return KeyCode::Minus;
-    case SDL_SCANCODE_EQUALS: return KeyCode::Equals;
-    case SDL_SCANCODE_LEFTBRACKET: return KeyCode::LeftBracket;
-    case SDL_SCANCODE_RIGHTBRACKET: return KeyCode::RightBracket;
-    case SDL_SCANCODE_BACKSLASH: return KeyCode::Backslash;
+    case SDL_SCANCODE_MINUS:
+        return KeyCode::Minus;
+    case SDL_SCANCODE_EQUALS:
+        return KeyCode::Equals;
+    case SDL_SCANCODE_LEFTBRACKET:
+        return KeyCode::LeftBracket;
+    case SDL_SCANCODE_RIGHTBRACKET:
+        return KeyCode::RightBracket;
+    case SDL_SCANCODE_BACKSLASH:
+        return KeyCode::Backslash;
 
-    //case SDL_SCANCODE_NONUSHASH: return KeyCode::
+    // case SDL_SCANCODE_NONUSHASH: return KeyCode::
 
-    case SDL_SCANCODE_SEMICOLON: return KeyCode::Semicolon;
-    case SDL_SCANCODE_APOSTROPHE: return KeyCode::Apostrophe;
-    case SDL_SCANCODE_GRAVE: return KeyCode::Grave;
+    case SDL_SCANCODE_SEMICOLON:
+        return KeyCode::Semicolon;
+    case SDL_SCANCODE_APOSTROPHE:
+        return KeyCode::Apostrophe;
+    case SDL_SCANCODE_GRAVE:
+        return KeyCode::Grave;
 
-    case SDL_SCANCODE_COMMA: return KeyCode::Comma;
-    case SDL_SCANCODE_PERIOD: return KeyCode::Period;
-    case SDL_SCANCODE_SLASH: return KeyCode::Slash;
+    case SDL_SCANCODE_COMMA:
+        return KeyCode::Comma;
+    case SDL_SCANCODE_PERIOD:
+        return KeyCode::Period;
+    case SDL_SCANCODE_SLASH:
+        return KeyCode::Slash;
 
-    //case SDL_SCANCODE_CAPSLOCK: return KeyCode::
+    // case SDL_SCANCODE_CAPSLOCK: return KeyCode::
 
-    case SDL_SCANCODE_F1: return KeyCode::F1;
-    case SDL_SCANCODE_F2: return KeyCode::F2;
-    case SDL_SCANCODE_F3: return KeyCode::F3;
-    case SDL_SCANCODE_F4: return KeyCode::F4;
-    case SDL_SCANCODE_F5: return KeyCode::F5;
-    case SDL_SCANCODE_F6: return KeyCode::F6;
-    case SDL_SCANCODE_F7: return KeyCode::F7;
-    case SDL_SCANCODE_F8: return KeyCode::F8;
-    case SDL_SCANCODE_F9: return KeyCode::F9;
-    case SDL_SCANCODE_F10: return KeyCode::F10;
-    case SDL_SCANCODE_F11: return KeyCode::F11;
-    case SDL_SCANCODE_F12: return KeyCode::F12;
+    case SDL_SCANCODE_F1:
+        return KeyCode::F1;
+    case SDL_SCANCODE_F2:
+        return KeyCode::F2;
+    case SDL_SCANCODE_F3:
+        return KeyCode::F3;
+    case SDL_SCANCODE_F4:
+        return KeyCode::F4;
+    case SDL_SCANCODE_F5:
+        return KeyCode::F5;
+    case SDL_SCANCODE_F6:
+        return KeyCode::F6;
+    case SDL_SCANCODE_F7:
+        return KeyCode::F7;
+    case SDL_SCANCODE_F8:
+        return KeyCode::F8;
+    case SDL_SCANCODE_F9:
+        return KeyCode::F9;
+    case SDL_SCANCODE_F10:
+        return KeyCode::F10;
+    case SDL_SCANCODE_F11:
+        return KeyCode::F11;
+    case SDL_SCANCODE_F12:
+        return KeyCode::F12;
 
-    case SDL_SCANCODE_PRINTSCREEN: return KeyCode::SysRq;
-    case SDL_SCANCODE_SCROLLLOCK: return KeyCode::ScrollLock;
-    case SDL_SCANCODE_PAUSE: return KeyCode::Pause;
-    case SDL_SCANCODE_INSERT: return KeyCode::Insert;
+    case SDL_SCANCODE_PRINTSCREEN:
+        return KeyCode::SysRq;
+    case SDL_SCANCODE_SCROLLLOCK:
+        return KeyCode::ScrollLock;
+    case SDL_SCANCODE_PAUSE:
+        return KeyCode::Pause;
+    case SDL_SCANCODE_INSERT:
+        return KeyCode::Insert;
 
-    case SDL_SCANCODE_HOME: return KeyCode::Home;
-    case SDL_SCANCODE_PAGEUP: return KeyCode::PageUp;
-    case SDL_SCANCODE_DELETE: return KeyCode::Delete;
-    case SDL_SCANCODE_END: return KeyCode::End;
-    case SDL_SCANCODE_PAGEDOWN: return KeyCode::PageDown;
-    case SDL_SCANCODE_RIGHT: return KeyCode::ArrowRight;
-    case SDL_SCANCODE_LEFT: return KeyCode::ArrowLeft;
-    case SDL_SCANCODE_DOWN: return KeyCode::ArrowDown;
-    case SDL_SCANCODE_UP: return KeyCode::ArrowUp;
+    case SDL_SCANCODE_HOME:
+        return KeyCode::Home;
+    case SDL_SCANCODE_PAGEUP:
+        return KeyCode::PageUp;
+    case SDL_SCANCODE_DELETE:
+        return KeyCode::Delete;
+    case SDL_SCANCODE_END:
+        return KeyCode::End;
+    case SDL_SCANCODE_PAGEDOWN:
+        return KeyCode::PageDown;
+    case SDL_SCANCODE_RIGHT:
+        return KeyCode::ArrowRight;
+    case SDL_SCANCODE_LEFT:
+        return KeyCode::ArrowLeft;
+    case SDL_SCANCODE_DOWN:
+        return KeyCode::ArrowDown;
+    case SDL_SCANCODE_UP:
+        return KeyCode::ArrowUp;
 
-    case SDL_SCANCODE_NUMLOCKCLEAR: return KeyCode::NumLock;
+    case SDL_SCANCODE_NUMLOCKCLEAR:
+        return KeyCode::NumLock;
 
-    case SDL_SCANCODE_KP_DIVIDE: return KeyCode::Divide;
-    case SDL_SCANCODE_KP_MULTIPLY: return KeyCode::Multiply;
-    //case SDL_SCANCODE_KP_MINUS: return KeyCode::Minus;
-    //case SDL_SCANCODE_KP_PLUS: return KeyCode::
-    case SDL_SCANCODE_KP_ENTER: return KeyCode::NumpadEnter;
-    case SDL_SCANCODE_KP_1: return KeyCode::Numpad1;
-    case SDL_SCANCODE_KP_2: return KeyCode::Numpad2;
-    case SDL_SCANCODE_KP_3: return KeyCode::Numpad3;
-    case SDL_SCANCODE_KP_4: return KeyCode::Numpad4;
-    case SDL_SCANCODE_KP_5: return KeyCode::Numpad5;
-    case SDL_SCANCODE_KP_6: return KeyCode::Numpad6;
-    case SDL_SCANCODE_KP_7: return KeyCode::Numpad7;
-    case SDL_SCANCODE_KP_8: return KeyCode::Numpad8;
-    case SDL_SCANCODE_KP_9: return KeyCode::Numpad9;
-    case SDL_SCANCODE_KP_0: return KeyCode::Numpad0;
-    //case SDL_SCANCODE_KP_PERIOD: return KeyCode::NumpadComma;
+    case SDL_SCANCODE_KP_DIVIDE:
+        return KeyCode::Divide;
+    case SDL_SCANCODE_KP_MULTIPLY:
+        return KeyCode::Multiply;
+    // case SDL_SCANCODE_KP_MINUS: return KeyCode::Minus;
+    // case SDL_SCANCODE_KP_PLUS: return KeyCode::
+    case SDL_SCANCODE_KP_ENTER:
+        return KeyCode::NumpadEnter;
+    case SDL_SCANCODE_KP_1:
+        return KeyCode::Numpad1;
+    case SDL_SCANCODE_KP_2:
+        return KeyCode::Numpad2;
+    case SDL_SCANCODE_KP_3:
+        return KeyCode::Numpad3;
+    case SDL_SCANCODE_KP_4:
+        return KeyCode::Numpad4;
+    case SDL_SCANCODE_KP_5:
+        return KeyCode::Numpad5;
+    case SDL_SCANCODE_KP_6:
+        return KeyCode::Numpad6;
+    case SDL_SCANCODE_KP_7:
+        return KeyCode::Numpad7;
+    case SDL_SCANCODE_KP_8:
+        return KeyCode::Numpad8;
+    case SDL_SCANCODE_KP_9:
+        return KeyCode::Numpad9;
+    case SDL_SCANCODE_KP_0:
+        return KeyCode::Numpad0;
+    // case SDL_SCANCODE_KP_PERIOD: return KeyCode::NumpadComma;
 
-    //case SDL_SCANCODE_NONUSBACKSLASH: return KeyCode::
+    // case SDL_SCANCODE_NONUSBACKSLASH: return KeyCode::
 
-    //case SDL_SCANCODE_APPLICATION: return KeyCode::AppMenu;
-    case SDL_SCANCODE_POWER: return KeyCode::Power;
+    // case SDL_SCANCODE_APPLICATION: return KeyCode::AppMenu;
+    case SDL_SCANCODE_POWER:
+        return KeyCode::Power;
 
-    case SDL_SCANCODE_KP_EQUALS: return KeyCode::NumpadEquals;
-    case SDL_SCANCODE_F13: return KeyCode::F13;
-    case SDL_SCANCODE_F14: return KeyCode::F14;
-    case SDL_SCANCODE_F15: return KeyCode::F15;
-    //case SDL_SCANCODE_F16: return KeyCode::
-    //case SDL_SCANCODE_F17: return KeyCode::
-    //case SDL_SCANCODE_F18: return KeyCode::
-    //case SDL_SCANCODE_F19: return KeyCode::
-    //case SDL_SCANCODE_F20: return KeyCode::
-    //case SDL_SCANCODE_F21: return KeyCode::
-    //case SDL_SCANCODE_F22: return KeyCode::
-    //case SDL_SCANCODE_F23: return KeyCode::
-    //case SDL_SCANCODE_F24: return KeyCode::
-    //case SDL_SCANCODE_EXECUTE: return KeyCode::
-    //case SDL_SCANCODE_HELP: return KeyCode::
-    case SDL_SCANCODE_MENU: return KeyCode::AppMenu;
-    //case SDL_SCANCODE_SELECT: return KeyCode::
-    case SDL_SCANCODE_STOP: return KeyCode::Stop;
-    //case SDL_SCANCODE_AGAIN: return KeyCode::
-    //case SDL_SCANCODE_UNDO: return KeyCode::
-    //case SDL_SCANCODE_CUT: return KeyCode::
-    //case SDL_SCANCODE_COPY: return KeyCode::
-    //case SDL_SCANCODE_PASTE: return KeyCode::
-    //case SDL_SCANCODE_FIND: return KeyCode::
-    case SDL_SCANCODE_MUTE: return KeyCode::Mute;
-    case SDL_SCANCODE_VOLUMEUP: return KeyCode::VolumeUp;
-    case SDL_SCANCODE_VOLUMEDOWN: return KeyCode::VolumeDown;
+    case SDL_SCANCODE_KP_EQUALS:
+        return KeyCode::NumpadEquals;
+    case SDL_SCANCODE_F13:
+        return KeyCode::F13;
+    case SDL_SCANCODE_F14:
+        return KeyCode::F14;
+    case SDL_SCANCODE_F15:
+        return KeyCode::F15;
+    // case SDL_SCANCODE_F16: return KeyCode::
+    // case SDL_SCANCODE_F17: return KeyCode::
+    // case SDL_SCANCODE_F18: return KeyCode::
+    // case SDL_SCANCODE_F19: return KeyCode::
+    // case SDL_SCANCODE_F20: return KeyCode::
+    // case SDL_SCANCODE_F21: return KeyCode::
+    // case SDL_SCANCODE_F22: return KeyCode::
+    // case SDL_SCANCODE_F23: return KeyCode::
+    // case SDL_SCANCODE_F24: return KeyCode::
+    // case SDL_SCANCODE_EXECUTE: return KeyCode::
+    // case SDL_SCANCODE_HELP: return KeyCode::
+    case SDL_SCANCODE_MENU:
+        return KeyCode::AppMenu;
+    // case SDL_SCANCODE_SELECT: return KeyCode::
+    case SDL_SCANCODE_STOP:
+        return KeyCode::Stop;
+    // case SDL_SCANCODE_AGAIN: return KeyCode::
+    // case SDL_SCANCODE_UNDO: return KeyCode::
+    // case SDL_SCANCODE_CUT: return KeyCode::
+    // case SDL_SCANCODE_COPY: return KeyCode::
+    // case SDL_SCANCODE_PASTE: return KeyCode::
+    // case SDL_SCANCODE_FIND: return KeyCode::
+    case SDL_SCANCODE_MUTE:
+        return KeyCode::Mute;
+    case SDL_SCANCODE_VOLUMEUP:
+        return KeyCode::VolumeUp;
+    case SDL_SCANCODE_VOLUMEDOWN:
+        return KeyCode::VolumeDown;
 
     /*
     case SDL_SCANCODE_INTERNATIONAL2: return KeyCode::
@@ -548,34 +643,59 @@ MyGUI::KeyCode SDLScancodeToMyGUI(SDL_Scancode code)
     case SDL_SCANCODE_KP_DECIMAL: return KeyCode::
     case SDL_SCANCODE_KP_HEXADECIMAL: return KeyCode::
     */
-    case SDL_SCANCODE_LCTRL: return KeyCode::LeftControl;
-    case SDL_SCANCODE_LSHIFT: return KeyCode::LeftShift;
-    case SDL_SCANCODE_LALT: return KeyCode::LeftAlt;
-    case SDL_SCANCODE_LGUI: return KeyCode::LeftWindows;
-    case SDL_SCANCODE_RCTRL: return KeyCode::RightControl;
-    case SDL_SCANCODE_RSHIFT: return KeyCode::RightShift;
-    case SDL_SCANCODE_RALT: return KeyCode::RightAlt;
-    case SDL_SCANCODE_RGUI: return KeyCode::RightWindows;
+    case SDL_SCANCODE_LCTRL:
+        return KeyCode::LeftControl;
+    case SDL_SCANCODE_LSHIFT:
+        return KeyCode::LeftShift;
+    case SDL_SCANCODE_LALT:
+        return KeyCode::LeftAlt;
+    case SDL_SCANCODE_LGUI:
+        return KeyCode::LeftWindows;
+    case SDL_SCANCODE_RCTRL:
+        return KeyCode::RightControl;
+    case SDL_SCANCODE_RSHIFT:
+        return KeyCode::RightShift;
+    case SDL_SCANCODE_RALT:
+        return KeyCode::RightAlt;
+    case SDL_SCANCODE_RGUI:
+        return KeyCode::RightWindows;
 
-    //case SDL_SCANCODE_MODE: return KeyCode::
+    // case SDL_SCANCODE_MODE: return KeyCode::
 
-    case SDL_SCANCODE_AUDIONEXT: return KeyCode::NextTrack;
-    case SDL_SCANCODE_AUDIOPREV: return KeyCode::PrevTrack;
-    case SDL_SCANCODE_AUDIOSTOP: return KeyCode::MediaStop;
-    case SDL_SCANCODE_AUDIOPLAY: return KeyCode::PlayPause;
-    case SDL_SCANCODE_AUDIOMUTE: return KeyCode::Mute;
-    case SDL_SCANCODE_MEDIASELECT: return KeyCode::MediaSelect;
-    case SDL_SCANCODE_WWW: return KeyCode::WebHome; // Not sure
-    case SDL_SCANCODE_MAIL: return KeyCode::Mail;
-    case SDL_SCANCODE_CALCULATOR: return KeyCode::Calculator;
-    case SDL_SCANCODE_COMPUTER: return KeyCode::MyComputer;
-    case SDL_SCANCODE_AC_SEARCH: return KeyCode::WebSearch;
-    case SDL_SCANCODE_AC_HOME: return KeyCode::WebHome;
-    case SDL_SCANCODE_AC_BACK: return KeyCode::WebBack;
-    case SDL_SCANCODE_AC_FORWARD: return KeyCode::WebForward;
-    case SDL_SCANCODE_AC_STOP: return KeyCode::WebStop;
-    case SDL_SCANCODE_AC_REFRESH: return KeyCode::WebRefresh;
-    case SDL_SCANCODE_AC_BOOKMARKS: return KeyCode::WebFavorites;
+    case SDL_SCANCODE_AUDIONEXT:
+        return KeyCode::NextTrack;
+    case SDL_SCANCODE_AUDIOPREV:
+        return KeyCode::PrevTrack;
+    case SDL_SCANCODE_AUDIOSTOP:
+        return KeyCode::MediaStop;
+    case SDL_SCANCODE_AUDIOPLAY:
+        return KeyCode::PlayPause;
+    case SDL_SCANCODE_AUDIOMUTE:
+        return KeyCode::Mute;
+    case SDL_SCANCODE_MEDIASELECT:
+        return KeyCode::MediaSelect;
+    case SDL_SCANCODE_WWW:
+        return KeyCode::WebHome; // Not sure
+    case SDL_SCANCODE_MAIL:
+        return KeyCode::Mail;
+    case SDL_SCANCODE_CALCULATOR:
+        return KeyCode::Calculator;
+    case SDL_SCANCODE_COMPUTER:
+        return KeyCode::MyComputer;
+    case SDL_SCANCODE_AC_SEARCH:
+        return KeyCode::WebSearch;
+    case SDL_SCANCODE_AC_HOME:
+        return KeyCode::WebHome;
+    case SDL_SCANCODE_AC_BACK:
+        return KeyCode::WebBack;
+    case SDL_SCANCODE_AC_FORWARD:
+        return KeyCode::WebForward;
+    case SDL_SCANCODE_AC_STOP:
+        return KeyCode::WebStop;
+    case SDL_SCANCODE_AC_REFRESH:
+        return KeyCode::WebRefresh;
+    case SDL_SCANCODE_AC_BOOKMARKS:
+        return KeyCode::WebFavorites;
     /*
     case SDL_SCANCODE_BRIGHTNESSDOWN: return KeyCode::
     case SDL_SCANCODE_BRIGHTNESSUP: return KeyCode::
@@ -590,6 +710,7 @@ MyGUI::KeyCode SDLScancodeToMyGUI(SDL_Scancode code)
     case SDL_SCANCODE_APP1: return KeyCode::
     case SDL_SCANCODE_APP2: return KeyCode::
     */
-    default: return KeyCode::None;
+    default:
+        return KeyCode::None;
     }
 }

@@ -1,11 +1,8 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #include "Map.h"
 
-Map::Map()
-    : m_width(0)
-    , m_height(0)
-    , m_tileWidth(32)
-    , m_tileHeight(32)
+Map::Map() : m_width(0), m_height(0), m_tileWidth(32), m_tileHeight(32)
 {
     //
 }
@@ -14,24 +11,24 @@ Map::Map()
 
 Map::~Map()
 {
-    for (const Layer* layer : m_layers) {
+    for (const Layer *layer : m_layers) {
         delete layer;
     }
 }
 
 //------------------------------------------------------------------------------
 
-bool Map::loadFromFile(const std::string& filename)
+bool Map::loadFromFile(const std::string &filename)
 {
     m_tmxMap.loadFromFile(filename);
 
-    m_width = m_tmxMap.width;
+    m_width  = m_tmxMap.width;
     m_height = m_tmxMap.height;
 
-    m_tileWidth = m_tmxMap.tileWidth;
+    m_tileWidth  = m_tmxMap.tileWidth;
     m_tileHeight = m_tmxMap.tileHeight;
 
-    for (const tmx::Layer& layer : m_tmxMap.layers) {
+    for (const tmx::Layer &layer : m_tmxMap.layers) {
         m_layers.push_back(new Layer(this, layer));
     }
     return true;
@@ -39,10 +36,10 @@ bool Map::loadFromFile(const std::string& filename)
 
 //------------------------------------------------------------------------------
 
-void Map::getObjects(std::vector<MapObject>& v)
+void Map::getObjects(std::vector<MapObject> &v)
 {
-    for (const tmx::ObjectGroup& og : m_tmxMap.objectGroups) {
-        for (const tmx::Object& obj : og.objects) {
+    for (const tmx::ObjectGroup &og : m_tmxMap.objectGroups) {
+        for (const tmx::Object &obj : og.objects) {
 
             MapObject mapObject;
             mapObject.name = obj.name;
@@ -51,14 +48,14 @@ void Map::getObjects(std::vector<MapObject>& v)
 
             mapObject.x = obj.x / float(m_tileWidth);
             mapObject.y = m_height - (obj.height + obj.y) / float(m_tileHeight);
-      
-            mapObject.width   = obj.width  / float(m_tileWidth);
-            mapObject.height  = obj.height / float(m_tileHeight);
+
+            mapObject.width  = obj.width / float(m_tileWidth);
+            mapObject.height = obj.height / float(m_tileHeight);
 
             mapObject.shape   = obj.shape;
             mapObject.visible = (obj.visible == "1") ? true : false;
 
-            for (const std::pair<int, int>& point : obj.points) {
+            for (const std::pair<int, int> &point : obj.points) {
                 float x = point.first / float(m_tileWidth);
                 float y = -point.second / float(m_tileHeight);
 
@@ -72,9 +69,9 @@ void Map::getObjects(std::vector<MapObject>& v)
 
 //------------------------------------------------------------------------------
 
-Layer * Map::findLayer(const std::string& layerName) const
+Layer *Map::findLayer(const std::string &layerName) const
 {
-    for (Layer* layer : m_layers) {
+    for (Layer *layer : m_layers) {
         if (layer->name == layerName)
             return layer;
     }
@@ -90,7 +87,7 @@ std::vector<std::string> Map::externalImages() const
 {
     std::vector<std::string> ret;
 
-    for (const tmx::Tileset& tileset : m_tmxMap.tilesets) {
+    for (const tmx::Tileset &tileset : m_tmxMap.tilesets) {
         ret.push_back(tileset.imageSource);
     }
 
@@ -99,10 +96,7 @@ std::vector<std::string> Map::externalImages() const
 
 //------------------------------------------------------------------------------
 
-std::string Map::backgroundColor() const
-{
-    return m_tmxMap.backgroundColor;
-}
+std::string Map::backgroundColor() const { return m_tmxMap.backgroundColor; }
 
 //------------------------------------------------------------------------------
 /*!
@@ -110,26 +104,28 @@ std::string Map::backgroundColor() const
  *
  * @param tileCoords    output argument
  */
-void Map::rectOnTextureForTile(Rect<int> *tileCoords, unsigned global_tile_id) const
+void Map::rectOnTextureForTile(Rect<int> *tileCoords,
+                               unsigned global_tile_id) const
 {
     const tmx::Tileset *tileset = m_tmxMap.tilesetForTile(global_tile_id);
-  
+
     int local_id = global_tile_id - tileset->firstGid;
-  
+
     int width = tileset->imageWidth / tileset->tileWidth;
-    //int height = tileset->imageHeight / tileset->tileHeight;
-  
+    // int height = tileset->imageHeight / tileset->tileHeight;
+
     // Tile coords (y pointing down)
     int local_x = local_id % width;
     int local_y = local_id / width;
-  
-    int margin = tileset->margin;
+
+    int margin  = tileset->margin;
     int spacing = tileset->spacing;
 
     // Pixel coords (y pointing up)
     int opengl_x = local_x * tileset->tileWidth + local_x * spacing + margin;
-    int opengl_y = tileset->imageHeight - (local_y * tileset->tileHeight) - tileset->tileHeight - local_y * spacing - margin;
-  
+    int opengl_y = tileset->imageHeight - (local_y * tileset->tileHeight) -
+                   tileset->tileHeight - local_y * spacing - margin;
+
     tileCoords->left   = opengl_x;
     tileCoords->bottom = opengl_y;
     tileCoords->right  = opengl_x + tileset->tileWidth;
@@ -143,13 +139,10 @@ const unsigned FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
 const unsigned FLIPPED_VERTICALLY_FLAG   = 0x40000000;
 const unsigned FLIPPED_DIAGONALLY_FLAG   = 0x20000000;
 
-Layer::Layer(const Map *aMap, const tmx::Layer& tmxLayer)
-    : map(aMap)
-    , name(tmxLayer.name)
-    , width(tmxLayer.width)
-    , height(tmxLayer.height)
-    , visible((tmxLayer.visible == "1"))
-    , tiles(width * height, nullptr)
+Layer::Layer(const Map *aMap, const tmx::Layer &tmxLayer)
+    : map(aMap), name(tmxLayer.name), width(tmxLayer.width),
+      height(tmxLayer.height), visible((tmxLayer.visible == "1")),
+      tiles(width * height, nullptr)
 {
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
@@ -158,16 +151,19 @@ Layer::Layer(const Map *aMap, const tmx::Layer& tmxLayer)
 
             if (global_tile_id != 0) {
                 // Read out the flags
-                //bool flipped_horizontally = (global_tile_id & FLIPPED_HORIZONTALLY_FLAG);
-                //bool flipped_vertically   = (global_tile_id & FLIPPED_VERTICALLY_FLAG);
-                //bool flipped_diagonally   = (global_tile_id & FLIPPED_DIAGONALLY_FLAG);
+                // bool flipped_horizontally = (global_tile_id &
+                // FLIPPED_HORIZONTALLY_FLAG);
+                // bool flipped_vertically   = (global_tile_id &
+                // FLIPPED_VERTICALLY_FLAG);
+                // bool flipped_diagonally   = (global_tile_id &
+                // FLIPPED_DIAGONALLY_FLAG);
 
                 // Clear the flags
-                global_tile_id &= ~(FLIPPED_HORIZONTALLY_FLAG
-                                    | FLIPPED_VERTICALLY_FLAG
-                                    | FLIPPED_DIAGONALLY_FLAG);
+                global_tile_id &=
+                    ~(FLIPPED_HORIZONTALLY_FLAG | FLIPPED_VERTICALLY_FLAG |
+                      FLIPPED_DIAGONALLY_FLAG);
 
-                Tile *tile = new Tile(map, global_tile_id);
+                Tile *tile           = new Tile(map, global_tile_id);
                 tiles[y * width + x] = tile;
             }
         }
@@ -178,7 +174,7 @@ Layer::Layer(const Map *aMap, const tmx::Layer& tmxLayer)
 
 Layer::~Layer()
 {
-    for (const Tile* tile : tiles) {
+    for (const Tile *tile : tiles) {
         delete tile;
     }
 }
@@ -186,10 +182,7 @@ Layer::~Layer()
 //==============================================================================
 
 Tile::Tile(const Map *aMap, unsigned agid)
-    : map(aMap)
-    , gid(agid)
-    , texId(0)
-    , texCoords()
+    : map(aMap), gid(agid), texId(0), texCoords()
 {
 }
 
@@ -210,5 +203,3 @@ Rect<int> Tile::tileCoords() const
 
     return aTileCoords;
 }
-
-

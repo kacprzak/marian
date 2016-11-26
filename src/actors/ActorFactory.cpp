@@ -1,11 +1,12 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #include "ActorFactory.h"
 
 #include "components/ActorComponent.h"
 
-#include "actors/Hero.h"
-#include "actors/Ground.h"
 #include "actors/Box.h"
+#include "actors/Ground.h"
+#include "actors/Hero.h"
 #include "actors/Sensor.h"
 
 #include <cassert>
@@ -19,8 +20,8 @@ ActorPtr ActorFactory::create(GameLogic *game, const MapObject &obj)
     if (obj.type == "Hero") {
         actor->setCategory(HERO);
 
-        ActorComponentPtr physics(
-                    new HeroPhysicsComponent(game, obj.x, obj.y, obj.width, obj.height));
+        ActorComponentPtr physics(new HeroPhysicsComponent(
+            game, obj.x, obj.y, obj.width, obj.height));
         actor->addComponent(physics);
         physics->init();
 
@@ -32,7 +33,7 @@ ActorPtr ActorFactory::create(GameLogic *game, const MapObject &obj)
         actor->setCategory(BOX);
 
         ActorComponentPtr physics(
-                    new BoxPhysicsComponent(game, obj.x, obj.y, obj.width, obj.height));
+            new BoxPhysicsComponent(game, obj.x, obj.y, obj.width, obj.height));
         actor->addComponent(physics);
         physics->init();
 
@@ -62,7 +63,8 @@ ActorPtr ActorFactory::create(GameLogic *game, const MapObject &obj)
 
 //--------------------------------------------------------------------------
 
-ActorPtr ActorFactory::create(GameLogic *game, ActorCategory type, const std::string &name, float x, float y)
+ActorPtr ActorFactory::create(GameLogic *game, ActorCategory type,
+                              const std::string &name, float x, float y)
 {
     assert(game);
     ActorPtr actor(new Actor(getNextId(), game));

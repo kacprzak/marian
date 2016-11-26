@@ -1,14 +1,15 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #include "BaseSocketMgr.h"
 
-#include "config.h"
 #include "Logger.h"
+#include "config.h"
 
 #if PLATFORM == PLATFORM_WINDOWS
-  #include <winsock2.h>
+#include <winsock2.h>
 #else
-  #include <unistd.h> // close
-  #include <netdb.h>  // hostent
+#include <netdb.h>  // hostent
+#include <unistd.h> // close
 #endif
 
 #include <string>
@@ -16,16 +17,12 @@
 using namespace net;
 
 BaseSocketMgr::BaseSocketMgr()
-    : m_nextSocketId(1)
-    , m_inbound(0)
-    , m_outbound(0)
-    , m_maxOpenSockets(0)
-    , m_subnet(0xffffffff)
-    , m_subnetMask(0)
+    : m_nextSocketId(1), m_inbound(0), m_outbound(0), m_maxOpenSockets(0),
+      m_subnet(0xffffffff), m_subnetMask(0)
 {
 #if PLATFORM == PLATFORM_WINDOWS
     WSADATA WsaData;
-    int err = WSAStartup(MAKEWORD(2,2), &WsaData) == NO_ERROR;
+    int err = WSAStartup(MAKEWORD(2, 2), &WsaData) == NO_ERROR;
     if (err != NO_ERROR) {
         std::string msg("WSAStartup failed with error: ");
         msg += std::to_string(err);
@@ -45,14 +42,15 @@ BaseSocketMgr::~BaseSocketMgr()
     WSACleanup();
 #endif
 
-    LOG << "Data sent: " << m_outbound << " bytes | Data recv: " << m_inbound << " bytes" << std::endl;
+    LOG << "Data sent: " << m_outbound << " bytes | Data recv: " << m_inbound
+        << " bytes" << std::endl;
 }
 
 //------------------------------------------------------------------------------
 
 void BaseSocketMgr::shutdown()
 {
-    for(NetSocket *sock : m_sockList) {
+    for (NetSocket *sock : m_sockList) {
         delete sock;
     }
     m_sockList.clear();
@@ -62,7 +60,7 @@ void BaseSocketMgr::shutdown()
 
 int BaseSocketMgr::addSocket(NetSocket *socket)
 {
-    socket->m_id = m_nextSocketId;
+    socket->m_id                = m_nextSocketId;
     m_sockMap[m_nextSocketId++] = socket;
 
     m_sockList.push_front(socket);
@@ -102,7 +100,7 @@ void BaseSocketMgr::select(int pauseMicroSecs, bool handleInput)
 {
     // How long to wait
     timeval tv;
-    tv.tv_sec = 0;
+    tv.tv_sec  = 0;
     tv.tv_usec = pauseMicroSecs;
 
     fd_set inp_set, out_set, exp_set;
@@ -202,7 +200,7 @@ bool BaseSocketMgr::isInternal(unsigned int ip)
 
 //------------------------------------------------------------------------------
 
-unsigned int BaseSocketMgr::getHostByName(const std::string& hostName)
+unsigned int BaseSocketMgr::getHostByName(const std::string &hostName)
 {
     struct hostent *hostEnt = ::gethostbyname(hostName.c_str());
 
@@ -225,7 +223,8 @@ const char *BaseSocketMgr::getHostByAddr(unsigned int ip)
 
     unsigned int netip = htonl(ip);
 
-    struct hostent *hostEnt = ::gethostbyaddr((const char*)&netip, sizeof(netip), PF_INET);
+    struct hostent *hostEnt =
+        ::gethostbyaddr((const char *)&netip, sizeof(netip), PF_INET);
 
     if (hostEnt == NULL) {
         PLOG << "gethostbyaddr";

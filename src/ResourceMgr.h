@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #ifndef RESOURCE_MGR_H
 #define RESOURCE_MGR_H
 
@@ -10,26 +11,26 @@
 
 class ResourceMgr final : public Singleton<ResourceMgr>
 {
-public:
+  public:
     ResourceMgr();
 
     ~ResourceMgr() override;
 
     // Set data folder ex: "media/"
-    void setDataFolder(const std::string& folder);
+    void setDataFolder(const std::string &folder);
     std::string dataFolder() const { return m_dataFolder; }
 
     // Releases all resources.
     void release();
 
     // Textures management
-    void addTexture(const std::string& filename);
-    const gfx::Texture* getTexture(const std::string& filename);
+    void addTexture(const std::string &filename);
+    const gfx::Texture *getTexture(const std::string &filename);
     void releaseTextures();
 
-private:
+  private:
     std::string m_dataFolder;
-    std::unordered_map<std::string, gfx::Texture*> m_textures;
+    std::unordered_map<std::string, gfx::Texture *> m_textures;
 };
 
 #endif

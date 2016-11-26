@@ -1,30 +1,29 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #ifndef HERO_H
 #define HERO_H
 
 #include "Actor.h"
+#include "StateMachine.h"
 #include "components/PhysicsComponent.h"
 #include "components/RenderComponent.h"
-#include "StateMachine.h"
 
 class Engine;
 
 class HeroRenderComponent : public RenderComponent
 {
-public:
+  public:
     HeroRenderComponent() {}
-
 };
-
 
 class HeroPhysicsComponent : public PhysicsComponent
 {
-public:
-    HeroPhysicsComponent(GameLogic *game, float x, float y,
-                         float w = 1.0f, float h = 1.0f);
+  public:
+    HeroPhysicsComponent(GameLogic *game, float x, float y, float w = 1.0f,
+                         float h = 1.0f);
 
-    void handleBeginContact(Actor& other, void *fixtureUD = nullptr) override;
-    void handleEndContact  (Actor& other, void *fixtureUD = nullptr) override;
+    void handleBeginContact(Actor &other, void *fixtureUD = nullptr) override;
+    void handleEndContact(Actor &other, void *fixtureUD = nullptr) override;
 
     void update(float elapsedTime) override;
 
@@ -34,7 +33,7 @@ public:
 
     void handleInputCommand(event::InputCommand command) override;
 
-private:
+  private:
     int m_feetContacts;
     int m_heroStateId;
 

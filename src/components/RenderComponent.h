@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #ifndef RENDERCOMPONENT_H
 #define RENDERCOMPONENT_H
 
@@ -9,8 +10,7 @@ class RenderComponent : public ActorComponent
 {
     friend class ActorFactory;
 
-public:
-
+  public:
     ActorComponentId componentId() const { return RENDER; }
 };
 

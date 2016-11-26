@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #include "ScriptMgr.h"
 
 #include "BaseGameLogic.h"
@@ -36,14 +37,14 @@ ScriptMgr::~ScriptMgr()
 
 //------------------------------------------------------------------------------
 
-void ScriptMgr::setDataFolder(const std::string& folder)
+void ScriptMgr::setDataFolder(const std::string &folder)
 {
     m_dataFolder = appendDirSeparator(folder);
 }
 
 //------------------------------------------------------------------------------
 
-bool ScriptMgr::executeString(const std::string& code)
+bool ScriptMgr::executeString(const std::string &code)
 {
     if (luaL_dostring(m_L, code.c_str())) {
         const char *errMsg = lua_tostring(m_L, -1);
@@ -57,7 +58,7 @@ bool ScriptMgr::executeString(const std::string& code)
 
 //------------------------------------------------------------------------------
 
-bool ScriptMgr::executeFile(const std::string& filename)
+bool ScriptMgr::executeFile(const std::string &filename)
 {
     std::string fullpath = m_dataFolder + filename;
     if (luaL_dofile(m_L, fullpath.c_str())) {
@@ -72,13 +73,13 @@ bool ScriptMgr::executeFile(const std::string& filename)
 
 //------------------------------------------------------------------------------
 
-int ScriptMgr::getGlobalInt(const std::string& varname)
+int ScriptMgr::getGlobalInt(const std::string &varname)
 {
     lua_getglobal(m_L, varname.c_str());
     if (!lua_isnumber(m_L, -1)) {
         throw ScriptError(varname + " should be a number.");
     }
-    
+
     int retVal = lua_tonumber(m_L, -1);
     lua_pop(m_L, 1);
 
@@ -87,7 +88,7 @@ int ScriptMgr::getGlobalInt(const std::string& varname)
 
 //------------------------------------------------------------------------------
 
-bool ScriptMgr::getGlobalBool(const std::string& varname)
+bool ScriptMgr::getGlobalBool(const std::string &varname)
 {
     lua_getglobal(m_L, varname.c_str());
     if (!lua_isboolean(m_L, -1)) {
@@ -117,21 +118,21 @@ const char *ScriptMgr::getGlobalString(const std::string &varname)
 
 //------------------------------------------------------------------------------
 
-void ScriptMgr::addListener(ScriptListener* listener)
+void ScriptMgr::addListener(ScriptListener *listener)
 {
     m_listeners.push_back(listener);
 }
 
 //------------------------------------------------------------------------------
 
-void ScriptMgr::removeListener(ScriptListener* listener)
+void ScriptMgr::removeListener(ScriptListener *listener)
 {
     m_listeners.remove(listener);
 }
 
 //------------------------------------------------------------------------------
 
-void ScriptMgr::notifyListenersOnOutput(const std::string & msg)
+void ScriptMgr::notifyListenersOnOutput(const std::string &msg)
 {
     for (auto listener : m_listeners) {
         listener->onScriptOutput(msg);
@@ -140,7 +141,7 @@ void ScriptMgr::notifyListenersOnOutput(const std::string & msg)
 
 //------------------------------------------------------------------------------
 
-void ScriptMgr::notifyListenersOnError(const std::string & msg)
+void ScriptMgr::notifyListenersOnError(const std::string &msg)
 {
     for (auto listener : m_listeners) {
         listener->onScriptError(msg);
@@ -155,7 +156,8 @@ static int l_addBox(lua_State *L)
     float x = luaL_checknumber(L, -2);
     float y = luaL_checknumber(L, -1);
 
-    BaseGameLogic *currGame = static_cast<BaseGameLogic *>(Engine::singleton().game());
+    BaseGameLogic *currGame =
+        static_cast<BaseGameLogic *>(Engine::singleton().game());
     currGame->addGameObject(BOX, "box", x, y);
 
     return 0;

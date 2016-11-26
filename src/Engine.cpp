@@ -1,8 +1,7 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "Engine.h"
 
-#include "ResourceMgr.h"
 #include "Logger.h"
+#include "ResourceMgr.h"
 #include "network/BaseSocketMgr.h"
 
 #include <cstdlib> // exit
@@ -11,16 +10,12 @@
 #define DELTA_MAX 0.04f
 
 Engine::Engine(bool initVideo)
-    : m_breakLoop(false)
-    , m_initVideo(initVideo)
-    , m_appActive(true)
-    , m_mouseFocus(true)
-    , m_inputFocus(true)
-    , m_game(nullptr)
+    : m_breakLoop(false), m_initVideo(initVideo), m_appActive(true),
+      m_mouseFocus(true), m_inputFocus(true), m_game(nullptr)
 {
     try {
         initializeSDL();
-    } catch (const EngineError& /*e*/) {
+    } catch (const EngineError & /*e*/) {
         SDL_Quit();
         throw;
     }
@@ -54,7 +49,8 @@ void Engine::initializeSDL()
     }
 
     if (m_initVideo) {
-        LOG << "  Current video driver: " << SDL_GetCurrentVideoDriver() << "\n";
+        LOG << "  Current video driver: " << SDL_GetCurrentVideoDriver()
+            << "\n";
 #if 0
         SDL_GL_SetAttribute(SDL_GL_RED_SIZE,   8);
         SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
@@ -67,7 +63,8 @@ void Engine::initializeSDL()
     }
 
     SDL_ShowCursor(SDL_DISABLE);
-    //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+    // SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,
+    // SDL_DEFAULT_REPEAT_INTERVAL);
     SDL_StopTextInput(); // Disable text input events when GUI is not visible
 
     LOG << "SDL initialized\n";
@@ -83,7 +80,8 @@ void Engine::logSDLInfo()
     SDL_VERSION(&compiled);
     SDL_GetVersion(&linked);
     LOG << "  Compiled against SDL " << (uint32_t)compiled.major << "."
-        << (uint32_t)compiled.minor << "." << (uint32_t)compiled.patch << std::endl;
+        << (uint32_t)compiled.minor << "." << (uint32_t)compiled.patch
+        << std::endl;
     LOG << "  Linking against SDL " << (uint32_t)linked.major << "."
         << (uint32_t)linked.minor << "." << (uint32_t)linked.patch << std::endl;
 
@@ -101,10 +99,10 @@ void Engine::mainLoop(GameLogic *game)
 {
     m_game = game;
     m_game->onBeforeMainLoop(this);
- 
+
     unsigned int curr_time = SDL_GetTicks();
     unsigned int last_time = curr_time;
-    float delta = 0.0f;
+    float delta            = 0.0f;
 
     for (;;) {
         if (m_breakLoop || !processEvents())
@@ -119,9 +117,9 @@ void Engine::mainLoop(GameLogic *game)
             }
             draw();
         }
-    
+
         curr_time = SDL_GetTicks();
-        delta = float(curr_time - last_time) / 1000.0f;
+        delta     = float(curr_time - last_time) / 1000.0f;
         last_time = curr_time;
     }
 
@@ -134,29 +132,30 @@ void Engine::mainLoop(GameLogic *game)
 bool Engine::processEvents()
 {
     SDL_Event event;
-  
+
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
         case SDL_KEYUP:
             break;
         case SDL_KEYDOWN:
-            if (event.key.keysym.scancode == SDL_SCANCODE_G) m_game->toggleDrawDebug();
-            if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) return false;
+            if (event.key.keysym.scancode == SDL_SCANCODE_G)
+                m_game->toggleDrawDebug();
+            if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+                return false;
             break;
-        case SDL_WINDOWEVENT:
-            {
-                switch (event.window.event) {
-                case SDL_WINDOWEVENT_FOCUS_GAINED:
-                    m_inputFocus = true;
-                    break;
-                case SDL_WINDOWEVENT_FOCUS_LOST:
-                    m_inputFocus = false;
-                    break;
-                default:
-                    break;
-                }
+        case SDL_WINDOWEVENT: {
+            switch (event.window.event) {
+            case SDL_WINDOWEVENT_FOCUS_GAINED:
+                m_inputFocus = true;
+                break;
+            case SDL_WINDOWEVENT_FOCUS_LOST:
+                m_inputFocus = false;
+                break;
+            default:
                 break;
             }
+            break;
+        }
         case SDL_QUIT:
             return false;
         }

@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #ifndef BOX2DPHYSICSENGINE_H
 #define BOX2DPHYSICSENGINE_H
 
@@ -19,7 +20,7 @@ class ContactListener : public b2ContactListener
 
 class Box2dPhysicsEngine : public PhysicsEngine
 {
-public:
+  public:
     Box2dPhysicsEngine();
     ~Box2dPhysicsEngine() override;
 
@@ -28,17 +29,17 @@ public:
     void toggleDrawDebug() override;
     void drawDebugData() override;
 
-    //void applyForce(const Vec2& dir, float newtons, ActorId actorId) override;
+    // void applyForce(const Vec2& dir, float newtons, ActorId actorId)
+    // override;
 
     b2World *world() { return m_world.get(); }
 
-private:
+  private:
     std::unique_ptr<b2World> m_world;
-    ContactListener          m_contactListener;
+    ContactListener m_contactListener;
 
     std::unique_ptr<DebugDraw> m_debugDraw;
-    bool                       m_drawDebugData;
-
+    bool m_drawDebugData;
 };
 
 #endif // BOX2DPHYSICSENGINE_H

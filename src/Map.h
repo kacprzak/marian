@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #ifndef MAP_H
 #define MAP_H
 
@@ -18,7 +19,7 @@ class Layer;
 /*! \brief Map object but in game coords. */
 class MapObject
 {
-public:
+  public:
     std::string name;
     std::string type;
     unsigned gid; //< 0 means no gid
@@ -28,7 +29,7 @@ public:
     float height;
     bool visible;
     std::string shape; //< ellipse, polygon, polyline or null
-    std::vector<std::pair<float, float> > points; //< polygon or polyline points
+    std::vector<std::pair<float, float>> points; //< polygon or polyline points
 };
 
 //------------------------------------------------------------------------------
@@ -39,25 +40,25 @@ class Map : private boost::noncopyable
     friend class Layer;
     friend class Tile;
 
-public:
+  public:
     Map();
     ~Map();
-    bool loadFromFile(const std::string& filename);
+    bool loadFromFile(const std::string &filename);
 
     int width() const { return m_width; }
     int height() const { return m_height; }
 
     /*! Get map objects */
-    void getObjects(std::vector<MapObject>& v);
+    void getObjects(std::vector<MapObject> &v);
 
     std::vector<std::string> externalImages() const;
     std::string backgroundColor() const;
 
-    Layer *findLayer(const std::string& layerName) const;
+    Layer *findLayer(const std::string &layerName) const;
 
     std::vector<Layer *> m_layers;
 
-private:
+  private:
     void rectOnTextureForTile(Rect<int> *tileCoords, unsigned globalId) const;
 
     /*! Size in game (tile) coords */
@@ -75,11 +76,11 @@ private:
 
 class Layer : private boost::noncopyable
 {
-public:
-    Layer(const Map *map, const tmx::Layer& layer);
+  public:
+    Layer(const Map *map, const tmx::Layer &layer);
     ~Layer();
 
-    //void draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const;
+    // void draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const;
 
     const Map *map; //!< Parent object
     std::string name;
@@ -93,13 +94,13 @@ public:
 
 class Tile
 {
-public:
+  public:
     Tile(const Map *map, unsigned agid);
 
-    const Map     *map; //!< Parent object
-    unsigned       gid;
-    unsigned       texId;
-    float          texCoords[8];
+    const Map *map; //!< Parent object
+    unsigned gid;
+    unsigned texId;
+    float texCoords[8];
 
     std::string textureSource() const;
     Rect<int> tileCoords() const;

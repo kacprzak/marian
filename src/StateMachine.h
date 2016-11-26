@@ -1,18 +1,19 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #ifndef STATEMACHINE_H
 #define STATEMACHINE_H
 
-#include <map>
 #include <cassert>
+#include <map>
 
 template <typename T>
 class State
 {
-public:
+  public:
     virtual ~State() {}
 
     virtual void onEnter(T owner, int prevStateId) = 0;
-    virtual void onExit(T owner, int nextStateId) = 0;
+    virtual void onExit(T owner, int nextStateId)  = 0;
 };
 
 //------------------------------------------------------------------------------
@@ -26,15 +27,14 @@ public:
  * \tparam S state type
  */
 template <typename T, typename S>
-    class StateMachine
+class StateMachine
 {
-public:
-StateMachine(T owner, int idleStateId)
-    : m_owner(owner)
-        , m_idleStateId(idleStateId)
-        , m_currentStateId(idleStateId)
-        , m_currentState(nullptr)
-    {}
+  public:
+    StateMachine(T owner, int idleStateId)
+        : m_owner(owner), m_idleStateId(idleStateId),
+          m_currentStateId(idleStateId), m_currentState(nullptr)
+    {
+    }
 
     T owner() { return m_owner; }
     const T owner() const { return m_owner; }
@@ -46,7 +46,7 @@ StateMachine(T owner, int idleStateId)
 
     const int *stateId(S *state) const
     {
-        for (const auto& kv : m_states) {
+        for (const auto &kv : m_states) {
             if (kv.second == state)
                 return &kv.first;
         }
@@ -61,16 +61,13 @@ StateMachine(T owner, int idleStateId)
 
         m_states[stateId] = state;
     }
-    
+
     bool registered(int stateId) const
     {
         return m_states.find(stateId) != end(m_states);
     }
 
-    bool registered(S *state) const
-    {
-        return stateId(state) != nullptr;
-    }
+    bool registered(S *state) const { return stateId(state) != nullptr; }
 
     void changeState(int stateId)
     {
@@ -85,18 +82,17 @@ StateMachine(T owner, int idleStateId)
         int prevStateId = m_currentStateId;
 
         m_currentStateId = stateId;
-        m_currentState = nextState;
+        m_currentState   = nextState;
 
         nextState->onEnter(m_owner, prevStateId);
     }
 
-private:
+  private:
     T m_owner;
     const int m_idleStateId;
     int m_currentStateId;
-    S  *m_currentState;
+    S *m_currentState;
     std::map<int, S *> m_states;
 };
 
 #endif // STATEMACHINE_H
-

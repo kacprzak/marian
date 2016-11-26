@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #ifndef AICOMPONENT_H
 #define AICOMPONENT_H
 
@@ -8,7 +9,7 @@ class AiComponent : public ActorComponent
 {
     friend class ActorFactory;
 
-public:
+  public:
     virtual ~AiComponent();
 
     /*!
@@ -17,11 +18,14 @@ public:
      * \param other      object that contacts this object
      * \param fixtureUD  user data of fixture that collided with other
      */
-    virtual void handleBeginContact(Actor& /*other*/,
-                                    void * /*fixtureUD*/ = nullptr) {}
-    virtual void handleEndContact  (Actor& /*other*/,
-                                    void * /*fixtureUD*/ = nullptr) {}
-
+    virtual void handleBeginContact(Actor & /*other*/,
+                                    void * /*fixtureUD*/ = nullptr)
+    {
+    }
+    virtual void handleEndContact(Actor & /*other*/,
+                                  void * /*fixtureUD*/ = nullptr)
+    {
+    }
 
     ActorComponentId componentId() const { return AI; }
 };

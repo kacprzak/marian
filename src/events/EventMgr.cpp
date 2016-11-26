@@ -1,26 +1,21 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #include "EventMgr.h"
 
 #include "Logger.h"
 
 using namespace event;
 
-EventMgr::EventMgr()
-    : m_activeQueue(0)
-{
-    LOG << "created EventMgr\n";
-}
+EventMgr::EventMgr() : m_activeQueue(0) { LOG << "created EventMgr\n"; }
 
 //------------------------------------------------------------------------------
 
-EventMgr::~EventMgr()
-{
-    LOG << "destroyed EventMgr\n";
-}
+EventMgr::~EventMgr() { LOG << "destroyed EventMgr\n"; }
 
 //------------------------------------------------------------------------------
 
-void EventMgr::addListener(EventType et, std::shared_ptr<EventListener> listener)
+void EventMgr::addListener(EventType et,
+                           std::shared_ptr<EventListener> listener)
 {
     // TODO: Prevent double registration
 
@@ -29,10 +24,11 @@ void EventMgr::addListener(EventType et, std::shared_ptr<EventListener> listener
 
 //------------------------------------------------------------------------------
 
-void EventMgr::removeListener(EventType et, std::shared_ptr<EventListener> listener)
+void EventMgr::removeListener(EventType et,
+                              std::shared_ptr<EventListener> listener)
 {
     auto ii = m_listeners.equal_range(et);
-    for(auto i = ii.first; i != ii.second;) {
+    for (auto i = ii.first; i != ii.second;) {
         if (i->second == listener) {
             i = m_listeners.erase(i);
         } else {
@@ -46,7 +42,7 @@ void EventMgr::removeListener(EventType et, std::shared_ptr<EventListener> liste
 void EventMgr::triggerEvent(std::unique_ptr<Event> event)
 {
     auto ii = m_listeners.equal_range(event->eventType());
-    for(auto i = ii.first; i != ii.second; ++i) {
+    for (auto i = ii.first; i != ii.second; ++i) {
         (*(i->second))(*event);
     }
 }
@@ -66,12 +62,10 @@ void EventMgr::queueEvent(std::unique_ptr<Event> event)
 
 void EventMgr::update()
 {
-    for (std::unique_ptr<Event>& event : m_eventQueues[m_activeQueue]) {
+    for (std::unique_ptr<Event> &event : m_eventQueues[m_activeQueue]) {
         triggerEvent(std::move(event));
     }
     m_eventQueues[m_activeQueue].clear();
 
     m_activeQueue = (m_activeQueue + 1) % NUM_OF_QUEUES;
 }
-
-

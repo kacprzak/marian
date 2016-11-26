@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #ifndef GAMELOGIC_H
 #define GAMELOGIC_H
 
@@ -6,16 +7,16 @@
 #include "PhysicsEngine.h"
 
 #include <boost/utility.hpp>
-#include <memory>
 #include <list>
+#include <memory>
 
 class Engine;
 
-using GameViewList = std::list<std::shared_ptr<GameView> >;
+using GameViewList = std::list<std::shared_ptr<GameView>>;
 
 class GameLogic : private boost::noncopyable
 {
-public:
+  public:
     virtual ~GameLogic() {}
 
     virtual void update(float elapsedTime) = 0;
@@ -26,7 +27,7 @@ public:
 
     virtual PhysicsEngine *physicsEngine() { return nullptr; }
 
-    GameViewList& gameViews() { return m_gameViews; }
+    GameViewList &gameViews() { return m_gameViews; }
 
     void drawDebugData()
     {
@@ -47,7 +48,7 @@ public:
         gameView->onAttach(viewId, actorId);
     }
 
-private:
+  private:
     GameViewList m_gameViews;
 };
 

@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #include "ResourceMgr.h"
 
 #include "Logger.h"
@@ -7,10 +8,7 @@
 #include <memory>
 #include <stdexcept>
 
-ResourceMgr::ResourceMgr()
-{
-    LOG << "created ResourceMgr\n";
-}
+ResourceMgr::ResourceMgr() { LOG << "created ResourceMgr\n"; }
 
 //------------------------------------------------------------------------------
 
@@ -22,21 +20,18 @@ ResourceMgr::~ResourceMgr()
 
 //------------------------------------------------------------------------------
 
-void ResourceMgr::setDataFolder(const std::string& folder)
+void ResourceMgr::setDataFolder(const std::string &folder)
 {
     m_dataFolder = appendDirSeparator(folder);
 }
 
 //------------------------------------------------------------------------------
 
-void ResourceMgr::release()
-{
-    releaseTextures();
-}
+void ResourceMgr::release() { releaseTextures(); }
 
 //------------------------------------------------------------------------------
 
-void ResourceMgr::addTexture(const std::string& filename)
+void ResourceMgr::addTexture(const std::string &filename)
 {
     if (m_textures.find(filename) != m_textures.end()) {
         LOG_WARNING << "Trying to double load " << filename << " texture!\n";
@@ -66,10 +61,10 @@ void ResourceMgr::releaseTextures()
 
 //------------------------------------------------------------------------------
 
-const gfx::Texture* ResourceMgr::getTexture(const std::string& filename)
+const gfx::Texture *ResourceMgr::getTexture(const std::string &filename)
 {
     auto it = m_textures.find(filename);
-    
+
     if (it != std::end(m_textures)) {
         return it->second;
     } else {

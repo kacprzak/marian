@@ -1,8 +1,9 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #include "Texture.h"
 
 #ifdef _MSC_VER
-  #include <windows.h>
+#include <windows.h>
 #endif
 
 #include <GL/gl.h>
@@ -10,8 +11,8 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
-#include <stdexcept>
 #include <iostream>
+#include <stdexcept>
 
 using namespace gfx;
 
@@ -20,28 +21,21 @@ static int SDL_InvertSurface(SDL_Surface *image);
 
 //------------------------------------------------------------------------------
 
-Texture::Texture()
-    : m_textureId(0)
-    , m_w(0)
-    , m_h(0)
-{}
+Texture::Texture() : m_textureId(0), m_w(0), m_h(0) {}
 
 //------------------------------------------------------------------------------
 
-Texture::~Texture()
-{
-    glDeleteTextures(1, &m_textureId);
-}
+Texture::~Texture() { glDeleteTextures(1, &m_textureId); }
 
 //------------------------------------------------------------------------------
 
-void Texture::loadFromFile(const std::string& filename)
+void Texture::loadFromFile(const std::string &filename)
 {
     SDL_Surface *surface = IMG_Load(filename.c_str());
 
     if (!surface) {
-        throw std::runtime_error("SDL_Image load error: "
-                                 + std::string(IMG_GetError()));
+        throw std::runtime_error("SDL_Image load error: " +
+                                 std::string(IMG_GetError()));
     }
 
     loadFromSDL(surface);
@@ -79,17 +73,17 @@ static GLuint load_texture(SDL_Surface *surface, int *w, int *h)
         // Convert to 32 bits.
         SDL_PixelFormat fmt;
         memset(&fmt, 0, sizeof(fmt));
-        fmt.format = SDL_PIXELFORMAT_RGBA8888;
-        fmt.BitsPerPixel = 32;
+        fmt.format        = SDL_PIXELFORMAT_RGBA8888;
+        fmt.BitsPerPixel  = 32;
         fmt.BytesPerPixel = 4;
-        fmt.Rmask = 0xff;
-        fmt.Gmask = 0xff00;
-        fmt.Bmask = 0xff0000;
-        fmt.Amask = 0xff000000;
+        fmt.Rmask         = 0xff;
+        fmt.Gmask         = 0xff00;
+        fmt.Bmask         = 0xff0000;
+        fmt.Amask         = 0xff000000;
 
         SDL_Surface *nimg = SDL_ConvertSurface(surface, &fmt, 0);
-        
-        if(!nimg) {
+
+        if (!nimg) {
             std::cerr << "SDL error: " << SDL_GetError() << "\n";
             return 0;
         }
@@ -98,7 +92,7 @@ static GLuint load_texture(SDL_Surface *surface, int *w, int *h)
         converted = true;
         // surface is now pointing to object that needs to be freed!
         surface = nimg;
-        mode = GL_RGBA;
+        mode    = GL_RGBA;
     }
 
     *w = surface->w;
@@ -112,19 +106,19 @@ static GLuint load_texture(SDL_Surface *surface, int *w, int *h)
 
     // This reads from the sdl surface and puts it into an opengl texture
     SDL_LockSurface(surface);
-    glTexImage2D(GL_TEXTURE_2D, 0, mode, surface->w, surface->h, 0,
-                 mode, GL_UNSIGNED_BYTE, surface->pixels);
+    glTexImage2D(GL_TEXTURE_2D, 0, mode, surface->w, surface->h, 0, mode,
+                 GL_UNSIGNED_BYTE, surface->pixels);
     SDL_UnlockSurface(surface);
 
     // These affect how this texture is drawn later on...
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     // Clamping
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
@@ -139,7 +133,7 @@ static GLuint load_texture(SDL_Surface *surface, int *w, int *h)
 // Code from
 // http://www.gribblegames.com/articles/game_programming/sdlgl/invert_sdl_surfaces.html
 //
-static int invert_image(int pitch, int height, void* image_pixels)
+static int invert_image(int pitch, int height, void *image_pixels)
 {
     int index;
     void *temp_row;
@@ -150,20 +144,17 @@ static int invert_image(int pitch, int height, void* image_pixels)
         SDL_SetError("Not enough memory for image inversion");
         return -1;
     }
-    //if height is odd, don't need to swap middle row
+    // if height is odd, don't need to swap middle row
     height_div_2 = (int)(height * .5);
     for (index = 0; index < height_div_2; ++index) {
-        //uses string.h
-        memcpy((Uint8 *)temp_row,
-               (Uint8 *)(image_pixels) + pitch * index,
+        // uses string.h
+        memcpy((Uint8 *)temp_row, (Uint8 *)(image_pixels) + pitch * index,
                pitch);
 
         memcpy((Uint8 *)(image_pixels) + pitch * index,
-               (Uint8 *)(image_pixels) + pitch * (height - index-1),
-               pitch);
+               (Uint8 *)(image_pixels) + pitch * (height - index - 1), pitch);
 
-        memcpy((Uint8 *)(image_pixels) + pitch * (height - index-1),
-               temp_row,
+        memcpy((Uint8 *)(image_pixels) + pitch * (height - index - 1), temp_row,
                pitch);
     }
     free(temp_row);
@@ -172,7 +163,7 @@ static int invert_image(int pitch, int height, void* image_pixels)
 
 //------------------------------------------------------------------------------
 
-//This is the function you want to call!
+// This is the function you want to call!
 static int SDL_InvertSurface(SDL_Surface *image)
 {
     if (NULL == image) {

@@ -1,24 +1,21 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #include "BaseGameLogic.h"
 
-#include "actors/ActorFactory.h"
-#include "events/EventMgr.h"
 #include "Box2dPhysicsEngine.h"
 #include "Logger.h"
+#include "actors/ActorFactory.h"
+#include "events/EventMgr.h"
 
 BaseGameLogic::BaseGameLogic()
-    : m_physicsEngine(new Box2dPhysicsEngine)
-    , m_mapWidth(0.0f)
+    : m_physicsEngine(new Box2dPhysicsEngine), m_mapWidth(0.0f)
 {
     LOG << "created BaseGameLogic\n";
 }
 
 //------------------------------------------------------------------------------
 
-BaseGameLogic::~BaseGameLogic()
-{
-    LOG << "destroyed BaseGameLogic\n";
-}
+BaseGameLogic::~BaseGameLogic() { LOG << "destroyed BaseGameLogic\n"; }
 
 //------------------------------------------------------------------------------
 
@@ -28,11 +25,11 @@ void BaseGameLogic::update(float elapsedTime)
 
     m_physicsEngine->update(elapsedTime);
 
-    for (const auto& pair : m_actors) {
+    for (const auto &pair : m_actors) {
         pair.second->update(elapsedTime);
     }
 
-    EventMgr& evtMgr = EventMgr::singleton();
+    EventMgr &evtMgr = EventMgr::singleton();
     evtMgr.update();
 
     // Remove dead GameObjects
@@ -41,7 +38,8 @@ void BaseGameLogic::update(float elapsedTime)
         ActorPtr actor = it->second;
         if (actor->dead()) {
             // Emit event
-            evtMgr.queueEvent(std::make_unique<ActorDestroyedEvent>(actor->id()));
+            evtMgr.queueEvent(
+                std::make_unique<ActorDestroyedEvent>(actor->id()));
             it = m_actors.erase(it);
         } else {
             // Kill it if out of map
@@ -54,7 +52,7 @@ void BaseGameLogic::update(float elapsedTime)
 
 //------------------------------------------------------------------------------
 
-void BaseGameLogic::addGameObject(ActorCategory type, const std::string& name,
+void BaseGameLogic::addGameObject(ActorCategory type, const std::string &name,
                                   float x, float y)
 {
     using namespace event;
@@ -63,7 +61,8 @@ void BaseGameLogic::addGameObject(ActorCategory type, const std::string& name,
     m_actors.insert(std::make_pair(a->id(), a));
 
     // Emit event
-    EventMgr::singleton().queueEvent(std::make_unique<ActorCreatedEvent>(a->id(), type, x, y));
+    EventMgr::singleton().queueEvent(
+        std::make_unique<ActorCreatedEvent>(a->id(), type, x, y));
 }
 
 //------------------------------------------------------------------------------

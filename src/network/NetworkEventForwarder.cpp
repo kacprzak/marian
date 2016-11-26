@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #include "NetworkEventForwarder.h"
 
 #include "Packet.h"
@@ -14,16 +15,16 @@ NetworkEventForwarder::NetworkEventForwarder(int socketId)
 
 //------------------------------------------------------------------------------
 
-void NetworkEventForwarder::forwardEvent(event::Event& e)
+void NetworkEventForwarder::forwardEvent(event::Event &e)
 {
     std::ostringstream out;
 
     out << static_cast<unsigned short>(e.eventType()) << " ";
-    //out << e.eventName() << " ";
+    // out << e.eventName() << " ";
     out << e;
-    //out << "\r\n";
+    // out << "\r\n";
 
-    const std::string& data = out.str();
+    const std::string &data = out.str();
 
     std::shared_ptr<Packet> packet(new Packet(data.c_str(), data.length()));
 

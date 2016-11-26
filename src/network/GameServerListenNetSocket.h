@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #ifndef GAMESERVERLISTENNETSOCKET_H
 #define GAMESERVERLISTENNETSOCKET_H
 
@@ -6,13 +7,13 @@
 
 namespace net {
 
-    class GameServerListenNetSocket : public ListenNetSocket
-    {
-    public:
-        explicit GameServerListenNetSocket(int portNum);
+class GameServerListenNetSocket : public ListenNetSocket
+{
+  public:
+    explicit GameServerListenNetSocket(int portNum);
 
-        void handleInput();
-    };
+    void handleInput();
+};
 
 } // namespace network
 

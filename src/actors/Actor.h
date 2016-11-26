@@ -1,18 +1,19 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #ifndef ACTOR_H
 #define ACTOR_H
 
 #include "ActorCategory.h"
 #include "components/ActorComponent.h"
 
-#include <string>
 #include <map>
 #include <memory>
+#include <string>
 
 class GameLogic;
 
-using ActorId = unsigned long;
-using ActorPtr = std::shared_ptr<Actor>;
+using ActorId           = unsigned long;
+using ActorPtr          = std::shared_ptr<Actor>;
 using ActorComponentPtr = std::shared_ptr<ActorComponent>;
 
 /*!
@@ -26,7 +27,7 @@ class Actor final
 
     using ComponentsMap = std::map<ActorComponentId, ActorComponentPtr>;
 
-public:
+  public:
     Actor(ActorId id, GameLogic *game);
     ~Actor();
 
@@ -44,10 +45,11 @@ public:
     void die();
     bool dead() const { return m_dead; }
 
-    void setName(const std::string& name) { m_name = name; }
-    const std::string& name() const { return m_name; }
+    void setName(const std::string &name) { m_name = name; }
+    const std::string &name() const { return m_name; }
 
-    template <class T> std::weak_ptr<T> getComponent(ActorComponentId id)
+    template <class T>
+    std::weak_ptr<T> getComponent(ActorComponentId id)
     {
         ComponentsMap::iterator found = m_components.find(id);
         if (found != m_components.end()) {
@@ -62,13 +64,14 @@ public:
         }
     }
 
-private:
-    ActorId       m_id;
-    GameLogic    *m_game;           //!< Owner
-    ActorCategory m_category; 
+  private:
+    ActorId m_id;
+    GameLogic *m_game; //!< Owner
+    ActorCategory m_category;
     ComponentsMap m_components;
-    bool          m_dead;           //!< Flag indicating that this actor should be deleted by GameLogic
-    std::string   m_name;           //!< Name used in debug
+    bool m_dead; //!< Flag indicating that this actor should be deleted by
+                 //!GameLogic
+    std::string m_name; //!< Name used in debug
 
     // Should be called only by ActorFactory
     void addComponent(ActorComponentPtr c)
@@ -76,8 +79,6 @@ private:
         c->setOwner(this);
         m_components.insert(std::make_pair(c->componentId(), c));
     }
-
 };
 
 #endif // ACTOR_H
-

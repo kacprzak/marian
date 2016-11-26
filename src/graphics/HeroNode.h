@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #ifndef HERONODE_H
 #define HERONODE_H
 
@@ -10,34 +11,34 @@
 
 namespace gfx {
 
-    class HeroNode;
-    class HeroNodeState;
+class HeroNode;
+class HeroNodeState;
 
-    using HeroNodeStateMachine = StateMachine<HeroNode *, HeroNodeState>;
+using HeroNodeStateMachine = StateMachine<HeroNode *, HeroNodeState>;
 
-    class HeroNode : public SpriteNode
-    {
-    public:
-        HeroNode();
-        ~HeroNode() override;
+class HeroNode : public SpriteNode
+{
+  public:
+    HeroNode();
+    ~HeroNode() override;
 
-        void update(float elapsedTime) override;
-        void moveTo(float x, float y, float angle) override;
+    void update(float elapsedTime) override;
+    void moveTo(float x, float y, float angle) override;
 
-        void changePhysicsState(ActorPhysicsStateId newState) override;
+    void changePhysicsState(ActorPhysicsStateId newState) override;
 
-        void flipHorizontally(bool flip) override { setFacingRight(!flip); }
+    void flipHorizontally(bool flip) override { setFacingRight(!flip); }
 
-        bool isFacingRight() const { return m_facingRight; }
+    bool isFacingRight() const { return m_facingRight; }
 
-    private:
-        void setFacingRight(bool right);
+  private:
+    void setFacingRight(bool right);
 
-        bool m_facingRight;
+    bool m_facingRight;
 
-        HeroNodeStateMachine m_stateMachine;
-        std::vector<HeroNodeState *> m_states;
-    };
+    HeroNodeStateMachine m_stateMachine;
+    std::vector<HeroNodeState *> m_states;
+};
 
 } // namespace gfx
 

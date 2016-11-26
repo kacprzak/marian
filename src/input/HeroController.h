@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #ifndef HEROCONTROLLER_H
 #define HEROCONTROLLER_H
 
@@ -7,7 +8,7 @@
 
 class HeroController : public KeyboardHandler
 {
-public:
+  public:
     HeroController();
 
     void setActor(ActorId actorId);
@@ -16,7 +17,7 @@ public:
     bool onKeyDown(const unsigned int kcode);
     bool onKeyUp(const unsigned int kcode);
 
-private:
+  private:
     ActorId m_actorId;
 };
 

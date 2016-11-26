@@ -1,23 +1,24 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #include "RemoteEventSocket.h"
 
+#include "Logger.h"
+#include "events/Event.h"
 #include "events/EventMgr.h"
 #include "events/EventType.h"
-#include "events/Event.h"
-#include "Logger.h"
 
 #include <sstream>
 
 using namespace net;
 
-RemoteEventSocket::RemoteEventSocket()
-{}
+RemoteEventSocket::RemoteEventSocket() {}
 
 //------------------------------------------------------------------------------
 
 RemoteEventSocket::RemoteEventSocket(int socket, unsigned int ip)
     : NetSocket(socket, ip)
-{}
+{
+}
 
 //------------------------------------------------------------------------------
 
@@ -32,7 +33,7 @@ void RemoteEventSocket::handleInput()
         m_inList.pop_front();
 
         const char *buf = packet->getData();
-        int size = packet->getSize();
+        int size        = packet->getSize();
 
         static char str[MAX_PACKET_SIZE + 1];
 
@@ -44,17 +45,15 @@ void RemoteEventSocket::handleInput()
         in >> eventTypeVal;
         EventType eventType = static_cast<EventType>(eventTypeVal);
 
-        EventMgr& evtMgr = EventMgr::singleton();
+        EventMgr &evtMgr = EventMgr::singleton();
         std::unique_ptr<Event> eventPtr;
 
         switch (eventType) {
-        case ACTOR_MOVED:
-        {
+        case ACTOR_MOVED: {
             eventPtr.reset(new MoveEvent(in));
             break;
         }
-        case ACTOR_PHYSICS_STATE_CHANGED:
-        {
+        case ACTOR_PHYSICS_STATE_CHANGED: {
             eventPtr.reset(new PhysicsStateChangeEvent(in));
             break;
         }

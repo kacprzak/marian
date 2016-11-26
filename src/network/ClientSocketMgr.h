@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #ifndef CLIENTSOCKETMGR_H
 #define CLIENTSOCKETMGR_H
 
@@ -8,19 +9,19 @@
 
 namespace net {
 
-    class ClientSocketMgr : public BaseSocketMgr
-    {
-        using super = BaseSocketMgr;
+class ClientSocketMgr : public BaseSocketMgr
+{
+    using super = BaseSocketMgr;
 
-    public:
-        ClientSocketMgr(const std::string& hostName, unsigned int port);
+  public:
+    ClientSocketMgr(const std::string &hostName, unsigned int port);
 
-        bool connect();
+    bool connect();
 
-    private:
-        std::string m_hostName;
-        unsigned int m_port;
-    };
+  private:
+    std::string m_hostName;
+    unsigned int m_port;
+};
 
 } // namespace network
 

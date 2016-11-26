@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #ifndef SENSOR_H
 #define SENSOR_H
 
@@ -6,8 +7,8 @@
 
 class SensorPhysicsComponent : public GroundPhysicsComponent
 {
-public:
-    SensorPhysicsComponent(GameLogic *game, const MapObject& obj);
+  public:
+    SensorPhysicsComponent(GameLogic *game, const MapObject &obj);
 };
 
 #endif // SENSOR_H

@@ -1,19 +1,21 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #include "TexCoords.h"
 
 namespace gfx {
 
-TexCoords<4> calculateTexCoords(int texWidth, int texHeight, const Rect<int>& tileCoords)
+TexCoords<4> calculateTexCoords(int texWidth, int texHeight,
+                                const Rect<int> &tileCoords)
 {
     TexCoords<4> tc;
 
     // Left bottom
-    tc[0].s = tileCoords.left   / static_cast<float>(texWidth);
+    tc[0].s = tileCoords.left / static_cast<float>(texWidth);
     tc[0].t = tileCoords.bottom / static_cast<float>(texHeight);
 
     // Top right
     tc[2].s = tileCoords.right / static_cast<float>(texWidth);
-    tc[2].t = tileCoords.top   / static_cast<float>(texHeight);
+    tc[2].t = tileCoords.top / static_cast<float>(texHeight);
 
     // Right bottom
     tc[1].s = tc[2].s;
@@ -28,7 +30,7 @@ TexCoords<4> calculateTexCoords(int texWidth, int texHeight, const Rect<int>& ti
 
 //------------------------------------------------------------------------------
 
-TexCoords<4> flipVerticallyTexCoords(const TexCoords<4>& texCoords)
+TexCoords<4> flipVerticallyTexCoords(const TexCoords<4> &texCoords)
 {
     TexCoords<4> tc;
 
@@ -42,7 +44,7 @@ TexCoords<4> flipVerticallyTexCoords(const TexCoords<4>& texCoords)
 
 //------------------------------------------------------------------------------
 
-TexCoords<4> flipHorizontallyTexCoords(const TexCoords<4>& texCoords)
+TexCoords<4> flipHorizontallyTexCoords(const TexCoords<4> &texCoords)
 {
     TexCoords<4> tc;
 

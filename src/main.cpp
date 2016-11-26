@@ -1,18 +1,17 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 #include "network/BaseSocketMgr.h"
 #include "network/ClientSocketMgr.h"
-#include "network/RemoteGameLogic.h"
 #include "network/GameServerListenNetSocket.h"
+#include "network/RemoteGameLogic.h"
 #include "network/RemoteGameView.h"
 
 #include "graphics/HeroHumanView.h"
 
 #include "events/EventMgr.h"
 
-#include "ScriptMgr.h"
-#include "ResourceMgr.h"
 #include "Engine.h"
 #include "GameLogicImpl.h"
+#include "ResourceMgr.h"
+#include "ScriptMgr.h"
 
 #include "Logger.h"
 #include "config.h"
@@ -20,13 +19,13 @@
 #include <string>
 
 void runSingleplayer();
-void runMultiplayerClient(const std::string& serverAddress);
+void runMultiplayerClient(const std::string &serverAddress);
 void runMultiplayerServer();
 
-void remoteClientEventListener(event::Event& event);
+void remoteClientEventListener(event::Event &event);
 
 #if PLATFORM == PLATFORM_UNIX
-  #include <signal.h>
+#include <signal.h>
 
 void ctrl_c_handler(int sgn);
 void register_ctrl_c_handler();
@@ -42,7 +41,7 @@ int main(int argc, char *argv[])
         new EventMgr;
         new ResourceMgr;
 
-        ScriptMgr& scriptMgr = ScriptMgr::singleton();
+        ScriptMgr &scriptMgr = ScriptMgr::singleton();
         scriptMgr.executeFile("startup.lua");
 
         const char *scriptsFolder = scriptMgr.getGlobalString("scripts_folder");
@@ -50,19 +49,14 @@ int main(int argc, char *argv[])
         const char *assetsFolder = scriptMgr.getGlobalString("assets_folder");
         ResourceMgr::singleton().setDataFolder(assetsFolder);
 
-        if (argc >= 2 && strcmp(argv[1], "-s") == 0)
-        {
+        if (argc >= 2 && strcmp(argv[1], "-s") == 0) {
             runMultiplayerServer();
-        }
-        else if (argc >= 2 && strcmp(argv[1], "-c") == 0)
-        {
+        } else if (argc >= 2 && strcmp(argv[1], "-c") == 0) {
             std::string gameServer = "localhost";
             if (argc >= 3)
                 gameServer = argv[2];
             runMultiplayerClient(gameServer);
-        }
-        else
-        {
+        } else {
             runSingleplayer();
         }
 
@@ -70,7 +64,7 @@ int main(int argc, char *argv[])
         delete EventMgr::singletonPtr();
         delete ScriptMgr::singletonPtr();
 
-    } catch (const std::exception& e) {
+    } catch (const std::exception &e) {
         Engine::showErrorMessageBox(e.what());
         LOG_FATAL << e.what() << std::endl;
         throw;
@@ -89,10 +83,8 @@ void runSingleplayer()
 
     new Engine;
     GameLogicImpl *game = new GameLogicImpl;
-    game->attachView(std::make_shared<gfx::HeroHumanView>("Marian",
-                                                          screenWidth,
-                                                          screenHeight,
-                                                          fullScreen));
+    game->attachView(std::make_shared<gfx::HeroHumanView>(
+        "Marian", screenWidth, screenHeight, fullScreen));
     Engine::singleton().mainLoop(game);
     delete game;
     delete Engine::singletonPtr();
@@ -100,7 +92,7 @@ void runSingleplayer()
 
 //------------------------------------------------------------------------------
 
-void runMultiplayerClient(const std::string& serverAddress)
+void runMultiplayerClient(const std::string &serverAddress)
 {
     using namespace net;
 
@@ -109,17 +101,15 @@ void runMultiplayerClient(const std::string& serverAddress)
     bool fullScreen  = ScriptMgr::singleton().getGlobalBool("screen_full");
 
     ClientSocketMgr *bsm = new ClientSocketMgr(serverAddress, GAME_PORT);
-    int socketId = bsm->connect();
+    int socketId         = bsm->connect();
     if (socketId == -1) {
         LOG << "Unable to connect to: " << serverAddress << std::endl;
     }
 
     new Engine;
     GameLogic *game = new RemoteGameLogic(socketId);
-    game->attachView(std::make_shared<gfx::HeroHumanView>("Marian Cli",
-                                                          screenWidth,
-                                                          screenHeight,
-                                                          fullScreen));
+    game->attachView(std::make_shared<gfx::HeroHumanView>(
+        "Marian Cli", screenWidth, screenHeight, fullScreen));
     Engine::singleton().mainLoop(game);
     delete game;
     delete Engine::singletonPtr();
@@ -135,11 +125,11 @@ void runMultiplayerServer()
 #if PLATFORM == PLATFORM_UNIX
     register_ctrl_c_handler();
 #endif
-    EventMgr& evtMgr = EventMgr::singleton();
-    evtMgr.addListener(REMOTE_CLIENT,
-                       std::make_shared<EventListener>(remoteClientEventListener));
+    EventMgr &evtMgr = EventMgr::singleton();
+    evtMgr.addListener(REMOTE_CLIENT, std::make_shared<EventListener>(
+                                          remoteClientEventListener));
 
-    BaseSocketMgr *bsm = new BaseSocketMgr;
+    BaseSocketMgr *bsm               = new BaseSocketMgr;
     GameServerListenNetSocket *gslns = new GameServerListenNetSocket(GAME_PORT);
     bsm->addSocket(gslns);
 
@@ -152,11 +142,12 @@ void runMultiplayerServer()
 
 //------------------------------------------------------------------------------
 
-void remoteClientEventListener(event::Event& event)
+void remoteClientEventListener(event::Event &event)
 {
     LOG << "EVENT: " << event.eventName() << " {" << event << " }\n";
 
-    event::RemoteClientEvent& e = static_cast<event::RemoteClientEvent&>(event);
+    event::RemoteClientEvent &e =
+        static_cast<event::RemoteClientEvent &>(event);
 
     std::shared_ptr<GameView> view(new net::RemoteGameView(e.m_socketId));
     Engine::singleton().game()->attachView(view);

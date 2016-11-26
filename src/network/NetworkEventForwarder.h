@@ -1,4 +1,5 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #ifndef NETWORKEVENTFORWARDER_H
 #define NETWORKEVENTFORWARDER_H
 
@@ -6,16 +7,16 @@
 
 namespace net {
 
-    class NetworkEventForwarder
-    {
-    public:
-        explicit NetworkEventForwarder(int socketId);
+class NetworkEventForwarder
+{
+  public:
+    explicit NetworkEventForwarder(int socketId);
 
-        void forwardEvent(event::Event& e);
+    void forwardEvent(event::Event &e);
 
-    protected:
-        int m_socketId;
-    };
+  protected:
+    int m_socketId;
+};
 
 } // namespace network
 

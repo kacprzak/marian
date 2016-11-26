@@ -1,19 +1,19 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
+/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+ */
 #include "Console_MyGUI.h"
 
-#include "ScriptMgr.h"
 #include "Logger.h"
+#include "ScriptMgr.h"
 
 #include <limits>
 
 using namespace gui;
 
-Console::Console()
-    : m_consoleVisible(true)
+Console::Console() : m_consoleVisible(true)
 {
     MyGUI::LayoutManager::getInstance().loadLayout("Console.layout");
 
-    MyGUI::Gui& gui = MyGUI::Gui::getInstance();
+    MyGUI::Gui &gui = MyGUI::Gui::getInstance();
     m_consoleWindow = gui.findWidget<MyGUI::Window>("_Main");
     m_listHistory   = gui.findWidget<MyGUI::EditBox>("list_History");
     m_comboCommand  = gui.findWidget<MyGUI::ComboBox>("combo_Command");
@@ -22,7 +22,7 @@ Console::Console()
     m_listHistory->setOverflowToTheLeft(true);
 
     m_errorColor = m_consoleWindow->getUserString("ErrorColor");
-    m_echoColor = m_consoleWindow->getUserString("EchoColor");
+    m_echoColor  = m_consoleWindow->getUserString("EchoColor");
 
     // Example commands
     m_comboCommand->addItem("addBox(x, y)");
@@ -48,9 +48,9 @@ Console::~Console()
 
 void Console::handleKey(MyGUI::KeyCode key)
 {
-    //switch (key.toValue()) {
+    // switch (key.toValue()) {
     switch (key.getValue()) {
-    case MyGUI::KeyCode::ArrowUp :
+    case MyGUI::KeyCode::ArrowUp:
         revertPreviousCommand();
         break;
     default:
@@ -65,7 +65,7 @@ void Console::setVisible(bool visible)
     m_consoleWindow->setVisible(visible);
     m_consoleVisible = visible;
 
-    if(visible) {
+    if (visible) {
         m_comboCommand->setEnabled(true);
         MyGUI::InputManager::getInstance().setKeyFocusWidget(m_comboCommand);
     } else {
@@ -75,39 +75,30 @@ void Console::setVisible(bool visible)
 
 //------------------------------------------------------------------------------
 
-bool Console::isVisible()
-{
-    return m_consoleWindow->getVisible();
-}
+bool Console::isVisible() { return m_consoleWindow->getVisible(); }
 
 //------------------------------------------------------------------------------
 
 void Console::registerHandlers()
 {
-    m_buttonSubmit->eventMouseButtonClick += MyGUI::newDelegate(this,
-                                                 &Console::handle_SendButtonPressed);
+    m_buttonSubmit->eventMouseButtonClick +=
+        MyGUI::newDelegate(this, &Console::handle_SendButtonPressed);
 
-    m_comboCommand->eventComboAccept += MyGUI::newDelegate(this,
-                                            &Console::handle_ComboAccept);
+    m_comboCommand->eventComboAccept +=
+        MyGUI::newDelegate(this, &Console::handle_ComboAccept);
 }
 
 //------------------------------------------------------------------------------
 
-void Console::onScriptOutput(const std::string & out)
-{
-	output(out);
-}
+void Console::onScriptOutput(const std::string &out) { output(out); }
 
 //------------------------------------------------------------------------------
 
-void Console::onScriptError(const std::string & out)
-{
-	output(out, true);
-}
+void Console::onScriptError(const std::string &out) { output(out, true); }
 
 //------------------------------------------------------------------------------
 
-void Console::handle_SendButtonPressed(MyGUI::Widget * _sender)
+void Console::handle_SendButtonPressed(MyGUI::Widget *_sender)
 {
     handle_ComboAccept(m_comboCommand, MyGUI::ITEM_NONE);
 }
@@ -116,8 +107,9 @@ void Console::handle_SendButtonPressed(MyGUI::Widget * _sender)
 
 void Console::handle_ComboAccept(MyGUI::ComboBox *_sender, size_t _index)
 {
-    const MyGUI::UString& command = _sender->getOnlyText();
-    if (command == "") return;
+    const MyGUI::UString &command = _sender->getOnlyText();
+    if (command == "")
+        return;
 
     parseText(command);
 
@@ -142,9 +134,9 @@ void Console::parseText(MyGUI::UString inMsg)
     try {
         outputText(m_echoColor + "> " + inMsg); // echo
         ScriptMgr::singleton().executeString(inMsg.asUTF8_c_str());
-    } catch (const ScriptError& ex) {
+    } catch (const ScriptError &ex) {
         // Just output by listener
-        //outputText(m_errorColor + ex.what());
+        // outputText(m_errorColor + ex.what());
     }
 }
 
@@ -161,24 +153,21 @@ void Console::outputText(MyGUI::UString inMsg, bool err)
     else
         m_listHistory->addText("\n" + color + inMsg);
 
-    //m_listHistory->setTextCursor(0);
+    // m_listHistory->setTextCursor(0);
     m_listHistory->setTextSelection(m_listHistory->getTextLength(),
                                     m_listHistory->getTextLength());
 }
 
 //------------------------------------------------------------------------------
 
-void Console::output(const std::string& inMsg, bool err)
+void Console::output(const std::string &inMsg, bool err)
 {
     outputText(MyGUI::UString(inMsg), err);
 }
 
 //------------------------------------------------------------------------------
 
-void Console::clearText()
-{
-    m_listHistory->setCaption("");
-}
+void Console::clearText() { m_listHistory->setCaption(""); }
 
 //------------------------------------------------------------------------------
 
