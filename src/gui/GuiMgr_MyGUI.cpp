@@ -29,19 +29,19 @@ MyGUI::KeyCode SDLScancodeToMyGUI(SDL_Scancode code);
 class ImageLoader : public MyGUI::OpenGLImageLoader
 {
   public:
-    void *loadImage(int &_width, int &_height, MyGUI::PixelFormat &_format,
-                    const std::string &_filename) override;
+    void* loadImage(int& _width, int& _height, MyGUI::PixelFormat& _format,
+                    const std::string& _filename) override;
     void saveImage(int _width, int _height, MyGUI::PixelFormat _format,
-                   void *_texture, const std::string &_filename) override;
+                   void* _texture, const std::string& _filename) override;
 };
 
 //==============================================================================
 
-static MyGUI::OpenGLPlatform *s_platform = nullptr;
-static MyGUI::Gui *s_gui                 = nullptr;
+static MyGUI::OpenGLPlatform* s_platform = nullptr;
+static MyGUI::Gui* s_gui                 = nullptr;
 static ImageLoader s_imageLoader;
 
-static Console *s_console = nullptr;
+static Console* s_console = nullptr;
 
 //------------------------------------------------------------------------------
 
@@ -83,10 +83,10 @@ GuiMgr::~GuiMgr()
 
 //------------------------------------------------------------------------------
 
-bool GuiMgr::processInput(const SDL_Event &e)
+bool GuiMgr::processInput(const SDL_Event& e)
 {
     bool interceptEvent           = false;
-    MyGUI::InputManager &inputMgr = MyGUI::InputManager::getInstance();
+    MyGUI::InputManager& inputMgr = MyGUI::InputManager::getInstance();
 
     switch (e.type) {
 
@@ -134,7 +134,7 @@ bool GuiMgr::processInput(const SDL_Event &e)
         break;
 
     case SDL_TEXTINPUT: {
-        const char *ch = e.text.text;
+        const char* ch = e.text.text;
         while (*ch != '\0') {
             inputMgr.injectKeyPress(MyGUI::KeyCode::None, *ch);
             ch++;
@@ -185,7 +185,7 @@ void GuiMgr::handle_mouse_down(Uint8 button) {}
 
 //------------------------------------------------------------------------------
 
-void GuiMgr::handle_mouse_wheel(const SDL_MouseWheelEvent &e) {}
+void GuiMgr::handle_mouse_wheel(const SDL_MouseWheelEvent& e) {}
 
 //------------------------------------------------------------------------------
 
@@ -193,14 +193,14 @@ void GuiMgr::handle_mouse_up(Uint8 button) {}
 
 //==============================================================================
 
-void *ImageLoader::loadImage(int &_width, int &_height,
-                             MyGUI::PixelFormat &_format,
-                             const std::string &_filename)
+void* ImageLoader::loadImage(int& _width, int& _height,
+                             MyGUI::PixelFormat& _format,
+                             const std::string& _filename)
 {
     std::string filename =
         s_platform->getDataManagerPtr()->getDataPath(_filename);
 
-    SDL_Surface *surface = IMG_Load(filename.c_str());
+    SDL_Surface* surface = IMG_Load(filename.c_str());
 
     if (!surface) {
         std::cerr << "Could not load " << _filename << std::endl;
@@ -223,7 +223,7 @@ void *ImageLoader::loadImage(int &_width, int &_height,
         fmt.Bmask         = 0xff0000;
         fmt.Amask         = 0xff000000;
 
-        SDL_Surface *nimg = SDL_ConvertSurface(surface, &fmt, 0);
+        SDL_Surface* nimg = SDL_ConvertSurface(surface, &fmt, 0);
         SDL_FreeSurface(surface);
 
         if (!nimg) {
@@ -242,17 +242,17 @@ void *ImageLoader::loadImage(int &_width, int &_height,
 
     std::size_t data_size =
         surface->w * surface->h * surface->format->BytesPerPixel;
-    Uint8 *data = new Uint8[data_size];
+    Uint8* data = new Uint8[data_size];
 
     // Copy data for SDL to data
-    SDL_PixelFormat *fmt = surface->format;
+    SDL_PixelFormat* fmt = surface->format;
     SDL_LockSurface(surface);
 
     if (_format == MyGUI::PixelFormat::R8G8B8) {
         memcpy(data, surface->pixels, data_size);
     } else { // RGBA
-        Uint32 *pixels_src = (Uint32 *)surface->pixels;
-        Uint32 *pixels_dst = (Uint32 *)data;
+        Uint32* pixels_src = (Uint32*)surface->pixels;
+        Uint32* pixels_dst = (Uint32*)data;
         int pixels_size    = surface->w * surface->h;
         for (int i = 0; i < pixels_size; ++i) {
             if (fmt->format == SDL_PIXELFORMAT_BGRA8888) {
@@ -275,7 +275,7 @@ void *ImageLoader::loadImage(int &_width, int &_height,
 //------------------------------------------------------------------------------
 
 void ImageLoader::saveImage(int _width, int _height, MyGUI::PixelFormat _format,
-                            void *_texture, const std::string &_filename)
+                            void* _texture, const std::string& _filename)
 {
     throw std::logic_error("Not implemented!");
 }

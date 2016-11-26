@@ -15,14 +15,14 @@ Map::Map()
 
 Map::~Map()
 {
-    for (const Layer *layer : m_layers) {
+    for (const Layer* layer : m_layers) {
         delete layer;
     }
 }
 
 //------------------------------------------------------------------------------
 
-bool Map::loadFromFile(const std::string &filename)
+bool Map::loadFromFile(const std::string& filename)
 {
     m_tmxMap.loadFromFile(filename);
 
@@ -32,7 +32,7 @@ bool Map::loadFromFile(const std::string &filename)
     m_tileWidth  = m_tmxMap.tileWidth;
     m_tileHeight = m_tmxMap.tileHeight;
 
-    for (const tmx::Layer &layer : m_tmxMap.layers) {
+    for (const tmx::Layer& layer : m_tmxMap.layers) {
         m_layers.push_back(new Layer(this, layer));
     }
     return true;
@@ -40,10 +40,10 @@ bool Map::loadFromFile(const std::string &filename)
 
 //------------------------------------------------------------------------------
 
-void Map::getObjects(std::vector<MapObject> &v)
+void Map::getObjects(std::vector<MapObject>& v)
 {
-    for (const tmx::ObjectGroup &og : m_tmxMap.objectGroups) {
-        for (const tmx::Object &obj : og.objects) {
+    for (const tmx::ObjectGroup& og : m_tmxMap.objectGroups) {
+        for (const tmx::Object& obj : og.objects) {
 
             MapObject mapObject;
             mapObject.name = obj.name;
@@ -59,7 +59,7 @@ void Map::getObjects(std::vector<MapObject> &v)
             mapObject.shape   = obj.shape;
             mapObject.visible = (obj.visible == "1") ? true : false;
 
-            for (const std::pair<int, int> &point : obj.points) {
+            for (const std::pair<int, int>& point : obj.points) {
                 float x = point.first / float(m_tileWidth);
                 float y = -point.second / float(m_tileHeight);
 
@@ -73,9 +73,9 @@ void Map::getObjects(std::vector<MapObject> &v)
 
 //------------------------------------------------------------------------------
 
-Layer *Map::findLayer(const std::string &layerName) const
+Layer* Map::findLayer(const std::string& layerName) const
 {
-    for (Layer *layer : m_layers) {
+    for (Layer* layer : m_layers) {
         if (layer->name == layerName)
             return layer;
     }
@@ -91,7 +91,7 @@ std::vector<std::string> Map::externalImages() const
 {
     std::vector<std::string> ret;
 
-    for (const tmx::Tileset &tileset : m_tmxMap.tilesets) {
+    for (const tmx::Tileset& tileset : m_tmxMap.tilesets) {
         ret.push_back(tileset.imageSource);
     }
 
@@ -108,10 +108,10 @@ std::string Map::backgroundColor() const { return m_tmxMap.backgroundColor; }
  *
  * @param tileCoords    output argument
  */
-void Map::rectOnTextureForTile(Rect<int> *tileCoords,
+void Map::rectOnTextureForTile(Rect<int>* tileCoords,
                                unsigned global_tile_id) const
 {
-    const tmx::Tileset *tileset = m_tmxMap.tilesetForTile(global_tile_id);
+    const tmx::Tileset* tileset = m_tmxMap.tilesetForTile(global_tile_id);
 
     int local_id = global_tile_id - tileset->firstGid;
 
@@ -143,7 +143,7 @@ const unsigned FLIPPED_HORIZONTALLY_FLAG = 0x80000000;
 const unsigned FLIPPED_VERTICALLY_FLAG   = 0x40000000;
 const unsigned FLIPPED_DIAGONALLY_FLAG   = 0x20000000;
 
-Layer::Layer(const Map *aMap, const tmx::Layer &tmxLayer)
+Layer::Layer(const Map* aMap, const tmx::Layer& tmxLayer)
     : map(aMap)
     , name(tmxLayer.name)
     , width(tmxLayer.width)
@@ -170,7 +170,7 @@ Layer::Layer(const Map *aMap, const tmx::Layer &tmxLayer)
                     ~(FLIPPED_HORIZONTALLY_FLAG | FLIPPED_VERTICALLY_FLAG |
                       FLIPPED_DIAGONALLY_FLAG);
 
-                Tile *tile           = new Tile(map, global_tile_id);
+                Tile* tile           = new Tile(map, global_tile_id);
                 tiles[y * width + x] = tile;
             }
         }
@@ -181,14 +181,14 @@ Layer::Layer(const Map *aMap, const tmx::Layer &tmxLayer)
 
 Layer::~Layer()
 {
-    for (const Tile *tile : tiles) {
+    for (const Tile* tile : tiles) {
         delete tile;
     }
 }
 
 //==============================================================================
 
-Tile::Tile(const Map *aMap, unsigned agid)
+Tile::Tile(const Map* aMap, unsigned agid)
     : map(aMap)
     , gid(agid)
     , texId(0)
@@ -200,7 +200,7 @@ Tile::Tile(const Map *aMap, unsigned agid)
 
 std::string Tile::textureSource() const
 {
-    const tmx::Tileset *tileset = map->m_tmxMap.tilesetForTile(gid);
+    const tmx::Tileset* tileset = map->m_tmxMap.tilesetForTile(gid);
     return tileset->imageSource;
 }
 

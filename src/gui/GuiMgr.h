@@ -15,7 +15,7 @@ class GuiMgr : public Singleton<GuiMgr>
     GuiMgr();
     ~GuiMgr() override;
 
-    bool processInput(const SDL_Event &event);
+    bool processInput(const SDL_Event& event);
     void update(float elapsedTime);
     void draw();
 
@@ -24,7 +24,7 @@ class GuiMgr : public Singleton<GuiMgr>
   private:
     void handle_mouse_up(Uint8 button);
     void handle_mouse_down(Uint8 button);
-    void handle_mouse_wheel(const SDL_MouseWheelEvent &e);
+    void handle_mouse_wheel(const SDL_MouseWheelEvent& e);
 };
 
 } // namespace gui

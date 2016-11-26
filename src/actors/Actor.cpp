@@ -4,7 +4,7 @@
 
 #include "Logger.h"
 
-Actor::Actor(ActorId id, GameLogic *game)
+Actor::Actor(ActorId id, GameLogic* game)
     : m_id(id)
     , m_game(game)
     , m_dead(false)

@@ -18,27 +18,27 @@ namespace event {
  */
 class Event
 {
-    friend std::ostream &operator<<(std::ostream &os, const Event &e);
-    friend std::istream &operator>>(std::istream &is, Event &e);
+    friend std::ostream& operator<<(std::ostream& os, const Event& e);
+    friend std::istream& operator>>(std::istream& is, Event& e);
 
   public:
     virtual ~Event() {}
 
     virtual EventType eventType() const   = 0;
-    virtual const char *eventName() const = 0;
+    virtual const char* eventName() const = 0;
 
   protected:
-    virtual void serialize(std::ostream &out) const = 0;
-    virtual void deserialize(std::istream &in)      = 0;
+    virtual void serialize(std::ostream& out) const = 0;
+    virtual void deserialize(std::istream& in)      = 0;
 };
 
-inline std::ostream &operator<<(std::ostream &os, const Event &e)
+inline std::ostream& operator<<(std::ostream& os, const Event& e)
 {
     e.serialize(os);
     return os;
 }
 
-inline std::istream &operator>>(std::istream &is, Event &e)
+inline std::istream& operator>>(std::istream& is, Event& e)
 {
     e.deserialize(is);
     return is;
@@ -49,7 +49,7 @@ inline std::istream &operator>>(std::istream &is, Event &e)
 class BaseEvent : public Event
 {
   protected:
-    BaseEvent(EventType type, const char *name)
+    BaseEvent(EventType type, const char* name)
         : m_type(type)
         , m_name(name)
     {
@@ -57,15 +57,15 @@ class BaseEvent : public Event
 
   public:
     EventType eventType() const override final { return m_type; }
-    const char *eventName() const override final { return m_name; }
+    const char* eventName() const override final { return m_name; }
 
   protected:
-    void serialize(std::ostream & /*out*/) const override {}
-    void deserialize(std::istream & /*in*/) override {}
+    void serialize(std::ostream& /*out*/) const override {}
+    void deserialize(std::istream& /*in*/) override {}
 
   private:
     EventType m_type;
-    const char *m_name;
+    const char* m_name;
 };
 
 //------------------------------------------------------------------------------
@@ -75,8 +75,8 @@ class CollisionEvent : public BaseEvent
   public:
     enum Phase { BEGIN, END };
 
-    CollisionEvent(Phase phase, ActorId actorA, void *actorALimbData,
-                   ActorId actorB, void *actorBLimbData)
+    CollisionEvent(Phase phase, ActorId actorA, void* actorALimbData,
+                   ActorId actorB, void* actorBLimbData)
         : BaseEvent(ACTOR_COLLIDED, "ActorCollided")
         , m_phase(phase)
         , m_actorA(actorA)
@@ -87,9 +87,9 @@ class CollisionEvent : public BaseEvent
     }
 
     // protected:
-    void serialize(std::ostream &out) const override
+    void serialize(std::ostream& out) const override
     {
-        const char *phase = (m_phase == BEGIN) ? "BEGIN" : "END  ";
+        const char* phase = (m_phase == BEGIN) ? "BEGIN" : "END  ";
         out << phase << " A id: " << m_actorA << " B id: " << m_actorB
             << " A limb: " << m_actorALimbData
             << " B limb: " << m_actorBLimbData;
@@ -99,9 +99,9 @@ class CollisionEvent : public BaseEvent
     Phase m_phase;
 
     ActorId m_actorA;
-    void *m_actorALimbData;
+    void* m_actorALimbData;
     ActorId m_actorB;
-    void *m_actorBLimbData;
+    void* m_actorBLimbData;
 };
 
 //------------------------------------------------------------------------------
@@ -118,18 +118,18 @@ class MoveEvent : public BaseEvent
     {
     }
 
-    explicit MoveEvent(std::istream &in)
+    explicit MoveEvent(std::istream& in)
         : BaseEvent(ACTOR_MOVED, "ActorMoved")
     {
         deserialize(in);
     }
 
-    void serialize(std::ostream &out) const
+    void serialize(std::ostream& out) const
     {
         out << m_actorId << " " << m_x << " " << m_y << " " << m_angle;
     }
 
-    void deserialize(std::istream &in)
+    void deserialize(std::istream& in)
     {
         in >> m_actorId;
         in >> m_x;
@@ -155,18 +155,18 @@ class PhysicsStateChangeEvent : public BaseEvent
     {
     }
 
-    explicit PhysicsStateChangeEvent(std::istream &in)
+    explicit PhysicsStateChangeEvent(std::istream& in)
         : BaseEvent(ACTOR_PHYSICS_STATE_CHANGED, "ActorPhysicsStateChanged")
     {
         deserialize(in);
     }
 
-    void serialize(std::ostream &out) const
+    void serialize(std::ostream& out) const
     {
         out << m_actorId << " " << static_cast<unsigned short>(m_newState);
     }
 
-    void deserialize(std::istream &in)
+    void deserialize(std::istream& in)
     {
         unsigned short newStateVal;
 
@@ -227,18 +227,18 @@ class ActorInputEvent : public BaseEvent
     {
     }
 
-    explicit ActorInputEvent(std::istream &in)
+    explicit ActorInputEvent(std::istream& in)
         : BaseEvent(INPUT_COMMAND, "ActorInput")
     {
         deserialize(in);
     }
 
-    void serialize(std::ostream &out) const
+    void serialize(std::ostream& out) const
     {
         out << m_actorId << " " << static_cast<unsigned short>(m_command);
     }
 
-    void deserialize(std::istream &in)
+    void deserialize(std::istream& in)
     {
         unsigned short newCommandVal;
 
@@ -264,7 +264,7 @@ class RemoteClientEvent : public BaseEvent
     {
     }
 
-    void serialize(std::ostream &out) const
+    void serialize(std::ostream& out) const
     {
         out << "socketId: " << m_socketId
             << " ip: " << net::BaseSocketMgr::singleton().getHostByAddr(m_ip);

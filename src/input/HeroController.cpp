@@ -29,7 +29,7 @@ bool HeroController::onKeyDown(const unsigned int kcode)
     if (!m_actorId)
         return false;
 
-    EventMgr &evtMgr = EventMgr::singleton();
+    EventMgr& evtMgr = EventMgr::singleton();
 
     if (kcode == SDL_SCANCODE_RIGHT) {
         evtMgr.queueEvent(
@@ -61,7 +61,7 @@ bool HeroController::onKeyUp(const unsigned int kcode)
     if (!m_actorId)
         return false;
 
-    EventMgr &evtMgr = EventMgr::singleton();
+    EventMgr& evtMgr = EventMgr::singleton();
 
     if (kcode == SDL_SCANCODE_RIGHT) {
         evtMgr.queueEvent(

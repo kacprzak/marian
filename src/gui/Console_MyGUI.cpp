@@ -14,7 +14,7 @@ Console::Console()
 {
     MyGUI::LayoutManager::getInstance().loadLayout("Console.layout");
 
-    MyGUI::Gui &gui = MyGUI::Gui::getInstance();
+    MyGUI::Gui& gui = MyGUI::Gui::getInstance();
     m_consoleWindow = gui.findWidget<MyGUI::Window>("_Main");
     m_listHistory   = gui.findWidget<MyGUI::EditBox>("list_History");
     m_comboCommand  = gui.findWidget<MyGUI::ComboBox>("combo_Command");
@@ -91,24 +91,24 @@ void Console::registerHandlers()
 
 //------------------------------------------------------------------------------
 
-void Console::onScriptOutput(const std::string &out) { output(out); }
+void Console::onScriptOutput(const std::string& out) { output(out); }
 
 //------------------------------------------------------------------------------
 
-void Console::onScriptError(const std::string &out) { output(out, true); }
+void Console::onScriptError(const std::string& out) { output(out, true); }
 
 //------------------------------------------------------------------------------
 
-void Console::handle_SendButtonPressed(MyGUI::Widget *_sender)
+void Console::handle_SendButtonPressed(MyGUI::Widget* _sender)
 {
     handle_ComboAccept(m_comboCommand, MyGUI::ITEM_NONE);
 }
 
 //------------------------------------------------------------------------------
 
-void Console::handle_ComboAccept(MyGUI::ComboBox *_sender, size_t _index)
+void Console::handle_ComboAccept(MyGUI::ComboBox* _sender, size_t _index)
 {
-    const MyGUI::UString &command = _sender->getOnlyText();
+    const MyGUI::UString& command = _sender->getOnlyText();
     if (command == "")
         return;
 
@@ -135,7 +135,7 @@ void Console::parseText(MyGUI::UString inMsg)
     try {
         outputText(m_echoColor + "> " + inMsg); // echo
         ScriptMgr::singleton().executeString(inMsg.asUTF8_c_str());
-    } catch (const ScriptError &ex) {
+    } catch (const ScriptError& ex) {
         // Just output by listener
         // outputText(m_errorColor + ex.what());
     }
@@ -161,7 +161,7 @@ void Console::outputText(MyGUI::UString inMsg, bool err)
 
 //------------------------------------------------------------------------------
 
-void Console::output(const std::string &inMsg, bool err)
+void Console::output(const std::string& inMsg, bool err)
 {
     outputText(MyGUI::UString(inMsg), err);
 }

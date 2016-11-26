@@ -12,7 +12,7 @@
 #include <cassert>
 #include <memory>
 
-ActorPtr ActorFactory::create(GameLogic *game, const MapObject &obj)
+ActorPtr ActorFactory::create(GameLogic* game, const MapObject& obj)
 {
     assert(game);
     auto actor = std::make_shared<Actor>(getNextId(), game);
@@ -63,8 +63,8 @@ ActorPtr ActorFactory::create(GameLogic *game, const MapObject &obj)
 
 //--------------------------------------------------------------------------
 
-ActorPtr ActorFactory::create(GameLogic *game, ActorCategory type,
-                              const std::string &name, float x, float y)
+ActorPtr ActorFactory::create(GameLogic* game, ActorCategory type,
+                              const std::string& name, float x, float y)
 {
     assert(game);
     ActorPtr actor(new Actor(getNextId(), game));

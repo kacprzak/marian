@@ -14,7 +14,7 @@
 
 namespace event {
 
-using EventListener = std::function<void(Event &)>;
+using EventListener = std::function<void(Event&)>;
 
 /*!
  * \brief The global event manager class.

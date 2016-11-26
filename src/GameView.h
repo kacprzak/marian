@@ -11,7 +11,7 @@ class GameView : private boost::noncopyable
   public:
     virtual ~GameView() {}
 
-    virtual bool processInput(const SDL_Event &event) = 0;
+    virtual bool processInput(const SDL_Event& event) = 0;
     virtual void update(float elapsedTime)            = 0;
     virtual void draw()                               = 0;
 

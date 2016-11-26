@@ -6,7 +6,7 @@
 
 using namespace net;
 
-ClientSocketMgr::ClientSocketMgr(const std::string &hostName, unsigned int port)
+ClientSocketMgr::ClientSocketMgr(const std::string& hostName, unsigned int port)
     : m_hostName(hostName)
     , m_port(port)
 {
@@ -16,7 +16,7 @@ ClientSocketMgr::ClientSocketMgr(const std::string &hostName, unsigned int port)
 
 bool ClientSocketMgr::connect()
 {
-    RemoteEventSocket *socket = new RemoteEventSocket;
+    RemoteEventSocket* socket = new RemoteEventSocket;
 
     if (!socket->connect(getHostByName(m_hostName), m_port)) {
         delete socket;

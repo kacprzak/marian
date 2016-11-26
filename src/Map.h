@@ -43,23 +43,23 @@ class Map : private boost::noncopyable
   public:
     Map();
     ~Map();
-    bool loadFromFile(const std::string &filename);
+    bool loadFromFile(const std::string& filename);
 
     int width() const { return m_width; }
     int height() const { return m_height; }
 
     /*! Get map objects */
-    void getObjects(std::vector<MapObject> &v);
+    void getObjects(std::vector<MapObject>& v);
 
     std::vector<std::string> externalImages() const;
     std::string backgroundColor() const;
 
-    Layer *findLayer(const std::string &layerName) const;
+    Layer* findLayer(const std::string& layerName) const;
 
-    std::vector<Layer *> m_layers;
+    std::vector<Layer*> m_layers;
 
   private:
-    void rectOnTextureForTile(Rect<int> *tileCoords, unsigned globalId) const;
+    void rectOnTextureForTile(Rect<int>* tileCoords, unsigned globalId) const;
 
     /*! Size in game (tile) coords */
     int m_width;
@@ -77,17 +77,17 @@ class Map : private boost::noncopyable
 class Layer : private boost::noncopyable
 {
   public:
-    Layer(const Map *map, const tmx::Layer &layer);
+    Layer(const Map* map, const tmx::Layer& layer);
     ~Layer();
 
     // void draw(Engine *e, int xFrom, int xTo, int yFrom, int yTo) const;
 
-    const Map *map; //!< Parent object
+    const Map* map; //!< Parent object
     std::string name;
     int width;
     int height;
     bool visible;
-    std::vector<Tile *> tiles;
+    std::vector<Tile*> tiles;
 };
 
 //------------------------------------------------------------------------------
@@ -95,9 +95,9 @@ class Layer : private boost::noncopyable
 class Tile
 {
   public:
-    Tile(const Map *map, unsigned agid);
+    Tile(const Map* map, unsigned agid);
 
-    const Map *map; //!< Parent object
+    const Map* map; //!< Parent object
     unsigned gid;
     unsigned texId;
     float texCoords[8];

@@ -12,7 +12,7 @@ class NetworkEventForwarder
   public:
     explicit NetworkEventForwarder(int socketId);
 
-    void forwardEvent(event::Event &e);
+    void forwardEvent(event::Event& e);
 
   protected:
     int m_socketId;

@@ -13,7 +13,7 @@
 #define JUMP_DELAY 0.5f
 #define FEET_SENSOR 1248
 
-HeroPhysicsComponent::HeroPhysicsComponent(GameLogic *game, float x, float y,
+HeroPhysicsComponent::HeroPhysicsComponent(GameLogic* game, float x, float y,
                                            float w, float h)
 {
     // Physics
@@ -27,9 +27,9 @@ HeroPhysicsComponent::HeroPhysicsComponent(GameLogic *game, float x, float y,
     bodyDef.fixedRotation = true;
     bodyDef.userData      = this;
 
-    Box2dPhysicsEngine *pe =
-        static_cast<Box2dPhysicsEngine *>(game->physicsEngine());
-    b2Body *body = pe->world()->CreateBody(&bodyDef);
+    Box2dPhysicsEngine* pe =
+        static_cast<Box2dPhysicsEngine*>(game->physicsEngine());
+    b2Body* body = pe->world()->CreateBody(&bodyDef);
 
     b2CircleShape circleShape;
     circleShape.m_radius = hw;
@@ -53,8 +53,8 @@ HeroPhysicsComponent::HeroPhysicsComponent(GameLogic *game, float x, float y,
     fixtureDef.filter.maskBits   = GROUND | BOX;
     fixtureDef.density           = 0.0f;
     fixtureDef.friction          = 0.0f;
-    b2Fixture *footSensorFixture = body->CreateFixture(&fixtureDef);
-    footSensorFixture->SetUserData(reinterpret_cast<void *>(FEET_SENSOR));
+    b2Fixture* footSensorFixture = body->CreateFixture(&fixtureDef);
+    footSensorFixture->SetUserData(reinterpret_cast<void*>(FEET_SENSOR));
 
     m_body = body;
 
@@ -73,9 +73,9 @@ HeroPhysicsComponent::HeroPhysicsComponent(GameLogic *game, float x, float y,
 
 //------------------------------------------------------------------------------
 
-void HeroPhysicsComponent::handleBeginContact(Actor &other, void *fixtureUD)
+void HeroPhysicsComponent::handleBeginContact(Actor& other, void* fixtureUD)
 {
-    if (fixtureUD == (void *)FEET_SENSOR) {
+    if (fixtureUD == (void*)FEET_SENSOR) {
         ++m_feetContacts;
     }
 
@@ -87,9 +87,9 @@ void HeroPhysicsComponent::handleBeginContact(Actor &other, void *fixtureUD)
 
 //------------------------------------------------------------------------------
 
-void HeroPhysicsComponent::handleEndContact(Actor &other, void *fixtureUD)
+void HeroPhysicsComponent::handleEndContact(Actor& other, void* fixtureUD)
 {
-    if (fixtureUD == (void *)FEET_SENSOR) {
+    if (fixtureUD == (void*)FEET_SENSOR) {
         --m_feetContacts;
     }
 
@@ -155,7 +155,7 @@ void HeroPhysicsComponent::update(float elapsedTime)
     using namespace event;
     // emit move event if position changed
     if (m_lastX != posX() || m_lastY != posY()) {
-        EventMgr &evtMgr = EventMgr::singleton();
+        EventMgr& evtMgr = EventMgr::singleton();
         evtMgr.queueEvent(
             std::make_unique<MoveEvent>(m_owner->id(), posX(), posY()));
     }
@@ -175,7 +175,7 @@ void HeroPhysicsComponent::changeState(ActorPhysicsStateId state)
 
     m_heroStateId = state;
     // emit event
-    EventMgr &evtMgr = EventMgr::singleton();
+    EventMgr& evtMgr = EventMgr::singleton();
     evtMgr.queueEvent(
         std::make_unique<PhysicsStateChangeEvent>(m_owner->id(), state));
 }

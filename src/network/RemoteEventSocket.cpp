@@ -32,7 +32,7 @@ void RemoteEventSocket::handleInput()
         std::shared_ptr<Packet> packet = *(m_inList.begin());
         m_inList.pop_front();
 
-        const char *buf = packet->getData();
+        const char* buf = packet->getData();
         int size        = packet->getSize();
 
         static char str[MAX_PACKET_SIZE + 1];
@@ -45,7 +45,7 @@ void RemoteEventSocket::handleInput()
         in >> eventTypeVal;
         EventType eventType = static_cast<EventType>(eventTypeVal);
 
-        EventMgr &evtMgr = EventMgr::singleton();
+        EventMgr& evtMgr = EventMgr::singleton();
         std::unique_ptr<Event> eventPtr;
 
         switch (eventType) {

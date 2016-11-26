@@ -15,7 +15,7 @@ std::vector<int> hexColorToRgb(int hexValue)
 
 //------------------------------------------------------------------------------
 
-std::vector<int> hexColorToRgb(const std::string &str)
+std::vector<int> hexColorToRgb(const std::string& str)
 {
     std::string hexString = str;
 
@@ -30,7 +30,7 @@ std::vector<int> hexColorToRgb(const std::string &str)
 
 //------------------------------------------------------------------------------
 
-std::string appendDirSeparator(const std::string &folder)
+std::string appendDirSeparator(const std::string& folder)
 {
     const char dirSep = '/';
 

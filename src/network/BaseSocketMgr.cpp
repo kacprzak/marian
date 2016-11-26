@@ -54,7 +54,7 @@ BaseSocketMgr::~BaseSocketMgr()
 
 void BaseSocketMgr::shutdown()
 {
-    for (NetSocket *sock : m_sockList) {
+    for (NetSocket* sock : m_sockList) {
         delete sock;
     }
     m_sockList.clear();
@@ -62,7 +62,7 @@ void BaseSocketMgr::shutdown()
 
 //------------------------------------------------------------------------------
 
-int BaseSocketMgr::addSocket(NetSocket *socket)
+int BaseSocketMgr::addSocket(NetSocket* socket)
 {
     socket->m_id                = m_nextSocketId;
     m_sockMap[m_nextSocketId++] = socket;
@@ -77,7 +77,7 @@ int BaseSocketMgr::addSocket(NetSocket *socket)
 
 //------------------------------------------------------------------------------
 
-void BaseSocketMgr::removeSocket(NetSocket *socket)
+void BaseSocketMgr::removeSocket(NetSocket* socket)
 {
     m_sockMap.erase(socket->m_id);
     m_sockList.remove(socket);
@@ -89,7 +89,7 @@ void BaseSocketMgr::removeSocket(NetSocket *socket)
 
 bool BaseSocketMgr::send(int sockId, std::shared_ptr<Packet> packet)
 {
-    NetSocket *sock = findSocket(sockId);
+    NetSocket* sock = findSocket(sockId);
 
     if (!sock)
         return false;
@@ -115,7 +115,7 @@ void BaseSocketMgr::select(int pauseMicroSecs, bool handleInput)
 
     int maxdesc = 0;
 
-    for (NetSocket *sock : m_sockList) {
+    for (NetSocket* sock : m_sockList) {
         if ((sock->m_deleteFlag & 1) || sock->m_socket == -1)
             continue;
 
@@ -140,7 +140,7 @@ void BaseSocketMgr::select(int pauseMicroSecs, bool handleInput)
 
     // Handle sets
     if (selectRet) {
-        for (NetSocket *sock : m_sockList) {
+        for (NetSocket* sock : m_sockList) {
             if ((sock->m_deleteFlag & 1) || sock->m_socket == -1)
                 continue;
 
@@ -159,7 +159,7 @@ void BaseSocketMgr::select(int pauseMicroSecs, bool handleInput)
 
     auto it = std::begin(m_sockList);
     while (it != std::end(m_sockList)) {
-        NetSocket *sock = *it;
+        NetSocket* sock = *it;
 
         if (sock->m_timeOut && (sock->m_timeOut < timeNow))
             sock->timeOut();
@@ -204,9 +204,9 @@ bool BaseSocketMgr::isInternal(unsigned int ip)
 
 //------------------------------------------------------------------------------
 
-unsigned int BaseSocketMgr::getHostByName(const std::string &hostName)
+unsigned int BaseSocketMgr::getHostByName(const std::string& hostName)
 {
-    struct hostent *hostEnt = ::gethostbyname(hostName.c_str());
+    struct hostent* hostEnt = ::gethostbyname(hostName.c_str());
 
     if (!hostEnt) {
         PLOG << "gethostbyname";
@@ -221,14 +221,14 @@ unsigned int BaseSocketMgr::getHostByName(const std::string &hostName)
 
 //------------------------------------------------------------------------------
 
-const char *BaseSocketMgr::getHostByAddr(unsigned int ip)
+const char* BaseSocketMgr::getHostByAddr(unsigned int ip)
 {
     static char host[32];
 
     unsigned int netip = htonl(ip);
 
-    struct hostent *hostEnt =
-        ::gethostbyaddr((const char *)&netip, sizeof(netip), PF_INET);
+    struct hostent* hostEnt =
+        ::gethostbyaddr((const char*)&netip, sizeof(netip), PF_INET);
 
     if (hostEnt == NULL) {
         PLOG << "gethostbyaddr";
@@ -241,7 +241,7 @@ const char *BaseSocketMgr::getHostByAddr(unsigned int ip)
 
 //------------------------------------------------------------------------------
 
-NetSocket *BaseSocketMgr::findSocket(int sockId)
+NetSocket* BaseSocketMgr::findSocket(int sockId)
 {
     SocketIdMap::iterator it = m_sockMap.find(sockId);
     if (it == std::end(m_sockMap))

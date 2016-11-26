@@ -17,8 +17,8 @@ class SpriteNode
 
     virtual void update(float /*elapsedTime*/) {}
 
-    void setImage(const Image &image);
-    const Image *image() { return m_image; }
+    void setImage(const Image& image);
+    const Image* image() { return m_image; }
 
     void setActorId(ActorId aid) { m_actorId = aid; }
     ActorId actorId() const { return m_actorId; }
@@ -35,7 +35,7 @@ class SpriteNode
 
   protected:
     ActorId m_actorId;
-    const Image *m_image;
+    const Image* m_image;
 
     float m_x;
     float m_y;

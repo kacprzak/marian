@@ -17,7 +17,7 @@
 using namespace gfx;
 using namespace event;
 
-HeroHumanView::HeroHumanView(const std::string &title, int screenWidth,
+HeroHumanView::HeroHumanView(const std::string& title, int screenWidth,
                              int screenHeight, bool screenFull)
     : HumanView(title, screenWidth, screenHeight, screenFull)
     , m_renderer(new GLRenderer)
@@ -25,14 +25,14 @@ HeroHumanView::HeroHumanView(const std::string &title, int screenWidth,
     , m_keyboardHandler(new HeroController)
 {
     std::shared_ptr<Map> map(new Map);
-    ResourceMgr &resourceMgr = ResourceMgr::singleton();
+    ResourceMgr& resourceMgr = ResourceMgr::singleton();
     // Read map from file
     std::string assetsFolder = resourceMgr.dataFolder();
     map->loadFromFile(assetsFolder + "map2.tmx");
 
     // Load map images
     auto images = map->externalImages();
-    for (const std::string &image : images)
+    for (const std::string& image : images)
         resourceMgr.addTexture(image);
 
     // Build objects
@@ -47,16 +47,16 @@ HeroHumanView::HeroHumanView(const std::string &title, int screenWidth,
 
     unsigned long actorId = 0;
 
-    for (const MapObject &obj : mapObjects) {
+    for (const MapObject& obj : mapObjects) {
 
         ++actorId;
 
         if (obj.type == "Box") {
-            const Texture *tex =
+            const Texture* tex =
                 resourceMgr.getTexture("minecraft_tiles_big.png");
             Image img(tex, Rect<int>(256, 480, 288, 512));
 
-            SpriteNode *sprite = new SpriteNode();
+            SpriteNode* sprite = new SpriteNode();
             sprite->setActorId(actorId);
             sprite->setImage(img);
 
@@ -65,7 +65,7 @@ HeroHumanView::HeroHumanView(const std::string &title, int screenWidth,
         } else if (obj.type == "Hero") {
             m_heroId = actorId;
 
-            SpriteNode *sprite = new HeroNode();
+            SpriteNode* sprite = new HeroNode();
             sprite->setActorId(actorId);
 
             m_nodes.insert(std::make_pair(actorId, sprite));
@@ -98,14 +98,14 @@ HeroHumanView::HeroHumanView(const std::string &title, int screenWidth,
 
 HeroHumanView::~HeroHumanView()
 {
-    for (const auto &pair : m_nodes) {
+    for (const auto& pair : m_nodes) {
         delete pair.second;
     }
 }
 
 //------------------------------------------------------------------------------
 
-bool HeroHumanView::processInput(const SDL_Event &event)
+bool HeroHumanView::processInput(const SDL_Event& event)
 {
     if (super::processInput(event))
         return false;
@@ -127,8 +127,8 @@ void HeroHumanView::update(float elapsedTime)
 {
     super::update(elapsedTime);
 
-    for (auto &pair : m_nodes) {
-        SpriteNode *s = pair.second;
+    for (auto& pair : m_nodes) {
+        SpriteNode* s = pair.second;
         if (s)
             s->update(elapsedTime);
     }
@@ -149,9 +149,9 @@ void HeroHumanView::draw()
     m_mapNode.drawBackground(m_renderer.get(), r);
 
     // Draw actors
-    for (auto &pair : m_nodes) {
-        SpriteNode *sprite = pair.second;
-        const Image *img   = nullptr;
+    for (auto& pair : m_nodes) {
+        SpriteNode* sprite = pair.second;
+        const Image* img   = nullptr;
         if (sprite && (img = sprite->image())) {
             m_renderer->drawImage(*img, sprite->x(), sprite->y(),
                                   sprite->angle());
@@ -165,9 +165,9 @@ void HeroHumanView::draw()
 
 //------------------------------------------------------------------------------
 
-void HeroHumanView::handleActorMoved(Event &event)
+void HeroHumanView::handleActorMoved(Event& event)
 {
-    auto &e = static_cast<MoveEvent &>(event);
+    auto& e = static_cast<MoveEvent&>(event);
 
     // ActorPtr actor = m_actors[e->m_actor];
 
@@ -191,7 +191,7 @@ void HeroHumanView::handleActorMoved(Event &event)
         centerViewOn(x, y);
     }
 
-    SpriteNode *sprite = m_nodes[e.m_actorId];
+    SpriteNode* sprite = m_nodes[e.m_actorId];
     if (sprite) {
         sprite->moveTo(e.m_x, e.m_y, e.m_angle);
     }
@@ -199,11 +199,11 @@ void HeroHumanView::handleActorMoved(Event &event)
 
 //------------------------------------------------------------------------------
 
-void HeroHumanView::handleActorPhysicsStateChanged(Event &event)
+void HeroHumanView::handleActorPhysicsStateChanged(Event& event)
 {
-    auto &e = static_cast<PhysicsStateChangeEvent &>(event);
+    auto& e = static_cast<PhysicsStateChangeEvent&>(event);
 
-    SpriteNode *sprite = m_nodes[e.m_actorId];
+    SpriteNode* sprite = m_nodes[e.m_actorId];
     if (sprite) {
         sprite->changePhysicsState(e.m_newState);
     }
@@ -211,17 +211,17 @@ void HeroHumanView::handleActorPhysicsStateChanged(Event &event)
 
 //------------------------------------------------------------------------------
 
-void HeroHumanView::handleActorCreated(Event &event)
+void HeroHumanView::handleActorCreated(Event& event)
 {
-    auto &e = static_cast<ActorCreatedEvent &>(event);
+    auto& e = static_cast<ActorCreatedEvent&>(event);
 
     if (e.m_actorCategory == BOX) {
 
-        const Texture *tex =
+        const Texture* tex =
             ResourceMgr::singleton().getTexture("minecraft_tiles_big.png");
         Image img(tex, Rect<int>(256, 480, 288, 512));
 
-        SpriteNode *sprite = new SpriteNode();
+        SpriteNode* sprite = new SpriteNode();
         sprite->setActorId(e.m_actorId);
         sprite->setImage(img);
 
@@ -231,11 +231,11 @@ void HeroHumanView::handleActorCreated(Event &event)
 
 //------------------------------------------------------------------------------
 
-void HeroHumanView::handleActorDestroyed(Event &event)
+void HeroHumanView::handleActorDestroyed(Event& event)
 {
-    auto &e = static_cast<ActorDestroyedEvent &>(event);
+    auto& e = static_cast<ActorDestroyedEvent&>(event);
 
-    SpriteNode *sprite = m_nodes[e.m_actorId];
+    SpriteNode* sprite = m_nodes[e.m_actorId];
 
     if (sprite) {
         m_nodes.erase(e.m_actorId);
@@ -245,11 +245,11 @@ void HeroHumanView::handleActorDestroyed(Event &event)
 
 //------------------------------------------------------------------------------
 
-void HeroHumanView::handleInputCommand(Event &event)
+void HeroHumanView::handleInputCommand(Event& event)
 {
-    auto &e = static_cast<ActorInputEvent &>(event);
+    auto& e = static_cast<ActorInputEvent&>(event);
 
-    SpriteNode *sprite = m_nodes[e.m_actorId];
+    SpriteNode* sprite = m_nodes[e.m_actorId];
 
     if (sprite && (e.m_actorId == m_heroId)) {
         if (e.m_command == MOVE_RIGHT_START)

@@ -30,8 +30,8 @@ class Texture : private boost::noncopyable
     int w() const { return m_w; }
     int h() const { return m_h; }
 
-    void loadFromFile(const std::string &filename);
-    void loadFromSDL(SDL_Surface *surface);
+    void loadFromFile(const std::string& filename);
+    void loadFromSDL(SDL_Surface* surface);
 
   private:
     GLuint m_textureId;

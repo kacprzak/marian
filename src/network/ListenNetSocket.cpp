@@ -25,7 +25,7 @@ void ListenNetSocket::init(int portNum)
     }
 
     int value = 1;
-    if (setsockopt(m_socket, SOL_SOCKET, SO_REUSEADDR, (const char *)&value,
+    if (setsockopt(m_socket, SOL_SOCKET, SO_REUSEADDR, (const char*)&value,
                    sizeof(value)) == -1) {
         PLOG << "setsockopt";
     }
@@ -36,7 +36,7 @@ void ListenNetSocket::init(int portNum)
     sa.sin_addr.s_addr = INADDR_ANY;
     sa.sin_port        = htons(portNum);
 
-    if (bind(m_socket, (struct sockaddr *)&sa, sizeof(sa)) == -1) {
+    if (bind(m_socket, (struct sockaddr*)&sa, sizeof(sa)) == -1) {
         PLOG << "bind";
 #if PLATFORM == PLATFORM_WINDOWS
         closesocket(m_socket);
@@ -63,7 +63,7 @@ void ListenNetSocket::init(int portNum)
 
 //------------------------------------------------------------------------------
 
-int ListenNetSocket::acceptConnection(unsigned int *addr)
+int ListenNetSocket::acceptConnection(unsigned int* addr)
 {
 #if PLATFORM == PLATFORM_WINDOWS
     typedef int socklen_t;
@@ -73,13 +73,13 @@ int ListenNetSocket::acceptConnection(unsigned int *addr)
     struct sockaddr_in socka;
     socklen_t size = sizeof(socka);
 
-    new_socket = accept(m_socket, (struct sockaddr *)&socka, &size);
+    new_socket = accept(m_socket, (struct sockaddr*)&socka, &size);
     if (new_socket == -1) {
         PLOG << "accept";
         return -1;
     }
 
-    if (getpeername(new_socket, (struct sockaddr *)&socka, &size) == -1) {
+    if (getpeername(new_socket, (struct sockaddr*)&socka, &size) == -1) {
         PLOG << "getpeername";
 #if PLATFORM == PLATFORM_WINDOWS
         closesocket(m_socket);

@@ -6,8 +6,8 @@
 
 #include <Box2D/Box2D.h>
 
-SensorPhysicsComponent::SensorPhysicsComponent(GameLogic *game,
-                                               const MapObject &obj)
+SensorPhysicsComponent::SensorPhysicsComponent(GameLogic* game,
+                                               const MapObject& obj)
     : GroundPhysicsComponent(game, obj)
 {
     b2Filter filter;
@@ -15,7 +15,7 @@ SensorPhysicsComponent::SensorPhysicsComponent(GameLogic *game,
     filter.maskBits     = HERO;
 
     // Ground has one fixture
-    b2Fixture *fix = m_body->GetFixtureList();
+    b2Fixture* fix = m_body->GetFixtureList();
     fix->SetFilterData(filter);
     fix->SetSensor(true);
 }

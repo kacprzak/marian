@@ -26,11 +26,11 @@ void BaseGameLogic::update(float elapsedTime)
 
     m_physicsEngine->update(elapsedTime);
 
-    for (const auto &pair : m_actors) {
+    for (const auto& pair : m_actors) {
         pair.second->update(elapsedTime);
     }
 
-    EventMgr &evtMgr = EventMgr::singleton();
+    EventMgr& evtMgr = EventMgr::singleton();
     evtMgr.update();
 
     // Remove dead GameObjects
@@ -53,7 +53,7 @@ void BaseGameLogic::update(float elapsedTime)
 
 //------------------------------------------------------------------------------
 
-void BaseGameLogic::addGameObject(ActorCategory type, const std::string &name,
+void BaseGameLogic::addGameObject(ActorCategory type, const std::string& name,
                                   float x, float y)
 {
     using namespace event;

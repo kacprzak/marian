@@ -5,24 +5,24 @@
 #include "Box2dPhysicsEngine.h"
 #include "GameLogic.h"
 
-GroundPhysicsComponent::GroundPhysicsComponent(GameLogic *game,
-                                               const MapObject &obj)
+GroundPhysicsComponent::GroundPhysicsComponent(GameLogic* game,
+                                               const MapObject& obj)
     : PhysicsComponent()
 {
     b2BodyDef groundBodyDef;
     groundBodyDef.position.Set(obj.x, obj.y);
 
-    Box2dPhysicsEngine *pe =
-        static_cast<Box2dPhysicsEngine *>(game->physicsEngine());
-    b2Body *groundBody = pe->world()->CreateBody(&groundBodyDef);
+    Box2dPhysicsEngine* pe =
+        static_cast<Box2dPhysicsEngine*>(game->physicsEngine());
+    b2Body* groundBody = pe->world()->CreateBody(&groundBodyDef);
 
-    const std::string &shape = obj.shape;
+    const std::string& shape = obj.shape;
     if (shape == "polyline" || shape == "polygon") {
         size_t numOfPoints = obj.points.size();
         std::vector<b2Vec2> vs(numOfPoints);
 
         for (size_t i = 0; i < numOfPoints; ++i) {
-            auto &p = obj.points[i];
+            auto& p = obj.points[i];
             vs[i].Set(p.first, p.second);
         }
 

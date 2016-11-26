@@ -42,20 +42,20 @@ class StateMachine
     const T owner() const { return m_owner; }
     void setOwner(T owner) { m_owner = owner; }
 
-    S *state(int stateId) { return m_states[stateId]; }
-    S *currentState() { return m_currentState; }
-    const S *currentState() const { return m_currentState; }
+    S* state(int stateId) { return m_states[stateId]; }
+    S* currentState() { return m_currentState; }
+    const S* currentState() const { return m_currentState; }
 
-    const int *stateId(S *state) const
+    const int* stateId(S* state) const
     {
-        for (const auto &kv : m_states) {
+        for (const auto& kv : m_states) {
             if (kv.second == state)
                 return &kv.first;
         }
         return nullptr;
     }
 
-    void registerState(int stateId, S *state)
+    void registerState(int stateId, S* state)
     {
         assert(state);
         assert(!registered(stateId));
@@ -69,7 +69,7 @@ class StateMachine
         return m_states.find(stateId) != end(m_states);
     }
 
-    bool registered(S *state) const { return stateId(state) != nullptr; }
+    bool registered(S* state) const { return stateId(state) != nullptr; }
 
     void changeState(int stateId)
     {
@@ -78,7 +78,7 @@ class StateMachine
         if (m_currentState)
             m_currentState->onExit(m_owner, stateId);
 
-        auto *nextState = state(stateId);
+        auto* nextState = state(stateId);
         assert(nextState);
 
         int prevStateId = m_currentStateId;
@@ -93,8 +93,8 @@ class StateMachine
     T m_owner;
     const int m_idleStateId;
     int m_currentStateId;
-    S *m_currentState;
-    std::map<int, S *> m_states;
+    S* m_currentState;
+    std::map<int, S*> m_states;
 };
 
 #endif // STATEMACHINE_H

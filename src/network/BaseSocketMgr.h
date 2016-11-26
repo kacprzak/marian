@@ -18,8 +18,8 @@ class BaseSocketMgr : public Singleton<BaseSocketMgr>
     BaseSocketMgr();
     virtual ~BaseSocketMgr();
 
-    int addSocket(NetSocket *socket);
-    void removeSocket(NetSocket *socket);
+    int addSocket(NetSocket* socket);
+    void removeSocket(NetSocket* socket);
 
     bool send(int sockId, std::shared_ptr<Packet> packet);
     void select(int pauseMicroSecs, bool handleInput = true);
@@ -32,8 +32,8 @@ class BaseSocketMgr : public Singleton<BaseSocketMgr>
 
     bool isInternal(unsigned int ip);
 
-    unsigned int getHostByName(const std::string &hostName);
-    const char *getHostByAddr(unsigned int ip);
+    unsigned int getHostByName(const std::string& hostName);
+    const char* getHostByAddr(unsigned int ip);
 
     void addToOutbound(int rc) { m_outbound += rc; }
     void addToInbound(int rc) { m_inbound += rc; }
@@ -41,8 +41,8 @@ class BaseSocketMgr : public Singleton<BaseSocketMgr>
   protected:
     void shutdown();
 
-    using SocketList  = std::list<NetSocket *>;
-    using SocketIdMap = std::map<int, NetSocket *>;
+    using SocketList  = std::list<NetSocket*>;
+    using SocketIdMap = std::map<int, NetSocket*>;
 
     SocketList m_sockList; //!< List of sockets
     SocketIdMap m_sockMap; //!< Map from id to socket handles
@@ -56,7 +56,7 @@ class BaseSocketMgr : public Singleton<BaseSocketMgr>
     unsigned int m_subnet;     //!< the subnet of the internal network
     unsigned int m_subnetMask; //!< the subnet mask of the internal network
 
-    NetSocket *findSocket(int sockId);
+    NetSocket* findSocket(int sockId);
 };
 
 } // namespace network

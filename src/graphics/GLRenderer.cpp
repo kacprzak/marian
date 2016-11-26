@@ -10,15 +10,15 @@ using namespace gfx;
 
 //------------------------------------------------------------------------------
 
-void GLRenderer::drawImage(const Image &image, float x, float y,
+void GLRenderer::drawImage(const Image& image, float x, float y,
                            float rotation) const
 {
     float deg = rotation * 180.0f / boost::math::constants::pi<float>();
     float hw  = image.width() / 2.0f;
     float hh  = image.height() / 2.0f;
 
-    const Texture *tex       = image.texture();
-    const GLfloat *texCoords = image.getTextureCoords();
+    const Texture* tex       = image.texture();
+    const GLfloat* texCoords = image.getTextureCoords();
 
     glPushMatrix();
     glTranslatef(x, y, 0.0f);
@@ -33,7 +33,7 @@ void GLRenderer::drawImage(const Image &image, float x, float y,
 //------------------------------------------------------------------------------
 
 void GLRenderer::drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
-                          GLuint texture_id, const GLfloat *texCoords) const
+                          GLuint texture_id, const GLfloat* texCoords) const
 {
     // Enable texturing if needed.
     GLboolean texturing_enabled = glIsEnabled(GL_TEXTURE_2D);
@@ -74,7 +74,7 @@ void GLRenderer::drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h) const
 //------------------------------------------------------------------------------
 
 void GLRenderer::drawQuad(GLfloat x, GLfloat y, GLfloat w, GLfloat h,
-                          const GLfloat *texCoords) const
+                          const GLfloat* texCoords) const
 {
     static GLfloat s_texCoords[8] = {0.0f, 0.0f, 1.0f, 0.0f,
                                      1.0f, 1.0f, 0.0f, 1.0f};

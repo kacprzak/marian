@@ -19,20 +19,20 @@ using ViewRect = Rect<float>;
 class HumanView : public GameView
 {
   public:
-    HumanView(const std::string &title, int screenWidth, int screenHeight,
+    HumanView(const std::string& title, int screenWidth, int screenHeight,
               bool screenFull = false);
 
     ~HumanView() override;
 
     // GameView interface
-    bool processInput(const SDL_Event &event) override;
+    bool processInput(const SDL_Event& event) override;
     void update(float elapsedTime) override;
 
     void centerViewOn(float x, float y);
-    void viewBounds(ViewRect *rect);
+    void viewBounds(ViewRect* rect);
 
     void setBackgroundColor(int r, int g, int b);
-    void setBackgroundColor(const std::string &color);
+    void setBackgroundColor(const std::string& color);
 
     /*! Screen size in pixels */
     int screenWidth() const { return m_screenWidth; }
@@ -53,7 +53,7 @@ class HumanView : public GameView
     int m_screenHeight;
     bool m_screenFull;
 
-    SDL_Window *m_window;
+    SDL_Window* m_window;
     SDL_GLContext m_glContext;
 
     float m_translate_x;

@@ -37,13 +37,13 @@ class PhysicsComponent : public ActorComponent
         if (!m_owner || !m_body)
             return false;
 
-        m_body->SetUserData(reinterpret_cast<void *>(m_owner->id()));
+        m_body->SetUserData(reinterpret_cast<void*>(m_owner->id()));
         return true;
     }
 
     // TODO: Make private
-    b2Body *body() { return m_body; }
-    void setBody(b2Body *body)
+    b2Body* body() { return m_body; }
+    void setBody(b2Body* body)
     {
         assert(m_body == nullptr);
         m_body = body;
@@ -74,12 +74,12 @@ class PhysicsComponent : public ActorComponent
      * \param other      object that contacts this object
      * \param fixtureUD  user data of fixture that collided with other
      */
-    virtual void handleBeginContact(Actor & /*other*/,
-                                    void * /*fixtureUD*/ = nullptr)
+    virtual void handleBeginContact(Actor& /*other*/,
+                                    void* /*fixtureUD*/ = nullptr)
     {
     }
-    virtual void handleEndContact(Actor & /*other*/,
-                                  void * /*fixtureUD*/ = nullptr)
+    virtual void handleEndContact(Actor& /*other*/,
+                                  void* /*fixtureUD*/ = nullptr)
     {
     }
 
@@ -88,7 +88,7 @@ class PhysicsComponent : public ActorComponent
     ActorComponentId componentId() const { return PHYSICS; }
 
   protected:
-    b2Body *m_body;
+    b2Body* m_body;
 };
 
 #endif // PHYSICSCOMPONENT_H

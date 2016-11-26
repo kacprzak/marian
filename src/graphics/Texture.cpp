@@ -16,8 +16,8 @@
 
 using namespace gfx;
 
-static GLuint load_texture(SDL_Surface *surface, int *w, int *h);
-static int SDL_InvertSurface(SDL_Surface *image);
+static GLuint load_texture(SDL_Surface* surface, int* w, int* h);
+static int SDL_InvertSurface(SDL_Surface* image);
 
 //------------------------------------------------------------------------------
 
@@ -34,9 +34,9 @@ Texture::~Texture() { glDeleteTextures(1, &m_textureId); }
 
 //------------------------------------------------------------------------------
 
-void Texture::loadFromFile(const std::string &filename)
+void Texture::loadFromFile(const std::string& filename)
 {
-    SDL_Surface *surface = IMG_Load(filename.c_str());
+    SDL_Surface* surface = IMG_Load(filename.c_str());
 
     if (!surface) {
         throw std::runtime_error("SDL_Image load error: " +
@@ -49,7 +49,7 @@ void Texture::loadFromFile(const std::string &filename)
 
 //------------------------------------------------------------------------------
 
-void Texture::loadFromSDL(SDL_Surface *surface)
+void Texture::loadFromSDL(SDL_Surface* surface)
 {
     // Top down inversion
     if (SDL_InvertSurface(surface) != 0)
@@ -63,7 +63,7 @@ void Texture::loadFromSDL(SDL_Surface *surface)
 
 //==============================================================================
 
-static GLuint load_texture(SDL_Surface *surface, int *w, int *h)
+static GLuint load_texture(SDL_Surface* surface, int* w, int* h)
 {
     GLuint textureid;
     int mode;
@@ -86,7 +86,7 @@ static GLuint load_texture(SDL_Surface *surface, int *w, int *h)
         fmt.Bmask         = 0xff0000;
         fmt.Amask         = 0xff000000;
 
-        SDL_Surface *nimg = SDL_ConvertSurface(surface, &fmt, 0);
+        SDL_Surface* nimg = SDL_ConvertSurface(surface, &fmt, 0);
 
         if (!nimg) {
             std::cerr << "SDL error: " << SDL_GetError() << "\n";
@@ -138,13 +138,13 @@ static GLuint load_texture(SDL_Surface *surface, int *w, int *h)
 // Code from
 // http://www.gribblegames.com/articles/game_programming/sdlgl/invert_sdl_surfaces.html
 //
-static int invert_image(int pitch, int height, void *image_pixels)
+static int invert_image(int pitch, int height, void* image_pixels)
 {
     int index;
-    void *temp_row;
+    void* temp_row;
     int height_div_2;
 
-    temp_row = (void *)malloc(pitch);
+    temp_row = (void*)malloc(pitch);
     if (NULL == temp_row) {
         SDL_SetError("Not enough memory for image inversion");
         return -1;
@@ -153,13 +153,12 @@ static int invert_image(int pitch, int height, void *image_pixels)
     height_div_2 = (int)(height * .5);
     for (index = 0; index < height_div_2; ++index) {
         // uses string.h
-        memcpy((Uint8 *)temp_row, (Uint8 *)(image_pixels) + pitch * index,
-               pitch);
+        memcpy((Uint8*)temp_row, (Uint8*)(image_pixels) + pitch * index, pitch);
 
-        memcpy((Uint8 *)(image_pixels) + pitch * index,
-               (Uint8 *)(image_pixels) + pitch * (height - index - 1), pitch);
+        memcpy((Uint8*)(image_pixels) + pitch * index,
+               (Uint8*)(image_pixels) + pitch * (height - index - 1), pitch);
 
-        memcpy((Uint8 *)(image_pixels) + pitch * (height - index - 1), temp_row,
+        memcpy((Uint8*)(image_pixels) + pitch * (height - index - 1), temp_row,
                pitch);
     }
     free(temp_row);
@@ -169,7 +168,7 @@ static int invert_image(int pitch, int height, void *image_pixels)
 //------------------------------------------------------------------------------
 
 // This is the function you want to call!
-static int SDL_InvertSurface(SDL_Surface *image)
+static int SDL_InvertSurface(SDL_Surface* image)
 {
     if (NULL == image) {
         SDL_SetError("Surface is NULL");

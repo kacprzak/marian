@@ -9,28 +9,28 @@ namespace gfx {
 
 //==============================================================================
 
-class HeroNodeState : public State<HeroNode *>
+class HeroNodeState : public State<HeroNode*>
 {
   public:
-    explicit HeroNodeState(HeroNodeStateMachine &stateMachine)
-        : State<HeroNode *>()
+    explicit HeroNodeState(HeroNodeStateMachine& stateMachine)
+        : State<HeroNode*>()
         , m_stateMachine(stateMachine)
     {
     }
 
-    void onEnter(HeroNode *owner, int /*prevStateId*/) override
+    void onEnter(HeroNode* owner, int /*prevStateId*/) override
     {
         setFacingRight(owner->isFacingRight());
     }
 
-    void onExit(HeroNode * /*owner*/, int /*nextStateId*/) override {}
+    void onExit(HeroNode* /*owner*/, int /*nextStateId*/) override {}
 
     virtual void update(float elapsedTime)    = 0;
-    virtual const Image &currentImage() const = 0;
+    virtual const Image& currentImage() const = 0;
     virtual void setFacingRight(bool right)   = 0;
 
   protected:
-    HeroNodeStateMachine &m_stateMachine;
+    HeroNodeStateMachine& m_stateMachine;
 };
 
 //==============================================================================
@@ -38,10 +38,10 @@ class HeroNodeState : public State<HeroNode *>
 class StandHeroState : public HeroNodeState
 {
   public:
-    explicit StandHeroState(HeroNodeStateMachine &stateMachine)
+    explicit StandHeroState(HeroNodeStateMachine& stateMachine)
         : HeroNodeState(stateMachine)
     {
-        const Texture *tex =
+        const Texture* tex =
             ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
         Rect<int> tileCoords = Rect<int>(38, 255, 38 + 32, 255 + 32);
@@ -60,7 +60,7 @@ class StandHeroState : public HeroNodeState
 
     void update(float elapsedTime) override { m_animation.update(elapsedTime); }
 
-    const Image &currentImage() const override
+    const Image& currentImage() const override
     {
         return m_animation.currentFrame();
     }
@@ -82,10 +82,10 @@ class StandHeroState : public HeroNodeState
 class FallHeroState : public HeroNodeState
 {
   public:
-    explicit FallHeroState(HeroNodeStateMachine &stateMachine)
+    explicit FallHeroState(HeroNodeStateMachine& stateMachine)
         : HeroNodeState(stateMachine)
     {
-        const Texture *tex =
+        const Texture* tex =
             ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
         Rect<int> tileCoords = Rect<int>(182, 219, 182 + 32, 219 + 32);
@@ -99,7 +99,7 @@ class FallHeroState : public HeroNodeState
         // Do nothing
     }
 
-    const Image &currentImage() const override { return *m_image; }
+    const Image& currentImage() const override { return *m_image; }
 
     void setFacingRight(bool right) override
     {
@@ -118,10 +118,10 @@ class FallHeroState : public HeroNodeState
 class RunHeroState : public HeroNodeState
 {
   public:
-    explicit RunHeroState(HeroNodeStateMachine &stateMachine)
+    explicit RunHeroState(HeroNodeStateMachine& stateMachine)
         : HeroNodeState(stateMachine)
     {
-        const Texture *tex =
+        const Texture* tex =
             ResourceMgr::singleton().getTexture("MegaMan_001.png");
 
         float frameSpeed = 0.25f;
@@ -152,7 +152,7 @@ class RunHeroState : public HeroNodeState
 
     void update(float elapsedTime) override { m_animation.update(elapsedTime); }
 
-    const Image &currentImage() const override
+    const Image& currentImage() const override
     {
         return m_animation.currentFrame();
     }
@@ -178,7 +178,7 @@ HeroNode::HeroNode()
     m_stateMachine.setOwner(this);
 
     // States
-    HeroNodeState *state = new StandHeroState(m_stateMachine);
+    HeroNodeState* state = new StandHeroState(m_stateMachine);
     m_states.push_back(state);
     m_stateMachine.registerState(IDLE, state);
 
@@ -197,7 +197,7 @@ HeroNode::HeroNode()
 
 HeroNode::~HeroNode()
 {
-    for (auto *state : m_states)
+    for (auto* state : m_states)
         delete state;
 
     m_image = nullptr;
@@ -209,8 +209,8 @@ void HeroNode::update(float elapsedTime)
 {
     m_stateMachine.currentState()->update(elapsedTime);
 
-    const HeroNodeState *renderState =
-        static_cast<const HeroNodeState *>(m_stateMachine.currentState());
+    const HeroNodeState* renderState =
+        static_cast<const HeroNodeState*>(m_stateMachine.currentState());
     m_image = &(renderState->currentImage());
 }
 

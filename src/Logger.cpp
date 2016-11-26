@@ -8,7 +8,7 @@
 
 #define SHOW_PKT_SIZE false
 
-void logHelper(int sockId, const char *data, unsigned int size, const char *msg)
+void logHelper(int sockId, const char* data, unsigned int size, const char* msg)
 {
     // debug data
     char buf[60];
@@ -21,7 +21,7 @@ void logHelper(int sockId, const char *data, unsigned int size, const char *msg)
     char buf_hex[buf_size * 3 + 1];
     memset(buf_hex, '\0', sizeof(buf_hex));
 
-    char *buf_hex_ptr = buf_hex;
+    char* buf_hex_ptr = buf_hex;
     for (unsigned int i = 0; i < std::min(size, buf_size - 1); ++i) {
         buf_hex_ptr += sprintf(buf_hex_ptr, "%02x:", buf[i]);
     }
@@ -30,7 +30,7 @@ void logHelper(int sockId, const char *data, unsigned int size, const char *msg)
         *(buf_hex_ptr - 1) = '\0';
 
     buf_hex_ptr                = buf_hex;
-    char *buf_ptr              = buf;
+    char* buf_ptr              = buf;
     const size_t sizeof_uint32 = 4; // sizeof(u_int32_t);
     if (!SHOW_PKT_SIZE && (size > sizeof_uint32)) {
         buf_hex_ptr += sizeof_uint32 * 2 + 4; // plus 4 ':' chars

@@ -14,7 +14,7 @@ namespace gfx {
 class HeroNode;
 class HeroNodeState;
 
-using HeroNodeStateMachine = StateMachine<HeroNode *, HeroNodeState>;
+using HeroNodeStateMachine = StateMachine<HeroNode*, HeroNodeState>;
 
 class HeroNode : public SpriteNode
 {
@@ -37,7 +37,7 @@ class HeroNode : public SpriteNode
     bool m_facingRight;
 
     HeroNodeStateMachine m_stateMachine;
-    std::vector<HeroNodeState *> m_states;
+    std::vector<HeroNodeState*> m_states;
 };
 
 } // namespace gfx

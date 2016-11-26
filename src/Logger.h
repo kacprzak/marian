@@ -13,11 +13,11 @@
 
 static std::clock_t startTime = std::clock();
 
-static const char *severMsg[] = {"[DEBUG] ", "[INFO]  ", "[WARN]  ", "[ERROR] ",
+static const char* severMsg[] = {"[DEBUG] ", "[INFO]  ", "[WARN]  ", "[ERROR] ",
                                  "[FATAL] "};
 
-void logHelper(int sockId, const char *data, unsigned int size,
-               const char *msg);
+void logHelper(int sockId, const char* data, unsigned int size,
+               const char* msg);
 
 // This will show CPU time! It is different from the actual time.
 #define _LOG_CLOCK                                                             \
@@ -49,7 +49,7 @@ void logHelper(int sockId, const char *data, unsigned int size,
 class PerrorLogger
 {
   public:
-    explicit PerrorLogger(const char *func)
+    explicit PerrorLogger(const char* func)
     {
         if (func)
             std::cerr << severMsg[3] _LOG_CLOCK _LOG_EXTRA(func);
@@ -57,7 +57,7 @@ class PerrorLogger
             std::cerr << severMsg[3] _LOG_CLOCK;
     }
 
-    void operator<<(const char *msg) { std::perror(msg); }
+    void operator<<(const char* msg) { std::perror(msg); }
 };
 
 #if !(defined NDEBUG) && !(defined _MSC_VER)

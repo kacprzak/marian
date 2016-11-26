@@ -10,14 +10,14 @@ class GameLogicImpl : public BaseGameLogic
   public:
     GameLogicImpl();
 
-    void onBeforeMainLoop(Engine *e) override;
+    void onBeforeMainLoop(Engine* e) override;
 
     void update(float elapsedTime) override;
 
   private:
-    void handleActorCollided(event::Event &event);
+    void handleActorCollided(event::Event& event);
     // void handleActorPhysicsStateChanged(Event& event);
-    void handleInputCommand(event::Event &event);
+    void handleInputCommand(event::Event& event);
 
     event::EventListenerHelper elh;
 };

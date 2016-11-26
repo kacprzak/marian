@@ -24,8 +24,8 @@ struct Rect
 
 std::vector<int> hexColorToRgb(int hexValue);
 
-std::vector<int> hexColorToRgb(const std::string &hexString);
+std::vector<int> hexColorToRgb(const std::string& hexString);
 
-std::string appendDirSeparator(const std::string &folder);
+std::string appendDirSeparator(const std::string& folder);
 
 #endif

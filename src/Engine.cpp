@@ -19,7 +19,7 @@ Engine::Engine(bool initVideo)
 {
     try {
         initializeSDL();
-    } catch (const EngineError & /*e*/) {
+    } catch (const EngineError& /*e*/) {
         SDL_Quit();
         throw;
     }
@@ -99,7 +99,7 @@ void Engine::logSDLInfo()
 
 //------------------------------------------------------------------------------
 
-void Engine::mainLoop(GameLogic *game)
+void Engine::mainLoop(GameLogic* game)
 {
     m_game = game;
     m_game->onBeforeMainLoop(this);
@@ -184,7 +184,7 @@ void Engine::update(float elapsedTime)
         gv->update(elapsedTime);
 
     // Update network
-    net::BaseSocketMgr *sm = net::BaseSocketMgr::singletonPtr();
+    net::BaseSocketMgr* sm = net::BaseSocketMgr::singletonPtr();
     if (sm)
         sm->select(20);
 }
@@ -204,7 +204,7 @@ void Engine::draw()
 
 //------------------------------------------------------------------------------
 
-int Engine::showErrorMessageBox(const char *msg)
+int Engine::showErrorMessageBox(const char* msg)
 {
     return SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", msg, NULL);
 }

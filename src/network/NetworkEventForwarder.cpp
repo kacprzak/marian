@@ -15,7 +15,7 @@ NetworkEventForwarder::NetworkEventForwarder(int socketId)
 
 //------------------------------------------------------------------------------
 
-void NetworkEventForwarder::forwardEvent(event::Event &e)
+void NetworkEventForwarder::forwardEvent(event::Event& e)
 {
     std::ostringstream out;
 
@@ -24,7 +24,7 @@ void NetworkEventForwarder::forwardEvent(event::Event &e)
     out << e;
     // out << "\r\n";
 
-    const std::string &data = out.str();
+    const std::string& data = out.str();
 
     std::shared_ptr<Packet> packet(new Packet(data.c_str(), data.length()));
 

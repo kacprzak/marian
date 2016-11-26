@@ -44,8 +44,8 @@
 #include <cstring>
 using namespace std;
 
-void DebugDraw::DrawPolygon(const b2Vec2 *vertices, int32 vertexCount,
-                            const b2Color &color)
+void DebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount,
+                            const b2Color& color)
 {
     glColor3f(color.r, color.g, color.b);
     glBegin(GL_LINE_LOOP);
@@ -55,8 +55,8 @@ void DebugDraw::DrawPolygon(const b2Vec2 *vertices, int32 vertexCount,
     glEnd();
 }
 
-void DebugDraw::DrawSolidPolygon(const b2Vec2 *vertices, int32 vertexCount,
-                                 const b2Color &color)
+void DebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount,
+                                 const b2Color& color)
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -76,8 +76,8 @@ void DebugDraw::DrawSolidPolygon(const b2Vec2 *vertices, int32 vertexCount,
     glEnd();
 }
 
-void DebugDraw::DrawCircle(const b2Vec2 &center, float32 radius,
-                           const b2Color &color)
+void DebugDraw::DrawCircle(const b2Vec2& center, float32 radius,
+                           const b2Color& color)
 {
     const float32 k_segments  = 16.0f;
     const float32 k_increment = 2.0f * b2_pi / k_segments;
@@ -92,8 +92,8 @@ void DebugDraw::DrawCircle(const b2Vec2 &center, float32 radius,
     glEnd();
 }
 
-void DebugDraw::DrawSolidCircle(const b2Vec2 &center, float32 radius,
-                                const b2Vec2 &axis, const b2Color &color)
+void DebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius,
+                                const b2Vec2& axis, const b2Color& color)
 {
     const float32 k_segments  = 16.0f;
     const float32 k_increment = 2.0f * b2_pi / k_segments;
@@ -127,8 +127,8 @@ void DebugDraw::DrawSolidCircle(const b2Vec2 &center, float32 radius,
     glEnd();
 }
 
-void DebugDraw::DrawSegment(const b2Vec2 &p1, const b2Vec2 &p2,
-                            const b2Color &color)
+void DebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2,
+                            const b2Color& color)
 {
     glColor3f(color.r, color.g, color.b);
     glBegin(GL_LINES);
@@ -137,7 +137,7 @@ void DebugDraw::DrawSegment(const b2Vec2 &p1, const b2Vec2 &p2,
     glEnd();
 }
 
-void DebugDraw::DrawTransform(const b2Transform &xf)
+void DebugDraw::DrawTransform(const b2Transform& xf)
 {
     b2Vec2 p1                 = xf.p, p2;
     const float32 k_axisScale = 0.4f;
@@ -156,7 +156,7 @@ void DebugDraw::DrawTransform(const b2Transform &xf)
     glEnd();
 }
 
-void DebugDraw::DrawPoint(const b2Vec2 &p, float32 size, const b2Color &color)
+void DebugDraw::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color)
 {
     glPointSize(size);
     glBegin(GL_POINTS);
@@ -166,7 +166,7 @@ void DebugDraw::DrawPoint(const b2Vec2 &p, float32 size, const b2Color &color)
     glPointSize(1.0f);
 }
 
-void DebugDraw::DrawString(int x, int y, const char *string, ...)
+void DebugDraw::DrawString(int x, int y, const char* string, ...)
 {
 #ifdef NO_GLUT
     puts("WARNING: GLUT is disabled. DrawString does nothing");
@@ -202,7 +202,7 @@ void DebugDraw::DrawString(int x, int y, const char *string, ...)
 #endif
 }
 
-void DebugDraw::DrawAABB(b2AABB *aabb, const b2Color &c)
+void DebugDraw::DrawAABB(b2AABB* aabb, const b2Color& c)
 {
     glColor3f(c.r, c.g, c.b);
     glBegin(GL_LINE_LOOP);

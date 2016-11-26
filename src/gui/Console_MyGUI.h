@@ -17,7 +17,7 @@ class Console : public ScriptListener
     Console();
     ~Console();
 
-    MyGUI::Window *getWindow() { return m_consoleWindow; }
+    MyGUI::Window* getWindow() { return m_consoleWindow; }
 
     void handleKey(MyGUI::KeyCode key);
 
@@ -30,31 +30,31 @@ class Console : public ScriptListener
     void revertPreviousCommand();
 
     // Inherited via ScriptListener
-    virtual void onScriptOutput(const std::string &out) override;
-    virtual void onScriptError(const std::string &out) override;
+    virtual void onScriptOutput(const std::string& out) override;
+    virtual void onScriptError(const std::string& out) override;
 
   private:
     // Register our handler functions
     void registerHandlers();
     // Handle when we press the Send button
-    void handle_SendButtonPressed(MyGUI::Widget *_sender);
+    void handle_SendButtonPressed(MyGUI::Widget* _sender);
     // Handle when we press Enter after typing
-    void handle_ComboAccept(MyGUI::ComboBox *_sender, size_t _index);
+    void handle_ComboAccept(MyGUI::ComboBox* _sender, size_t _index);
     // Parse the text the user submitted
     void parseText(MyGUI::UString inMsg);
     // Post the message to the ChatHistory listbox
     void outputText(MyGUI::UString inMsg, bool err = false);
-    void output(const std::string &inMsg, bool err = false);
+    void output(const std::string& inMsg, bool err = false);
 
     void clearText();
 
   private:
     bool m_consoleVisible;
 
-    MyGUI::Window *m_consoleWindow;
-    MyGUI::EditBox *m_listHistory;
-    MyGUI::ComboBox *m_comboCommand;
-    MyGUI::Button *m_buttonSubmit;
+    MyGUI::Window* m_consoleWindow;
+    MyGUI::EditBox* m_listHistory;
+    MyGUI::ComboBox* m_comboCommand;
+    MyGUI::Button* m_buttonSubmit;
 
     MyGUI::UString m_errorColor;
     MyGUI::UString m_echoColor;

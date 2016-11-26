@@ -12,8 +12,8 @@
 
 class ContactListener : public b2ContactListener
 {
-    void BeginContact(b2Contact *contact) override;
-    void EndContact(b2Contact *contact) override;
+    void BeginContact(b2Contact* contact) override;
+    void EndContact(b2Contact* contact) override;
 };
 
 //------------------------------------------------------------------------------
@@ -32,7 +32,7 @@ class Box2dPhysicsEngine : public PhysicsEngine
     // void applyForce(const Vec2& dir, float newtons, ActorId actorId)
     // override;
 
-    b2World *world() { return m_world.get(); }
+    b2World* world() { return m_world.get(); }
 
   private:
     std::unique_ptr<b2World> m_world;

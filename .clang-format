@@ -19,4 +19,5 @@ BreakBeforeBinaryOperators: None
 BreakBeforeBraces: Custom
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializersBeforeComma: true
+PointerAlignment: Left
 IndentWidth:     4

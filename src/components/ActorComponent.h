@@ -24,10 +24,10 @@ class ActorComponent
 
   private:
     // Only Actor should use this
-    void setOwner(Actor *actor) { m_owner = actor; }
+    void setOwner(Actor* actor) { m_owner = actor; }
 
   protected:
-    Actor *m_owner = nullptr;
+    Actor* m_owner = nullptr;
 };
 
 #endif // ACTORCOMPONENT_H

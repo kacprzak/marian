@@ -89,19 +89,19 @@ void Box2dPhysicsEngine::drawDebugData()
 
 //------------------------------------------------------------------------------
 
-void ContactListener::BeginContact(b2Contact *contact)
+void ContactListener::BeginContact(b2Contact* contact)
 {
-    void *fixAUserData = contact->GetFixtureA()->GetUserData();
-    void *fixBUserData = contact->GetFixtureB()->GetUserData();
+    void* fixAUserData = contact->GetFixtureA()->GetUserData();
+    void* fixBUserData = contact->GetFixtureB()->GetUserData();
 
-    void *bodyAUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-    void *bodyBUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+    void* bodyAUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+    void* bodyBUserData = contact->GetFixtureB()->GetBody()->GetUserData();
 
     if (bodyAUserData && bodyBUserData) {
         ActorId actorA = reinterpret_cast<ActorId>(bodyAUserData);
         ActorId actorB = reinterpret_cast<ActorId>(bodyBUserData);
 
-        EventMgr &evtMgr = EventMgr::singleton();
+        EventMgr& evtMgr = EventMgr::singleton();
         evtMgr.queueEvent(std::make_unique<CollisionEvent>(
             CollisionEvent::BEGIN, actorA, fixAUserData, actorB, fixBUserData));
     }
@@ -109,19 +109,19 @@ void ContactListener::BeginContact(b2Contact *contact)
 
 //------------------------------------------------------------------------------
 
-void ContactListener::EndContact(b2Contact *contact)
+void ContactListener::EndContact(b2Contact* contact)
 {
-    void *fixAUserData = contact->GetFixtureA()->GetUserData();
-    void *fixBUserData = contact->GetFixtureB()->GetUserData();
+    void* fixAUserData = contact->GetFixtureA()->GetUserData();
+    void* fixBUserData = contact->GetFixtureB()->GetUserData();
 
-    void *bodyAUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-    void *bodyBUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+    void* bodyAUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+    void* bodyBUserData = contact->GetFixtureB()->GetBody()->GetUserData();
 
     if (bodyAUserData && bodyBUserData) {
         ActorId actorA = reinterpret_cast<ActorId>(bodyAUserData);
         ActorId actorB = reinterpret_cast<ActorId>(bodyBUserData);
 
-        EventMgr &evtMgr = EventMgr::singleton();
+        EventMgr& evtMgr = EventMgr::singleton();
         evtMgr.queueEvent(std::make_unique<CollisionEvent>(
             CollisionEvent::END, actorA, fixAUserData, actorB, fixBUserData));
     }

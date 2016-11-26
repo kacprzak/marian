@@ -11,7 +11,7 @@ class GameLogic;
 class GroundPhysicsComponent : public PhysicsComponent
 {
   public:
-    GroundPhysicsComponent(GameLogic *game, const MapObject &obj);
+    GroundPhysicsComponent(GameLogic* game, const MapObject& obj);
 };
 
 #endif

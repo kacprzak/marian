@@ -29,20 +29,20 @@ class MapNode
 
     std::string backgroundColor() const { return m_map->backgroundColor(); }
 
-    void drawBackground(Renderer *rndr, const ViewRect &rect) const;
-    void drawForeground(Renderer *rndr, const ViewRect &rect) const;
+    void drawBackground(Renderer* rndr, const ViewRect& rect) const;
+    void drawForeground(Renderer* rndr, const ViewRect& rect) const;
 
   private:
     void calculateTilesTextureData();
 
     // void draw(Engine *e, float xFrom, float xTo, float yFrom, float yTo)
     // const;
-    void drawLayer(Renderer *rndr, const std::string &layer,
-                   const ViewRect &rect) const;
-    void drawParallaxLayer(Renderer *rndr, const std::string &layerName,
-                           const ViewRect &rect, float transition) const;
+    void drawLayer(Renderer* rndr, const std::string& layer,
+                   const ViewRect& rect) const;
+    void drawParallaxLayer(Renderer* rndr, const std::string& layerName,
+                           const ViewRect& rect, float transition) const;
 
-    void drawLayer(Renderer *rndr, const Layer *layer, int xFrom, int xTo,
+    void drawLayer(Renderer* rndr, const Layer* layer, int xFrom, int xTo,
                    int yFrom, int yTo) const;
 
     std::shared_ptr<Map> m_map;

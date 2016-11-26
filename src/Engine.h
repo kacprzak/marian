@@ -18,16 +18,16 @@
 class EngineError : public std::runtime_error
 {
   public:
-    EngineError(const std::string &msg, const char *sdlError)
+    EngineError(const std::string& msg, const char* sdlError)
         : std::runtime_error(msg + ": " + sdlError)
         , m_sdlError(sdlError)
     {
     }
 
-    const char *sdlError() { return m_sdlError; }
+    const char* sdlError() { return m_sdlError; }
 
   private:
-    const char *m_sdlError;
+    const char* m_sdlError;
 };
 
 //------------------------------------------------------------------------------
@@ -41,12 +41,12 @@ class Engine : public Singleton<Engine>
     explicit Engine(bool initVideo = true);
     ~Engine() override;
 
-    void mainLoop(GameLogic *game);
-    GameLogic *game() { return m_game; }
+    void mainLoop(GameLogic* game);
+    GameLogic* game() { return m_game; }
 
     void breakLoop() { m_breakLoop = true; }
 
-    static int showErrorMessageBox(const char *msg);
+    static int showErrorMessageBox(const char* msg);
 
   private:
     void initializeSDL();
@@ -63,7 +63,7 @@ class Engine : public Singleton<Engine>
     bool m_mouseFocus;
     bool m_inputFocus;
 
-    GameLogic *m_game;
+    GameLogic* m_game;
 };
 
 #endif

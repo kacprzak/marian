@@ -15,7 +15,7 @@ class RemoteGameView : public GameView
     explicit RemoteGameView(int socketId);
 
     // GameView interface
-    bool processInput(const SDL_Event & /*event*/) { return true; }
+    bool processInput(const SDL_Event& /*event*/) { return true; }
     void update(float /*elapsedTime*/) {}
     void draw() {}
     void onAttach(int gameViewId, unsigned long actorId)

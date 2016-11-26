@@ -22,20 +22,20 @@ class HeroHumanView : public HumanView
     using super = HumanView;
 
   public:
-    HeroHumanView(const std::string &title, int screenWidth, int screenHeight,
+    HeroHumanView(const std::string& title, int screenWidth, int screenHeight,
                   bool screenFull = false);
     ~HeroHumanView() override;
 
-    bool processInput(const SDL_Event &event) override;
+    bool processInput(const SDL_Event& event) override;
     void update(float elapsedTime) override;
     void draw() override;
 
   private:
-    void handleActorMoved(event::Event &event);
-    void handleActorPhysicsStateChanged(event::Event &event);
-    void handleActorCreated(event::Event &event);
-    void handleActorDestroyed(event::Event &event);
-    void handleInputCommand(event::Event &event);
+    void handleActorMoved(event::Event& event);
+    void handleActorPhysicsStateChanged(event::Event& event);
+    void handleActorCreated(event::Event& event);
+    void handleActorDestroyed(event::Event& event);
+    void handleInputCommand(event::Event& event);
 
     std::unique_ptr<Renderer> m_renderer;
     ActorId m_heroId;
@@ -43,7 +43,7 @@ class HeroHumanView : public HumanView
     event::EventListenerHelper elh;
     MapNode m_mapNode;
 
-    std::map<ActorId, SpriteNode *> m_nodes;
+    std::map<ActorId, SpriteNode*> m_nodes;
 
     std::unique_ptr<HeroController> m_keyboardHandler;
 };

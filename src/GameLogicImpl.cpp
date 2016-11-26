@@ -20,7 +20,7 @@ GameLogicImpl::GameLogicImpl()
     Map map;
 
     // Read map from file
-    const std::string &assetsFolder = ResourceMgr::singleton().dataFolder();
+    const std::string& assetsFolder = ResourceMgr::singleton().dataFolder();
     map.loadFromFile(assetsFolder + "map2.tmx");
 
     m_mapWidth = map.width();
@@ -31,7 +31,7 @@ GameLogicImpl::GameLogicImpl()
 
     // std::cout << "INFO: " << mapObjects.size() << " MapObjects loaded.\n";
 
-    for (const MapObject &obj : mapObjects) {
+    for (const MapObject& obj : mapObjects) {
         ActorPtr a = ActorFactory::create(this, obj);
         m_actors.insert(std::make_pair(a->id(), a));
     }
@@ -50,7 +50,7 @@ GameLogicImpl::GameLogicImpl()
 
 //------------------------------------------------------------------------------
 
-void GameLogicImpl::onBeforeMainLoop(Engine * /*e*/)
+void GameLogicImpl::onBeforeMainLoop(Engine* /*e*/)
 {
     ScriptMgr::singleton().executeFile("map2_init.lua");
 }
@@ -64,9 +64,9 @@ void GameLogicImpl::update(float elapsedTime)
 
 //------------------------------------------------------------------------------
 
-void GameLogicImpl::handleActorCollided(Event &event)
+void GameLogicImpl::handleActorCollided(Event& event)
 {
-    CollisionEvent &e = static_cast<CollisionEvent &>(event);
+    CollisionEvent& e = static_cast<CollisionEvent&>(event);
 
     ActorPtr a                  = m_actors.at(e.m_actorA);
     ActorPtr b                  = m_actors.at(e.m_actorB);
@@ -91,9 +91,9 @@ void GameLogicImpl::handleActorCollided(Event &event)
 
 //------------------------------------------------------------------------------
 
-void GameLogicImpl::handleInputCommand(Event &event)
+void GameLogicImpl::handleInputCommand(Event& event)
 {
-    ActorInputEvent &e = static_cast<ActorInputEvent &>(event);
+    ActorInputEvent& e = static_cast<ActorInputEvent&>(event);
 
     auto it = m_actors.find(e.m_actorId);
 

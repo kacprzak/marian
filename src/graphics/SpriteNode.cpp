@@ -17,7 +17,7 @@ SpriteNode::SpriteNode()
 
 //------------------------------------------------------------------------------
 
-void SpriteNode::setImage(const Image &image) { m_image = new Image(image); }
+void SpriteNode::setImage(const Image& image) { m_image = new Image(image); }
 
 //------------------------------------------------------------------------------
 

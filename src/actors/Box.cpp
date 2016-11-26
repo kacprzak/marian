@@ -8,7 +8,7 @@
 #include "ResourceMgr.h"
 #include "events/EventMgr.h"
 
-BoxPhysicsComponent::BoxPhysicsComponent(GameLogic *game, float x, float y,
+BoxPhysicsComponent::BoxPhysicsComponent(GameLogic* game, float x, float y,
                                          float w, float h)
 {
     // Physics
@@ -22,9 +22,9 @@ BoxPhysicsComponent::BoxPhysicsComponent(GameLogic *game, float x, float y,
     // bodyDef.fixedRotation = true;
     // bodyDef.userData = this;
 
-    Box2dPhysicsEngine *pe =
-        static_cast<Box2dPhysicsEngine *>(game->physicsEngine());
-    b2Body *body = pe->world()->CreateBody(&bodyDef);
+    Box2dPhysicsEngine* pe =
+        static_cast<Box2dPhysicsEngine*>(game->physicsEngine());
+    b2Body* body = pe->world()->CreateBody(&bodyDef);
 
     b2PolygonShape dynamicBox;
     dynamicBox.SetAsBox(hw, hh);
@@ -54,7 +54,7 @@ void BoxPhysicsComponent::update(float)
 
     // emit move event if position changed
     if (m_lastX != posX() || m_lastY != posY() || m_lastAngle != angle()) {
-        EventMgr &evtMgr = EventMgr::singleton();
+        EventMgr& evtMgr = EventMgr::singleton();
         evtMgr.queueEvent(std::make_unique<MoveEvent>(m_owner->id(), posX(),
                                                       posY(), angle()));
     }

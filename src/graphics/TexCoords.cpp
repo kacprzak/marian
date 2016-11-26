@@ -5,7 +5,7 @@
 namespace gfx {
 
 TexCoords<4> calculateTexCoords(int texWidth, int texHeight,
-                                const Rect<int> &tileCoords)
+                                const Rect<int>& tileCoords)
 {
     TexCoords<4> tc;
 
@@ -30,7 +30,7 @@ TexCoords<4> calculateTexCoords(int texWidth, int texHeight,
 
 //------------------------------------------------------------------------------
 
-TexCoords<4> flipVerticallyTexCoords(const TexCoords<4> &texCoords)
+TexCoords<4> flipVerticallyTexCoords(const TexCoords<4>& texCoords)
 {
     TexCoords<4> tc;
 
@@ -44,7 +44,7 @@ TexCoords<4> flipVerticallyTexCoords(const TexCoords<4> &texCoords)
 
 //------------------------------------------------------------------------------
 
-TexCoords<4> flipHorizontallyTexCoords(const TexCoords<4> &texCoords)
+TexCoords<4> flipHorizontallyTexCoords(const TexCoords<4>& texCoords)
 {
     TexCoords<4> tc;
 

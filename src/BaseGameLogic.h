@@ -16,9 +16,9 @@ class BaseGameLogic : public GameLogic
     BaseGameLogic();
     ~BaseGameLogic() override;
 
-    PhysicsEngine *physicsEngine() override { return m_physicsEngine.get(); }
+    PhysicsEngine* physicsEngine() override { return m_physicsEngine.get(); }
 
-    void addGameObject(ActorCategory type, const std::string &name, float x,
+    void addGameObject(ActorCategory type, const std::string& name, float x,
                        float y);
 
     void update(float elapsedTime) override;

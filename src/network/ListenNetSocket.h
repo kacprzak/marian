@@ -18,7 +18,7 @@ class ListenNetSocket : public NetSocket
     }
 
     void init(int portNum);
-    int acceptConnection(unsigned int *addr);
+    int acceptConnection(unsigned int* addr);
 
     unsigned short port;
 };

@@ -49,9 +49,9 @@ class Animation
         }
     }
 
-    const Image &currentFrame() const { return m_frames[m_currentFrameIndex]; }
+    const Image& currentFrame() const { return m_frames[m_currentFrameIndex]; }
 
-    void addFrame(const Image &image, float duration = 1.0f)
+    void addFrame(const Image& image, float duration = 1.0f)
     {
         m_frames.push_back(image);
         m_frameDurations.push_back(duration);
@@ -66,13 +66,13 @@ class Animation
 
     void flipVertically()
     {
-        for (Image &img : m_frames)
+        for (Image& img : m_frames)
             img.flipVertically();
     }
 
     void flipHorizontally()
     {
-        for (Image &img : m_frames)
+        for (Image& img : m_frames)
             img.flipHorizontally();
     }
 

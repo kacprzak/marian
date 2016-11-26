@@ -24,7 +24,7 @@
 using namespace gfx;
 using namespace gui;
 
-HumanView::HumanView(const std::string &title, int screenWidth,
+HumanView::HumanView(const std::string& title, int screenWidth,
                      int screenHeight, bool screenFull)
     : m_titile(title)
     , m_screenWidth(screenWidth)
@@ -59,7 +59,7 @@ HumanView::~HumanView()
 
 //------------------------------------------------------------------------------
 
-bool HumanView::processInput(const SDL_Event &event)
+bool HumanView::processInput(const SDL_Event& event)
 {
     // Inject to gui
     return GuiMgr::singleton().processInput(event);
@@ -153,7 +153,7 @@ void HumanView::centerViewOn(float x, float y)
 
 //------------------------------------------------------------------------------
 
-void HumanView::viewBounds(ViewRect *rect)
+void HumanView::viewBounds(ViewRect* rect)
 {
     rect->left   = (-m_translate_x - m_screenWidth / 2) / m_scale;
     rect->right  = (-m_translate_x + m_screenWidth / 2) / m_scale;
@@ -170,7 +170,7 @@ void HumanView::setBackgroundColor(int r, int g, int b)
 
 //------------------------------------------------------------------------------
 
-void HumanView::setBackgroundColor(const std::string &bgColor)
+void HumanView::setBackgroundColor(const std::string& bgColor)
 {
     if (!bgColor.empty()) {
         std::vector<int> color = hexColorToRgb(bgColor);

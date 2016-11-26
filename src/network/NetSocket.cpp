@@ -48,7 +48,7 @@ NetSocket::NetSocket(int new_sock, unsigned int hostIp)
     struct linger ling;
     ling.l_onoff  = 0;
     ling.l_linger = 0;
-    if (setsockopt(new_sock, SOL_SOCKET, SO_LINGER, (const char *)&ling,
+    if (setsockopt(new_sock, SOL_SOCKET, SO_LINGER, (const char*)&ling,
                    sizeof(ling)) == -1) {
         PLOG << "setsockopt";
     }
@@ -87,7 +87,7 @@ bool NetSocket::connect(unsigned int ip, unsigned int port, bool forceCoalesce)
     // In this case turn off Nagle algorithm if desired
     if (!forceCoalesce) {
         int x = 1;
-        if (setsockopt(m_socket, IPPROTO_TCP, TCP_NODELAY, (const char *)&x,
+        if (setsockopt(m_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&x,
                        sizeof(x))) {
             PLOG << "setsockopt";
         }
@@ -99,7 +99,7 @@ bool NetSocket::connect(unsigned int ip, unsigned int port, bool forceCoalesce)
     sa.sin_port        = htons(port);
 
     // Connect!
-    if (::connect(m_socket, (struct sockaddr *)&sa, sizeof(sa)) == -1) {
+    if (::connect(m_socket, (struct sockaddr*)&sa, sizeof(sa)) == -1) {
         PLOG << "connect";
 #if PLATFORM == PLATFORM_WINDOWS
         closesocket(m_socket);
@@ -161,7 +161,7 @@ void NetSocket::handleOutput()
 
         std::shared_ptr<Packet> packet = *(m_outList.begin());
 
-        const char *data = packet->getData();
+        const char* data = packet->getData();
         int len = static_cast<int>(packet->getSize()); // cast from ulong!
 
         int flags = 0;
@@ -225,7 +225,7 @@ void NetSocket::handleInput()
 
     while (newData > hdrSize) {
         // There is packet size value on buffer begin position
-        packetSize = *(reinterpret_cast<uint32 *>(m_recvBuff + m_recvBegin));
+        packetSize = *(reinterpret_cast<uint32*>(m_recvBuff + m_recvBegin));
         packetSize = ntohl(packetSize);
 
         // If so, we heed to wait for more data.

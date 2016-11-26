@@ -22,12 +22,12 @@ class GameLogic : private boost::noncopyable
     virtual void update(float elapsedTime) = 0;
 
     /*!  Use these if you need Engine to create or clean stuff */
-    virtual void onBeforeMainLoop(Engine * /*e*/) {}
-    virtual void onAfterMainLoop(Engine * /*e*/) {}
+    virtual void onBeforeMainLoop(Engine* /*e*/) {}
+    virtual void onAfterMainLoop(Engine* /*e*/) {}
 
-    virtual PhysicsEngine *physicsEngine() { return nullptr; }
+    virtual PhysicsEngine* physicsEngine() { return nullptr; }
 
-    GameViewList &gameViews() { return m_gameViews; }
+    GameViewList& gameViews() { return m_gameViews; }
 
     void drawDebugData()
     {

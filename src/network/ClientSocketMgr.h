@@ -14,7 +14,7 @@ class ClientSocketMgr : public BaseSocketMgr
     using super = BaseSocketMgr;
 
   public:
-    ClientSocketMgr(const std::string &hostName, unsigned int port);
+    ClientSocketMgr(const std::string& hostName, unsigned int port);
 
     bool connect();
 

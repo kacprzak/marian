@@ -20,7 +20,7 @@ namespace gfx {
 class Image
 {
   public:
-    explicit Image(const Texture *texture)
+    explicit Image(const Texture* texture)
         : m_texture(texture)
         , m_pixelWidth(m_texture->w())
         , m_pixelHeight(m_texture->h())
@@ -33,7 +33,7 @@ class Image
         m_texCoords[3] = TexCoord(0.0f, 1.0f);
     }
 
-    Image(const Texture *texture, const Rect<int> &tileCoords)
+    Image(const Texture* texture, const Rect<int>& tileCoords)
         : m_texture(texture)
         , m_pixelWidth(tileCoords.right - tileCoords.left)
         , m_pixelHeight(tileCoords.top - tileCoords.bottom)
@@ -68,10 +68,10 @@ class Image
         m_texCoords = flipHorizontallyTexCoords(m_texCoords);
     }
 
-    const Texture *texture() const { return m_texture; }
-    const float *getTextureCoords() const
+    const Texture* texture() const { return m_texture; }
+    const float* getTextureCoords() const
     {
-        return reinterpret_cast<const float *>(&m_texCoords);
+        return reinterpret_cast<const float*>(&m_texCoords);
     }
 
     std::string toString() const
@@ -84,7 +84,7 @@ class Image
     }
 
   private:
-    const Texture *m_texture;
+    const Texture* m_texture;
     int m_pixelWidth;
     int m_pixelHeight;
     float m_width;
@@ -94,7 +94,7 @@ class Image
 
 } // namespace gfx
 
-inline std::ostream &operator<<(std::ostream &os, const gfx::Image &image)
+inline std::ostream& operator<<(std::ostream& os, const gfx::Image& image)
 {
     os << image.toString();
     return os;

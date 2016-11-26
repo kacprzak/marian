@@ -16,7 +16,7 @@
 class ScriptError : public std::runtime_error
 {
   public:
-    explicit ScriptError(const std::string &msg)
+    explicit ScriptError(const std::string& msg)
         : std::runtime_error(msg)
     {
     }
@@ -29,8 +29,8 @@ class ScriptListener
   public:
     virtual ~ScriptListener() = default;
 
-    virtual void onScriptOutput(const std::string &out) = 0;
-    virtual void onScriptError(const std::string &out)  = 0;
+    virtual void onScriptOutput(const std::string& out) = 0;
+    virtual void onScriptError(const std::string& out)  = 0;
 };
 
 //------------------------------------------------------------------------------
@@ -42,27 +42,27 @@ class ScriptMgr : public Singleton<ScriptMgr>
     ~ScriptMgr() override;
 
     // Set data folder ex: "scripts/"
-    void setDataFolder(const std::string &folder);
+    void setDataFolder(const std::string& folder);
 
     // Scripts management
-    bool executeString(const std::string &code);
-    bool executeFile(const std::string &filename);
+    bool executeString(const std::string& code);
+    bool executeFile(const std::string& filename);
 
-    int getGlobalInt(const std::string &varname);
-    bool getGlobalBool(const std::string &varname);
-    const char *getGlobalString(const std::string &varname);
+    int getGlobalInt(const std::string& varname);
+    bool getGlobalBool(const std::string& varname);
+    const char* getGlobalString(const std::string& varname);
 
-    void addListener(ScriptListener *listener);
-    void removeListener(ScriptListener *listener);
+    void addListener(ScriptListener* listener);
+    void removeListener(ScriptListener* listener);
 
-    void notifyListenersOnOutput(const std::string &msg);
-    void notifyListenersOnError(const std::string &msg);
+    void notifyListenersOnOutput(const std::string& msg);
+    void notifyListenersOnError(const std::string& msg);
 
   private:
-    using ListenersList = std::list<ScriptListener *>;
+    using ListenersList = std::list<ScriptListener*>;
 
     std::string m_dataFolder;
-    lua_State *m_L;
+    lua_State* m_L;
     ListenersList m_listeners;
 };
 

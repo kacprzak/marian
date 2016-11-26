@@ -11,10 +11,10 @@ class GameLogic;
 class ActorFactory
 {
   public:
-    static ActorPtr create(GameLogic *game, const MapObject &obj);
+    static ActorPtr create(GameLogic* game, const MapObject& obj);
 
-    static ActorPtr create(GameLogic *game, ActorCategory type,
-                           const std::string &name, float x, float y);
+    static ActorPtr create(GameLogic* game, ActorCategory type,
+                           const std::string& name, float x, float y);
 
   private:
     static unsigned long getNextId();

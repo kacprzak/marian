@@ -66,7 +66,7 @@ void EventMgr::queueEvent(std::unique_ptr<Event> event)
 
 void EventMgr::update()
 {
-    for (std::unique_ptr<Event> &event : m_eventQueues[m_activeQueue]) {
+    for (std::unique_ptr<Event>& event : m_eventQueues[m_activeQueue]) {
         triggerEvent(std::move(event));
     }
     m_eventQueues[m_activeQueue].clear();

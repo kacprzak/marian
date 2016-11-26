@@ -28,7 +28,7 @@ class Actor final
     using ComponentsMap = std::map<ActorComponentId, ActorComponentPtr>;
 
   public:
-    Actor(ActorId id, GameLogic *game);
+    Actor(ActorId id, GameLogic* game);
     ~Actor();
 
     ActorId id() const { return m_id; }
@@ -38,15 +38,15 @@ class Actor final
 
     void update(float elapsedTime)
     {
-        for (const auto &pair : m_components)
+        for (const auto& pair : m_components)
             pair.second->update(elapsedTime);
     }
 
     void die();
     bool dead() const { return m_dead; }
 
-    void setName(const std::string &name) { m_name = name; }
-    const std::string &name() const { return m_name; }
+    void setName(const std::string& name) { m_name = name; }
+    const std::string& name() const { return m_name; }
 
     template <class T>
     std::weak_ptr<T> getComponent(ActorComponentId id)
@@ -66,7 +66,7 @@ class Actor final
 
   private:
     ActorId m_id;
-    GameLogic *m_game; //!< Owner
+    GameLogic* m_game; //!< Owner
     ActorCategory m_category;
     ComponentsMap m_components;
     bool m_dead; //!< Flag indicating that this actor should be deleted by
