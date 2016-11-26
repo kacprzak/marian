@@ -1,5 +1,3 @@
-/* -*- c-file-style: "stroustrup"; c-basic-offset: 4; indent-tabs-mode: nil; -*-
- */
 #include "RemoteGameLogic.h"
 
 #include "events/EventMgr.h"
