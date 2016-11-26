@@ -37,17 +37,17 @@ int main(int argc, char* argv[])
     using namespace event;
 
     try {
-        new ScriptMgr;
-        new EventMgr;
-        new ResourceMgr;
+        auto scriptMgr   = std::make_unique<ScriptMgr>();
+        auto eventMgr    = std::make_unique<EventMgr>();
+        auto resourceMgr = std::make_unique<ResourceMgr>();
 
-        ScriptMgr& scriptMgr = ScriptMgr::singleton();
-        scriptMgr.executeFile("startup.lua");
+        scriptMgr->executeFile("startup.lua");
 
-        const char* scriptsFolder = scriptMgr.getGlobalString("scripts_folder");
-        scriptMgr.setDataFolder(scriptsFolder);
-        const char* assetsFolder = scriptMgr.getGlobalString("assets_folder");
-        ResourceMgr::singleton().setDataFolder(assetsFolder);
+        const char* scriptsFolder =
+            scriptMgr->getGlobalString("scripts_folder");
+        scriptMgr->setDataFolder(scriptsFolder);
+        const char* assetsFolder = scriptMgr->getGlobalString("assets_folder");
+        resourceMgr->setDataFolder(assetsFolder);
 
         if (argc >= 2 && strcmp(argv[1], "-s") == 0) {
             runMultiplayerServer();
@@ -59,11 +59,6 @@ int main(int argc, char* argv[])
         } else {
             runSingleplayer();
         }
-
-        delete ResourceMgr::singletonPtr();
-        delete EventMgr::singletonPtr();
-        delete ScriptMgr::singletonPtr();
-
     } catch (const std::exception& e) {
         Engine::showErrorMessageBox(e.what());
         LOG_FATAL << e.what() << std::endl;
@@ -81,13 +76,11 @@ void runSingleplayer()
     int screenHeight = ScriptMgr::singleton().getGlobalInt("screen_height");
     bool fullScreen  = ScriptMgr::singleton().getGlobalBool("screen_full");
 
-    new Engine;
-    GameLogicImpl* game = new GameLogicImpl;
-    game->attachView(std::make_shared<gfx::HeroHumanView>(
+    Engine engine;
+    GameLogicImpl game;
+    game.attachView(std::make_shared<gfx::HeroHumanView>(
         "Marian", screenWidth, screenHeight, fullScreen));
-    Engine::singleton().mainLoop(game);
-    delete game;
-    delete Engine::singletonPtr();
+    engine.mainLoop(&game);
 }
 
 //------------------------------------------------------------------------------
@@ -106,13 +99,11 @@ void runMultiplayerClient(const std::string& serverAddress)
         LOG << "Unable to connect to: " << serverAddress << std::endl;
     }
 
-    new Engine;
-    GameLogic* game = new RemoteGameLogic(socketId);
-    game->attachView(std::make_shared<gfx::HeroHumanView>(
+    Engine engine;
+    RemoteGameLogic game(socketId);
+    game.attachView(std::make_shared<gfx::HeroHumanView>(
         "Marian Cli", screenWidth, screenHeight, fullScreen));
-    Engine::singleton().mainLoop(game);
-    delete game;
-    delete Engine::singletonPtr();
+    engine.mainLoop(&game);
 }
 
 //------------------------------------------------------------------------------
@@ -133,11 +124,9 @@ void runMultiplayerServer()
     GameServerListenNetSocket* gslns = new GameServerListenNetSocket(GAME_PORT);
     bsm->addSocket(gslns);
 
-    new Engine(false); // Starts engine without video subsystem
-    GameLogicImpl* game = new GameLogicImpl;
-    Engine::singleton().mainLoop(game);
-    delete game;
-    delete Engine::singletonPtr();
+    Engine engine{false}; // Starts engine without video subsystem
+    GameLogicImpl game;
+    engine.mainLoop(&game);
 }
 
 //------------------------------------------------------------------------------
