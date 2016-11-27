@@ -10,9 +10,7 @@
 
 class GameLogic;
 
-using ActorId           = unsigned long;
-using ActorPtr          = std::shared_ptr<Actor>;
-using ActorComponentPtr = std::shared_ptr<ActorComponent>;
+using ActorId = unsigned long;
 
 /*!
  * \brief Game entity.
@@ -23,10 +21,13 @@ class Actor final
 {
     friend class ActorFactory;
 
-    using ComponentsMap = std::map<ActorComponentId, ActorComponentPtr>;
+    using ComponentsMap =
+        std::map<ActorComponentId, std::shared_ptr<ActorComponent>>;
 
   public:
     Actor(ActorId id, GameLogic* game);
+    Actor(const Actor&) = delete;
+    Actor& operator=(const Actor&) = delete;
     ~Actor();
 
     ActorId id() const { return m_id; }
@@ -51,14 +52,12 @@ class Actor final
     {
         ComponentsMap::iterator found = m_components.find(id);
         if (found != m_components.end()) {
-            ActorComponentPtr base(found->second);
             // Cast to subclass
-            std::shared_ptr<T> sub(std::static_pointer_cast<T>(base));
+            std::shared_ptr<T> sub{std::static_pointer_cast<T>(found->second)};
             // Conver to weak_ptr
-            std::weak_ptr<T> weak(sub);
-            return weak;
+            return std::weak_ptr<T>{sub};
         } else {
-            return std::weak_ptr<T>();
+            return std::weak_ptr<T>{};
         }
     }
 
@@ -72,7 +71,7 @@ class Actor final
     std::string m_name; //!< Name used in debug
 
     // Should be called only by ActorFactory
-    void addComponent(ActorComponentPtr c)
+    void addComponent(const std::shared_ptr<ActorComponent>& c)
     {
         c->setOwner(this);
         m_components.insert(std::make_pair(c->componentId(), c));

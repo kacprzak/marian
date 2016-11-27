@@ -10,39 +10,40 @@
 #include <cassert>
 #include <memory>
 
-ActorPtr ActorFactory::create(GameLogic* game, const MapObject& obj)
+std::unique_ptr<Actor> ActorFactory::create(GameLogic* game,
+                                            const MapObject& obj)
 {
     assert(game);
-    auto actor = std::make_shared<Actor>(getNextId(), game);
+    auto actor = std::make_unique<Actor>(getNextId(), game);
 
     if (obj.type == "Hero") {
         actor->setCategory(HERO);
 
-        ActorComponentPtr physics(new HeroPhysicsComponent(
-            game, obj.x, obj.y, obj.width, obj.height));
+        auto physics = std::make_shared<HeroPhysicsComponent>(
+            game, obj.x, obj.y, obj.width, obj.height);
         actor->addComponent(physics);
         physics->init();
 
-        ActorComponentPtr render(new HeroRenderComponent);
+        auto render = std::make_shared<HeroRenderComponent>();
         actor->addComponent(render);
         render->init();
 
     } else if (obj.type == "Box") {
         actor->setCategory(BOX);
 
-        ActorComponentPtr physics(
-            new BoxPhysicsComponent(game, obj.x, obj.y, obj.width, obj.height));
+        auto physics = std::make_shared<BoxPhysicsComponent>(
+            game, obj.x, obj.y, obj.width, obj.height);
         actor->addComponent(physics);
         physics->init();
 
-        ActorComponentPtr render(new RenderComponent);
+        auto render = std::make_shared<RenderComponent>();
         actor->addComponent(render);
         render->init();
 
     } else if (obj.type == "Sensor") {
         actor->setCategory(SENSOR);
 
-        ActorComponentPtr physics(new SensorPhysicsComponent(game, obj));
+        auto physics = std::make_shared<SensorPhysicsComponent>(game, obj);
         actor->addComponent(physics);
         physics->init();
 
@@ -50,7 +51,7 @@ ActorPtr ActorFactory::create(GameLogic* game, const MapObject& obj)
         // Static collision shape
         actor->setCategory(GROUND);
 
-        ActorComponentPtr physics(new GroundPhysicsComponent(game, obj));
+        auto physics = std::make_shared<GroundPhysicsComponent>(game, obj);
         actor->addComponent(physics);
         physics->init();
     }
@@ -61,20 +62,21 @@ ActorPtr ActorFactory::create(GameLogic* game, const MapObject& obj)
 
 //--------------------------------------------------------------------------
 
-ActorPtr ActorFactory::create(GameLogic* game, ActorCategory type,
-                              const std::string& name, float x, float y)
+std::unique_ptr<Actor> ActorFactory::create(GameLogic* game, ActorCategory type,
+                                            const std::string& name, float x,
+                                            float y)
 {
     assert(game);
-    ActorPtr actor(new Actor(getNextId(), game));
+    auto actor = std::make_unique<Actor>(getNextId(), game);
 
     if (type == BOX) {
         actor->setCategory(BOX);
 
-        ActorComponentPtr physics(new BoxPhysicsComponent(game, x, y));
+        auto physics = std::make_shared<BoxPhysicsComponent>(game, x, y);
         actor->addComponent(physics);
         physics->init();
 
-        ActorComponentPtr render(new RenderComponent());
+        auto render = std::make_shared<RenderComponent>();
         actor->addComponent(render);
         render->init();
     }

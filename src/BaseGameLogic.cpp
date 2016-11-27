@@ -34,7 +34,7 @@ void BaseGameLogic::update(float elapsedTime)
     // Remove dead GameObjects
     auto it = std::begin(m_actors);
     while (it != std::end(m_actors)) {
-        ActorPtr actor = it->second;
+        const auto& actor = it->second;
         if (actor->dead()) {
             // Emit event
             evtMgr.queueEvent(
@@ -42,7 +42,7 @@ void BaseGameLogic::update(float elapsedTime)
             it = m_actors.erase(it);
         } else {
             // Kill it if out of map
-            if (!isOnMap(actor))
+            if (!isOnMap(*actor))
                 actor->die();
             ++it;
         }
@@ -56,19 +56,20 @@ void BaseGameLogic::addGameObject(ActorCategory type, const std::string& name,
 {
     using namespace event;
 
-    ActorPtr a = ActorFactory::create(this, type, name, x, y);
-    m_actors.insert(std::make_pair(a->id(), a));
+    auto a = ActorFactory::create(this, type, name, x, y);
+    auto actorId = a->id();
+    m_actors.insert(std::make_pair(actorId, std::move(a)));
 
     // Emit event
     EventMgr::singleton().queueEvent(
-        std::make_unique<ActorCreatedEvent>(a->id(), type, x, y));
+        std::make_unique<ActorCreatedEvent>(actorId, type, x, y));
 }
 
 //------------------------------------------------------------------------------
 
-bool BaseGameLogic::isOnMap(ActorPtr a)
+bool BaseGameLogic::isOnMap(Actor& a) const
 {
-    auto pcwp = a->getComponent<PhysicsComponent>(PHYSICS);
+    const auto& pcwp = a.getComponent<PhysicsComponent>(PHYSICS);
     // Try to get shared_ptr
     if (auto pcsp = pcwp.lock()) {
         float x = pcsp->posX();

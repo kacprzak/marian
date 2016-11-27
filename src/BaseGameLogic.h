@@ -23,11 +23,11 @@ class BaseGameLogic : public GameLogic
 
   protected:
     std::unique_ptr<PhysicsEngine> m_physicsEngine;
-    std::map<ActorId, ActorPtr> m_actors;
+    std::map<ActorId, std::unique_ptr<Actor>> m_actors;
     float m_mapWidth;
 
   private:
-    bool isOnMap(ActorPtr actor);
+    bool isOnMap(Actor& actor) const;
 };
 
 #endif // BASEGAMELOGIC_H

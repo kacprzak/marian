@@ -30,8 +30,8 @@ GameLogicImpl::GameLogicImpl()
     // std::cout << "INFO: " << mapObjects.size() << " MapObjects loaded.\n";
 
     for (const MapObject& obj : mapObjects) {
-        ActorPtr a = ActorFactory::create(this, obj);
-        m_actors.insert(std::make_pair(a->id(), a));
+        auto a = ActorFactory::create(this, obj);
+        m_actors.insert(std::make_pair(a->id(), std::move(a)));
     }
 
     // Register event listeners
@@ -66,8 +66,8 @@ void GameLogicImpl::handleActorCollided(Event& event)
 {
     CollisionEvent& e = static_cast<CollisionEvent&>(event);
 
-    ActorPtr a                  = m_actors.at(e.m_actorA);
-    ActorPtr b                  = m_actors.at(e.m_actorB);
+    const auto& a               = m_actors.at(e.m_actorA);
+    const auto& b               = m_actors.at(e.m_actorB);
     CollisionEvent::Phase phase = e.m_phase;
 
     auto pcqpA = a->getComponent<PhysicsComponent>(PHYSICS);
@@ -100,7 +100,7 @@ void GameLogicImpl::handleInputCommand(Event& event)
         return;
     }
 
-    ActorPtr a = it->second;
+    const auto& a = it->second;
 
     if (a && (a->category() == HERO)) {
         auto hpcw = a->getComponent<PhysicsComponent>(PHYSICS);
