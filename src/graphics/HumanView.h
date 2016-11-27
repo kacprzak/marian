@@ -8,6 +8,7 @@
 
 //#define PRINT_FPS
 
+namespace gui { class GuiMgr; }
 namespace gfx {
 
 using ViewRect = Rect<float>;
@@ -53,7 +54,8 @@ class HumanView : public GameView
 
     SDL_Window* m_window;
     SDL_GLContext m_glContext;
-
+    gui::GuiMgr* m_guiMgr;
+    
     float m_translate_x;
     float m_translate_y;
     float m_translate_z;

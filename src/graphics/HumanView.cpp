@@ -42,15 +42,15 @@ HumanView::HumanView(const std::string& title, int screenWidth,
         throw;
     }
 
-    new GuiMgr;
-    GuiMgr::singleton().setViewSize(m_screenWidth, m_screenHeight);
+    m_guiMgr = new GuiMgr;
+    m_guiMgr->setViewSize(m_screenWidth, m_screenHeight);
 }
 
 //------------------------------------------------------------------------------
 
 HumanView::~HumanView()
 {
-    delete GuiMgr::singletonPtr();
+    delete m_guiMgr;
     SDL_GL_DeleteContext(m_glContext);
     SDL_DestroyWindow(m_window);
 }
@@ -60,7 +60,7 @@ HumanView::~HumanView()
 bool HumanView::processInput(const SDL_Event& event)
 {
     // Inject to gui
-    return GuiMgr::singleton().processInput(event);
+    return m_guiMgr->processInput(event);
 }
 
 //------------------------------------------------------------------------------
@@ -68,8 +68,8 @@ bool HumanView::processInput(const SDL_Event& event)
 void HumanView::update(float elapsedTime)
 {
     // Update gui
-    if (GuiMgr::singletonPtr())
-        GuiMgr::singleton().update(elapsedTime);
+    if (m_guiMgr)
+        m_guiMgr->update(elapsedTime);
 
 #ifdef PRINT_FPS
     m_fpsCounter.update(elapsedTime);
@@ -222,8 +222,8 @@ void HumanView::preDraw()
 void HumanView::postDraw()
 {
     // Draw gui
-    if (GuiMgr::singletonPtr())
-        GuiMgr::singleton().draw();
+    if (m_guiMgr)
+        m_guiMgr->draw();
 
     // Draw debug information
     Engine::singleton().game()->drawDebugData();
