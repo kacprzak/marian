@@ -11,3 +11,8 @@ marian
 *.user
 callgrind.out.*
 CMakeLists.txt.user*
+/GPATH
+/GRTAGS
+/GSYMS
+/GTAGS
+/compile_commands.json
