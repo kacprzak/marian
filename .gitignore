@@ -2,6 +2,7 @@
 *.o
 *.d
 *.log
+\#*\#
 gmon.out
 TAGS
 
