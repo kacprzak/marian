@@ -1,0 +1,3 @@
+[submodule "rapid-tmx"]
+	path = rapid-tmx
+	url = https://github.com/kacprzak/rapid-tmx
