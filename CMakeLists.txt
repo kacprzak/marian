@@ -27,7 +27,6 @@ if( UNIX )
   find_package( Boost COMPONENTS unit_test_framework )
 endif()
 find_package( Box2D REQUIRED )
-find_package( ZLIB REQUIRED )
 find_package( Lua53 REQUIRED )
 
 find_package( MyGUI REQUIRED )
@@ -49,17 +48,18 @@ configure_file(
 include_directories(
   ${PROJECT_BINARY_DIR}
   src
-  tmx
   ${SDL2_INCLUDE_DIR}
   ${SDL2IMAGE_INCLUDE_DIR}
   ${OPENGL_INCLUDE_DIR}
   ${Boost_INCLUDE_DIR}
   ${BOX2D_INCLUDE_DIR}
-  ${ZLIB_INCLUDE_DIR}
   ${LUA53_INCLUDE_DIR}
 )
 
-add_subdirectory( tmx )
+# For simplicity assumed that rapid-tmx is build here
+include_directories( rapid-tmx )
+link_directories( ${CMAKE_SOURCE_DIR}/rapid-tmx/build )
+
 add_subdirectory( src )
 #add_subdirectory( assets )
 #add_subdirectory( scripts )
