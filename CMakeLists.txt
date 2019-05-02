@@ -1,4 +1,4 @@
-cmake_minimum_required( VERSION 2.8 )
+cmake_minimum_required( VERSION 3.12 )
 project( marian )
 
 # The version number.
@@ -56,9 +56,7 @@ include_directories(
   ${LUA53_INCLUDE_DIR}
 )
 
-# For simplicity assumed that rapid-tmx is build here
-include_directories( rapid-tmx )
-link_directories( ${CMAKE_SOURCE_DIR}/rapid-tmx/build )
+add_subdirectory( rapid-tmx )
 
 add_subdirectory( src )
 #add_subdirectory( assets )

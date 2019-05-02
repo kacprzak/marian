@@ -118,7 +118,7 @@ set( marian_SRCS
 )
 
 set( LINK_LIBS
-  tmx
+  rapid-tmx
   ${BOX2D_LIBRARY}
   ${SDL2_LIBRARY}
   ${SDL2MAIN_LIBRARY}
