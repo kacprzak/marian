@@ -56,6 +56,7 @@ include_directories(
   ${LUA53_INCLUDE_DIR}
 )
 
+#find_package( rapid-tmx REQUIRED )
 add_subdirectory( rapid-tmx )
 
 add_subdirectory( src )
