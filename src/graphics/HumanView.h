@@ -54,8 +54,11 @@ class HumanView : public GameView
 
     SDL_Window* m_window;
     SDL_GLContext m_glContext;
+
+#ifdef USE_MYGUI
     gui::GuiMgr* m_guiMgr;
-    
+#endif
+
     float m_translate_x;
     float m_translate_y;
     float m_translate_z;

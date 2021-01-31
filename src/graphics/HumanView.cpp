@@ -37,20 +37,24 @@ HumanView::HumanView(const std::string& title, int screenWidth,
 {
     try {
         createSDLWindow();
-    } catch (EngineError /*e*/) {
+    } catch (const EngineError& /*e*/) {
         SDL_Quit();
         throw;
     }
 
+#ifdef USE_MYGUI
     m_guiMgr = new GuiMgr;
     m_guiMgr->setViewSize(m_screenWidth, m_screenHeight);
+#endif
 }
 
 //------------------------------------------------------------------------------
 
 HumanView::~HumanView()
 {
+#ifdef USE_MYGUI
     delete m_guiMgr;
+#endif
     SDL_GL_DeleteContext(m_glContext);
     SDL_DestroyWindow(m_window);
 }
@@ -59,17 +63,21 @@ HumanView::~HumanView()
 
 bool HumanView::processInput(const SDL_Event& event)
 {
+#ifdef USE_MYGUI
     // Inject to gui
     return m_guiMgr->processInput(event);
+#endif
 }
 
 //------------------------------------------------------------------------------
 
 void HumanView::update(float elapsedTime)
 {
+#ifdef USE_MYGUI
     // Update gui
     if (m_guiMgr)
         m_guiMgr->update(elapsedTime);
+#endif
 
 #ifdef PRINT_FPS
     m_fpsCounter.update(elapsedTime);
@@ -99,13 +107,14 @@ void HumanView::createSDLWindow()
         SDL_DestroyWindow(m_window);
         throw EngineError("Creating OpenGL context failed", SDL_GetError());
     }
+/*
+    SDL_Renderer *renderer = SDL_CreateRenderer(screen, -1,
+    SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-    // SDL_Renderer *renderer = SDL_CreateRenderer(screen, -1,
-    // SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
-    // if (!renderer) {
-    //    throw EngineError("Creating renderer failed", SDL_GetError());
-    //}
+    if (!renderer) {
+       throw EngineError("Creating renderer failed", SDL_GetError());
+    }
+*/
 
     // OpenGL setup
     initializeOpenGL();
@@ -221,9 +230,11 @@ void HumanView::preDraw()
 
 void HumanView::postDraw()
 {
+#ifdef USE_MYGUI
     // Draw gui
     if (m_guiMgr)
         m_guiMgr->draw();
+#endif
 
     // Draw debug information
     Engine::singleton().game()->drawDebugData();

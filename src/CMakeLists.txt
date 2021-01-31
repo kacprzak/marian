@@ -46,9 +46,6 @@ set( marian_HDRS
   events/Event.h
   events/EventMgr.h
 
-  gui/GuiMgr.h
-  gui/Console_MyGUI.h
-
   Logger.h
   Engine.h
   FpsCounter.h
@@ -66,7 +63,7 @@ set( marian_HDRS
   Util.h
 
   debugdraw/Render.h
-)
+  )
 
 set( marian_SRCS
   actors/Actor.cpp
@@ -100,9 +97,6 @@ set( marian_SRCS
 
   events/EventMgr.cpp
 
-  gui/GuiMgr_MyGUI.cpp
-  gui/Console_MyGUI.cpp
-
   Logger.cpp
   Box2dPhysicsEngine.cpp
   Engine.cpp
@@ -115,7 +109,23 @@ set( marian_SRCS
   Util.cpp
 
   debugdraw/Render.cpp
-)
+  )
+
+if(USE_MYGUI)
+  set(marian_HDRS
+    ${marian_HDRS}
+    gui/GuiMgr.h
+    gui/Console_MyGUI.h
+    )
+
+  set(marian_SRCS
+    ${marian_SRCS}
+    gui/GuiMgr_MyGUI.cpp
+    gui/Console_MyGUI.cpp
+    )
+
+endif()
+
 
 set( LINK_LIBS
   rapid-tmx::rapid-tmx
@@ -125,10 +135,10 @@ set( LINK_LIBS
   ${SDL2IMAGE_LIBRARY}
   ${OPENGL_LIBRARIES}
   ${LUA53_LIBRARIES}
-#  ${Boost_LIBRARIES}
-#  ${GLUT_LIBRARY}
+  #  ${Boost_LIBRARIES}
+  #  ${GLUT_LIBRARY}
   ${EXTRA_LIBS}
-)
+  )
 
 # Add winsock lib
 if( WIN32 )

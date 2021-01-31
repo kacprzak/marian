@@ -19,6 +19,8 @@ set( LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 set( CMAKE_DEBUG_POSTFIX "_d" )
 
+option(USE_MYGUI OFF)
+
 find_package( SDL2 REQUIRED )
 find_package( SDL2_image REQUIRED )
 find_package( OpenGL REQUIRED )
@@ -29,21 +31,23 @@ endif()
 find_package( Box2D REQUIRED )
 find_package( Lua53 REQUIRED )
 
-find_package( MyGUI REQUIRED )
-include_directories( ${MYGUI_INCLUDE_DIRS} )
-link_directories( ${MYGUI_LIB_DIR} )
-set( MYGUI_LIBRARIES ${MYGUI_LIBRARIES} MyGUI.OpenGLPlatform )
-set( EXTRA_LIBS ${EXTRA_LIBS} ${MYGUI_LIBRARIES} )
-	
+if(USE_MYGUI)
+  find_package( MyGUI REQUIRED )
+  include_directories( ${MYGUI_INCLUDE_DIRS} )
+  link_directories( ${MYGUI_LIB_DIR} )
+  set( MYGUI_LIBRARIES ${MYGUI_LIBRARIES} MyGUI.OpenGLPlatform )
+  set( EXTRA_LIBS ${EXTRA_LIBS} ${MYGUI_LIBRARIES} )
+endif()
+
 configure_file(
   ${PROJECT_SOURCE_DIR}/config.h.in
   ${PROJECT_BINARY_DIR}/config.h
-)
+  )
 
 configure_file(
   ${PROJECT_SOURCE_DIR}/startup.lua.in
   ${PROJECT_BINARY_DIR}/startup.lua
-)
+  )
 
 include_directories(
   ${PROJECT_BINARY_DIR}
@@ -54,7 +58,7 @@ include_directories(
   ${Boost_INCLUDE_DIR}
   ${BOX2D_INCLUDE_DIR}
   ${LUA53_INCLUDE_DIR}
-)
+  )
 
 #find_package( rapid-tmx REQUIRED )
 add_subdirectory( rapid-tmx )
@@ -77,5 +81,11 @@ if( DOXYGEN_FOUND )
     ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Generating API documentation with Doxygen" VERBATIM
-)
+    )
 endif( DOXYGEN_FOUND )
+
+# For clangd support
+if(UNIX)
+  execute_process(COMMAND ln -sf "${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+endif()
