@@ -2,7 +2,7 @@
 #define ACTORFACTORY_H
 
 #include "Actor.h"
-#include "Map.h"
+#include "../Map.h"
 
 class GameLogic;
 

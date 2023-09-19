@@ -1,6 +1,6 @@
 #include "GLRenderer.h"
 
-#include "graphics/Texture.h"
+#include "../graphics/Texture.h"
 
 #include <boost/math/constants/constants.hpp>
 

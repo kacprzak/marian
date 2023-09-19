@@ -1,10 +1,10 @@
 #include "GameServerListenNetSocket.h"
 
 #include "BaseSocketMgr.h"
-#include "Logger.h"
+#include "../Logger.h"
 #include "RemoteEventSocket.h"
-#include "events/Event.h"
-#include "events/EventMgr.h"
+#include "../events/Event.h"
+#include "../events/EventMgr.h"
 
 using namespace net;
 using namespace event;

@@ -2,7 +2,7 @@
 #define RENDERCOMPONENT_H
 
 #include "ActorComponent.h"
-#include "events/Event.h"
+#include "../events/Event.h"
 
 class RenderComponent : public ActorComponent
 {

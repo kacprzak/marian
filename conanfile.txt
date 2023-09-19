@@ -1,0 +1,16 @@
+[requires]
+sdl/2.28.2
+sdl_image/2.0.5
+opengl/system
+boost/1.69.0
+box2d/2.4.1
+lua/5.3.6
+zlib/1.2.13
+rapidxml/1.13
+
+[generators]
+CMakeDeps
+CMakeToolchain
+
+[layout]
+cmake_layout

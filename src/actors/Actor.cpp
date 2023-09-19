@@ -1,6 +1,6 @@
 #include "Actor.h"
 
-#include "Logger.h"
+#include "../Logger.h"
 
 Actor::Actor(ActorId id, GameLogic* game)
     : m_id(id)

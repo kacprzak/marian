@@ -1,7 +1,7 @@
 #include "HeroNode.h"
 
 #include "Animation.h"
-#include "ResourceMgr.h"
+#include "../ResourceMgr.h"
 
 namespace gfx {
 

@@ -1,10 +1,10 @@
 #ifndef HUMANVIEW_H
 #define HUMANVIEW_H
 
-#include "GameView.h"
-#include "Util.h"
+#include "../GameView.h"
+#include "../Util.h"
 
-#include "FpsCounter.h"
+#include "../FpsCounter.h"
 
 //#define PRINT_FPS
 

@@ -1,5 +1,5 @@
 #include "MapNode.h"
-#include "ResourceMgr.h"
+#include "../ResourceMgr.h"
 
 #include <cmath>
 #include <cstring> // memcpy

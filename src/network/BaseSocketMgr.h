@@ -2,9 +2,10 @@
 #define BASESOCKETMGR_H
 
 #include "NetSocket.h"
-#include "Singleton.h"
+#include "../Singleton.h"
 
 #include <map>
+#include <string>
 
 #define GAME_PORT 3456
 

@@ -1,9 +1,9 @@
 #ifndef REMOTEGAMEVIEW_H
 #define REMOTEGAMEVIEW_H
 
-#include "GameView.h"
+#include "../GameView.h"
 #include "NetworkEventForwarder.h"
-#include "events/EventMgr.h"
+#include "../events/EventMgr.h"
 
 namespace net {
 

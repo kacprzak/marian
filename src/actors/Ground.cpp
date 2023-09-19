@@ -1,7 +1,7 @@
 #include "Ground.h"
 
-#include "Box2dPhysicsEngine.h"
-#include "GameLogic.h"
+#include "../Box2dPhysicsEngine.h"
+#include "../GameLogic.h"
 
 GroundPhysicsComponent::GroundPhysicsComponent(GameLogic* game,
                                                const MapObject& obj)
@@ -26,7 +26,8 @@ GroundPhysicsComponent::GroundPhysicsComponent(GameLogic* game,
 
         b2ChainShape chain;
         if (obj.shape == "polyline")
-            chain.CreateChain(vs.data(), numOfPoints);
+            ;
+        //chain.CreateChain(vs.data(), numOfPoints);
         else
             chain.CreateLoop(vs.data(), numOfPoints);
 

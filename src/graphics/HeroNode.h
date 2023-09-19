@@ -2,8 +2,8 @@
 #define HERONODE_H
 
 #include "SpriteNode.h"
-#include "StateMachine.h"
-#include "components/PhysicsComponent.h"
+#include "../StateMachine.h"
+#include "../components/PhysicsComponent.h"
 
 #include <vector>
 

@@ -1,9 +1,9 @@
 #ifndef PHYSICSCOMPONENT_H
 #define PHYSICSCOMPONENT_H
 
+#include "../actors/Actor.h"
+#include "../events/EventType.h"
 #include "ActorComponent.h"
-#include "actors/Actor.h"
-#include "events/EventType.h"
 
 #include <Box2D/Box2D.h>
 
@@ -25,7 +25,7 @@ class PhysicsComponent : public ActorComponent
     ~PhysicsComponent()
     {
         if (m_body) {
-            m_body->SetUserData(nullptr); // To silence contact listener
+            m_body->GetUserData().pointer = 0; // To silence contact listener
             m_body->GetWorld()->DestroyBody(m_body);
         }
     }
@@ -35,7 +35,7 @@ class PhysicsComponent : public ActorComponent
         if (!m_owner || !m_body)
             return false;
 
-        m_body->SetUserData(reinterpret_cast<void*>(m_owner->id()));
+        m_body->GetUserData().pointer = m_owner->id();
         return true;
     }
 
@@ -73,11 +73,10 @@ class PhysicsComponent : public ActorComponent
      * \param fixtureUD  user data of fixture that collided with other
      */
     virtual void handleBeginContact(Actor& /*other*/,
-                                    void* /*fixtureUD*/ = nullptr)
+                                    uintptr_t /*fixtureUD*/ = 0)
     {
     }
-    virtual void handleEndContact(Actor& /*other*/,
-                                  void* /*fixtureUD*/ = nullptr)
+    virtual void handleEndContact(Actor& /*other*/, uintptr_t /*fixtureUD*/ = 0)
     {
     }
 

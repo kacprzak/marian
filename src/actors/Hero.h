@@ -2,9 +2,9 @@
 #define HERO_H
 
 #include "Actor.h"
-#include "StateMachine.h"
-#include "components/PhysicsComponent.h"
-#include "components/RenderComponent.h"
+#include "../StateMachine.h"
+#include "../components/PhysicsComponent.h"
+#include "../components/RenderComponent.h"
 
 class Engine;
 
@@ -20,8 +20,8 @@ class HeroPhysicsComponent : public PhysicsComponent
     HeroPhysicsComponent(GameLogic* game, float x, float y, float w = 1.0f,
                          float h = 1.0f);
 
-    void handleBeginContact(Actor& other, void* fixtureUD = nullptr) override;
-    void handleEndContact(Actor& other, void* fixtureUD = nullptr) override;
+    void handleBeginContact(Actor& other, uintptr_t fixtureUD = 0) override;
+    void handleEndContact(Actor& other, uintptr_t fixtureUD = 0) override;
 
     void update(float elapsedTime) override;
 

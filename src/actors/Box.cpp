@@ -1,10 +1,10 @@
 #include "Box.h"
 
-#include "Box2dPhysicsEngine.h"
-#include "Engine.h"
-#include "GameLogic.h"
-#include "ResourceMgr.h"
-#include "events/EventMgr.h"
+#include "../Box2dPhysicsEngine.h"
+#include "../Engine.h"
+#include "../GameLogic.h"
+#include "../ResourceMgr.h"
+#include "../events/EventMgr.h"
 
 BoxPhysicsComponent::BoxPhysicsComponent(GameLogic* game, float x, float y,
                                          float w, float h)

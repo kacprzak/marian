@@ -1,6 +1,6 @@
 #include "RemoteGameLogic.h"
 
-#include "events/EventMgr.h"
+#include "../events/EventMgr.h"
 
 using namespace net;
 

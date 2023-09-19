@@ -2,7 +2,7 @@
 #define ACTOR_H
 
 #include "ActorCategory.h"
-#include "components/ActorComponent.h"
+#include "../components/ActorComponent.h"
 
 #include <map>
 #include <memory>

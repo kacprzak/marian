@@ -2,8 +2,8 @@
 #define SPRITENODE_H
 
 #include "Image.h"
-#include "actors/Actor.h"
-#include "components/PhysicsComponent.h"
+#include "../actors/Actor.h"
+#include "../components/PhysicsComponent.h"
 
 namespace gfx {
 

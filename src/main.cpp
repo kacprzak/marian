@@ -62,7 +62,6 @@ int main(int argc, char* argv[])
     } catch (const std::exception& e) {
         Engine::showErrorMessageBox(e.what());
         LOG_FATAL << e.what() << std::endl;
-        throw;
     }
 
     return 0;

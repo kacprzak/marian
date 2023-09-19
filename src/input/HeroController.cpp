@@ -1,6 +1,6 @@
 #include "HeroController.h"
 
-#include "events/EventMgr.h"
+#include "../events/EventMgr.h"
 #include <SDL.h>
 
 #define TEST 0

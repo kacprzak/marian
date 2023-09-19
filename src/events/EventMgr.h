@@ -3,7 +3,7 @@
 
 #include "Event.h"
 #include "EventType.h"
-#include "Singleton.h"
+#include "../Singleton.h"
 
 #include <functional>
 #include <list>

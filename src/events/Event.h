@@ -2,9 +2,9 @@
 #define EVENT_H
 
 #include "EventType.h"
-#include "actors/Actor.h"
-#include "components/PhysicsComponent.h"
-#include "network/BaseSocketMgr.h"
+#include "../actors/Actor.h"
+#include "../components/PhysicsComponent.h"
+#include "../network/BaseSocketMgr.h"
 
 #include <iostream>
 #include <memory>
@@ -73,8 +73,8 @@ class CollisionEvent : public BaseEvent
   public:
     enum Phase { BEGIN, END };
 
-    CollisionEvent(Phase phase, ActorId actorA, void* actorALimbData,
-                   ActorId actorB, void* actorBLimbData)
+    CollisionEvent(Phase phase, ActorId actorA, uintptr_t actorALimbData,
+                   ActorId actorB, uintptr_t actorBLimbData)
         : BaseEvent(ACTOR_COLLIDED, "ActorCollided")
         , m_phase(phase)
         , m_actorA(actorA)
@@ -97,9 +97,9 @@ class CollisionEvent : public BaseEvent
     Phase m_phase;
 
     ActorId m_actorA;
-    void* m_actorALimbData;
+    uintptr_t m_actorALimbData;
     ActorId m_actorB;
-    void* m_actorBLimbData;
+    uintptr_t m_actorBLimbData;
 };
 
 //------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #ifndef GUIMGR_H
 #define GUIMGR_H
 
-#include "Singleton.h"
+#include "../Singleton.h"
 
 #include <SDL.h>
 

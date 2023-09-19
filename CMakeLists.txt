@@ -1,4 +1,8 @@
 cmake_minimum_required( VERSION 3.12 )
+cmake_policy(SET CMP0091 NEW)
+cmake_policy(SET CMP0115 NEW)
+cmake_policy(SET CMP0117 NEW)
+
 project( marian )
 
 # The version number.
@@ -23,13 +27,14 @@ option(USE_MYGUI OFF)
 
 find_package( SDL2 REQUIRED )
 find_package( SDL2_image REQUIRED )
-find_package( OpenGL REQUIRED )
+find_package( opengl_system REQUIRED )
 find_package( Boost REQUIRED )
 if( UNIX )
   find_package( Boost COMPONENTS unit_test_framework )
 endif()
 find_package( Box2D REQUIRED )
-find_package( Lua53 REQUIRED )
+find_package( Lua REQUIRED )
+find_package( rapidxml REQUIRED )
 
 if(USE_MYGUI)
   find_package( MyGUI REQUIRED )
@@ -47,17 +52,6 @@ configure_file(
 configure_file(
   ${PROJECT_SOURCE_DIR}/startup.lua.in
   ${PROJECT_BINARY_DIR}/startup.lua
-  )
-
-include_directories(
-  ${PROJECT_BINARY_DIR}
-  src
-  ${SDL2_INCLUDE_DIR}
-  ${SDL2IMAGE_INCLUDE_DIR}
-  ${OPENGL_INCLUDE_DIR}
-  ${Boost_INCLUDE_DIR}
-  ${BOX2D_INCLUDE_DIR}
-  ${LUA53_INCLUDE_DIR}
   )
 
 #find_package( rapid-tmx REQUIRED )

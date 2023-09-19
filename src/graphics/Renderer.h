@@ -1,7 +1,7 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "graphics/Image.h"
+#include "Image.h"
 
 namespace gfx {
 

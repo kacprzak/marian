@@ -1,9 +1,9 @@
 #include "HumanView.h"
 
-#include "Engine.h"
-#include "Logger.h"
-#include "Util.h"
-#include "gui/GuiMgr.h"
+#include "../Engine.h"
+#include "../Logger.h"
+#include "../Util.h"
+#include "../gui/GuiMgr.h"
 
 #ifdef _MSC_VER
 #include <windows.h>
@@ -66,6 +66,8 @@ bool HumanView::processInput(const SDL_Event& event)
 #ifdef USE_MYGUI
     // Inject to gui
     return m_guiMgr->processInput(event);
+#else
+    return false;
 #endif
 }
 

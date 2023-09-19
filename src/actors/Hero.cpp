@@ -1,12 +1,12 @@
 #include "Hero.h"
 
-#include "Box2dPhysicsEngine.h"
-#include "Engine.h"
-#include "GameLogicImpl.h"
-#include "Logger.h"
-#include "ResourceMgr.h"
-#include "events/EventMgr.h"
-#include "graphics/Animation.h"
+#include "../Box2dPhysicsEngine.h"
+#include "../Engine.h"
+#include "../GameLogicImpl.h"
+#include "../Logger.h"
+#include "../ResourceMgr.h"
+#include "../events/EventMgr.h"
+#include "../graphics/Animation.h"
 
 #define JUMP_DELAY 0.5f
 #define FEET_SENSOR 1248
@@ -22,8 +22,8 @@ HeroPhysicsComponent::HeroPhysicsComponent(GameLogic* game, float x, float y,
     bodyDef.type = b2_dynamicBody;
     // Set origin in center
     bodyDef.position.Set(x + hw, y + hh);
-    bodyDef.fixedRotation = true;
-    bodyDef.userData      = this;
+    bodyDef.fixedRotation    = true;
+    bodyDef.userData.pointer = (uintptr_t)this;
 
     Box2dPhysicsEngine* pe =
         static_cast<Box2dPhysicsEngine*>(game->physicsEngine());
@@ -52,7 +52,7 @@ HeroPhysicsComponent::HeroPhysicsComponent(GameLogic* game, float x, float y,
     fixtureDef.density           = 0.0f;
     fixtureDef.friction          = 0.0f;
     b2Fixture* footSensorFixture = body->CreateFixture(&fixtureDef);
-    footSensorFixture->SetUserData(reinterpret_cast<void*>(FEET_SENSOR));
+    footSensorFixture->GetUserData().pointer = FEET_SENSOR;
 
     m_body = body;
 
@@ -71,9 +71,9 @@ HeroPhysicsComponent::HeroPhysicsComponent(GameLogic* game, float x, float y,
 
 //------------------------------------------------------------------------------
 
-void HeroPhysicsComponent::handleBeginContact(Actor& other, void* fixtureUD)
+void HeroPhysicsComponent::handleBeginContact(Actor& other, uintptr_t fixtureUD)
 {
-    if (fixtureUD == (void*)FEET_SENSOR) {
+    if (fixtureUD == FEET_SENSOR) {
         ++m_feetContacts;
     }
 
@@ -85,9 +85,9 @@ void HeroPhysicsComponent::handleBeginContact(Actor& other, void* fixtureUD)
 
 //------------------------------------------------------------------------------
 
-void HeroPhysicsComponent::handleEndContact(Actor& other, void* fixtureUD)
+void HeroPhysicsComponent::handleEndContact(Actor& other, uintptr_t fixtureUD)
 {
-    if (fixtureUD == (void*)FEET_SENSOR) {
+    if (fixtureUD == FEET_SENSOR) {
         --m_feetContacts;
     }
 

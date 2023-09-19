@@ -128,16 +128,16 @@ endif()
 
 
 set( LINK_LIBS
-  rapid-tmx::rapid-tmx
-  ${BOX2D_LIBRARY}
-  ${SDL2_LIBRARY}
-  ${SDL2MAIN_LIBRARY}
-  ${SDL2IMAGE_LIBRARY}
-  ${OPENGL_LIBRARIES}
-  ${LUA53_LIBRARIES}
-  #  ${Boost_LIBRARIES}
-  #  ${GLUT_LIBRARY}
   ${EXTRA_LIBS}
+  opengl::opengl
+  SDL2::SDL2
+  SDL2::SDL2main
+  SDL2_image::SDL2_image
+  Boost::boost
+  box2d::box2d
+  rapid-tmx::rapid-tmx
+  lua::lua
+
   )
 
 # Add winsock lib
@@ -147,4 +147,5 @@ endif( WIN32 )
 
 add_executable( marian main.cpp ${marian_HDRS} ${marian_SRCS} )
 set_target_properties( marian PROPERTIES DEBUG_POSTFIX _d )
+target_include_directories( marian PRIVATE ${PROJECT_BINARY_DIR} )
 target_link_libraries( marian ${LINK_LIBS} )

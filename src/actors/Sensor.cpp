@@ -1,6 +1,6 @@
 #include "Sensor.h"
 
-#include "GameLogic.h"
+#include "../GameLogic.h"
 
 #include <Box2D/Box2D.h>
 

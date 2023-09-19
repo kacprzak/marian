@@ -2,9 +2,9 @@
 #define HEROHUMANVIEW_H
 
 #include "HumanView.h"
-#include "events/EventMgr.h"
-#include "graphics/MapNode.h"
-#include "input/HeroController.h"
+#include "../events/EventMgr.h"
+#include "MapNode.h"
+#include "../input/HeroController.h"
 
 #include <map>
 #include <memory>

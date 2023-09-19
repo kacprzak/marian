@@ -1,8 +1,8 @@
 #ifndef GROUND_H
 #define GROUND_H
 
-#include "Map.h"
-#include "components/PhysicsComponent.h"
+#include "../Map.h"
+#include "../components/PhysicsComponent.h"
 
 class GameLogic;
 

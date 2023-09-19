@@ -1,6 +1,6 @@
 #include "BaseSocketMgr.h"
 
-#include "Logger.h"
+#include "../Logger.h"
 #include "config.h"
 
 #if PLATFORM == PLATFORM_WINDOWS
@@ -24,7 +24,7 @@ BaseSocketMgr::BaseSocketMgr()
 {
 #if PLATFORM == PLATFORM_WINDOWS
     WSADATA WsaData;
-    int err = WSAStartup(MAKEWORD(2, 2), &WsaData) == NO_ERROR;
+    int err = WSAStartup(MAKEWORD(2, 2), &WsaData);
     if (err != NO_ERROR) {
         std::string msg("WSAStartup failed with error: ");
         msg += std::to_string(err);

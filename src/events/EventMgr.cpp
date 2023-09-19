@@ -1,6 +1,6 @@
 #include "EventMgr.h"
 
-#include "Logger.h"
+#include "../Logger.h"
 
 using namespace event;
 

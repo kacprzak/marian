@@ -1,10 +1,10 @@
 #ifndef REMOTEGAMELOGIC_H
 #define REMOTEGAMELOGIC_H
 
-#include "GameLogic.h"
+#include "../GameLogic.h"
 
 #include "NetworkEventForwarder.h"
-#include "events/EventMgr.h"
+#include "../events/EventMgr.h"
 
 namespace net {
 

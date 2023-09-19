@@ -1,7 +1,7 @@
 #ifndef TEXCOORDS_H
 #define TEXCOORDS_H
 
-#include "Util.h"
+#include "../Util.h"
 
 #include <cstddef> // size_t
 #include <iostream>

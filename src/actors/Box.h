@@ -1,8 +1,7 @@
 #ifndef BOX_H
 #define BOX_H
 
-#include "components/PhysicsComponent.h"
-#include "components/RenderComponent.h"
+#include "../components/PhysicsComponent.h"
 
 class GameLogic;
 

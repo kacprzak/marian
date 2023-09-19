@@ -1,7 +1,7 @@
 #include "NetSocket.h"
 
 #include "BaseSocketMgr.h"
-#include "Logger.h"
+#include "../Logger.h"
 
 #if PLATFORM == PLATFORM_UNIX
 #include <sys/ioctl.h>

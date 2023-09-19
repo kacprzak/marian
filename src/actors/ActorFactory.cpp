@@ -1,11 +1,11 @@
 #include "ActorFactory.h"
 
-#include "components/ActorComponent.h"
+#include "../components/ActorComponent.h"
 
-#include "actors/Box.h"
-#include "actors/Ground.h"
-#include "actors/Hero.h"
-#include "actors/Sensor.h"
+#include "../actors/Box.h"
+#include "../actors/Ground.h"
+#include "../actors/Hero.h"
+#include "../actors/Sensor.h"
 
 #include <cassert>
 #include <memory>

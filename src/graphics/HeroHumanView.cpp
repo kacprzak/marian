@@ -1,16 +1,16 @@
 #include "HeroHumanView.h"
 
-#include "Engine.h"
+#include "../Engine.h"
 #include "GLRenderer.h"
-#include "Map.h"
-#include "ResourceMgr.h"
-#include "Util.h"
+#include "../Map.h"
+#include "../ResourceMgr.h"
+#include "../Util.h"
 
-#include "components/RenderComponent.h"
-#include "graphics/HeroNode.h"
-#include "graphics/MapNode.h"
-#include "graphics/SpriteNode.h"
-#include "input/HeroController.h"
+#include "../components/RenderComponent.h"
+#include "../graphics/HeroNode.h"
+#include "../graphics/MapNode.h"
+#include "../graphics/SpriteNode.h"
+#include "../input/HeroController.h"
 
 using namespace gfx;
 using namespace event;
